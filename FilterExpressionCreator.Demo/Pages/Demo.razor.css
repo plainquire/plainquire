@@ -1,0 +1,11 @@
+﻿.description {
+    text-overflow: ellipsis;
+    width: 20%;
+    max-width: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sql {
+    white-space: pre-wrap;
+}

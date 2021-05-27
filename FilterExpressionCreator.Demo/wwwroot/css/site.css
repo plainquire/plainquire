@@ -1,0 +1,53 @@
+@import url('bootstrap/bootstrap.min.css');
+
+/* ----------------------------------------- */
+/* Page
+/* ----------------------------------------- */
+html, .navbar {
+    /* Fix flickering after modal dialog is opened and (page) scrollbar disappears. */
+    /*See https://stackoverflow.com/a/59407573/1271211, https://aykevl.nl/2014/09/fix-jumping-scrollbar */
+    margin-left: calc(100vw - 100%);
+}
+
+/* ----------------------------------------- */
+/* Footer
+/* ----------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom == footer height */
+    margin-bottom: 3rem !important;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 3rem;
+}
+
+/* ReSharper disable All */
+/* ----------------------------------------- */
+/* Balzor
+/* ----------------------------------------- */
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}

@@ -1,0 +1,113 @@
+﻿@page "/demo"
+@inherits DemoComponent
+
+@using FilterExpressionCreator.Extensions;
+
+<div class="card mb-4">
+    <h6 class="card-header">
+        Refine Query
+    </h6>
+    <div class="card-body">
+        <EditForm class="row g-3" Model="@QueryModel" OnValidSubmit="@RefreshQuery">
+            <div class="col-md-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input id="firstName" class="form-control" @bind-Value="QueryModel.FirstName" @bind-Value:event="oninput" />
+                <div id="firstNameHelp" class="form-text">@(QueryModel.FirstName.HumanizeFilterSyntax<string>("'FirstName'"))</div>
+            </div>
+            <div class="col-md-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input id="lastName" class="form-control" @bind-Value="QueryModel.LastName" @bind-Value:event="oninput" />
+                <div id="lastNameHelp" class="form-text">@(QueryModel.LastName.HumanizeFilterSyntax<string>("'LastName'"))</div>
+            </div>
+            <div class="col-md-3">
+                <label for="gender" class="form-label">Gender</label>
+                <input id="gender" class="form-control" @bind-Value="QueryModel.Gender" @bind-Value:event="oninput" />
+                <div id="genderHelp" class="form-text">@(QueryModel.Gender.HumanizeFilterSyntax<Gender>("'Gender'"))</div>
+            </div>
+            <div class="col-md-3">
+                <label for="birthday" class="form-label">Birthday</label>
+                <input id="birthday" class="form-control" @bind-Value="QueryModel.Birthday" @bind-Value:event="oninput" />
+                <div id="birthdayHelp" class="form-text">@(QueryModel.Birthday.HumanizeFilterSyntax<DateTime>("'Birthday'"))</div>
+            </div>
+            <div class="col-md-3">
+                <label for="hourlyRate" class="form-label">Hourly Rate</label>
+                <input id="hourlyRate" class="form-control" @bind-Value="QueryModel.HourlyRate" @bind-Value:event="oninput" />
+                <div id="hourlyRateHelp" class="form-text">@(QueryModel.HourlyRate.HumanizeFilterSyntax<double>("'HourlyRate'"))</div>
+            </div>
+            <div class="col-md-3">
+                <label for="experience" class="form-label">Years of Experience</label>
+                <input id="experience" class="form-control" @bind-Value="QueryModel.YearsOfExperience" @bind-Value:event="oninput" />
+                <div id="experienceHelp" class="form-text">@(QueryModel.YearsOfExperience.HumanizeFilterSyntax<int>("'YearsOfExperience'"))</div>
+            </div>
+            <div class="col-md-3">
+                <label for="project" class="form-label">Project</label>
+                <input id="project" class="form-control" @bind-Value="QueryModel.ProjectTitle" @bind-Value:event="oninput" />
+                <div id="projectHelp" class="form-text">@(QueryModel.ProjectTitle.HumanizeFilterSyntax<string>("'ProjectTitle'"))</div>
+            </div>
+            <div class="col-md-3">
+                <label for="seed" class="form-label">Seed</label>
+                <input id="seed" type="number" class="form-control" @bind-Value="QueryModel.Seed" @bind-Value:event="oninput" />
+                <div id="seedHelp" class="form-text">Using the same seed returns predictable result</div>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Refresh</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<div class="card">
+    <h6 class="card-header">
+        Query Result
+    </h6>
+    <ul class="list-group list-group-flush">
+        @if (QueryResult.Data == null)
+        {
+            <li class="list-group-item">
+                <p>Loading</p>...
+            </li>
+        }
+        else
+        {
+            <li class="list-group-item">
+                <h6>URL</h6>
+                <pre>@QueryResult.HttpQuery</pre>
+            </li>
+            <li class="list-group-item">
+                <h6>Expression</h6>
+                <pre>@QueryResult.FilterExpression</pre>
+            </li>
+            <li class="list-group-item">
+                <h6>SQL (SQLite) <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="FormatSql">Beautify</button></h6>
+                <pre class="sql">@QueryResult.SqlQuery</pre>
+            </li>
+            <li class="list-group-item">
+                <h6>Data</h6>
+                <SimpleTable Items="QueryResult.Data">
+                    <HeaderTemplate>
+                        <tr>
+                            <th class="text-nowrap">First Name</th>
+                            <th class="text-nowrap">Last Name</th>
+                            <th class="text-nowrap">Gender</th>
+                            <th class="text-nowrap">Birthday</th>
+                            <th class="text-nowrap">Hourly Rate</th>
+                            <th class="text-nowrap">Experience</th>
+                            <th class="text-nowrap">Projects</th>
+                        </tr>
+                    </HeaderTemplate>
+                    <RowTemplate Context="freelancer">
+                        <tr>
+                            <td>@freelancer.FirstName</td>
+                            <td>@freelancer.LastName</td>
+                            <td>@freelancer.Gender</td>
+                            <td>@freelancer.Birthday?.ToString("d")</td>
+                            <td>@freelancer.HourlyRate.ToString("c", NumberFormat)</td>
+                            <td>@freelancer.YearsOfExperience years</td>
+                            <td class="description">@string.Join(", ", freelancer.Projects.Select(x => x.Title))</td>
+                        </tr>
+                    </RowTemplate>
+                </SimpleTable>
+            </li>
+        }
+    </ul>
+</div>

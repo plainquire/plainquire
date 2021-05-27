@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../Build/build_tests.props" />
+  <Import Project="../Build/build_version.props" />
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FilterExpressionCreator.Newtonsoft\FilterExpressionCreator.Newtonsoft.csproj" />
+    <ProjectReference Include="..\FilterExpressionCreator\FilterExpressionCreator.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+﻿@inherits LayoutComponentBase
+
+<header class="container-fluid fixed-top px-0 bg-success">
+    <NavMenu></NavMenu>
+</header>
+
+<main role="main" class="container pb-3" style="padding-top: 5rem;">
+    @Body
+</main>
+
+<footer class="d-flex flex-column bg-white">
+    <hr class="m-0" />
+    <div class="row mx-0 h-100 align-items-center">
+        <div class="col p-0 text-center">
+            <small class="text-muted">
+                @*{{ info.productName }}, Version&nbsp;{{ info.productVersion }} | Copyright {{ info.copyright }}*@
+                Footer
+            </small>
+        </div>
+    </div>
+</footer>
+

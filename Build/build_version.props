@@ -1,0 +1,24 @@
+<Project>
+  <PropertyGroup>
+    <Product>Filter Expression Creator</Product>
+    <Title>$(Product)</Title>
+    <Description>Dynamically creates expressions to filter IEnumerable/IQueryable collections</Description>
+    <Authors>Florian Schick</Authors>
+    <Company>Schick Software Entwicklung</Company>
+    <Copyright>© Florian Schick, 2021 all rights reserved</Copyright>
+    <Tags></Tags>
+    <PackageDescription>$(Description)</PackageDescription>
+    <Owners>$(Company)</Owners>
+    <Summary>$(Description)</Summary>
+
+    <Version>0.0.0.0</Version>
+    <FileVersion>0.0.0.0</FileVersion>
+    <AssemblyVersion>$(FileVersion)</AssemblyVersion>
+
+    <PackageProjectUrl>https://github.com/fschick/FilterExpressionCreator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/fschick/FilterExpressionCreator.git</RepositoryUrl>
+    <PackageLicenseUrl>MIT</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>$(Tags)</PackageTags>
+  </PropertyGroup>
+</Project>

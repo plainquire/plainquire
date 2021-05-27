@@ -1,0 +1,13 @@
+<Project>
+  <ItemGroup>
+    <PackageReference Include="SauceControl.InheritDoc" Version="1.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
+    <InheritDocEnabled>true</InheritDocEnabled>
+  </PropertyGroup>
+</Project>
