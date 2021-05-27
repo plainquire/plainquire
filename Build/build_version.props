@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Product>Filter Expression Creator</Product>
     <Title>$(Product)</Title>
-    <Description>Dynamically creates expressions to filter IEnumerable/IQueryable collections</Description>
+    <Description>Dynamically creates expressions to filter collections of IEnumerable/IQueryable</Description>
     <Authors>Florian Schick</Authors>
     <Company>Schick Software Entwicklung</Company>
     <Copyright>© Florian Schick, 2021 all rights reserved</Copyright>
