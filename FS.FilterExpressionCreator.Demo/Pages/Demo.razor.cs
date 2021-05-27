@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace FS.FilterExpressionCreator.Demo.Pages
 {
-    public class DemoComponent : ComponentBase
+    public class DemoPage : ComponentBase
     {
         [Inject] private HttpClient HttpClient { get; set; }
         [Inject] private NavigationManager NavigationManager { get; set; }
@@ -24,7 +24,7 @@ namespace FS.FilterExpressionCreator.Demo.Pages
         protected FreelancerDto QueryResult = new();
         protected NumberFormatInfo NumberFormat;
 
-        public DemoComponent()
+        public DemoPage()
         {
             NumberFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
             NumberFormat.CurrencySymbol = new CultureInfo("en-US").NumberFormat.CurrencySymbol;
