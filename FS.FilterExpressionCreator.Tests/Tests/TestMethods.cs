@@ -52,7 +52,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests
 
         private static EntityFilter<TEntity> NewtonsoftClone<TEntity>(this EntityFilter<TEntity> filter)
         {
-            var serializerSettings = new JsonSerializerSettings { Converters = JsonConverterExtensions.FilterExpressionsNewtonsoftConverters };
+            var serializerSettings = new JsonSerializerSettings { Converters = JsonConverterExtensions.NewtonsoftConverters };
             var json = JsonConvert.SerializeObject(filter, serializerSettings);
             return JsonConvert.DeserializeObject<EntityFilter<TEntity>>(json, serializerSettings);
         }

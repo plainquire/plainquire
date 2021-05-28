@@ -28,7 +28,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
                 .Replace(x => x.NestedList, nestedEntityFilterB);
 
             var netJson = NetSerializer.Serialize(entityFilter);
-            var newtonJson = NewtonSerializer.SerializeObject(entityFilter, JsonConverterExtensions.FilterExpressionsNewtonsoftConverters);
+            var newtonJson = NewtonSerializer.SerializeObject(entityFilter, JsonConverterExtensions.NewtonsoftConverters);
 
             netJson.Should().Be(newtonJson);
         }
@@ -121,7 +121,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         private static (T NetFilter, T NewtonFilter) Deserialize<T>(string json)
         {
             var netFilter = NetSerializer.Deserialize<T>(json);
-            var newtonFilter = NewtonSerializer.DeserializeObject<T>(json, JsonConverterExtensions.FilterExpressionsNewtonsoftConverters);
+            var newtonFilter = NewtonSerializer.DeserializeObject<T>(json, JsonConverterExtensions.NewtonsoftConverters);
             return (netFilter, newtonFilter);
         }
 
