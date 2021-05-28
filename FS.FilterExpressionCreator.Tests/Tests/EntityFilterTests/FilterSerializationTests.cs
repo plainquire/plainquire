@@ -40,7 +40,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 
             netFilter.Should().BeEquivalentTo(newtonFilter);
 
-            netFilter.CreateFilterPredicate().Should().BeNull();
+            netFilter.CreateFilterExpression().Should().BeNull();
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             netFilter2.Should().BeEquivalentTo(newtonFilter2);
             netFilter1.Should().BeEquivalentTo(netFilter2);
 
-            netFilter1.CreateFilterPredicate().Should().BeNull();
+            netFilter1.CreateFilterExpression().Should().BeNull();
         }
 
         [TestMethod]

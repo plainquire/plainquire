@@ -80,7 +80,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
                 .Add(x => x.ValueB, "=2")
                 .Clear();
 
-            var filter = entityFilter.CreateFilterPredicate();
+            var filter = entityFilter.CreateFilterExpression();
             filter.Should().BeNull();
         }
 
