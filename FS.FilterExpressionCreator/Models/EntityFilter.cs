@@ -400,6 +400,7 @@ namespace FS.FilterExpressionCreator.Models
                 .GetProperties();
 
             var propertyFilters = properties
+                .Reverse()
                 .Join(
                     PropertyFilters,
                     x => x.Name,
@@ -414,6 +415,7 @@ namespace FS.FilterExpressionCreator.Models
                 .ToList();
 
             var nestedObjectFilters = properties
+                .Reverse()
                 .Where(x => !x.PropertyType.IsGenericIEnumerable())
                 .Join(
                     NestedFilters,
@@ -440,6 +442,7 @@ namespace FS.FilterExpressionCreator.Models
                 .ToList();
 
             var nestedListsFilters = properties
+                .Reverse()
                 .Where(x => x.PropertyType.IsGenericIEnumerable())
                 .Join(
                     NestedFilters,
