@@ -78,8 +78,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 
             var items = new TestModel<string>[] { new() { NestedObject = null } };
 
-            var predicate = outerFilter.CreateFilterPredicate().Compile();
-            var filteredItems = items.Where(predicate).ToList();
+            var filteredItems = items.Where(outerFilter).ToList();
             filteredItems.Should().BeEmpty();
         }
 
@@ -94,8 +93,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 
             var items = new TestModel<string>[] { new() { NestedList = null } };
 
-            var predicate = outerFilter.CreateFilterPredicate().Compile();
-            var filteredItems = items.Where(predicate).ToList();
+            var filteredItems = items.Where(outerFilter).ToList();
             filteredItems.Should().BeEmpty();
         }
 

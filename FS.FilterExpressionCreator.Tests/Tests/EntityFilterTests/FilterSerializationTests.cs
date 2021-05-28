@@ -73,7 +73,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
                 new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc )},
             };
 
-            var filteredItems = items.Where(netFilter1.CreateFilterPredicate().Compile()).ToList();
+            var filteredItems = items.Where(netFilter1).ToList();
             filteredItems.Should().BeEquivalentTo(items[1]);
         }
 
@@ -94,7 +94,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
                 new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc )},
             };
 
-            var filteredItems = items.Where(netFilter1.CreateFilterPredicate().Compile()).ToList();
+            var filteredItems = items.Where(netFilter1).ToList();
             filteredItems.Should().BeEquivalentTo(items[1]);
         }
 
@@ -114,7 +114,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
                 new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedB" }, NestedList = new() { new () { Value= "NestedB" } } },
             };
 
-            var filteredItems = items.Where(netFilter.CreateFilterPredicate().Compile()).ToList();
+            var filteredItems = items.Where(netFilter).ToList();
             filteredItems.Should().BeEquivalentTo(items[2]);
         }
 

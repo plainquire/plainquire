@@ -236,10 +236,28 @@ namespace FS.FilterExpressionCreator.Models
         }
 
         /// <summary>
-        /// Creates the filter predicate.
+        /// Creates the filter predicate. Returns <c>null</c> when filter is empty.
         /// </summary>
         public Expression<Func<TEntity, bool>> CreateFilterPredicate(FilterConfiguration filterConfiguration = null)
             => CreateFilterPredicate<TEntity>(filterConfiguration);
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="EntityFilter{TEntity}"/> to <see cref="Expression{TDelegate}"/> where <c>TDelegate</c> is <see cref="Func{T, TResult}"/>.
+        /// </summary>
+        /// <param name="filter">The filter to convert.</param>
+        public static implicit operator Expression<Func<TEntity, bool>>(EntityFilter<TEntity> filter)
+            => filter.CreateFilterPredicate() ?? (x => true);
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="EntityFilter{TEntity}"/> to <see cref="Func{T, TResult}"/>.
+        /// </summary>
+        /// <param name="filter">The filter to convert.</param>
+        public static implicit operator Func<TEntity, bool>(EntityFilter<TEntity> filter)
+            => (filter.CreateFilterPredicate() ?? (x => true)).Compile();
+
+        /// <inheritdoc />
+        public override string ToString()
+            => CreateFilterPredicate()?.ToString() ?? string.Empty;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string DebuggerDisplay => CreateFilterPredicate()?.ToString() ?? "<EMPTY>";

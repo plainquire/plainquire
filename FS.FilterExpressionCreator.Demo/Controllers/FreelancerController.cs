@@ -57,13 +57,12 @@ namespace FS.FilterExpressionCreator.Demo.Controllers
                 .Replace(x => x.Projects, projectFilter)
                 .Replace(x => x.Seed, seed);
 
-            var filter = freelancerFilter.CreateFilterPredicate() ?? (x => true);
-            var query = _dbContext.Set<Freelancer>().Include(x => x.Projects).Where(filter);
+            var query = _dbContext.Set<Freelancer>().Include(x => x.Projects).Where(freelancerFilter);
             var freelancers = new FreelancerDto
             {
                 Data = query.ToList(),
                 SqlQuery = query.ToQueryString(),
-                FilterExpression = filter.ToString(),
+                FilterExpression = freelancerFilter.ToString(),
                 HttpQuery = WebUtility.UrlDecode(HttpContext.Request.Path.Value + HttpContext.Request.QueryString.Value)
             };
 
