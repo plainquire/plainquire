@@ -1,6 +1,6 @@
 # Filter Expression Creator
 
-This library provides you with a simple way to dynamically create lambda  expressions to filter lists and database queries by using a fluent interface. Custom model binders to create filter expressions from WebAPI request parameters are provided. Filters can be serialized to save and load them from configuration files.
+Library to dynamically create lambda expressions to filter lists and database queries.
 
 # Demo #
 
@@ -11,8 +11,8 @@ OpenAPI: https://filterexpressioncreator.schick-software.de/openapi/
 # Table of Content
 - [Getting Started](#getting-started)
 - [Creating Filters](#creating-filters)
-  * [Multiple values](#multiple-values)
-  * [Nested filters](#nested-filters)
+  * [Multiple Values](#multiple-values)
+  * [Nested Filters](#nested-filters)
   * [Filter for `null`](#filter-for--null-)
   * [Filter Operators](#filter-operators)
   * [Configuration](#configuration)
@@ -20,24 +20,24 @@ OpenAPI: https://filterexpressioncreator.schick-software.de/openapi/
   * [Examples](#examples)
   - [Date/Time](#date-time)
   - [Enumerations](#enumerations)
-- [Using with MVC controllers](#using-with-mvc-controllers)
-  * [Model binding](#model-binding)
-  * [Register model binders](#register-model-binders)
-  * [Configure model binding](#configure-model-binding)
-  * [Nested objects/lists](#nested-objects-lists)
+- [Using With MVC Controllers](#using-with-mvc-controllers)
+  * [Model Binding](#model-binding)
+  * [Register Model Binders](#register-model-binders)
+  * [Configure Model Binding](#configure-model-binding)
+  * [Nested Objects/Lists](#nested-objects-lists)
 - [Support for OpenAPI / Swashbuckle.AspNetCore](#support-for-openapi---swashbuckleaspnetcore)
-  * [Register OpenAPI support](#register-openapi-support)
-  * [Register XML documentation](#register-xml-documentation)
+  * [Register OpenAPI Support](#register-openapi-support)
+  * [Register XML Documentation](#register-xml-documentation)
 - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
 - [Advanced Scenarios](#advanced-scenarios)
   * [Deep Copy Filters](#deep-copy-filters)
   * [Cast Filters](#cast-filters)
-  * [Serialize Entity Filters](#serialize-entity-filters)
-  * [Combining Filter Expressions](#combining-filter-expressions)
+  * [Serialize Filters](#serialize-filters)
+  * [Combine Filter Expressions](#combine-filter-expressions)
+
 # Getting Started
 
-1. **NuGet packages are currently unavailable but coming soon.**
-   ~~Install the standard NuGet package into your ASP.NET Core application.~~
+1. Install the standard NuGet package into your ASP.NET Core application
 ```
 Package Manager : Install-Package FS.FilterExpressionCreator
 CLI : dotnet add package FS.FilterExpressionCreator
@@ -89,7 +89,7 @@ dbContext.Orders.Where(filter).ToList();
 
 # Creating Filters
 
-Filters can be created using Operator/Value(s) pairs or via [filter micro syntax](#Filter Micro Syntax).
+Filters can be created using Operator/Value(s) pairs or via [filter micro syntax](#Filter Micro Syntax)
 
 ```csharp
 // Operator/Value(s): Customer contains 'Joe' or 'Doe'
@@ -99,15 +99,15 @@ filter.Add(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
 filter.Add(x => x.Customer, "~Joe,Doe");
 ```
 
-## Multiple values
+## Multiple Values
 
 Multiple values are combined using conditional `OR` expect for operator `NOT`. For operator `NOT` given values are combined using conditional `AND`.
 
-## Nested filters
+## Nested Filters
 
 Filtering nested objects/lists is supported.
 
-### Nested objects
+### Nested Objects
 
 Nested objects are filtered directly
 
@@ -122,7 +122,7 @@ var filter = new EntityFilter<Order>()
 System.Console.WriteLine(filter);
 // x => ((x.Address != null) AndAlso (x.Address.City == "Berlin"))
 ```
-### Nested lists
+### Nested Lists
 
 Nested lists are filtered using `IEnumerable<T>.Any()`
 
@@ -140,7 +140,7 @@ System.Console.WriteLine(filter);
 
 ## Filter for `null`
 
-To filter for `== null` / `!= null` special filter operators exists.
+To filter for `== null` / `!= null` special filter operators exists
 
 ```csharp
 // Filtering for values are NULL
@@ -170,7 +170,7 @@ While filtering for `== null` / `!= null`, given values are ignored.
 
 ## Configuration
 
-Creation of filter expression can be configured via `FilterConfiguration`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply a configuration.
+Creation of filter expression can be configured via `FilterConfiguration`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply a configuration
 
 ```csharp
 // Parse filter values using german locale (e.g. "5,5" => 5.5f).
@@ -191,7 +191,7 @@ The filter syntax consists of a operator shortcut (see above) and a list of comm
 | ------------- | ------------------------------------------------------------ |
 | Joe           | For `string` filtered value contains 'Joe', for `Enum` filtered value is 'Joe' |
 | ~Joe          | Filtered value contains 'Joe', even for `Enum`               |
-| =1\,2         | Filtered value equals '1,2'                                  |
+| =1\\,2        | Filtered value equals '1,2'                                  |
 | ISNULL        | Filtered value is `null`                                     |
 | >one-week-ago | For `DateTime` filtered value is greater than one week ago, for others types see above |
 | 2020          | For `DateTime` filtered value is between 01/01/2020 and 12/31/2020, for others types see above |
@@ -213,11 +213,13 @@ Partial date strings are supported too
 
 ## Enumerations
 
-`Enum` values can be filtered by it's numeric representation as well as by it's name. When filtering using `Contains` the filter values are expanded ('~male' filters for 'male as well as 'female').
+`Enum` values can be filtered by it's numeric representation as well as by it's name.
 
-# Using with MVC controllers
+When filtering using `Contains` the filter values are expanded ("~male" filters for `male` as well as `female`).
 
-## Model binding
+# Using With MVC Controllers
+
+## Model Binding
 
 Model binding for MVC controllers is supported
 
@@ -228,7 +230,7 @@ public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order, ...)
 
 The above usage maps the query parameters `OrderNumber` and `OrderCustomer` to the filter parameter  `order`.
 
-## Register model binders
+## Register Model Binders
 
 ```
 Package Manager : Install-Package FS.FilterExpressionCreator.Mvc
@@ -244,7 +246,7 @@ using FS.FilterExpressionCreator.Mvc.Extensions;
 services.AddFilterExpressionsSupport();
 ```
 
-## Configure model binding
+## Configure Model Binding
 
 By default parameters for properties of filtered entity are named \<`Entity`\>\<`Property`\>.
 
@@ -264,13 +266,16 @@ public class Order
 }
 ```
 
-## Nested objects/lists
+## Nested Objects/Lists
 
 Nested objects and lists are not implicit recognized as parameters. But you can simply combine them
 
 ```csharp
 [HttpGet]
-public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order, [FromQuery] EntityFilter<Address> address)
+public Task<List<Order>> GetOrders(
+    [FromQuery] EntityFilter<Order> order, 
+    [FromQuery] EntityFilter<Address> address
+)
 {
     var filter = order.Add(x => x.Address, address);
     // ...
@@ -281,7 +286,7 @@ public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order, [FromQ
 
 Support for OpenAPI (formerly swagger) provided by Swashbuckle.AspNetCore is available.
 
-## Register OpenAPI support
+## Register OpenAPI Support
 
 ``` 
 Package Manager : Install-Package FS.FilterExpressionCreator.Swashbuckle
@@ -296,12 +301,12 @@ using FS.FilterExpressionCreator.Swashbuckle.Extensions;
 services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("V1", new OpenApiInfo { Title = $"API", Version = "V1" });
-	// Register required stuff by calling 'AddFilterExpressionsSupport()' on SwaggerGenOptions instance
+    // Register required stuff by calling 'AddFilterExpressionsSupport()' on SwaggerGenOptions instance
     options.AddFilterExpressionsSupport();
 });
 ```
 
-## Register XML documentation
+## Register XML Documentation
 
 To get descriptions for generated parameters from XML documentation, paths to documentation files can be provided
 
@@ -310,10 +315,10 @@ services
 .AddSwaggerGen(options =>
 {
     options.SwaggerDoc("V1", new OpenApiInfo { Title = $"API", Version = "V1" });
-	// Register required stuff including XML documentatioin files
-    var filterExpressionCreatorDoc = Path.Combine(AppContext.BaseDirectory, "FS.FilterExpressionCreator.xml");
-    options.AddFilterExpressionsSupport(filterExpressionCreatorDoc, filterExpressionCreatorDemoDoc);
-    options.IncludeXmlComments(filterExpressionCreatorDoc);
+    // Register required stuff including XML documentatioin files
+    var filterCreatorDoc = Path.Combine(AppContext.BaseDirectory, "FS.FilterExpressionCreator.xml");
+    options.AddFilterExpressionsSupport(filterCreatorDoc);
+    options.IncludeXmlComments(filterCreatorDoc);
 });
 ```
 
@@ -331,7 +336,8 @@ using FS.FilterExpressionCreator.Mvc.Newtonsoft;
 ```
 
 ```csharp
-// Register support for Newtonsoft by calling 'AddFilterExpressionsNewtonsoftSupport()' on IServiceCollection instance
+// Register support for Newtonsoft by calling 
+// 'AddFilterExpressionsNewtonsoftSupport()' on IServiceCollection instance
 services.AddFilterExpressionsNewtonsoftSupport();
 ```
 
@@ -356,7 +362,7 @@ var dtoFilter = new EntityFilter<OrderDto>().Add(...);
 var orderFilter = dtoFilter.Cast<Order>();
 ```
 
-## Serialize Entity Filters
+## Serialize Filters
 
 ### Using `System.Text.Json`
 
@@ -385,7 +391,7 @@ var json = JsonConvert.SerializeObject(filter, JsonConverterExtensions.Newtonsof
 filter = JsonConvert.DeserializeObject<EntityFilter<Order>>(json, JsonConverterExtensions.NewtonsoftConverters);
 ```
 
-## Combining Filter Expressions
+## Combine Filter Expressions
 
 To add custom checks to a filter either call `.Where(...)` again
 
