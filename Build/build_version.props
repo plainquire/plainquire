@@ -1,13 +1,12 @@
 <Project>
+
   <PropertyGroup>
     <Product>Filter Expression Creator</Product>
     <Title>$(Product)</Title>
-    <Description>Dynamically creates expressions to filter collections of IEnumerable/IQueryable</Description>
+    <Description>Library to dynamically create lambda expressions to filter lists and database queries</Description>
     <Authors>Florian Schick</Authors>
     <Company>Schick Software Entwicklung</Company>
     <Copyright>© Florian Schick, 2021 all rights reserved</Copyright>
-    <Tags></Tags>
-    <PackageDescription>$(Description)</PackageDescription>
     <Owners>$(Company)</Owners>
     <Summary>$(Description)</Summary>
 
@@ -15,10 +14,22 @@
     <FileVersion>0.0.0.0</FileVersion>
     <AssemblyVersion>$(FileVersion)</AssemblyVersion>
 
+    <PackageId>$([MSBuild]::ValueOrDefault('$(AssemblyName)', '').Replace('FS.', 'Schick.'))</PackageId>
+    <PackageDescription>$(Description)</PackageDescription>
+    <PackageIcon>Schick.FilterExpressionCreator.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/fschick/FilterExpressionCreator</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>Filter, dynamic, Expression, Function, Queryable, Enumerable, Entity, C#, aspnetcore, webapi</PackageTags>
+
     <RepositoryUrl>https://github.com/fschick/FilterExpressionCreator.git</RepositoryUrl>
-    <PackageLicenseUrl>MIT</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>$(Tags)</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
+    <None Include="..\README.md" Pack="true" PackagePath="README.md" />
+    <None Include="..\FS.FilterExpressionCreator.png" Pack="true" PackagePath="Schick.FilterExpressionCreator.png"/>
+  </ItemGroup>
+
 </Project>
