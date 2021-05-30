@@ -69,6 +69,12 @@ namespace FS.FilterExpressionCreator.Demo.Pages
             await UpdateQuery();
         }
 
+        protected async Task ChangeSeed()
+        {
+            QueryModel.Seed = _randomizer.Next().ToString();
+            await UpdateQuery();
+        }
+
         protected async Task FormatSql()
             => QueryResult.SqlQuery = await FormatSql(QueryResult.SqlQuery);
 

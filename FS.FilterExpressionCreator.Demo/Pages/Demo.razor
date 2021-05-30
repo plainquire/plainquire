@@ -74,6 +74,7 @@
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Update</button>
                 <button type="button" class="btn btn-primary" @onclick="@ClearQuery">Clear</button>
+                <button type="button" class="btn btn-primary" @onclick="@ChangeSeed">Change Seed</button>
             </div>
         </form>
     </div>
@@ -105,7 +106,7 @@
                 <pre class="sql">@QueryResult.SqlQuery</pre>
             </li>
             <li class="list-group-item">
-                <h6>Data</h6>
+                <h6>Data (@QueryResult.FilteredCount/@QueryResult.UnfilteredCount)</h6>
                 <SimpleTable Items="QueryResult.Data">
                     <HeaderTemplate>
                         <tr>

@@ -48,9 +48,12 @@ namespace FS.FilterExpressionCreator.Demo.Controllers
         [HttpGet]
         public Task<FreelancerDto> GetFreelancers([FromQuery] EntityFilter<Freelancer> freelancerFilter, [FromQuery] EntityFilter<Project> projectFilter, int seed = 0, CancellationToken cancellationToken = default)
         {
-            var dataForSeedAvailable = _dbContext.Set<Freelancer>().Any(x => x.Seed == seed);
-            if (!dataForSeedAvailable)
+            var unfilteredCount = _dbContext.Set<Freelancer>().Count(x => x.Seed == seed);
+            if (unfilteredCount == 0)
+            {
                 RecreateFreelancers(seed: seed);
+                unfilteredCount = _dbContext.Set<Freelancer>().Count(x => x.Seed == seed);
+            }
 
             freelancerFilter ??= new EntityFilter<Freelancer>();
             freelancerFilter
@@ -58,9 +61,12 @@ namespace FS.FilterExpressionCreator.Demo.Controllers
                 .Replace(x => x.Seed, seed);
 
             var query = _dbContext.Set<Freelancer>().Include(x => x.Projects).Where(freelancerFilter);
+            var data = query.ToList();
             var freelancers = new FreelancerDto
             {
-                Data = query.ToList(),
+                Data = data,
+                FilteredCount = data.Count,
+                UnfilteredCount = unfilteredCount,
                 SqlQuery = query.ToQueryString(),
                 FilterExpression = freelancerFilter.ToString(),
                 HttpQuery = WebUtility.UrlDecode(HttpContext.Request.Path.Value + HttpContext.Request.QueryString.Value)
