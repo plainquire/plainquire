@@ -37,10 +37,36 @@ namespace FS.FilterExpressionCreator.Demo.Pages
             await LoadData();
         }
 
-        protected async Task RefreshQuery()
+        protected async Task LoadPredefined(string identifier)
+        {
+            QueryModel.Clear();
+
+            if (identifier == "Older-than-40")
+                QueryModel.Birthday = "<forty-years-ago";
+            else if (identifier == "Unknown-Age")
+                QueryModel.Birthday = "ISNULL";
+            else if (identifier == "Known-Age")
+                QueryModel.Birthday = "NOTNULL";
+            else if (identifier == "Gender-Contains")
+                QueryModel.Gender = "~male";
+            else if (identifier == "Low-Experience")
+                QueryModel.YearsOfExperience = "<2";
+            else if (identifier == "Project-Contains")
+                QueryModel.ProjectTitle = "Z";
+
+            await UpdateQuery();
+        }
+
+        protected async Task UpdateQuery()
         {
             SetUrlFromQueryModel();
             await LoadData();
+        }
+
+        protected async Task ClearQuery()
+        {
+            QueryModel.Clear();
+            await UpdateQuery();
         }
 
         protected async Task FormatSql()
@@ -118,6 +144,17 @@ namespace FS.FilterExpressionCreator.Demo.Pages
 
             public void SetByName(string propertyName, string value)
                 => GetType().GetProperty(propertyName)?.SetMethod?.Invoke(this, new object[] { value });
+
+            public void Clear()
+            {
+                FirstName = null;
+                LastName = null;
+                Gender = null;
+                Birthday = null;
+                HourlyRate = null;
+                YearsOfExperience = null;
+                ProjectTitle = null;
+            }
         }
 
         private class SqlFormatResult

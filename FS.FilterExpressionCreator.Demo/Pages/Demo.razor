@@ -8,7 +8,29 @@
         Refine Query
     </h6>
     <div class="card-body">
-        <EditForm class="row g-3" Model="@QueryModel" OnValidSubmit="@RefreshQuery">
+        <form class="row g-3" @onsubmit="@UpdateQuery" novalidate>
+            <div class="col-md-12">Predefined samples</div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Older-than-40"))">Older than 40</button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Unknown-Age"))">Unknown Age</button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Known-Age"))">Known Age</button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Gender-Contains"))">Gender Contains 'male'</button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Low-Experience"))">Low Experience</button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Project-Contains"))">Project Contains 'Z'</button>
+            </div>
+            <div class="col-md-12 m-0">
+                <hr />
+            </div>
             <div class="col-md-3">
                 <label for="firstName" class="form-label">First Name</label>
                 <input id="firstName" class="form-control" @bind-Value="QueryModel.FirstName" @bind-Value:event="oninput" />
@@ -50,9 +72,10 @@
                 <div id="seedHelp" class="form-text">Using the same seed returns predictable result</div>
             </div>
             <div class="col-12">
-                <button type="submit" class="btn btn-primary">Refresh</button>
+                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="button" class="btn btn-primary" @onclick="@ClearQuery">Clear</button>
             </div>
-        </EditForm>
+        </form>
     </div>
 </div>
 
