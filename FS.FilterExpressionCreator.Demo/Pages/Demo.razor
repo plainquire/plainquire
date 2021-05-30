@@ -94,18 +94,6 @@
         else
         {
             <li class="list-group-item">
-                <h6>URL</h6>
-                <pre>@QueryResult.HttpQuery</pre>
-            </li>
-            <li class="list-group-item">
-                <h6>Expression</h6>
-                <pre>@QueryResult.FilterExpression</pre>
-            </li>
-            <li class="list-group-item">
-                <h6>SQL (SQLite) <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="FormatSql">Beautify</button></h6>
-                <pre class="sql">@QueryResult.SqlQuery</pre>
-            </li>
-            <li class="list-group-item">
                 <h6>Data (@QueryResult.FilteredCount/@QueryResult.UnfilteredCount)</h6>
                 <SimpleTable Items="QueryResult.Data">
                     <HeaderTemplate>
@@ -131,6 +119,18 @@
                         </tr>
                     </RowTemplate>
                 </SimpleTable>
+            </li>
+            <li class="list-group-item">
+                <h6>URL</h6>
+                <pre>@QueryResult.HttpQuery</pre>
+            </li>
+            <li class="list-group-item">
+                <h6>Expression</h6>
+                <pre>@QueryResult.FilterExpression</pre>
+            </li>
+            <li class="list-group-item">
+                <h6>SQL (SQLite) <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="FormatSql">Beautify</button></h6>
+                <pre class="sql">@QueryResult.SqlQuery</pre>
             </li>
         }
     </ul>
