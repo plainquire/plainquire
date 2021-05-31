@@ -39,8 +39,8 @@ OpenAPI: https://filterexpressioncreator.schick-software.de/openapi/
 
 1. Install the standard NuGet package into your ASP.NET Core application
 ```
-Package Manager : Install-Package FS.FilterExpressionCreator
-CLI : dotnet add package FS.FilterExpressionCreator
+Package Manager : Install-Package Schick.FilterExpressionCreator
+CLI : dotnet add package Schick.FilterExpressionCreator
 ```
 2. Create a new filter
  ```csharp
@@ -233,8 +233,8 @@ The above usage maps the query parameters `OrderNumber` and `OrderCustomer` to t
 ## Register Model Binders
 
 ```
-Package Manager : Install-Package FS.FilterExpressionCreator.Mvc
-CLI : dotnet add package FS.FilterExpressionCreator.Mvc
+Package Manager : Install-Package Schick.FilterExpressionCreator.Mvc
+CLI : dotnet add package Schick.FilterExpressionCreator.Mvc
 ```
 
 ```csharp
@@ -289,8 +289,8 @@ Support for OpenAPI (formerly swagger) provided by Swashbuckle.AspNetCore is ava
 ## Register OpenAPI Support
 
 ``` 
-Package Manager : Install-Package FS.FilterExpressionCreator.Swashbuckle
-CLI : dotnet add package FS.FilterExpressionCreator.Swashbuckle
+Package Manager : Install-Package Schick.FilterExpressionCreator.Swashbuckle
+CLI : dotnet add package Schick.FilterExpressionCreator.Swashbuckle
 ```
 
 ```csharp
@@ -327,8 +327,8 @@ services
 By default `System.Text.Json` is used to serialize/convert Filter Expression Creator specific stuff. If you like to use Newtonsoft.Json instead you must register it
 
 ```
-Package Manager : Install-Package FS.FilterExpressionCreator.Mvc.Newtonsoft
-CLI : dotnet add package FS.FilterExpressionCreator.Mvc.Newtonsoft
+Package Manager : Install-Package Schick.FilterExpressionCreator.Mvc.Newtonsoft
+CLI : dotnet add package Schick.FilterExpressionCreator.Mvc.Newtonsoft
 ```
 
 ```csharp
@@ -378,8 +378,8 @@ filter = JsonSerializer.Deserialize<EntityFilter<EntityFilter<Order>>>(json);
 When using `Newtonsoft.Json` additional converters are required
 
 ``` 
-Package Manager : Install-Package FS.FilterExpressionCreator.Newtonsoft
-CLI : dotnet add package FS.FilterExpressionCreator.Newtonsoft
+Package Manager : Install-Package Schick.FilterExpressionCreator.Newtonsoft
+CLI : dotnet add package Schick.FilterExpressionCreator.Newtonsoft
 ```
 
 ```csharp
