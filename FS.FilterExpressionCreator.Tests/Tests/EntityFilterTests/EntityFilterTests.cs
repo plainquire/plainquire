@@ -87,18 +87,40 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         [TestMethod]
         public void WhenNoValueForPropertyIsProvided_ThenArgumentExceptionIsThrown()
         {
+            using var _ = new AssertionScope();
+
             Action createInvalidEntityFilter1 = () => new EntityFilter<TestModel<string>>()
                 .Add(x => x.ValueA, (string[])null);
 
             Action createInvalidEntityFilter2 = () => new EntityFilter<TestModel<string>>()
                 .Add(x => x.ValueA, Array.Empty<string>());
 
-            Action createInvalidEntityFilter3 = () => new EntityFilter<TestModel<string>>()
-                .Add(x => x.ValueA, new string[] { null });
-
             createInvalidEntityFilter1.Should().Throw<ArgumentException>().WithMessage("At least one value is required");
             createInvalidEntityFilter2.Should().Throw<ArgumentException>().WithMessage("At least one value is required");
-            createInvalidEntityFilter3.Should().Throw<ArgumentException>().WithMessage("At least one value is required. If filtering for NULL is intended, use filter operator 'IsNull' or 'NotNull'.");
+        }
+
+        [TestMethod]
+        public void WhenNullValueForPropertyIsProvided_ThenArgumentExceptionIsThrown()
+        {
+            Action createInvalidEntityFilter = () => new EntityFilter<TestModel<string>>()
+                .Add(x => x.ValueA, "A", null);
+
+            createInvalidEntityFilter.Should().Throw<ArgumentException>().WithMessage("Filter values cannot be null. If filtering for NULL is intended, use filter operator 'IsNull' or 'NotNull'");
+        }
+
+        [TestMethod]
+        public void WhenUnknownTypeIsFiltered_ThenArgumentExceptionIsThrown()
+        {
+            using var _ = new AssertionScope();
+
+            Action createInvalidEntityFilter1 = () => new EntityFilter<TestModel<string>>()
+                .Replace(x => x.ValueA, FilterOperator.EqualCaseSensitive, new List<string>());
+
+            Action createInvalidEntityFilter2 = () => new EntityFilter<TestModel<string>>()
+                .Replace(x => x.ValueA, FilterOperator.EqualCaseSensitive, DateTimeOffset.Now);
+
+            createInvalidEntityFilter1.Should().Throw<ArgumentException>().WithMessage("The type 'System.Collections.Generic.List`1[System.String]' is not filterable by any known expression creator");
+            createInvalidEntityFilter2.Should().Throw<ArgumentException>().WithMessage("The type 'System.DateTimeOffset' is not filterable by any known expression creator");
         }
 
         [DataTestMethod]

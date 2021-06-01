@@ -1,4 +1,5 @@
 ﻿using FS.FilterExpressionCreator.Enums;
+using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.JsonConverters;
 using System;
 using System.Collections.Generic;
@@ -66,8 +67,10 @@ namespace FS.FilterExpressionCreator.Models
                 values = null;
             else if (values == null || values.Length == 0)
                 throw new ArgumentException("At least one value is required");
-            else if (values.All(x => x == null))
-                throw new ArgumentException($"At least one value is required. If filtering for NULL is intended, use filter operator '{FilterOperator.IsNull}' or '{FilterOperator.NotNull}'.");
+            else if (values.Any(x => x == null))
+                throw new ArgumentException($"Filter values cannot be null. If filtering for NULL is intended, use filter operator '{FilterOperator.IsNull}' or '{FilterOperator.NotNull}'");
+            else if (!typeof(TValue).IsFilterableProperty())
+                throw new ArgumentException($"The type '{typeof(TValue)}' is not filterable by any known expression creator");
 
             return new ValueFilter()
             {

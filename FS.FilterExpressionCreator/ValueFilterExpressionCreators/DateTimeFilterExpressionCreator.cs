@@ -4,6 +4,7 @@ using FS.FilterExpressionCreator.Interfaces;
 using FS.FilterExpressionCreator.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
@@ -30,7 +31,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 
         /// <inheritdoc />
         public override bool CanCreateExpressionFor(Type type)
-            => type.GetUnderlyingType() == typeof(DateTime);
+            => new[] { typeof(DateTimeSpan), typeof(DateTime) }.Contains(type.GetUnderlyingType());
 
         /// <inheritdoc />
         protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration filterConfiguration)
