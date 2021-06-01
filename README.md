@@ -13,7 +13,7 @@ OpenAPI: https://filterexpressioncreator.schick-software.de/openapi/
 - [Creating Filters](#creating-filters)
   * [Multiple Values](#multiple-values)
   * [Nested Filters](#nested-filters)
-  * [Filter for `null`](#filter-for--null-)
+  * [Filter for `null`](#filter-for-null)
   * [Filter Operators](#filter-operators)
   * [Configuration](#configuration)
 - [Filter Micro Syntax](#filter-micro-syntax)
@@ -83,13 +83,13 @@ var filteredOrders = orders.Where(filter).ToList();
 // filteredOrders equals
 // new[] { new Order { Customer = "Joe Smith", Number = 300 } };
 
-// Or using Queryables (e.g. Entity Framework)
+// Or using queryables (e.g. Entity Framework)
 dbContext.Orders.Where(filter).ToList();
 ```
 
 # Creating Filters
 
-Filters can be created using Operator/Value(s) pairs or via [filter micro syntax](#Filter Micro Syntax)
+Filters can be created using Operator/Value(s) pairs or via [Filter Micro Syntax](#filter-micro-syntax)
 
 ```csharp
 // Operator/Value(s): Customer contains 'Joe' or 'Doe'
@@ -353,7 +353,7 @@ var copy = filter.Clone();
 
 ## Cast Filters
 
-Filters can be cast between Entities, e.g. to convert them between DTOs and database models.
+Filters can be cast between entities, e.g. to convert them between DTOs and database models.
 
 Properties are matched by type (check if assignable) and name (case sensitive)
 
