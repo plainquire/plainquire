@@ -1,4 +1,5 @@
-﻿<nav class="navbar navbar-expand-md navbar-dark">
+﻿@inherits NavMenuComponent
+<nav class="navbar navbar-expand-md navbar-dark">
     <div class="container">
 
         <a class="navbar-brand" href="#">Filter Expression Creator</a>
@@ -19,6 +20,11 @@
                 <NavLink class="nav-link" href="demo">
                     <span class="d-block" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
                         Demo
+                    </span>
+                </NavLink>
+                <NavLink class="nav-link" href="@OpeApiLink" target="_blank">
+                    <span class="d-block" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+                        API
                     </span>
                 </NavLink>
             </ul>
