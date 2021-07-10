@@ -6,7 +6,7 @@ Library to dynamically create lambda expressions to filter lists and database qu
 
 Demo: [https://filterexpressioncreator.schick-software.de/demo](https://filterexpressioncreator.schick-software.de/demo)
 
-OpenAPI: https://filterexpressioncreator.schick-software.de/openapi/
+API: https://filterexpressioncreator.schick-software.de/openapi/
 
 # Table of Content
 - [Getting Started](#getting-started)
@@ -89,7 +89,7 @@ dbContext.Orders.Where(filter).ToList();
 
 # Creating Filters
 
-Filters can be created using Operator/Value(s) pairs or via [Filter Micro Syntax](#filter-micro-syntax)
+Filters can be created using operator/value(s) pairs or via [filter micro syntax](#filter-micro-syntax)
 
 ```csharp
 // Operator/Value(s): Customer contains 'Joe' or 'Doe'
