@@ -1,3 +1,11 @@
+# 1.0.2
+
+## Changes
+
+Link to API added to demo page
+
+README updated
+
 # 1.0.1
 
 ## Changes
