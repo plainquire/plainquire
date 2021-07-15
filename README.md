@@ -183,7 +183,7 @@ var filteredOrders = orders.Where(filterExpression.Compile()).ToList();
 
 # Filter Micro Syntax
 
-The filter syntax consists of a operator shortcut (see [filter operators](#filter-operators) above) and a list of comma separated values. When a value contains a comma itself, it must be escaped by a backslash. The backslash itself is escaped by another backslash.
+The filter syntax consists of an operator shortcut (see [filter operators](#filter-operators) above) and a list of comma separated values. When a value contains a comma itself, it must be escaped by a backslash. The backslash itself is escaped by another backslash.
 
 ## Examples
 
