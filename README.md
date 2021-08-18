@@ -242,8 +242,8 @@ using FS.FilterExpressionCreator.Mvc.Extensions;
 ```
 
 ```csharp
-// Register required stuff by calling 'AddFilterExpressionsSupport()' on IServiceCollection instance
-services.AddFilterExpressionsSupport();
+// Register required stuff by calling 'AddFilterExpressionsSupport()' on IMvcBuilder instance
+services.AddControllers().AddFilterExpressionsSupport();
 ```
 
 ## Configure Model Binding
@@ -337,8 +337,8 @@ using FS.FilterExpressionCreator.Mvc.Newtonsoft;
 
 ```csharp
 // Register support for Newtonsoft by calling 
-// 'AddFilterExpressionsNewtonsoftSupport()' on IServiceCollection instance
-services.AddFilterExpressionsNewtonsoftSupport();
+// 'AddFilterExpressionsNewtonsoftSupport()' on IMvcBuilder instance
+services.AddControllers().AddFilterExpressionsNewtonsoftSupport();
 ```
 
 # Advanced Scenarios
