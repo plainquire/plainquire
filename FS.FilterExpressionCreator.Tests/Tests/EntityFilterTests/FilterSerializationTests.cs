@@ -38,7 +38,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         {
             var (netFilter, newtonFilter) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_EMPTY);
 
-            netFilter.Should().BeEquivalentTo(newtonFilter);
+            netFilter.ToString().Should().BeEquivalentTo(newtonFilter.ToString());
 
             netFilter.CreateFilterExpression().Should().BeNull();
         }
@@ -49,9 +49,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             var (netFilter1, newtonFilter1) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_PROP_NULL);
             var (netFilter2, newtonFilter2) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_PROP_EMPTY);
 
-            netFilter1.Should().BeEquivalentTo(newtonFilter1);
-            netFilter2.Should().BeEquivalentTo(newtonFilter2);
-            netFilter1.Should().BeEquivalentTo(netFilter2);
+            netFilter1.ToString().Should().BeEquivalentTo(newtonFilter1.ToString());
+            netFilter2.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
+            netFilter1.ToString().Should().BeEquivalentTo(netFilter2.ToString());
 
             netFilter1.CreateFilterExpression().Should().BeNull();
         }
@@ -62,9 +62,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             var (netFilter1, newtonFilter1) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_NULL);
             var (netFilter2, newtonFilter2) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_EMPTY);
 
-            netFilter1.Should().BeEquivalentTo(newtonFilter1);
-            netFilter1.Should().BeEquivalentTo(newtonFilter2);
-            netFilter2.Should().BeEquivalentTo(newtonFilter2);
+            netFilter1.ToString().Should().BeEquivalentTo(newtonFilter1.ToString());
+            netFilter1.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
+            netFilter2.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
 
             var items = new TestModel<DateTime>[]
             {
@@ -74,7 +74,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             };
 
             var filteredItems = items.Where(netFilter1).ToList();
-            filteredItems.Should().BeEquivalentTo(items[1]);
+            filteredItems.Should().BeEquivalentTo(new[] { items[1] });
         }
 
         [TestMethod]
@@ -83,9 +83,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             var (netFilter1, newtonFilter1) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_PROP_NULL);
             var (netFilter2, newtonFilter2) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_PROP_EMPTY);
 
-            netFilter1.Should().BeEquivalentTo(newtonFilter1);
-            netFilter1.Should().BeEquivalentTo(newtonFilter2);
-            netFilter2.Should().BeEquivalentTo(newtonFilter2);
+            netFilter1.ToString().Should().BeEquivalentTo(newtonFilter1.ToString());
+            netFilter1.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
+            netFilter2.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
 
             var items = new TestModel<DateTime>[]
             {
@@ -95,7 +95,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             };
 
             var filteredItems = items.Where(netFilter1).ToList();
-            filteredItems.Should().BeEquivalentTo(items[1]);
+            filteredItems.Should().BeEquivalentTo(new[] { items[1] });
         }
 
         [TestMethod]
@@ -103,7 +103,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         {
             var (netFilter, newtonFilter) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_FULL);
 
-            netFilter.Should().BeEquivalentTo(newtonFilter);
+            netFilter.ToString().Should().BeEquivalentTo(newtonFilter.ToString());
 
             var items = new TestModel<DateTime>[]
             {
@@ -115,7 +115,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             };
 
             var filteredItems = items.Where(netFilter).ToList();
-            filteredItems.Should().BeEquivalentTo(items[2]);
+            filteredItems.Should().BeEquivalentTo(new[] { items[2] });
         }
 
         private static (T NetFilter, T NewtonFilter) Deserialize<T>(string json)

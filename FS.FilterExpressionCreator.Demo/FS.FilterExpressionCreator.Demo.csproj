@@ -9,17 +9,17 @@
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="33.0.2" />
-    <PackageReference Include="linq2db.EntityFrameworkCore" Version="5.2.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.6">
+    <PackageReference Include="linq2db.EntityFrameworkCore" Version="5.5.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.6" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +34,17 @@
     <Watch Include="..\**\*.razor" />
     <Watch Include="..\**\*.scss" />
     <Watch Include="..\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="IDisposableAnalyzers" Version="3.4.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="SauceControl.InheritDoc" Version="1.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

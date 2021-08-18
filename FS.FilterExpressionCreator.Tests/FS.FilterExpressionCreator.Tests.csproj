@@ -3,12 +3,27 @@
   <Import Project="../Build/build_version.props" />
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.9" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FS.FilterExpressionCreator.Newtonsoft\FS.FilterExpressionCreator.Newtonsoft.csproj" />
     <ProjectReference Include="..\FS.FilterExpressionCreator\FS.FilterExpressionCreator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="coverlet.collector" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="FluentAssertions" Version="6.0.0" />
+    <PackageReference Update="IDisposableAnalyzers" Version="3.4.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Update="MSTest.TestAdapter" Version="2.2.5" />
+    <PackageReference Update="MSTest.TestFramework" Version="2.2.5" />
   </ItemGroup>
 
 </Project>

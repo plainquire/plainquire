@@ -32,7 +32,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 
             var filteredEntities = filterFunc(testItems, outerFilter);
 
-            filteredEntities.Should().BeEquivalentTo(testItems[0]);
+            filteredEntities.Should().BeEquivalentTo(new[] { testItems[0] });
         }
 
         [DataTestMethod]
@@ -56,7 +56,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 
             var filteredEntities = filterFunc(testItems, outerFilter);
 
-            filteredEntities.Should().BeEquivalentTo(testItems[0], testItems[2]);
+            filteredEntities.Should().BeEquivalentTo(new[] { testItems[0], testItems[2] });
         }
 
         [TestMethod]
@@ -108,7 +108,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             var testItems = new TestModel<string>[] { new() { ValueA = "A" } };
 
             var filteredEntities = filterFunc(testItems, outerFilter);
-            filteredEntities.Should().BeEquivalentTo(testItems[0]);
+            filteredEntities.Should().BeEquivalentTo(new[] { testItems[0] });
         }
     }
 }

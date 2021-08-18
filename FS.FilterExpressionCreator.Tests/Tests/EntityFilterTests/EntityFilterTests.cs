@@ -32,7 +32,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             };
 
             var filteredEntitiesLinq = filterFunc(testItems, testItemsFilter);
-            filteredEntitiesLinq.Should().BeEquivalentTo(testItems[1], testItems[2]);
+            filteredEntitiesLinq.Should().BeEquivalentTo(new[] { testItems[1], testItems[2] });
         }
 
         [DataTestMethod]
@@ -50,7 +50,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             };
 
             var filteredEntities = filterFunc(testItems, testItemsFilter).ToList();
-            filteredEntities.Should().BeEquivalentTo(testItems[1]);
+            filteredEntities.Should().BeEquivalentTo(new[] { testItems[1] });
         }
 
         [DataTestMethod]
@@ -69,7 +69,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             };
 
             var filteredEntities = filterFunc(testItems, testItemsFilter).ToList();
-            filteredEntities.Should().BeEquivalentTo(testItems[0]);
+            filteredEntities.Should().BeEquivalentTo(new[] { testItems[0] });
         }
 
         [TestMethod]
@@ -142,8 +142,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             var isNullItems = filterFunc(testItems, isNullFilter).ToList();
             var notNullItems = filterFunc(testItems, isNotNullFilter).ToList();
 
-            isNullItems.Should().BeEquivalentTo(testItems[1]);
-            notNullItems.Should().BeEquivalentTo(testItems[0]);
+            isNullItems.Should().BeEquivalentTo(new[] { testItems[1] });
+            notNullItems.Should().BeEquivalentTo(new[] { testItems[0] });
         }
 
         [DataTestMethod]
@@ -166,8 +166,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             var isNullItems = filterFunc(testItems, isNullFilter).ToList();
             var notNullItems = filterFunc(testItems, isNotNullFilter).ToList();
 
-            isNullItems.Should().BeEquivalentTo(testItems[1]);
-            notNullItems.Should().BeEquivalentTo(testItems[0]);
+            isNullItems.Should().BeEquivalentTo(new[] { testItems[1] });
+            notNullItems.Should().BeEquivalentTo(new[] { testItems[0] });
         }
 
         [DataTestMethod]
@@ -186,7 +186,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 
             var filteredItems = filterFunc(testItems, filter).ToList();
 
-            filteredItems.Should().BeEquivalentTo(testItems[1]);
+            filteredItems.Should().BeEquivalentTo(new[] { testItems[1] });
         }
 
         [DataTestMethod]

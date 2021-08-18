@@ -4,13 +4,24 @@
   <Import Project="../Build/build_xml_documentation.props" />
 
   <ItemGroup>
-    <PackageReference Include="LoxSmoke.DocXml" Version="3.4.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
+    <PackageReference Include="LoxSmoke.DocXml" Version="3.4.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FS.FilterExpressionCreator.Mvc\FS.FilterExpressionCreator.Mvc.csproj" />
     <ProjectReference Include="..\FS.FilterExpressionCreator\FS.FilterExpressionCreator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="IDisposableAnalyzers" Version="3.4.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="SauceControl.InheritDoc" Version="1.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

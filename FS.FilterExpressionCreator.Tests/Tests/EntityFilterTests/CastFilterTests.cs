@@ -54,7 +54,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             };
 
             var filteredItems = filterFunc(testItems, dtoFilter);
-            filteredItems.Should().BeEquivalentTo(testItems[0]);
+            filteredItems.Should().BeEquivalentTo(new[] { testItems[0] });
         }
 
         public class ModelDto
