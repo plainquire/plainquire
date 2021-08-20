@@ -1,3 +1,15 @@
+# 1.1.0
+
+## Changes
+
+Names of generated API parameters changed to first-char-lower-cased
+
+# 1.0.3
+
+## Changes
+
+NuGet packages updated
+
 # 1.0.2
 
 ## Changes
