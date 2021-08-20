@@ -1,5 +1,6 @@
 ﻿#pragma warning disable 1591
 using FS.FilterExpressionCreator.Demo.DTOs;
+using FS.FilterExpressionCreator.Extensions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
@@ -146,7 +147,7 @@ namespace FS.FilterExpressionCreator.Demo.Pages
                      .GetProperties()
                      .Select(x => new { x.Name, Value = (string)x.GetMethod?.Invoke(this, null) })
                      .Where(x => !string.IsNullOrEmpty(x.Value))
-                     .ToDictionary(x => x.Name, x => new StringValues(x.Value));
+                     .ToDictionary(x => x.Name.LowercaseFirstChar(), x => new StringValues(x.Value));
 
             public void SetByName(string propertyName, string value)
                 => GetType().GetProperty(propertyName)?.SetMethod?.Invoke(this, new object[] { value });

@@ -31,7 +31,7 @@ namespace FS.FilterExpressionCreator.Mvc.Extensions
         public static string GetFilterParameterName(this MemberInfo member, string prefix = null)
         {
             var filterAttribute = member.GetCustomAttribute<FilterAttribute>();
-            return $"{prefix ?? member.ReflectedType?.Name}{filterAttribute?.Name ?? member.Name}";
+            return $"{prefix ?? member.ReflectedType?.Name}{filterAttribute?.Name ?? member.Name}".LowercaseFirstChar();
         }
 
         /// <summary>
