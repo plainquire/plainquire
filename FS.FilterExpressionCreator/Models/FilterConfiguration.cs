@@ -16,7 +16,7 @@ namespace FS.FilterExpressionCreator.Models
         /// <summary>
         /// A delegate returning the value for 'now' when parsing relative date/time values (e.g. one-week-ago). Defaults to <see cref="DateTime.Now"/>.
         /// </summary>
-        public Func<DateTime> Now { get; set; } = () => DateTime.Now;
+        public Func<DateTimeOffset> Now { get; set; } = () => DateTimeOffset.Now;
 
         // TODO: Think about to handle "Unable to parse given filter value"        
         /// <summary>

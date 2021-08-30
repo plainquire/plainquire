@@ -11,8 +11,6 @@ namespace FS.FilterExpressionCreator.Extensions
     /// </summary>
     public static class DateTimeSpanExtensions
     {
-        private const string DATE_TIME_ROUND_TRIP_STRING_PATTERN = @"(?<year>\d\d\d\d)(\D(?<month>\d\d))?(\D(?<day>\d\d))?(\D(?<hour>\d\d))?(\D(?<minute>\d\d))?(\D(?<second>\d\d))?(\D\d+)?(Z|\+\d\d:\d\d)?";
-
         /// <summary>
         /// Tries to convert a string to date time span.
         /// </summary>
@@ -20,9 +18,9 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="now">Value used for 'now' when parsing relative date/time values (e.g. one-week-ago).</param>
         /// <param name="dateTimeSpan">The parsed date time span.</param>
         /// <param name="cultureInfo">The culture to use when parsing.</param>
-        public static bool TryConvertStringToDateTimeSpan(this string value, DateTime now, out DateTimeSpan dateTimeSpan, CultureInfo cultureInfo = null)
+        public static bool TryConvertStringToDateTimeSpan(this string value, DateTimeOffset now, out DateTimeSpan dateTimeSpan, CultureInfo cultureInfo = null)
         {
-            dateTimeSpan = new DateTimeSpan(DateTime.MinValue, DateTime.MinValue);
+            dateTimeSpan = new DateTimeSpan(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
             if (value == null)
                 return false;
@@ -42,11 +40,10 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <summary>
         /// Expands a date to a time span. 2000-01-01 extends to 2020-12-31, 2020-02-01 extends to 2020-02-28 and so on.
         /// </summary>
-        /// <param name="value">The date/time to expand.</param>
-        public static DateTimeSpan ConvertToDateTimeSpan(this DateTime value)
+        /// <param name="start">The date/time to expand.</param>
+        public static DateTimeSpan ConvertToDateTimeSpan(this DateTimeOffset start)
         {
-            var start = value;
-            DateTime end;
+            DateTimeOffset end;
             if (start.Second != 0)
                 end = start.AddSeconds(1);
             else if (start.Minute != 0)
@@ -65,39 +62,49 @@ namespace FS.FilterExpressionCreator.Extensions
 
         private static bool TryConvertDateTimeSpanFormattedString(string value, IFormatProvider cultureInfo, out DateTimeSpan dateTimeSpan)
         {
-            dateTimeSpan = new DateTimeSpan(DateTime.MinValue, DateTime.MinValue);
+            dateTimeSpan = new DateTimeSpan(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
-            var match = Regex.Match(value, $"^(?<start>{DATE_TIME_ROUND_TRIP_STRING_PATTERN})_(?<end>{DATE_TIME_ROUND_TRIP_STRING_PATTERN})$");
-            if (!match.Success)
+            var startAndEnd = Regex.Match(value, "^(?<start>.+?)_(?<end>.+)$");
+            if (!startAndEnd.Success)
                 return false;
 
-            var startParsed = DateTime.TryParse(match.Groups["start"].Value, cultureInfo, DateTimeStyles.AdjustToUniversal, out var start);
-            var endParsed = DateTime.TryParse(match.Groups["end"].Value, cultureInfo, DateTimeStyles.AdjustToUniversal, out var end);
+            var startParsed = TryConvertRoundTripFormattedString(startAndEnd.Groups["start"].Value, cultureInfo, out var start);
+            var endParsed = TryConvertRoundTripFormattedString(startAndEnd.Groups["end"].Value, cultureInfo, out var end);
             if (!startParsed || !endParsed)
                 return false;
 
-            dateTimeSpan = new DateTimeSpan(start, end);
+            dateTimeSpan = new DateTimeSpan(start.Start, end.Start);
             return true;
         }
 
         private static bool TryConvertRoundTripFormattedString(string value, IFormatProvider cultureInfo, out DateTimeSpan dateTimeSpan)
         {
-            dateTimeSpan = new DateTimeSpan(DateTime.MinValue, DateTime.MinValue);
-            int? getNamedGroup(Match lMatch, string name) => int.TryParse(lMatch.Groups[name].Value, NumberStyles.Any, cultureInfo, out var intValue) ? intValue : (int?)null;
+            dateTimeSpan = new DateTimeSpan(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
-            var match = Regex.Match(value, $"^{DATE_TIME_ROUND_TRIP_STRING_PATTERN}$");
-            if (!match.Success)
+            const string offsetPattern = @"^(?<datetime>.+?)(?<offset>Z|[\+\-]\d{1,2}:\d{1,2})?$";
+            const string dateTimePattern = @"^(?<year>\d\d\d\d)(\D(?<month>\d\d))?(\D(?<day>\d\d))?(\D(?<hour>\d\d))?(\D(?<minute>\d\d))?(\D(?<second>\d\d))?(\D(?<millisecond>\d+))?$";
+
+            var dateTimeAndOffset = Regex.Match(value, offsetPattern);
+            if (!dateTimeAndOffset.Success)
+                return false;
+
+            var dateTime = dateTimeAndOffset.Groups["datetime"].Value;
+            var offset = dateTimeAndOffset.Groups["offset"].Value;
+
+            var dateAndTime = Regex.Match(dateTime, dateTimePattern);
+            if (!dateAndTime.Success)
                 return false;
 
             try
             {
-                var year = getNamedGroup(match, "year") ?? throw new InvalidOperationException($"Year could not be parsed from given value '{value}'");
-                var month = getNamedGroup(match, "month") ?? 1;
-                var day = getNamedGroup(match, "day") ?? 1;
-                var hour = getNamedGroup(match, "hour") ?? 0;
-                var minute = getNamedGroup(match, "minute") ?? 0;
-                var second = getNamedGroup(match, "second") ?? 0;
-                var start = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Utc);
+                var year = ParseDateTimePart(dateAndTime, "year", cultureInfo) ?? throw new InvalidOperationException($"Year could not be parsed from given value '{value}'");
+                var month = ParseDateTimePart(dateAndTime, "month", cultureInfo) ?? 1;
+                var day = ParseDateTimePart(dateAndTime, "day", cultureInfo) ?? 1;
+                var hour = ParseDateTimePart(dateAndTime, "hour", cultureInfo) ?? 0;
+                var minute = ParseDateTimePart(dateAndTime, "minute", cultureInfo) ?? 0;
+                var second = ParseDateTimePart(dateAndTime, "second", cultureInfo) ?? 0;
+                var offsetTimeSpan = ParseOffset(offset);
+                var start = new DateTimeOffset(year, month, day, hour, minute, second, offsetTimeSpan);
                 dateTimeSpan = start.ConvertToDateTimeSpan();
                 return true;
             }
@@ -106,23 +113,23 @@ namespace FS.FilterExpressionCreator.Extensions
             return false;
         }
 
-        private static bool TryConvertChronicSpanFormattedString(string value, DateTime now, out DateTimeSpan dateTimeSpan)
+        private static bool TryConvertChronicSpanFormattedString(string value, DateTimeOffset now, out DateTimeSpan dateTimeSpan)
         {
-            dateTimeSpan = new DateTimeSpan(DateTime.MinValue, DateTime.MinValue);
+            dateTimeSpan = new DateTimeSpan(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
-            var match = Regex.Match(value, "^(?<start>.*?)(_(?<end>(.*)))?$");
-            var startValue = RemoveHyphenForChronicParse(match.Groups["start"].Value);
-            var endValue = RemoveHyphenForChronicParse(match.Groups["end"].Value);
+            var startAndEnd = Regex.Match(value, "^(?<start>.*?)(_(?<end>(.*)))?$");
+            var startValue = RemoveHyphenForChronicParse(startAndEnd.Groups["start"].Value);
+            var endValue = RemoveHyphenForChronicParse(startAndEnd.Groups["end"].Value);
             var endIsEmpty = string.IsNullOrWhiteSpace(endValue);
 
-            var options = new Options { Clock = () => now };
+            var options = new Options { Clock = () => now.DateTime };
             var start = new Parser(options).Parse(startValue);
             var end = new Parser(options).Parse(endValue);
 
             if (start != null && endIsEmpty)
-                end = new Span(now, now);
+                end = new Span(now.DateTime, now.DateTime);
 
-            if (!match.Success || start?.Start.HasValue != true || end?.Start.HasValue != true)
+            if (!startAndEnd.Success || start?.Start.HasValue != true || end?.Start.HasValue != true)
                 return false;
 
             dateTimeSpan = new DateTimeSpan(start.Start.Value, end.Start.Value);
@@ -131,9 +138,26 @@ namespace FS.FilterExpressionCreator.Extensions
 
         private static bool TryConvertUnknownFormattedString(string value, CultureInfo cultureInfo, out DateTimeSpan dateTimeSpan)
         {
-            var result = DateTime.TryParse(value, cultureInfo, DateTimeStyles.AdjustToUniversal, out var dateTimeValue);
+            var result = DateTimeOffset.TryParse(value, cultureInfo, DateTimeStyles.AssumeUniversal, out var dateTimeValue);
             dateTimeSpan = dateTimeValue.ConvertToDateTimeSpan();
             return result;
+        }
+
+        private static int? ParseDateTimePart(Match lMatch, string name, IFormatProvider cultureInfo)
+            => int.TryParse(lMatch.Groups[name].Value, NumberStyles.Any, cultureInfo, out var intValue) ? intValue : (int?)null;
+
+        private static TimeSpan ParseOffset(string offset)
+        {
+            if (string.IsNullOrEmpty(offset) || offset == "Z")
+                return TimeSpan.Zero;
+
+            var offsetHasSign = offset[0] == '+' || offset[0] == '-';
+            var absoluteOffset = offsetHasSign ? offset[1..] : offset;
+            if (!TimeSpan.TryParse(absoluteOffset, out var timeSpan))
+                return TimeSpan.Zero;
+
+            var signMultiplier = offset[0] == '+' ? 1 : -1;
+            return timeSpan * signMultiplier;
         }
 
         private static string RemoveHyphenForChronicParse(string value)

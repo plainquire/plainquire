@@ -10,19 +10,19 @@ namespace FS.FilterExpressionCreator.Models
         /// <summary>
         /// Gets or sets the start of range.
         /// </summary>
-        public DateTime Start { get; set; }
+        public DateTimeOffset Start { get; set; }
 
         /// <summary>
         /// Gets or sets the end of range.
         /// </summary>
-        public DateTime End { get; set; }
+        public DateTimeOffset End { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DateTimeSpan"/> class.
         /// </summary>
         /// <param name="start">The start of range.</param>
         /// <param name="end">The end of range.</param>
-        public DateTimeSpan(DateTime start, DateTime end)
+        public DateTimeSpan(DateTimeOffset start, DateTimeOffset end)
         {
             Start = start;
             End = end;

@@ -116,11 +116,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             Action createInvalidEntityFilter1 = () => new EntityFilter<TestModel<string>>()
                 .Replace(x => x.ValueA, FilterOperator.EqualCaseSensitive, new List<string>());
 
-            Action createInvalidEntityFilter2 = () => new EntityFilter<TestModel<string>>()
-                .Replace(x => x.ValueA, FilterOperator.EqualCaseSensitive, DateTimeOffset.Now);
-
             createInvalidEntityFilter1.Should().Throw<ArgumentException>().WithMessage("The type 'System.Collections.Generic.List`1[System.String]' is not filterable by any known expression creator");
-            createInvalidEntityFilter2.Should().Throw<ArgumentException>().WithMessage("The type 'System.DateTimeOffset' is not filterable by any known expression creator");
         }
 
         [DataTestMethod]

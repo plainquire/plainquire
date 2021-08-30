@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace FS.FilterExpressionCreator.Tests.Models
 {
+    [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
     public class TestModel<TValue>
     {
         public Guid Id { get; set; } = Guid.NewGuid();
@@ -14,5 +16,19 @@ namespace FS.FilterExpressionCreator.Tests.Models
         public TestModelNested NestedObject { get; set; }
 
         public List<TestModelNested> NestedList { get; set; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private string DebuggerDisplay
+        {
+            get
+            {
+                var values = new List<string>();
+                if (!ValueA.Equals(default(TValue)))
+                    values.Add($"ValueA: {ValueA}");
+                if (!ValueB.Equals(default(TValue)))
+                    values.Add($"ValueB: {ValueB}");
+                return string.Join(", ", values);
+            }
+        }
     }
 }

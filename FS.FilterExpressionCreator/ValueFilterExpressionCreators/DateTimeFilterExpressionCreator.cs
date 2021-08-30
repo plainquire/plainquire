@@ -31,7 +31,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 
         /// <inheritdoc />
         public override bool CanCreateExpressionFor(Type type)
-            => new[] { typeof(DateTimeSpan), typeof(DateTime) }.Contains(type.GetUnderlyingType());
+            => new[] { typeof(DateTimeSpan), typeof(DateTime), typeof(DateTimeOffset) }.Contains(type.GetUnderlyingType());
 
         /// <inheritdoc />
         protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration filterConfiguration)
@@ -47,33 +47,48 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 
         private Expression CreateDateTimeExpressionByFilterOperator<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, DateTimeSpan value)
         {
+            TProperty valueStart;
+            TProperty valueEnd;
+
+            var underlyingFilterPropertyType = typeof(TProperty).GetUnderlyingType();
+            if (underlyingFilterPropertyType == typeof(DateTime))
+            {
+                valueStart = (TProperty)(object)value.Start.DateTime;
+                valueEnd = (TProperty)(object)value.End.DateTime;
+            }
+            else
+            {
+                valueStart = (TProperty)(object)value.Start;
+                valueEnd = (TProperty)(object)value.End;
+            }
+
             switch (filterOperator)
             {
                 case FilterOperator.Default:
                 case FilterOperator.Contains:
-                    return CreateDateTimeSpanContainsExpression(propertySelector, value);
+                    return CreateDateTimeSpanContainsExpression(propertySelector, valueStart, valueEnd);
                 case FilterOperator.EqualCaseInsensitive:
                 case FilterOperator.EqualCaseSensitive:
-                    return CreateEqualExpression(propertySelector, value.Start);
+                    return CreateEqualExpression(propertySelector, valueStart);
                 case FilterOperator.NotEqual:
-                    return CreateNotEqualExpression(propertySelector, value.Start);
+                    return CreateNotEqualExpression(propertySelector, valueStart);
                 case FilterOperator.LessThan:
-                    return CreateLessThanExpression(propertySelector, value.Start);
+                    return CreateLessThanExpression(propertySelector, valueStart);
                 case FilterOperator.LessThanOrEqual:
-                    return CreateLessThanOrEqualExpression(propertySelector, value.Start);
+                    return CreateLessThanOrEqualExpression(propertySelector, valueStart);
                 case FilterOperator.GreaterThan:
-                    return CreateGreaterThanExpression(propertySelector, value.Start);
+                    return CreateGreaterThanExpression(propertySelector, valueStart);
                 case FilterOperator.GreaterThanOrEqual:
-                    return CreateGreaterThanOrEqualExpression(propertySelector, value.Start);
+                    return CreateGreaterThanOrEqualExpression(propertySelector, valueStart);
                 default:
                     throw CreateFilterExpressionCreationException($"Filter operator '{filterOperator}' not allowed for property type '{typeof(TProperty)}'", propertySelector, filterOperator, value);
             }
         }
 
-        private static Expression CreateDateTimeSpanContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, DateTimeSpan value)
+        private static Expression CreateDateTimeSpanContainsExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue start, TValue end)
         {
-            var startExpression = Expression.Constant(value.Start, typeof(TProperty));
-            var endExpression = Expression.Constant(value.End, typeof(TProperty));
+            var startExpression = Expression.Constant(start, typeof(TProperty));
+            var endExpression = Expression.Constant(end, typeof(TProperty));
             var startGreaterThanOrEqualExpression = Expression.GreaterThanOrEqual(propertySelector.Body, startExpression);
             var endLessThanExpression = Expression.LessThan(propertySelector.Body, endExpression);
             var result = Expression.AndAlso(startGreaterThanOrEqualExpression, endLessThanExpression);

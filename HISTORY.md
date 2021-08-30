@@ -1,3 +1,9 @@
+# 1.2.0
+
+## Changes
+
+Support for DateTimeOffset added
+
 # 1.1.0
 
 ## Changes
