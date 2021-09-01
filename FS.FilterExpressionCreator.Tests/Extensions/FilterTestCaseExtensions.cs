@@ -5,6 +5,7 @@ using FS.FilterExpressionCreator.Tests.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Tests.Extensions
 {
@@ -34,7 +35,7 @@ namespace FS.FilterExpressionCreator.Tests.Extensions
             var filteredItems = filterFunc(testItems, entityFilter, testCase.FilterConfiguration);
             var expectedItems = testItems.Select(x => x.ValueA).Where(testCase.ExpectedTestItemsExpression ?? (_ => true)).ToList();
 
-            using (new AssertionScope($"items filtered by '{entityFilter.CreateFilterExpression(testCase.FilterConfiguration)}'"))
+            using (new AssertionScope($"items filtered by '{entityFilter.CreateFilter(testCase.FilterConfiguration)}'"))
                 filteredItems.Select(x => x.ValueA).Should().Equal(expectedItems);
         }
 

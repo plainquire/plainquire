@@ -4,6 +4,7 @@ using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 {

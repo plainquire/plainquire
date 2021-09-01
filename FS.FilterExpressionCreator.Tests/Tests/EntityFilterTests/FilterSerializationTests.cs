@@ -5,6 +5,7 @@ using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
+using FS.FilterExpressionCreator.Filters;
 using NetSerializer = System.Text.Json.JsonSerializer;
 using NewtonSerializer = Newtonsoft.Json.JsonConvert;
 
@@ -40,7 +41,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 
             netFilter.ToString().Should().BeEquivalentTo(newtonFilter.ToString());
 
-            netFilter.CreateFilterExpression().Should().BeNull();
+            netFilter.CreateFilter().Should().BeNull();
         }
 
         [TestMethod]
@@ -53,7 +54,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             netFilter2.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
             netFilter1.ToString().Should().BeEquivalentTo(netFilter2.ToString());
 
-            netFilter1.CreateFilterExpression().Should().BeNull();
+            netFilter1.CreateFilter().Should().BeNull();
         }
 
         [TestMethod]

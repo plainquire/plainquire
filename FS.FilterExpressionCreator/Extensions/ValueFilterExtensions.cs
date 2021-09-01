@@ -1,6 +1,7 @@
 ﻿using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Models;
 using System;
+using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Extensions
 {
@@ -55,10 +56,8 @@ namespace FS.FilterExpressionCreator.Extensions
         }
 
         private static FilterOperator GetDefaultOperator<TValue>()
-        {
-            if (typeof(TValue) == typeof(string))
-                return FilterOperator.Contains;
-            return FilterOperator.EqualCaseInsensitive;
-        }
+            => typeof(TValue) == typeof(string)
+                ? FilterOperator.Contains
+                : FilterOperator.EqualCaseInsensitive;
     }
 }

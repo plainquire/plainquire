@@ -1,14 +1,14 @@
-﻿using FS.FilterExpressionCreator.Enums;
-using FS.FilterExpressionCreator.Extensions;
-using FS.FilterExpressionCreator.JsonConverters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using FS.FilterExpressionCreator.Enums;
+using FS.FilterExpressionCreator.Extensions;
+using FS.FilterExpressionCreator.JsonConverters;
 
-namespace FS.FilterExpressionCreator.Models
+namespace FS.FilterExpressionCreator.Filters
 {
     /// <summary>
     /// Defines a filter for a property.

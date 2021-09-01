@@ -1,13 +1,14 @@
 ﻿using FS.FilterExpressionCreator.Models;
 using System;
 using System.Linq.Expressions;
+using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Interfaces
 {
     /// <summary>
-    /// Converter to create the body for a filter expression in the form of Expression&lt;Func&lt;T, bool&gt;&gt; for a given <see cref="ValueFilter"/>.
+    /// Converter to create the body for a filter expression for a given <see cref="ValueFilter"/>.
     /// </summary>
-    public interface IPropertyFilterExpressionCreator
+    public interface IValueFilterExpressionCreator
     {
         /// <summary>
         /// Determines whether this converter can create expressions for type <typeparamref name="TType"/>.

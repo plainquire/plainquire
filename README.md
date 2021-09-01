@@ -44,7 +44,7 @@ CLI : dotnet add package Schick.FilterExpressionCreator
 ```
 2. Create a new filter
  ```csharp
- using FS.FilterExpressionCreator.Models;
+ using FS.FilterExpressionCreator.Filters;
  using FS.FilterExpressionCreator.Enums;
  ```
 ```csharp
@@ -173,10 +173,12 @@ While filtering for `== null` / `!= null`, given values are ignored.
 Creation of filter expression can be configured via `FilterConfiguration`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply a configuration
 
 ```csharp
+using FS.FilterExpressionCreator.Models;
+
 // Parse filter values using german locale (e.g. "5,5" => 5.5f).
 var configuration = new FilterConfiguration { CultureInfo = new CultureInfo("de-DE") };
 // Explicit filter conversion
-var filterExpression = filter.CreateFilterExpression(configuration);
+var filterExpression = filter.CreateFilter(configuration);
 // Filter IEnumerable<T> by compiling filter expression
 var filteredOrders = orders.Where(filterExpression.Compile()).ToList();
 ```
@@ -410,7 +412,7 @@ using FS.FilterExpressionCreator.Extensions;
 ```csharp
 var extendedFilter = new[]
     {
-        filter.CreateFilterExpression(),
+        filter.CreateFilter(),
         item => item.Items.Count > 2
     }
     .CombineWithConditionalAnd();

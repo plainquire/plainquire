@@ -2,7 +2,7 @@
 using FluentAssertions.Execution;
 using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Exceptions;
-using FS.FilterExpressionCreator.Models;
+using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -80,7 +80,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
                 .Add(x => x.ValueB, "=2")
                 .Clear();
 
-            var filter = entityFilter.CreateFilterExpression();
+            var filter = entityFilter.CreateFilter();
             filter.Should().BeNull();
         }
 

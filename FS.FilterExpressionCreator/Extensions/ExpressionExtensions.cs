@@ -111,7 +111,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// Creates a property selector for the given type.
         /// </summary>
         /// <param name="declaringType">The Type of the declaring class/struct/record.</param>
-        /// <param name="propertyName">THe Name of the property.</param>
+        /// <param name="propertyName">The Name of the property.</param>
         public static LambdaExpression CreatePropertySelector(this Type declaringType, string propertyName)
         {
             var propertyParameter = Expression.Parameter(declaringType, "x");

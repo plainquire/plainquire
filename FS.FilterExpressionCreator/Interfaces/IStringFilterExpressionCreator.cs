@@ -2,10 +2,10 @@
 {
     /// <summary>
     /// Converter to create the body of filter expressions for <see cref="string"/> values.
-    /// Implements the <see cref="IPropertyFilterExpressionCreator"/>
+    /// Implements the <see cref="IValueFilterExpressionCreator"/>
     /// </summary>
-    /// <seealso cref="IPropertyFilterExpressionCreator"/>
-    public interface IStringFilterExpressionCreator : IPropertyFilterExpressionCreator
+    /// <seealso cref="IValueFilterExpressionCreator"/>
+    public interface IStringFilterExpressionCreator : IValueFilterExpressionCreator
     {
     }
 }

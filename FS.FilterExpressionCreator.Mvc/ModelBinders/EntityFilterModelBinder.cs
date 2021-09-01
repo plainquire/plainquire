@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Mvc.ModelBinders
 {

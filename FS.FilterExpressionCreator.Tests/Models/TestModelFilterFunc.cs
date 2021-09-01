@@ -1,5 +1,6 @@
 ﻿using FS.FilterExpressionCreator.Models;
 using System.Collections.Generic;
+using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Tests.Models
 {

@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Demo.Controllers
 {

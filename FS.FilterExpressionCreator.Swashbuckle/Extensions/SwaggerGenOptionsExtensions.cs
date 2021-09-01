@@ -3,6 +3,7 @@ using FS.FilterExpressionCreator.Swashbuckle.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
+using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Swashbuckle.Extensions
 {

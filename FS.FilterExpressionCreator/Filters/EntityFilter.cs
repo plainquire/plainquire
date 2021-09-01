@@ -1,9 +1,4 @@
-﻿using FS.FilterExpressionCreator.Enums;
-using FS.FilterExpressionCreator.Extensions;
-using FS.FilterExpressionCreator.Interfaces;
-using FS.FilterExpressionCreator.JsonConverters;
-using FS.FilterExpressionCreator.ValueFilterExpressionCreators;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,8 +6,13 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using FS.FilterExpressionCreator.Enums;
+using FS.FilterExpressionCreator.Extensions;
+using FS.FilterExpressionCreator.JsonConverters;
+using FS.FilterExpressionCreator.Models;
+using FS.FilterExpressionCreator.PropertyFilterExpressionCreators;
 
-namespace FS.FilterExpressionCreator.Models
+namespace FS.FilterExpressionCreator.Filters
 {
     /// <summary>
     /// Hub to create filter expressions for <typeparamref name="TEntity"/> with fluent API.
@@ -238,48 +238,36 @@ namespace FS.FilterExpressionCreator.Models
         /// <summary>
         /// Creates the filter expression. Returns <c>null</c> when filter is empty.
         /// </summary>
-        public Expression<Func<TEntity, bool>> CreateFilterExpression(FilterConfiguration filterConfiguration = null)
-            => CreateFilterExpression<TEntity>(filterConfiguration);
+        public Expression<Func<TEntity, bool>> CreateFilter(FilterConfiguration filterConfiguration = null)
+            => CreateFilter<TEntity>(filterConfiguration);
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="EntityFilter{TEntity}"/> to <see cref="Expression{TDelegate}"/> where <c>TDelegate</c> is <see cref="Func{T, TResult}"/>.
         /// </summary>
         /// <param name="filter">The filter to convert.</param>
         public static implicit operator Expression<Func<TEntity, bool>>(EntityFilter<TEntity> filter)
-            => filter.CreateFilterExpression() ?? (x => true);
+            => filter.CreateFilter() ?? (x => true);
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="EntityFilter{TEntity}"/> to <see cref="Func{T, TResult}"/>.
         /// </summary>
         /// <param name="filter">The filter to convert.</param>
         public static implicit operator Func<TEntity, bool>(EntityFilter<TEntity> filter)
-            => (filter.CreateFilterExpression() ?? (x => true)).Compile();
+            => (filter.CreateFilter() ?? (x => true)).Compile();
 
         /// <inheritdoc />
         public override string ToString()
-            => CreateFilterExpression()?.ToString() ?? string.Empty;
+            => CreateFilter()?.ToString() ?? string.Empty;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private string DebuggerDisplay => CreateFilterExpression()?.ToString() ?? "<EMPTY>";
+        private string DebuggerDisplay => CreateFilter()?.ToString() ?? "<EMPTY>";
     }
 
     /// <inheritdoc cref="EntityFilter{TEntity}" />
     [JsonConverter(typeof(EntityFilterConverter))]
     public class EntityFilter
     {
-        private static readonly MethodInfo _createFilterExpressionMethod = typeof(EntityFilter).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic).Single(x => x.Name == nameof(CreateFilterExpression));
-        private static readonly MethodInfo _createPropertyFilterExpressionMethod = typeof(EntityFilter).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic).Single(x => x.Name == nameof(CreatePropertyFilterExpression) && x.IsGenericMethod && x.GetGenericArguments().Length == 2);
-
-        private readonly IPropertyFilterExpressionCreator _defaultPropertyFilterExpressionCreator = new DefaultFilterExpressionCreator();
-
-        private readonly IPropertyFilterExpressionCreator[] _propertyFilterExpressionCreators = {
-            new StringFilterExpressionCreator(),
-            new GuidFilterExpressionCreator(),
-            new DateTimeFilterExpressionCreator(),
-            new BooleanFilterExpressionCreator(),
-            new NumericFilterExpressionCreator(),
-            new EnumFilterExpressionCreator(),
-        };
+        private static readonly MethodInfo _createFilterMethod = typeof(EntityFilter).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic).Single(x => x.Name == nameof(CreateFilter));
 
         internal List<PropertyFilter> PropertyFilters;
         internal List<NestedFilter> NestedFilters;
@@ -292,13 +280,6 @@ namespace FS.FilterExpressionCreator.Models
             PropertyFilters = new List<PropertyFilter>();
             NestedFilters = new List<NestedFilter>();
         }
-
-        /// <summary>
-        /// Determines whether a property of type <paramref name="propertyType"/> can be filtered.
-        /// </summary>
-        /// <param name="propertyType">The type to filter.</param>
-        internal bool CanCreateFilterFor(Type propertyType)
-            => _propertyFilterExpressionCreators.Any(x => x.CanCreateExpressionFor(propertyType));
 
         /// <summary>
         /// Gets the filter syntax for the given <typeparamref name="TProperty"/>.
@@ -391,8 +372,8 @@ namespace FS.FilterExpressionCreator.Models
         protected void ClearInternal()
             => PropertyFilters.Clear();
 
-        /// <inheritdoc cref="EntityFilter{TEntity}.CreateFilterExpression" />
-        protected Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(FilterConfiguration filterConfiguration = null)
+        /// <inheritdoc cref="EntityFilter{TEntity}.CreateFilter" />
+        protected internal Expression<Func<TEntity, bool>> CreateFilter<TEntity>(FilterConfiguration filterConfiguration = null)
         {
             filterConfiguration ??= new FilterConfiguration();
 
@@ -410,7 +391,7 @@ namespace FS.FilterExpressionCreator.Models
                 .Select(x =>
                 {
                     var propertySelector = typeof(TEntity).CreatePropertySelector(x.Property.Name);
-                    return CreatePropertyFilterExpression<TEntity>(x.Property.PropertyType, propertySelector, x.ValueFilter, filterConfiguration);
+                    return PropertyFilterExpressionCreator.CreateFilter<TEntity>(x.Property.PropertyType, propertySelector, x.ValueFilter, filterConfiguration);
                 })
                 .ToList();
 
@@ -425,7 +406,7 @@ namespace FS.FilterExpressionCreator.Models
                 )
                 .Select(x =>
                 {
-                    var createFilterExpression = _createFilterExpressionMethod.MakeGenericMethod(x.Property.PropertyType);
+                    var createFilterExpression = _createFilterMethod.MakeGenericMethod(x.Property.PropertyType);
                     var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, new object[] { filterConfiguration });
                     if (nestedFilterExpression == null)
                         return null;
@@ -453,7 +434,7 @@ namespace FS.FilterExpressionCreator.Models
                 .Select(x =>
                 {
                     var propertyType = x.Property.PropertyType.GetGenericArguments()[0];
-                    var createFilterExpression = _createFilterExpressionMethod.MakeGenericMethod(propertyType);
+                    var createFilterExpression = _createFilterMethod.MakeGenericMethod(propertyType);
                     var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, new object[] { filterConfiguration });
                     if (nestedFilterExpression == null)
                         return null;
@@ -473,31 +454,6 @@ namespace FS.FilterExpressionCreator.Models
                 .Concat(nestedObjectFilters)
                 .Concat(nestedListsFilters)
                 .CombineWithConditionalAnd();
-        }
-
-        private Expression<Func<TEntity, bool>> CreatePropertyFilterExpression<TEntity>(Type propertyType, LambdaExpression propertySelector, ValueFilter valueFilter, FilterConfiguration filterConfiguration)
-        {
-            try
-            {
-                var genericMethod = _createPropertyFilterExpressionMethod!.MakeGenericMethod(typeof(TEntity), propertyType);
-                var propertyExpression = (Expression<Func<TEntity, bool>>)genericMethod.Invoke(this, new object[] { propertySelector, valueFilter, filterConfiguration });
-                return propertyExpression;
-            }
-            catch (TargetInvocationException ex) when (ex.InnerException != null)
-            {
-                throw ex.InnerException;
-            }
-        }
-
-        private Expression<Func<TEntity, bool>> CreatePropertyFilterExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter valueFilter, FilterConfiguration filterConfiguration)
-        {
-            var propertyExpressionCreator = _propertyFilterExpressionCreators.FirstOrDefault(x => x.CanCreateExpressionFor<TProperty>()) ?? _defaultPropertyFilterExpressionCreator;
-            var propertyExpression = propertyExpressionCreator.CreateExpression(propertySelector, valueFilter, filterConfiguration);
-            if (propertyExpression == null)
-                return null;
-
-            var result = propertySelector.CreateLambda<TEntity, TProperty, bool>(propertyExpression);
-            return result;
         }
 
         internal class PropertyFilter

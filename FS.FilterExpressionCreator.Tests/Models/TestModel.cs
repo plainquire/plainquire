@@ -23,9 +23,9 @@ namespace FS.FilterExpressionCreator.Tests.Models
             get
             {
                 var values = new List<string>();
-                if (!ValueA.Equals(default(TValue)))
+                if (ValueA != null && !ValueA.Equals(default(TValue)))
                     values.Add($"ValueA: {ValueA}");
-                if (!ValueB.Equals(default(TValue)))
+                if (ValueB != null && !ValueB.Equals(default(TValue)))
                     values.Add($"ValueB: {ValueB}");
                 return string.Join(", ", values);
             }

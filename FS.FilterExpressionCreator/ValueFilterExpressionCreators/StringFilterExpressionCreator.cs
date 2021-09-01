@@ -1,10 +1,10 @@
-﻿using FS.FilterExpressionCreator.Enums;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
 using FS.FilterExpressionCreator.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 {
@@ -49,6 +49,16 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             }
         }
 
+        private static Expression CreateStringContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string value)
+        {
+            var valueToUpper = Expression.Constant(value.ToUpper(), typeof(TProperty));
+            var propertyToUpper = propertySelector.Body.StringToUpper();
+            var propertyContainsValue = propertyToUpper.StringContains(valueToUpper);
+            var propertyIsNotNull = propertySelector.IsNotNull();
+            var propertyIsNotNullAndContainsValue = Expression.AndAlso(propertyIsNotNull, propertyContainsValue);
+            return propertyIsNotNullAndContainsValue;
+        }
+
         private static Expression CreateStringCaseSensitiveEqualExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string value)
         {
             if (value == null)
@@ -74,16 +84,6 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             var propertyIsNotNull = propertySelector.IsNotNull();
             var propertyIsNotNullAndEqualsValue = Expression.AndAlso(propertyIsNotNull, propertyEqualsValue);
             return propertyIsNotNullAndEqualsValue;
-        }
-
-        private static Expression CreateStringContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string value)
-        {
-            var valueToUpper = Expression.Constant(value.ToUpper(), typeof(TProperty));
-            var propertyToUpper = propertySelector.Body.StringToUpper();
-            var propertyContainsValue = propertyToUpper.StringContains(valueToUpper);
-            var propertyIsNotNull = propertySelector.IsNotNull();
-            var propertyIsNotNullAndContainsValue = Expression.AndAlso(propertyIsNotNull, propertyContainsValue);
-            return propertyIsNotNullAndContainsValue;
         }
 
         private static Expression CreateStringCaseInsensitiveNotContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string value)

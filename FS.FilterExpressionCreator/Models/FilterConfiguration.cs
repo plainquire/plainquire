@@ -14,7 +14,7 @@ namespace FS.FilterExpressionCreator.Models
         public CultureInfo CultureInfo { get; set; } = CultureInfo.CurrentCulture;
 
         /// <summary>
-        /// A delegate returning the value for 'now' when parsing relative date/time values (e.g. one-week-ago). Defaults to <see cref="DateTime.Now"/>.
+        /// A delegate returning the value for 'now' when parsing relative date/time values (e.g. one-week-ago). Defaults to <see cref="DateTimeOffset.Now"/>.
         /// </summary>
         public Func<DateTimeOffset> Now { get; set; } = () => DateTimeOffset.Now;
 

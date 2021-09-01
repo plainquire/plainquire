@@ -1,21 +1,18 @@
-﻿using FS.FilterExpressionCreator.Enums;
-using FS.FilterExpressionCreator.Exceptions;
-using FS.FilterExpressionCreator.Extensions;
-using FS.FilterExpressionCreator.Interfaces;
-using FS.FilterExpressionCreator.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using FS.FilterExpressionCreator.Enums;
+using FS.FilterExpressionCreator.Exceptions;
+using FS.FilterExpressionCreator.Extensions;
+using FS.FilterExpressionCreator.Filters;
+using FS.FilterExpressionCreator.Interfaces;
+using FS.FilterExpressionCreator.Models;
 
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 {
-    /// <summary>
-    /// The default implementation to create the body of a filter expression.
-    /// Implements <see cref="IPropertyFilterExpressionCreator"/>
-    /// </summary>
-    /// <seealso cref="IPropertyFilterExpressionCreator"/>
-    public class DefaultFilterExpressionCreator : IPropertyFilterExpressionCreator
+    /// <inheritdoc />
+    public class DefaultFilterExpressionCreator : IValueFilterExpressionCreator
     {
         /// <summary>
         /// Gets the supported filter operators.
