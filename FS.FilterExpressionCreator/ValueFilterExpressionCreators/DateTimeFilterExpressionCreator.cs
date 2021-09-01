@@ -34,12 +34,12 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => new[] { typeof(DateTimeSpan), typeof(DateTime), typeof(DateTimeOffset) }.Contains(type.GetUnderlyingType());
 
         /// <inheritdoc />
-        protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration filterConfiguration)
+        protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration configuration)
         {
-            if (value.TryConvertStringToDateTimeSpan(filterConfiguration.Now(), out var dateTimeSpan, filterConfiguration.CultureInfo))
+            if (value.TryConvertStringToDateTimeSpan(configuration.Now(), out var dateTimeSpan, configuration.CultureInfo))
                 return CreateDateTimeExpressionByFilterOperator(propertySelector, filterOperator, dateTimeSpan);
 
-            if (filterConfiguration.IgnoreParseExceptions)
+            if (configuration.IgnoreParseExceptions)
                 return null;
 
             throw CreateFilterExpressionCreationException("Unable to parse given filter value", propertySelector, filterOperator, value);

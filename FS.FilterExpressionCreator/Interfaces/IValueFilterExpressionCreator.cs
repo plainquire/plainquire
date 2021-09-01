@@ -1,7 +1,7 @@
-﻿using FS.FilterExpressionCreator.Models;
+﻿using FS.FilterExpressionCreator.Filters;
+using FS.FilterExpressionCreator.Models;
 using System;
 using System.Linq.Expressions;
-using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Interfaces
 {
@@ -29,7 +29,7 @@ namespace FS.FilterExpressionCreator.Interfaces
         /// <typeparam name="TProperty">The type of the property.</typeparam>
         /// <param name="propertySelector">The property to create the expression for.</param>
         /// <param name="filter">The filter to create the expression for.</param>
-        /// <param name="filterConfiguration">The filter configuration to use.</param>
-        Expression CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter filter, FilterConfiguration filterConfiguration);
+        /// <param name="configuration">The filter configuration to use.</param>
+        Expression CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter filter, FilterConfiguration configuration);
     }
 }

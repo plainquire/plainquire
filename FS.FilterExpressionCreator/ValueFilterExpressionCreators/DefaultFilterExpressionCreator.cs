@@ -41,7 +41,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => true;
 
         /// <inheritdoc />
-        public Expression CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter valueFilter, FilterConfiguration filterConfiguration)
+        public Expression CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter valueFilter, FilterConfiguration configuration)
         {
             var propertyType = typeof(TProperty);
 
@@ -66,7 +66,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 
             var result = valueFilter
                 .Values!
-                .Select(x => CreateExpressionForValue(propertySelector, valueFilter.Operator, x, filterConfiguration));
+                .Select(x => CreateExpressionForValue(propertySelector, valueFilter.Operator, x, configuration));
 
             return valueFilter.Operator == FilterOperator.NotEqual
                 ? result.Aggregate(Expression.AndAlso)
@@ -81,8 +81,8 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <param name="propertySelector">The property to create the expression for.</param>
         /// <param name="filterOperator">The filter operator to use.</param>
         /// <param name="value">The value to create the expression for.</param>
-        /// <param name="filterConfiguration">The filter configuration to use.</param>
-        protected internal virtual Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration filterConfiguration)
+        /// <param name="configuration">The filter configuration to use.</param>
+        protected internal virtual Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration configuration)
         {
             switch (filterOperator)
             {

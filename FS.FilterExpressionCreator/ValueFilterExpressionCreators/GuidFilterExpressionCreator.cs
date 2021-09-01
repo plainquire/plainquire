@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using FS.FilterExpressionCreator.Enums;
+﻿using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
 using FS.FilterExpressionCreator.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 {
@@ -28,13 +28,13 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => type.GetUnderlyingType() == typeof(Guid);
 
         /// <inheritdoc />
-        protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration filterConfiguration)
+        protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration configuration)
         {
             if (Guid.TryParse(value, out var guidValue))
                 return CreateGuidExpressionByFilterOperator(propertySelector, filterOperator, guidValue);
 
             // TODO: Check how partial GUID handling could be implemented.
-            if (filterConfiguration.IgnoreParseExceptions)
+            if (configuration.IgnoreParseExceptions)
                 return null;
 
             throw CreateFilterExpressionCreationException("Unable to parse given filter value", propertySelector, filterOperator, value);

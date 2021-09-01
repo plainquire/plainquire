@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq.Expressions;
-using FS.FilterExpressionCreator.Enums;
+﻿using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
 using FS.FilterExpressionCreator.Models;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq.Expressions;
 
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 {
@@ -35,12 +35,12 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => _primitiveNumberTypes.Contains(type.GetUnderlyingType());
 
         /// <inheritdoc />
-        protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration filterConfiguration)
+        protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration configuration)
         {
-            if (decimal.TryParse(value, NumberStyles.Any, filterConfiguration.CultureInfo, out var decimalValue))
+            if (decimal.TryParse(value, NumberStyles.Any, configuration.CultureInfo, out var decimalValue))
                 return CreateNumberExpressionByFilterOperator(propertySelector, filterOperator, decimalValue);
 
-            if (filterConfiguration.IgnoreParseExceptions)
+            if (configuration.IgnoreParseExceptions)
                 return null;
 
             throw CreateFilterExpressionCreationException("Unable to parse given filter value", propertySelector, filterOperator, value);

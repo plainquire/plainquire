@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using FS.FilterExpressionCreator.Extensions;
+﻿using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Interfaces;
 using FS.FilterExpressionCreator.Models;
 using FS.FilterExpressionCreator.ValueFilterExpressionCreators;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace FS.FilterExpressionCreator.PropertyFilterExpressionCreators
 {
@@ -41,11 +41,11 @@ namespace FS.FilterExpressionCreator.PropertyFilterExpressionCreators
         /// <typeparam name="TProperty">The type of the property.</typeparam>
         /// <param name="propertySelector">The property selector.</param>
         /// <param name="valueFilter">The filter.</param>
-        /// <param name="filterConfiguration">The filter configuration.</param>
-        public static Expression<Func<TEntity, bool>> CreateFilter<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter valueFilter, FilterConfiguration filterConfiguration)
+        /// <param name="configuration">The filter configuration.</param>
+        public static Expression<Func<TEntity, bool>> CreateFilter<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter valueFilter, FilterConfiguration configuration)
         {
             var valueFilterExpressionCreator = _valueFilterExpressionCreators.FirstOrDefault(x => x.CanCreateExpressionFor<TProperty>()) ?? _defaultValueFilterExpressionCreator;
-            var propertyExpression = valueFilterExpressionCreator.CreateExpression(propertySelector, valueFilter, filterConfiguration);
+            var propertyExpression = valueFilterExpressionCreator.CreateExpression(propertySelector, valueFilter, configuration);
             if (propertyExpression == null)
                 return null;
 
@@ -60,13 +60,13 @@ namespace FS.FilterExpressionCreator.PropertyFilterExpressionCreators
         /// <param name="propertyType">The type of the property.</param>
         /// <param name="propertySelector">The property selector.</param>
         /// <param name="valueFilter">The filter.</param>
-        /// <param name="filterConfiguration">The filter configuration.</param>
-        public static Expression<Func<TEntity, bool>> CreateFilter<TEntity>(Type propertyType, LambdaExpression propertySelector, ValueFilter valueFilter, FilterConfiguration filterConfiguration)
+        /// <param name="configuration">The filter configuration.</param>
+        public static Expression<Func<TEntity, bool>> CreateFilter<TEntity>(Type propertyType, LambdaExpression propertySelector, ValueFilter valueFilter, FilterConfiguration configuration)
         {
             try
             {
                 var genericMethod = _createFilterMethod!.MakeGenericMethod(typeof(TEntity), propertyType);
-                var propertyExpression = (Expression<Func<TEntity, bool>>)genericMethod.Invoke(null, new object[] { propertySelector, valueFilter, filterConfiguration });
+                var propertyExpression = (Expression<Func<TEntity, bool>>)genericMethod.Invoke(null, new object[] { propertySelector, valueFilter, configuration });
                 return propertyExpression;
             }
             catch (TargetInvocationException ex) when (ex.InnerException != null)

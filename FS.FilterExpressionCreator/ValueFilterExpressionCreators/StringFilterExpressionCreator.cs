@@ -29,7 +29,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => type.GetUnderlyingType() == typeof(string);
 
         /// <inheritdoc />
-        protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration filterConfiguration)
+        protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration configuration)
         {
             var strFilter = value?.Trim();
             switch (filterOperator)

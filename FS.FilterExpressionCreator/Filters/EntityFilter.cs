@@ -238,8 +238,9 @@ namespace FS.FilterExpressionCreator.Filters
         /// <summary>
         /// Creates the filter expression. Returns <c>null</c> when filter is empty.
         /// </summary>
-        public Expression<Func<TEntity, bool>> CreateFilter(FilterConfiguration filterConfiguration = null)
-            => CreateFilter<TEntity>(filterConfiguration);
+        /// <param name="configuration">Filter configuration.</param>
+        public Expression<Func<TEntity, bool>> CreateFilter(FilterConfiguration configuration = null)
+            => CreateFilter<TEntity>(configuration);
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="EntityFilter{TEntity}"/> to <see cref="Expression{TDelegate}"/> where <c>TDelegate</c> is <see cref="Func{T, TResult}"/>.
@@ -373,9 +374,9 @@ namespace FS.FilterExpressionCreator.Filters
             => PropertyFilters.Clear();
 
         /// <inheritdoc cref="EntityFilter{TEntity}.CreateFilter" />
-        protected internal Expression<Func<TEntity, bool>> CreateFilter<TEntity>(FilterConfiguration filterConfiguration = null)
+        protected internal Expression<Func<TEntity, bool>> CreateFilter<TEntity>(FilterConfiguration configuration = null)
         {
-            filterConfiguration ??= new FilterConfiguration();
+            configuration ??= DefaultConfiguration;
 
             var properties = typeof(TEntity)
                 .GetProperties();
@@ -391,7 +392,7 @@ namespace FS.FilterExpressionCreator.Filters
                 .Select(x =>
                 {
                     var propertySelector = typeof(TEntity).CreatePropertySelector(x.Property.Name);
-                    return PropertyFilterExpressionCreator.CreateFilter<TEntity>(x.Property.PropertyType, propertySelector, x.ValueFilter, filterConfiguration);
+                    return PropertyFilterExpressionCreator.CreateFilter<TEntity>(x.Property.PropertyType, propertySelector, x.ValueFilter, configuration);
                 })
                 .ToList();
 
@@ -407,7 +408,7 @@ namespace FS.FilterExpressionCreator.Filters
                 .Select(x =>
                 {
                     var createFilterExpression = _createFilterMethod.MakeGenericMethod(x.Property.PropertyType);
-                    var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, new object[] { filterConfiguration });
+                    var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, new object[] { configuration });
                     if (nestedFilterExpression == null)
                         return null;
 
@@ -435,7 +436,7 @@ namespace FS.FilterExpressionCreator.Filters
                 {
                     var propertyType = x.Property.PropertyType.GetGenericArguments()[0];
                     var createFilterExpression = _createFilterMethod.MakeGenericMethod(propertyType);
-                    var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, new object[] { filterConfiguration });
+                    var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, new object[] { configuration });
                     if (nestedFilterExpression == null)
                         return null;
 
