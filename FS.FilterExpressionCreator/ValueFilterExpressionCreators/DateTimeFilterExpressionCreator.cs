@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using FS.FilterExpressionCreator.Enums;
+﻿using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
 using FS.FilterExpressionCreator.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 {
@@ -85,7 +85,16 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             }
         }
 
-        private static Expression CreateDateTimeSpanContainsExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue start, TValue end)
+        /// <summary>
+        /// Creates a date time span contains expression.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="propertySelector">The property selector.</param>
+        /// <param name="start">The start <see cref="DateTime"/> or <see cref="DateTimeOffset"/>.</param>
+        /// <param name="end">The end <see cref="DateTime"/> or <see cref="DateTimeOffset"/>.</param>
+        public static Expression CreateDateTimeSpanContainsExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue start, TValue end)
         {
             var startExpression = Expression.Constant(start, typeof(TProperty));
             var endExpression = Expression.Constant(end, typeof(TProperty));

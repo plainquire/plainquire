@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using FS.FilterExpressionCreator.Enums;
+﻿using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Exceptions;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Interfaces;
 using FS.FilterExpressionCreator.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 {
@@ -113,7 +113,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="value">The value to use.</param>
-        protected static Expression CreateEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
+        public static Expression CreateEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
             => CreateEqualExpression(propertySelector, typeof(TValue), value);
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="value">The value to use.</param>
-        protected static Expression CreateNotEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
+        public static Expression CreateNotEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
             => CreateNotEqualExpression(propertySelector, typeof(TValue), value);
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="value">The value to use.</param>
-        protected static Expression CreateLessThanExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
+        public static Expression CreateLessThanExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
             => CreateLessThanExpression(propertySelector, typeof(TValue), value);
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="value">The value to use.</param>
-        protected static Expression CreateLessThanOrEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
+        public static Expression CreateLessThanOrEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
             => CreateLessThanOrEqualExpression(propertySelector, typeof(TValue), value);
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="value">The value to use.</param>
-        protected static Expression CreateGreaterThanExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
+        public static Expression CreateGreaterThanExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
             => CreateGreaterThanExpression(propertySelector, typeof(TValue), value);
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="value">The value to use.</param>
-        protected static Expression CreateGreaterThanOrEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
+        public static Expression CreateGreaterThanOrEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
             => CreateGreaterThanOrEqualExpression(propertySelector, typeof(TValue), value);
 
         /// <summary>
