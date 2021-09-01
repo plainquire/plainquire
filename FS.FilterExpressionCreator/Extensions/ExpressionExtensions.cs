@@ -108,7 +108,15 @@ namespace FS.FilterExpressionCreator.Extensions
                 : expression;
 
         /// <summary>
-        /// Creates a property selector for the given type.
+        /// Creates typed property selector for the given type.
+        /// </summary>
+        /// <param name="declaringType">The Type of the declaring class/struct/record.</param>
+        /// <param name="propertyName">The Name of the property.</param>
+        public static Expression<Func<TEntity, TProperty>> CreatePropertySelector<TEntity, TProperty>(this Type declaringType, string propertyName)
+            => (Expression<Func<TEntity, TProperty>>)declaringType.CreatePropertySelector(propertyName);
+
+        /// <summary>
+        /// Creates a untyped property selector for the given type.
         /// </summary>
         /// <param name="declaringType">The Type of the declaring class/struct/record.</param>
         /// <param name="propertyName">The Name of the property.</param>

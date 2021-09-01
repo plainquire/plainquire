@@ -1,4 +1,10 @@
-﻿using System;
+﻿using FS.FilterExpressionCreator.Enums;
+using FS.FilterExpressionCreator.Extensions;
+using FS.FilterExpressionCreator.Interfaces;
+using FS.FilterExpressionCreator.JsonConverters;
+using FS.FilterExpressionCreator.Models;
+using FS.FilterExpressionCreator.PropertyFilterExpressionCreators;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,11 +12,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using FS.FilterExpressionCreator.Enums;
-using FS.FilterExpressionCreator.Extensions;
-using FS.FilterExpressionCreator.JsonConverters;
-using FS.FilterExpressionCreator.Models;
-using FS.FilterExpressionCreator.PropertyFilterExpressionCreators;
 
 namespace FS.FilterExpressionCreator.Filters
 {
@@ -239,8 +240,9 @@ namespace FS.FilterExpressionCreator.Filters
         /// Creates the filter expression. Returns <c>null</c> when filter is empty.
         /// </summary>
         /// <param name="configuration">Filter configuration.</param>
-        public Expression<Func<TEntity, bool>> CreateFilter(FilterConfiguration configuration = null)
-            => CreateFilter<TEntity>(configuration);
+        /// <param name="interceptor">An interceptor to manipulate the generated filters.</param>
+        public Expression<Func<TEntity, bool>> CreateFilter(FilterConfiguration configuration = null, IPropertyFilterInterceptor interceptor = null)
+            => CreateFilter<TEntity>(configuration, interceptor);
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="EntityFilter{TEntity}"/> to <see cref="Expression{TDelegate}"/> where <c>TDelegate</c> is <see cref="Func{T, TResult}"/>.
@@ -272,6 +274,16 @@ namespace FS.FilterExpressionCreator.Filters
 
         internal List<PropertyFilter> PropertyFilters;
         internal List<NestedFilter> NestedFilters;
+
+        /// <summary>
+        /// Gets or sets the default configuration. Can be used to set a system-wide configuration.
+        /// </summary>
+        public static FilterConfiguration DefaultConfiguration { get; set; } = new FilterConfiguration();
+
+        /// <summary>
+        /// Gets or sets the default interceptor. Can be used to set a system-wide interceptor.
+        /// </summary>
+        public static IPropertyFilterInterceptor DefaultInterceptor { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityFilter"/> class.
@@ -374,9 +386,10 @@ namespace FS.FilterExpressionCreator.Filters
             => PropertyFilters.Clear();
 
         /// <inheritdoc cref="EntityFilter{TEntity}.CreateFilter" />
-        protected internal Expression<Func<TEntity, bool>> CreateFilter<TEntity>(FilterConfiguration configuration = null)
+        protected internal Expression<Func<TEntity, bool>> CreateFilter<TEntity>(FilterConfiguration configuration = null, IPropertyFilterInterceptor interceptor = null)
         {
             configuration ??= DefaultConfiguration;
+            interceptor ??= DefaultInterceptor;
 
             var properties = typeof(TEntity)
                 .GetProperties();
@@ -392,7 +405,8 @@ namespace FS.FilterExpressionCreator.Filters
                 .Select(x =>
                 {
                     var propertySelector = typeof(TEntity).CreatePropertySelector(x.Property.Name);
-                    return PropertyFilterExpressionCreator.CreateFilter<TEntity>(x.Property.PropertyType, propertySelector, x.ValueFilter, configuration);
+                    return interceptor?.CreatePropertyFilter<TEntity>(x.Property, x.ValueFilter, configuration) ??
+                           PropertyFilterExpressionCreator.CreateFilter<TEntity>(x.Property.PropertyType, propertySelector, x.ValueFilter, configuration);
                 })
                 .ToList();
 
@@ -408,7 +422,7 @@ namespace FS.FilterExpressionCreator.Filters
                 .Select(x =>
                 {
                     var createFilterExpression = _createFilterMethod.MakeGenericMethod(x.Property.PropertyType);
-                    var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, new object[] { configuration });
+                    var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, new object[] { configuration, interceptor });
                     if (nestedFilterExpression == null)
                         return null;
 
@@ -436,7 +450,7 @@ namespace FS.FilterExpressionCreator.Filters
                 {
                     var propertyType = x.Property.PropertyType.GetGenericArguments()[0];
                     var createFilterExpression = _createFilterMethod.MakeGenericMethod(propertyType);
-                    var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, new object[] { configuration });
+                    var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, new object[] { configuration, interceptor });
                     if (nestedFilterExpression == null)
                         return null;
 

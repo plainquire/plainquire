@@ -11,29 +11,32 @@ API: https://filterexpressioncreator.schick-software.de/openapi/
 # Table of Content
 - [Getting Started](#getting-started)
 - [Creating Filters](#creating-filters)
-  * [Multiple Values](#multiple-values)
-  * [Nested Filters](#nested-filters)
-  * [Filter for `null`](#filter-for-null)
-  * [Filter Operators](#filter-operators)
-  * [Configuration](#configuration)
-- [Filter Micro Syntax](#filter-micro-syntax)
-  * [Examples](#examples)
-  - [Date/Time](#date-time)
-  - [Enumerations](#enumerations)
+  - [General](#general)
+  - [Multiple Values](#multiple-values)
+  - [Nested Filters](#nested-filters)
+  - [Filter Operators](#filter-operators)
+  - [Filter to `null`](#filter-to-null)
+  - [Filter Micro Syntax](#filter-micro-syntax)
+    - [Examples](#examples)
+    - [Date/Time](#date-time)
+    - [Enumerations](#enumerations)
+  - [Configuration](#configuration)
+  - [Interception](#interception)
+  - [Default Configuration and Interception](#default-configuration-and-interception)
 - [Using With MVC Controllers](#using-with-mvc-controllers)
-  * [Model Binding](#model-binding)
-  * [Register Model Binders](#register-model-binders)
-  * [Configure Model Binding](#configure-model-binding)
-  * [Nested Objects/Lists](#nested-objects-lists)
+  - [Model Binding](#model-binding)
+  - [Register Model Binders](#register-model-binders)
+  - [Configure Model Binding](#configure-model-binding)
+  - [Nested Objects/Lists](#nested-objects-lists)
 - [Support for OpenAPI / Swashbuckle.AspNetCore](#support-for-openapi---swashbuckleaspnetcore)
-  * [Register OpenAPI Support](#register-openapi-support)
-  * [Register XML Documentation](#register-xml-documentation)
+  - [Register OpenAPI Support](#register-openapi-support)
+  - [Register XML Documentation](#register-xml-documentation)
 - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
 - [Advanced Scenarios](#advanced-scenarios)
-  * [Deep Copy Filters](#deep-copy-filters)
-  * [Cast Filters](#cast-filters)
-  * [Serialize Filters](#serialize-filters)
-  * [Combine Filter Expressions](#combine-filter-expressions)
+  - [Deep Copy Filters](#deep-copy-filters)
+  - [Cast Filters](#cast-filters)
+  - [Serialize Filters](#serialize-filters)
+  - [Combine Filter Expressions](#combine-filter-expressions)
 
 # Getting Started
 
@@ -46,30 +49,21 @@ CLI : dotnet add package Schick.FilterExpressionCreator
  ```csharp
  using FS.FilterExpressionCreator.Filters;
  using FS.FilterExpressionCreator.Enums;
+ 
+ public class Order
+ {
+     public int Number { get; set; }
+     public string Customer { get; set; }
+ }
+ 
+ var filter = new EntityFilter<Order>()
+     .Add(x => x.Number, FilterOperator.GreaterThan, 200)
+     .Add(x => x.Customer, "Joe");
+ 
+ // Show filter
+ System.Console.WriteLine(filter);
+ // x => (((x.Customer != null) AndAlso x.Customer.ToUpper().Contains("JOE")) AndAlso (x.Number > 200))
  ```
-```csharp
-public class Order
-{
-    public int Number { get; set; }
-    public string Customer { get; set; }
-    
-    public Address Address { get; set; }
-    public List<OrderItem> Items { get; set; }
-}
-
-public record Address(string Street, string City) { }
-public record OrderItem(int Position, string Article) { }
-```
-
-```csharp
-var filter = new EntityFilter<Order>()
-    .Add(x => x.Customer, "Joe")
-    .Add(x => x.Number, FilterOperator.GreaterThan, 200);
-
-// Print
-System.Console.WriteLine(filter);
-// x => (((x.Customer != null) AndAlso x.Customer.ToUpper().Contains("JOE")) AndAlso (x.Number > 200))
-```
 3. Start filtering
 ```csharp
 var orders = new[] {
@@ -84,19 +78,27 @@ var filteredOrders = orders.Where(filter).ToList();
 // new[] { new Order { Customer = "Joe Smith", Number = 300 } };
 
 // Or using queryables (e.g. Entity Framework)
-dbContext.Orders.Where(filter).ToList();
+var filteredOrders = dbContext.Orders.Where(filter).ToList();
 ```
 
 # Creating Filters
 
-Filters can be created using operator/value(s) pairs or via [filter micro syntax](#filter-micro-syntax)
+## General
+
+Filters can be added/replaced using operator/value(s) pairs
 
 ```csharp
 // Operator/Value(s): Customer contains 'Joe' or 'Doe'
 filter.Add(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
+filter.Replace(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
+```
 
+or via [filter micro syntax](#filter-micro-syntax)
+
+```csharp
 // Filter micro syntax: Customer contains 'Joe' or 'Doe'
 filter.Add(x => x.Customer, "~Joe,Doe");
+filter.Replace(x => x.Customer, "~Joe,Doe");
 ```
 
 ## Multiple Values
@@ -111,7 +113,19 @@ Filtering nested objects/lists is supported.
 
 Nested objects are filtered directly
 
-``` csharp
+```csharp
+public class Order
+{
+    public int Number { get; set; }
+    public string Customer { get; set; }
+    
+    public Address Address { get; set; }
+    public List<OrderItem> Items { get; set; }
+}
+
+public record Address(string Street, string City) { }
+public record OrderItem(int Position, string Article) { }
+
 var addressFilter = new EntityFilter<Address>()
     .Add(x => x.City, "==Berlin");
 
@@ -138,20 +152,6 @@ System.Console.WriteLine(filter);
 // x => ((x.Positions != null) AndAlso x.Positions.Any(x => (x.Article == "Laptop")))
 ```
 
-## Filter for `null`
-
-To filter for `== null` / `!= null` special filter operators exists
-
-```csharp
-// Filtering for values are NULL
-filter.Add(x => x.Name, FilterOperator.IsNull);
-
-// Filtering for values are NOT NULL
-filter.Add(x => x.Name, FilterOperator.NotNull, "values", "are", "ignored");
-```
-
-While filtering for `== null` / `!= null`, given values are ignored.
-
 ## Filter Operators
 
 | Operator             | Micro Syntax | Description                                                  |
@@ -168,6 +168,56 @@ While filtering for `== null` / `!= null`, given values are ignored.
 | IsNull               | ISNULL       | Hits when the filtered property is `null`                    |
 | NotNull              | NOTNULL      | Hits when the filtered property is not `null`                |
 
+## Filter to `null`
+
+To filter to `== null` / `!= null` special filter operators exists
+
+```csharp
+// Filtering for values are NULL
+filter.Add(x => x.Name, FilterOperator.IsNull);
+
+// Filtering for values are NOT NULL
+filter.Add(x => x.Name, FilterOperator.NotNull, "values", "are", "ignored");
+```
+
+While filtering for `== null` / `!= null`, given values are ignored.
+
+## Filter Micro Syntax
+
+The filter syntax consists of an operator shortcut (see [filter operators](#filter-operators) above) and a list of comma separated values. When a value contains a comma itself, it must be escaped by a backslash. The backslash itself is escaped by another backslash.
+
+### Examples
+
+| Syntax        | Description                                                  |
+| ------------- | ------------------------------------------------------------ |
+| Joe           | For `string` filtered value contains 'Joe', for `Enum` filtered value is 'Joe' |
+| ~Joe          | Filtered value contains 'Joe', even for `Enum`               |
+| =1\\,2        | Filtered value equals '1,2'                                  |
+| ISNULL        | Filtered value is `null`                                     |
+| >one-week-ago | For `DateTime` filtered value is greater than one week ago, for others types see above |
+| 2020          | For `DateTime` filtered value is between 01/01/2020 and 12/31/2020, for others types see above |
+| 2020-01       | For `DateTime` filtered value is between 01/01/2020 and 1/31/2020, for others types see above |
+
+### Date/Time
+
+Date/Time values can be given as a representation in the form of a fault-tolerant [round-trip date/time pattern](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings#Roundtrip)
+
+`2020/01/01` works as well as `2020-01-01-12-30`
+
+or thanks to [nChronic.Core](https://github.com/robbell/nChronic.Core) as natural language date string. More details can be found here: [https://github.com/mojombo/chronic](https://github.com/mojombo/chronic#simple)
+
+`tomorrow` works as well as `3-months-ago-saturday-at-5-pm`
+
+Partial date strings are supported too
+
+`2020-01` filters date between `2020-01-01` and `2020-01-31`.
+
+### Enumerations
+
+`Enum` values can be filtered by it's numeric representation as well as by it's name.
+
+When filtering using `Contains` the filter values are expanded ("~male" filters for `male` as well as `female`).
+
 ## Configuration
 
 Creation of filter expression can be configured via `FilterConfiguration`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply a configuration
@@ -183,41 +233,27 @@ var filterExpression = filter.CreateFilter(configuration);
 var filteredOrders = orders.Where(filterExpression.Compile()).ToList();
 ```
 
-# Filter Micro Syntax
+## Interception
 
-The filter syntax consists of an operator shortcut (see [filter operators](#filter-operators) above) and a list of comma separated values. When a value contains a comma itself, it must be escaped by a backslash. The backslash itself is escaped by another backslash.
+Creation of filter expression can be intercepted via `IPropertyFilterInterceptor`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply a interceptor.
 
-## Examples
+An example can be found in the test code [InterceptorTests](https://github.com/fschick/FilterExpressionCreator/blob/main/FS.FilterExpressionCreator.Tests/Tests/EntityFilterTests/InterceptorTests.cs)
 
-| Syntax        | Description                                                  |
-| ------------- | ------------------------------------------------------------ |
-| Joe           | For `string` filtered value contains 'Joe', for `Enum` filtered value is 'Joe' |
-| ~Joe          | Filtered value contains 'Joe', even for `Enum`               |
-| =1\\,2        | Filtered value equals '1,2'                                  |
-| ISNULL        | Filtered value is `null`                                     |
-| >one-week-ago | For `DateTime` filtered value is greater than one week ago, for others types see above |
-| 2020          | For `DateTime` filtered value is between 01/01/2020 and 12/31/2020, for others types see above |
-| 2020-01       | For `DateTime` filtered value is between 01/01/2020 and 1/31/2020, for others types see above |
+## Default Configuration and Interception
 
-## Date/Time
+The class `EntityFilter` has static properties to provide a system-wide configuration and/or interceptors
 
-Date/Time values can be given as a representation in the form of a fault-tolerant [round-trip date/time pattern](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings#Roundtrip)
+```c#
+/// <summary>
+/// Gets or sets the default configuration. Can be used to set a system-wide configuration.
+/// </summary>
+public static FilterConfiguration DefaultConfiguration { get; set; } = new FilterConfiguration();
 
-`2020/01/01` works as well as `2020-01-01-12-30`
-
-or thanks to [nChronic.Core](https://github.com/robbell/nChronic.Core) as natural language date string. More details can be found here: [https://github.com/mojombo/chronic](https://github.com/mojombo/chronic#simple)
-
-`tomorrow` works as well as `3-months-ago-saturday-at-5-pm`
-
-Partial date strings are supported too
-
-`2020-01` filters date between `2020-01-01` and `2020-01-31`.
-
-## Enumerations
-
-`Enum` values can be filtered by it's numeric representation as well as by it's name.
-
-When filtering using `Contains` the filter values are expanded ("~male" filters for `male` as well as `female`).
+/// <summary>
+/// Gets or sets the default interceptor. Can be used to set a system-wide interceptor.
+/// </summary>
+public static IPropertyFilterInterceptor DefaultInterceptor { get; set; }
+```
 
 # Using With MVC Controllers
 

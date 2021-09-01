@@ -32,10 +32,10 @@ namespace FS.FilterExpressionCreator.Tests.Extensions
         private static void RunAndCheckExpectedItems<TFilterValue, TModelValue>(FilterTestCase<TFilterValue, TModelValue> testCase, ICollection<TestModel<TModelValue>> testItems, TestModelFilterFunc<TModelValue> filterFunc)
         {
             var entityFilter = CreateEntityFilter(testCase);
-            var filteredItems = filterFunc(testItems, entityFilter, testCase.FilterConfiguration);
+            var filteredItems = filterFunc(testItems, entityFilter, testCase.Configuration);
             var expectedItems = testItems.Select(x => x.ValueA).Where(testCase.ExpectedTestItemsExpression ?? (_ => true)).ToList();
 
-            using (new AssertionScope($"items filtered by '{entityFilter.CreateFilter(testCase.FilterConfiguration)}'"))
+            using (new AssertionScope($"items filtered by '{entityFilter.CreateFilter(testCase.Configuration)}'"))
                 filteredItems.Select(x => x.ValueA).Should().Equal(expectedItems);
         }
 
