@@ -1,12 +1,12 @@
-﻿using System;
+﻿using FS.FilterExpressionCreator.Enums;
+using FS.FilterExpressionCreator.Extensions;
+using FS.FilterExpressionCreator.JsonConverters;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using FS.FilterExpressionCreator.Enums;
-using FS.FilterExpressionCreator.Extensions;
-using FS.FilterExpressionCreator.JsonConverters;
 
 namespace FS.FilterExpressionCreator.Filters
 {
@@ -104,6 +104,7 @@ namespace FS.FilterExpressionCreator.Filters
             {
                 null => string.Empty,
                 DateTime dateTime => dateTime.ToString("o"),
+                DateTimeOffset dateTime => dateTime.ToString("o"),
                 _ => value.ToString(),
             };
 
