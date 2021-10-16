@@ -1,3 +1,15 @@
+# 2.1.0
+
+## Changes
+
+Parsing of (partial) date/time value (ranges) changed/fixed
+
+# 2.0.0
+
+## Changes
+
+Interceptor added to provide custom filter manipulation/translation
+
 # 1.2.0
 
 ## Changes
