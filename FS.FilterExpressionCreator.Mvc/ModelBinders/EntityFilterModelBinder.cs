@@ -1,11 +1,10 @@
-﻿using FS.FilterExpressionCreator.Models;
+﻿using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Mvc.Attributes;
 using FS.FilterExpressionCreator.Mvc.Extensions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Mvc.ModelBinders
 {

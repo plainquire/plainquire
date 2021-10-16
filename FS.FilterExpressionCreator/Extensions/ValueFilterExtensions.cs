@@ -1,7 +1,6 @@
 ﻿using FS.FilterExpressionCreator.Enums;
-using FS.FilterExpressionCreator.Models;
-using System;
 using FS.FilterExpressionCreator.Filters;
+using System;
 
 namespace FS.FilterExpressionCreator.Extensions
 {

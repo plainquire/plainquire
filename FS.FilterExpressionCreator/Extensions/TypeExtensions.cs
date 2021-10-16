@@ -1,9 +1,7 @@
-﻿using FS.FilterExpressionCreator.Models;
+﻿using FS.FilterExpressionCreator.Filters;
+using FS.FilterExpressionCreator.PropertyFilterExpressionCreators;
 using System;
 using System.Collections;
-using FS.FilterExpressionCreator.Filters;
-using FS.FilterExpressionCreator.PropertyFilterExpressionCreators;
-using FS.FilterExpressionCreator.ValueFilterExpressionCreators;
 
 namespace FS.FilterExpressionCreator.Extensions
 {

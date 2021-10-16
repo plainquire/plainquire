@@ -66,7 +66,8 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 
             var result = valueFilter
                 .Values!
-                .Select(x => CreateExpressionForValue(propertySelector, valueFilter.Operator, x, configuration));
+                .Select(x => CreateExpressionForValue(propertySelector, valueFilter.Operator, x, configuration))
+                .ToList();
 
             return valueFilter.Operator == FilterOperator.NotEqual
                 ? result.Aggregate(Expression.AndAlso)

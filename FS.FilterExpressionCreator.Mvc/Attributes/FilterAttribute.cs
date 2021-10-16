@@ -1,6 +1,5 @@
-﻿using FS.FilterExpressionCreator.Models;
+﻿using FS.FilterExpressionCreator.Filters;
 using System;
-using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Mvc.Attributes
 {

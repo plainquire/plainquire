@@ -1,7 +1,6 @@
-﻿using FS.FilterExpressionCreator.Models;
+﻿using FS.FilterExpressionCreator.Filters;
 using Newtonsoft.Json;
 using System;
-using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Newtonsoft.JsonConverters
 {

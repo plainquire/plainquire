@@ -1,11 +1,10 @@
 ﻿using FluentAssertions;
-using FS.FilterExpressionCreator.Models;
+using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Newtonsoft.Extensions;
 using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using FS.FilterExpressionCreator.Filters;
 using NetSerializer = System.Text.Json.JsonSerializer;
 using NewtonSerializer = Newtonsoft.Json.JsonConvert;
 

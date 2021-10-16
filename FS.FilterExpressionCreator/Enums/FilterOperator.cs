@@ -1,5 +1,4 @@
 ﻿using FS.FilterExpressionCreator.Filters;
-using FS.FilterExpressionCreator.Models;
 
 namespace FS.FilterExpressionCreator.Enums
 {

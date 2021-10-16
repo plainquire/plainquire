@@ -1,12 +1,11 @@
 ﻿using FluentAssertions;
-using FS.FilterExpressionCreator.Models;
+using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 {

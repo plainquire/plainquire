@@ -1,5 +1,5 @@
 ﻿using FS.FilterExpressionCreator.Extensions;
-using FS.FilterExpressionCreator.Models;
+using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Mvc.Attributes;
 using FS.FilterExpressionCreator.Mvc.Extensions;
 using LoxSmoke.DocXml;
@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using FS.FilterExpressionCreator.Filters;
 
 namespace FS.FilterExpressionCreator.Swashbuckle.Filters
 {
