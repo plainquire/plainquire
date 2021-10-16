@@ -49,23 +49,13 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
 
         // ReSharper disable RedundantExplicitArrayCreation
         private static readonly object[] _testCases = {
-            FilterTestCase.Create(1100, FilterOperator.Default, new DateTime?[] { new (2010, 01, 01) }, (DateTime? x) => x >= new DateTime(2010, 01, 01) && x < new DateTime(2011, 01, 01)),
-            FilterTestCase.Create(1101, FilterOperator.Default, new DateTime?[] { new (2010, 06, 01) }, (DateTime? x) => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 07, 01)),
-            FilterTestCase.Create(1102, FilterOperator.Default, new DateTime?[] { new (2010, 06, 15) }, (DateTime? x) => x >= new DateTime(2010, 06, 15) && x < new DateTime(2010, 06, 16)),
-            FilterTestCase.Create(1103, FilterOperator.Default, new DateTime?[] { new (2010, 06, 15, 12, 00, 00) }, (DateTime? x) => x >= new DateTime(2010, 06, 15, 12, 00, 00) && x < new DateTime(2010, 06, 15, 13, 00, 00)),
-            FilterTestCase.Create(1104, FilterOperator.Default, new DateTime?[] { new (2010, 06, 15, 12, 30, 00) }, (DateTime? x) => x >= new DateTime(2010, 06, 15, 12, 30, 00) && x < new DateTime(2010, 06, 15, 12, 31, 00)),
-            FilterTestCase.Create(1105, FilterOperator.Default, new DateTime?[] { new (2010, 06, 15, 12, 30, 30) }, (DateTime? x) => x >= new DateTime(2010, 06, 15, 12, 30, 30) && x < new DateTime(2010, 06, 15, 12, 30, 31)),
-            FilterTestCase.Create(1106, FilterOperator.Default, new DateTime?[] { new (2100, 01, 01) }, (DateTime? _) => NONE),
-            FilterTestCase.Create(1107, FilterOperator.Default, new DateTimeSpan?[] { new (new DateTime(2010, 06, 01), new DateTime(2010, 06, 15, 12, 31, 00)) }, (DateTime? x) => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 15, 12, 31, 00)),
+            FilterTestCase.Create(1100, FilterOperator.Default, new DateTime?[] { new (2010, 01, 01) }, (DateTime? x) => x >= new DateTime(2010, 01, 01) && x < new DateTime(2010, 01, 01, 0, 0, 1)),
+            FilterTestCase.Create(1101, FilterOperator.Default, new DateTime?[] { new (2100, 01, 01) }, (DateTime? _) => NONE),
+            FilterTestCase.Create(1102, FilterOperator.Default, new DateTimeSpan?[] { new (new DateTime(2010, 06, 01), new DateTime(2010, 06, 15, 12, 31, 00)) }, (DateTime? x) => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 15, 12, 31, 01)),
 
-            FilterTestCase.Create(1200, FilterOperator.Contains, new DateTime?[] { new (2010, 01, 01) }, (DateTime? x) => x >= new DateTime(2010, 01, 01) && x < new DateTime(2011, 01, 01)),
-            FilterTestCase.Create(1201, FilterOperator.Contains, new DateTime?[] { new (2010, 06, 01) }, (DateTime? x) => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 07, 01)),
-            FilterTestCase.Create(1202, FilterOperator.Contains, new DateTime?[] { new (2010, 06, 15) }, (DateTime? x) => x >= new DateTime(2010, 06, 15) && x < new DateTime(2010, 06, 16)),
-            FilterTestCase.Create(1203, FilterOperator.Contains, new DateTime?[] { new (2010, 06, 15, 12, 00, 00) }, (DateTime? x) => x >= new DateTime(2010, 06, 15, 12, 00, 00) && x < new DateTime(2010, 06, 15, 13, 00, 00)),
-            FilterTestCase.Create(1204, FilterOperator.Contains, new DateTime?[] { new (2010, 06, 15, 12, 30, 00) }, (DateTime? x) => x >= new DateTime(2010, 06, 15, 12, 30, 00) && x < new DateTime(2010, 06, 15, 12, 31, 00)),
-            FilterTestCase.Create(1205, FilterOperator.Contains, new DateTime?[] { new (2010, 06, 15, 12, 30, 30) }, (DateTime? x) => x >= new DateTime(2010, 06, 15, 12, 30, 30) && x < new DateTime(2010, 06, 15, 12, 30, 31)),
-            FilterTestCase.Create(1206, FilterOperator.Contains, new DateTime?[] { new (2100, 01, 01) }, (DateTime? _) => NONE),
-            FilterTestCase.Create(1207, FilterOperator.Contains, new DateTimeSpan?[] { new (new DateTime(2010, 06, 01), new DateTime(2010, 06, 15, 12, 31, 00)) }, (DateTime? x) => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 15, 12, 31, 00)),
+            FilterTestCase.Create(1200, FilterOperator.Contains, new DateTime?[] { new (2010, 01, 01) }, (DateTime? x) => x >= new DateTime(2010, 01, 01) && x < new DateTime(2010, 01, 01, 0, 0, 1)),
+            FilterTestCase.Create(1201, FilterOperator.Contains, new DateTime?[] { new (2100, 01, 01) }, (DateTime? _) => NONE),
+            FilterTestCase.Create(1202, FilterOperator.Contains, new DateTimeSpan?[] { new (new DateTime(2010, 06, 01), new DateTime(2010, 06, 15, 12, 31, 00)) }, (DateTime? x) => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 15, 12, 31, 01)),
 
             FilterTestCase.Create(1300, FilterOperator.EqualCaseInsensitive, new DateTime?[] { new (2010, 01, 01) }, (DateTime? x) => x == new DateTime(2010, 01, 01)),
             FilterTestCase.Create(1301, FilterOperator.EqualCaseInsensitive, new DateTime?[] { new (2010, 06, 15, 12, 30, 30) }, (DateTime? x) => x == new DateTime(2010, 06, 15, 12, 30, 30)),

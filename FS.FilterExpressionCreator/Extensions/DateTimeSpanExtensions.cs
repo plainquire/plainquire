@@ -27,7 +27,7 @@ namespace FS.FilterExpressionCreator.Extensions
 
             if (TryConvertDateTimeSpanFormattedString(value, cultureInfo, out dateTimeSpan))
                 return true;
-            if (TryConvertRoundTripFormattedString(value, cultureInfo, out dateTimeSpan))
+            if (TryConvertIso8601FormattedString(value, cultureInfo, out dateTimeSpan))
                 return true;
             if (TryConvertChronicSpanFormattedString(value, now, out dateTimeSpan))
                 return true;
@@ -38,24 +38,37 @@ namespace FS.FilterExpressionCreator.Extensions
         }
 
         /// <summary>
-        /// Expands a date to a time span. 2000-01-01 extends to 2020-12-31, 2020-02-01 extends to 2020-02-28 and so on.
+        /// Creates a new <see cref="DateTimeSpan"/> using given values. Values not given are expanded to start and end of it's period.
         /// </summary>
-        /// <param name="start">The date/time to expand.</param>
-        public static DateTimeSpan ConvertToDateTimeSpan(this DateTimeOffset start)
+        private static DateTimeSpan CreateDateTimeSpan(int? year = null, int? month = null, int? day = null, int? hour = null, int? minute = null, int? second = null, int? millisecond = null, TimeSpan offset = default)
         {
-            DateTimeOffset end;
-            if (start.Second != 0)
-                end = start.AddSeconds(1);
-            else if (start.Minute != 0)
-                end = start.AddMinutes(1);
-            else if (start.Hour != 0)
-                end = start.AddHours(1);
-            else if (start.Day != 1)
-                end = start.AddDays(1);
-            else if (start.Month != 1)
-                end = start.AddMonths(1);
+            var start = new DateTimeOffset(
+                year ?? DateTimeOffset.MinValue.Year,
+                month ?? 1,
+                day ?? 1,
+                hour ?? 0,
+                minute ?? 0,
+                second ?? 0,
+                millisecond ?? 0,
+                offset);
+
+            var end = start;
+            if (year == null)
+                end = DateTimeOffset.MaxValue;
+            else if (month == null)
+                end = end.AddYears(1);
+            else if (day == null)
+                end = end.AddMonths(1);
+            else if (hour == null)
+                end = end.AddDays(1);
+            else if (minute == null)
+                end = end.AddHours(1);
+            else if (second == null)
+                end = end.AddMinutes(1);
+            else if (millisecond == null)
+                end = end.AddSeconds(1);
             else
-                end = start.AddYears(1);
+                end = end.AddMilliseconds(millisecond.Value);
 
             return new DateTimeSpan(start, end);
         }
@@ -68,16 +81,16 @@ namespace FS.FilterExpressionCreator.Extensions
             if (!startAndEnd.Success)
                 return false;
 
-            var startParsed = TryConvertRoundTripFormattedString(startAndEnd.Groups["start"].Value, cultureInfo, out var start);
-            var endParsed = TryConvertRoundTripFormattedString(startAndEnd.Groups["end"].Value, cultureInfo, out var end);
+            var startParsed = TryConvertIso8601FormattedString(startAndEnd.Groups["start"].Value, cultureInfo, out var start);
+            var endParsed = TryConvertIso8601FormattedString(startAndEnd.Groups["end"].Value, cultureInfo, out var end);
             if (!startParsed || !endParsed)
                 return false;
 
-            dateTimeSpan = new DateTimeSpan(start.Start, end.Start);
+            dateTimeSpan = new DateTimeSpan(start.Start, end.End);
             return true;
         }
 
-        private static bool TryConvertRoundTripFormattedString(string value, IFormatProvider cultureInfo, out DateTimeSpan dateTimeSpan)
+        private static bool TryConvertIso8601FormattedString(string value, IFormatProvider cultureInfo, out DateTimeSpan dateTimeSpan)
         {
             dateTimeSpan = new DateTimeSpan(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
@@ -98,14 +111,13 @@ namespace FS.FilterExpressionCreator.Extensions
             try
             {
                 var year = ParseDateTimePart(dateAndTime, "year", cultureInfo) ?? throw new InvalidOperationException($"Year could not be parsed from given value '{value}'");
-                var month = ParseDateTimePart(dateAndTime, "month", cultureInfo) ?? 1;
-                var day = ParseDateTimePart(dateAndTime, "day", cultureInfo) ?? 1;
-                var hour = ParseDateTimePart(dateAndTime, "hour", cultureInfo) ?? 0;
-                var minute = ParseDateTimePart(dateAndTime, "minute", cultureInfo) ?? 0;
-                var second = ParseDateTimePart(dateAndTime, "second", cultureInfo) ?? 0;
+                var month = ParseDateTimePart(dateAndTime, "month", cultureInfo);
+                var day = ParseDateTimePart(dateAndTime, "day", cultureInfo);
+                var hour = ParseDateTimePart(dateAndTime, "hour", cultureInfo);
+                var minute = ParseDateTimePart(dateAndTime, "minute", cultureInfo);
+                var second = ParseDateTimePart(dateAndTime, "second", cultureInfo);
                 var offsetTimeSpan = ParseOffset(offset);
-                var start = new DateTimeOffset(year, month, day, hour, minute, second, offsetTimeSpan);
-                dateTimeSpan = start.ConvertToDateTimeSpan();
+                dateTimeSpan = CreateDateTimeSpan(year, month, day, hour, minute, second, null, offsetTimeSpan);
                 return true;
             }
             catch (ArgumentException) { }
@@ -138,8 +150,23 @@ namespace FS.FilterExpressionCreator.Extensions
 
         private static bool TryConvertUnknownFormattedString(string value, CultureInfo cultureInfo, out DateTimeSpan dateTimeSpan)
         {
-            var result = DateTimeOffset.TryParse(value, cultureInfo, DateTimeStyles.AssumeUniversal, out var dateTimeValue);
-            dateTimeSpan = dateTimeValue.ConvertToDateTimeSpan();
+            var result = DateTimeOffset.TryParse(value, cultureInfo, DateTimeStyles.AssumeUniversal, out var startDate);
+
+            DateTimeOffset endDate;
+            if (startDate.Second != 0)
+                endDate = startDate.AddSeconds(1);
+            else if (startDate.Minute != 0)
+                endDate = startDate.AddMinutes(1);
+            else if (startDate.Hour != 0)
+                endDate = startDate.AddHours(1);
+            else if (startDate.Day != 1)
+                endDate = startDate.AddDays(1);
+            else if (startDate.Month != 1)
+                endDate = startDate.AddMonths(1);
+            else
+                endDate = startDate.AddYears(1);
+
+            dateTimeSpan = new DateTimeSpan(startDate, endDate);
             return result;
         }
 
