@@ -86,9 +86,9 @@ namespace FS.FilterExpressionCreator.Models
         /// <param name="val2">The second of two <see cref="DateTimeOffset"/> to compare.</param>
         public static bool Intersect(DateTimeSpan val1, DateTimeSpan val2)
         {
-            var thisStartIsLowerThanRhsEnd = val1.Start.CompareTo(val2.End) <= 0;
-            var rhsStartIsLowerThanThisEnd = val2.Start.CompareTo(val1.End) <= 0;
-            return thisStartIsLowerThanRhsEnd && rhsStartIsLowerThanThisEnd;
+            var val1StartIsLowerThanVal2End = val1.Start.CompareTo(val2.End) <= 0;
+            var val2StartIsLowerThanVal1End = val2.Start.CompareTo(val1.End) <= 0;
+            return val1StartIsLowerThanVal2End && val2StartIsLowerThanVal1End;
         }
 
         /// <summary>

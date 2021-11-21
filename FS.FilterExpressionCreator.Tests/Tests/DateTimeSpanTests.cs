@@ -22,21 +22,29 @@ namespace FS.FilterExpressionCreator.Tests.Tests
         }
 
         [TestMethod]
-        public void WhenDateTimeSpansIntersects_IntersectReturnsTrue()
+        public void WhenDateTimeSpansIntersectIsCalculated_ResultMatchExpected()
         {
-            var earlySpan = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2000, 12, 31, 0, 0, 0, TimeSpan.Zero));
-            var laterSpan = new DateTimeSpan(new DateTimeOffset(2000, 12, 31, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            // ReSharper disable InconsistentNaming
+            var spanA_A = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2000, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanA_B = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanA_C = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2020, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanB_B = new DateTimeSpan(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanB_C = new DateTimeSpan(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2020, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanB_D = new DateTimeSpan(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2030, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanD_D = new DateTimeSpan(new DateTimeOffset(2030, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2030, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            // ReSharper restore InconsistentNaming
 
-            earlySpan.Should().Match<DateTimeSpan>(early => early.Intersect(laterSpan));
-        }
+            spanA_B.Intersect(spanA_A).Should().BeTrue();
+            spanA_A.Intersect(spanA_B).Should().BeTrue();
 
-        [TestMethod]
-        public void WhenDateTimeSpansNotIntersects_IntersectReturnsFalse()
-        {
-            var earlySpan = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2000, 12, 31, 0, 0, 0, TimeSpan.Zero));
-            var laterSpan = new DateTimeSpan(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            spanA_C.Intersect(spanB_B).Should().BeTrue();
+            spanB_B.Intersect(spanA_C).Should().BeTrue();
 
-            earlySpan.Should().Match<DateTimeSpan>(early => !early.Intersect(laterSpan));
+            spanA_C.Intersect(spanB_D).Should().BeTrue();
+            spanB_D.Intersect(spanA_C).Should().BeTrue();
+
+            spanB_C.Intersect(spanD_D).Should().BeFalse();
+            spanD_D.Intersect(spanB_C).Should().BeFalse();
         }
 
         [TestMethod]
@@ -66,23 +74,29 @@ namespace FS.FilterExpressionCreator.Tests.Tests
         }
 
         [TestMethod]
-        public void WhenDateTimeSpanContainsOther_ContainsReturnsTrue()
+        public void WhenDateTimeSpansContainsIsCalculated_ResultMatchExpected()
         {
-            var outer = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2000, 12, 31, 0, 0, 0, TimeSpan.Zero));
-            var inner = new DateTimeSpan(new DateTimeOffset(2000, 02, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2000, 11, 30, 0, 0, 0, TimeSpan.Zero));
+            // ReSharper disable InconsistentNaming
+            var spanA_A = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2000, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanA_B = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanA_C = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2020, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanB_B = new DateTimeSpan(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanB_C = new DateTimeSpan(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2020, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanB_D = new DateTimeSpan(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2030, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanD_D = new DateTimeSpan(new DateTimeOffset(2030, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2030, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            // ReSharper restore InconsistentNaming
 
-            outer.Should().Match<DateTimeSpan>(o => o.Contains(inner));
-            inner.Should().Match<DateTimeSpan>(i => !i.Contains(outer));
-        }
+            spanA_B.Contains(spanA_A).Should().BeTrue();
+            spanA_A.Contains(spanA_B).Should().BeFalse();
 
-        [TestMethod]
-        public void WhenDateTimeSpansNotIntersects_TheyDoesNotContainsEachOther()
-        {
-            var outer = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2000, 12, 31, 0, 0, 0, TimeSpan.Zero));
-            var inner = new DateTimeSpan(new DateTimeOffset(2000, 02, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            spanA_C.Contains(spanB_B).Should().BeTrue();
+            spanB_B.Contains(spanA_C).Should().BeFalse();
 
-            outer.Should().Match<DateTimeSpan>(o => !o.Contains(inner));
-            inner.Should().Match<DateTimeSpan>(i => !i.Contains(outer));
+            spanA_C.Contains(spanB_D).Should().BeFalse();
+            spanB_D.Contains(spanA_C).Should().BeFalse();
+
+            spanB_C.Contains(spanD_D).Should().BeFalse();
+            spanD_D.Contains(spanB_C).Should().BeFalse();
         }
     }
 }
