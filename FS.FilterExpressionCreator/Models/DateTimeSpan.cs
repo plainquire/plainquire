@@ -64,15 +64,61 @@ namespace FS.FilterExpressionCreator.Models
         public static bool operator !=(DateTimeSpan left, DateTimeSpan right) => !(left == right);
 
         /// <summary>
-        /// Checks if the given <see cref="DateTimeSpan"/> intersects with this one.
+        /// Returns the smaller of two <see cref="DateTimeOffset"/>.
+        /// </summary>
+        /// <param name="val1">The first of two <see cref="DateTimeOffset"/> to compare.</param>
+        /// <param name="val2">The second of two <see cref="DateTimeOffset"/> to compare.</param>
+        public static DateTimeOffset Min(DateTimeOffset val1, DateTimeOffset val2)
+            => val1.CompareTo(val2) <= 0 ? val1 : val2;
+
+        /// <summary>
+        /// Returns the larger of two <see cref="DateTimeOffset"/>.
+        /// </summary>
+        /// <param name="val1">The first of two <see cref="DateTimeOffset"/> to compare.</param>
+        /// <param name="val2">The second of two <see cref="DateTimeOffset"/> to compare.</param>
+        public static DateTimeOffset Max(DateTimeOffset val1, DateTimeOffset val2)
+            => val1.CompareTo(val2) >= 0 ? val1 : val2;
+
+        /// <summary>
+        /// Checks if two <see cref="DateTimeSpan"/> intersects with each other.
+        /// </summary>
+        /// <param name="val1">The first of two <see cref="DateTimeOffset"/> to compare.</param>
+        /// <param name="val2">The second of two <see cref="DateTimeOffset"/> to compare.</param>
+        public static bool Intersect(DateTimeSpan val1, DateTimeSpan val2)
+        {
+            var thisStartIsLowerThanRhsEnd = val1.Start.CompareTo(val2.End) <= 0;
+            var rhsStartIsLowerThanThisEnd = val2.Start.CompareTo(val1.End) <= 0;
+            return thisStartIsLowerThanRhsEnd && rhsStartIsLowerThanThisEnd;
+        }
+
+        /// <summary>
+        /// Checks if a second <see cref="DateTimeSpan"/> intersects with this one.
         /// </summary>
         /// <param name="other">The <see cref="DateTimeSpan"/> to check intersection with.</param>
         public bool Intersect(DateTimeSpan other)
+            => Intersect(this, other);
+
+        /// <summary>
+        /// Returns the intersected date/time span of two <see cref="DateTimeSpan"/>.
+        /// </summary>
+        /// <param name="val1">The first of two <see cref="DateTimeOffset"/> to compare.</param>
+        /// <param name="val2">The second of two <see cref="DateTimeOffset"/> to compare.</param>
+        public static DateTimeSpan? Intersection(DateTimeSpan val1, DateTimeSpan val2)
         {
-            var thisStartIsLowerThanRhsEnd = Start.CompareTo(other.End) <= 0;
-            var rhsStartIsLowerThanThisEnd = other.Start.CompareTo(End) <= 0;
-            return thisStartIsLowerThanRhsEnd && rhsStartIsLowerThanThisEnd;
+            if (!Intersect(val1, val2))
+                return null;
+
+            var start = Max(val1.Start, val2.Start);
+            var end = Min(val1.End, val2.End);
+            return new DateTimeSpan(start, end);
         }
+
+        /// <summary>
+        /// Returns the intersected date/time span of this and a second <see cref="DateTimeSpan"/>.
+        /// </summary>
+        /// <param name="other">The <see cref="DateTimeSpan"/> to check intersection with.</param>
+        public DateTimeSpan? Intersection(DateTimeSpan other)
+            => Intersection(this, other);
 
         /// <summary>
         /// Determines whether this instance contains the object.

@@ -40,6 +40,32 @@ namespace FS.FilterExpressionCreator.Tests.Tests
         }
 
         [TestMethod]
+        public void WhenDateTimeSpansIntersectionIsCalculated_ResultMatchExpected()
+        {
+            // ReSharper disable InconsistentNaming
+            var spanA_A = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2000, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanA_B = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanA_C = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2020, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanB_B = new DateTimeSpan(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanB_C = new DateTimeSpan(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2020, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanB_D = new DateTimeSpan(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2030, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanD_D = new DateTimeSpan(new DateTimeOffset(2030, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2030, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            // ReSharper restore InconsistentNaming
+
+            spanA_B.Intersection(spanA_A).Should().Be(spanA_A);
+            spanA_A.Intersection(spanA_B).Should().Be(spanA_A);
+
+            spanA_C.Intersection(spanB_B).Should().Be(spanB_B);
+            spanB_B.Intersection(spanA_C).Should().Be(spanB_B);
+
+            spanA_C.Intersection(spanB_D).Should().Be(spanB_C);
+            spanB_D.Intersection(spanA_C).Should().Be(spanB_C);
+
+            spanB_C.Intersection(spanD_D).Should().BeNull();
+            spanD_D.Intersection(spanB_C).Should().BeNull();
+        }
+
+        [TestMethod]
         public void WhenDateTimeSpanContainsOther_ContainsReturnsTrue()
         {
             var outer = new DateTimeSpan(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2000, 12, 31, 0, 0, 0, TimeSpan.Zero));

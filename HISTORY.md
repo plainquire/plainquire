@@ -1,3 +1,9 @@
+# 2.2.1
+
+## Changes
+
+DateTimeSpan intersection calculation added
+
 # 2.2.0
 
 ## New Features
