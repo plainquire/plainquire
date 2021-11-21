@@ -1,4 +1,10 @@
-# 2.1.0
+# 2.2.0
+
+## New Features
+
+DateTimeSpan equality and comparison functions added
+
+# 2.1.1
 
 ## Changes
 
@@ -6,13 +12,13 @@ Parsing of (partial) date/time value (ranges) changed/fixed
 
 # 2.0.0
 
-## Changes
+## New Features
 
 Interceptor added to provide custom filter manipulation/translation
 
 # 1.2.0
 
-## Changes
+## New Features
 
 Support for DateTimeOffset added
 
