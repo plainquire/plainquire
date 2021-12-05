@@ -95,8 +95,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             var entityFilter2 = new EntityFilter<TestModel<string>>()
                 .Add(x => x.ValueA, Array.Empty<string>());
 
-            entityFilter1.Should().Match<EntityFilter<TestModel<string>>>(x => x.IsEmpty);
-            entityFilter2.Should().Match<EntityFilter<TestModel<string>>>(x => x.IsEmpty);
+            entityFilter1.Should().Match<EntityFilter<TestModel<string>>>(x => x.IsEmpty());
+            entityFilter2.Should().Match<EntityFilter<TestModel<string>>>(x => x.IsEmpty());
         }
 
         [TestMethod]
