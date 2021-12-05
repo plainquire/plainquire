@@ -69,6 +69,10 @@ namespace FS.FilterExpressionCreator.Filters
         /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
         public EntityFilter<TEntity> Add<TProperty, TValue>(Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator, params TValue[] values)
         {
+            var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
+            if ((values == null || values.Length == 0) && !isNullableFilterOperator)
+                return this;
+
             var valueFilter = ValueFilter.Create(filterOperator, values);
             AddInternal(property, valueFilter);
             return this;
@@ -82,6 +86,9 @@ namespace FS.FilterExpressionCreator.Filters
         /// <param name="filterSyntax">Description of the filter using micro syntax.</param>
         public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty>> property, string filterSyntax)
         {
+            if (filterSyntax == null)
+                return this;
+
             var valueFilter = ValueFilter.Create(filterSyntax);
             AddInternal(property, valueFilter);
             return this;
@@ -95,6 +102,9 @@ namespace FS.FilterExpressionCreator.Filters
         /// <param name="nestedFilter">The nested class filter.</param>
         public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TProperty> nestedFilter)
         {
+            if (nestedFilter == null)
+                return this;
+
             AddInternal(property, nestedFilter);
             return this;
         }
@@ -109,6 +119,9 @@ namespace FS.FilterExpressionCreator.Filters
         public EntityFilter<TEntity> Add<TProperty, TNested>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TNested> nestedFilter)
             where TProperty : IEnumerable<TNested>
         {
+            if (nestedFilter == null)
+                return this;
+
             AddInternal(property, nestedFilter);
             return this;
         }
@@ -123,7 +136,7 @@ namespace FS.FilterExpressionCreator.Filters
         public EntityFilter<TEntity> Replace<TProperty, TValue>(Expression<Func<TEntity, TProperty>> property, params TValue[] values)
         {
             if (values != null && values.FirstOrDefault() is FilterOperator filterOperator)
-                return Replace(property, filterOperator, new object[0]);
+                return Replace(property, filterOperator, Array.Empty<object>());
             return Replace(property, FilterOperator.Default, values);
         }
 
@@ -137,6 +150,10 @@ namespace FS.FilterExpressionCreator.Filters
         /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
         public EntityFilter<TEntity> Replace<TProperty, TValue>(Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator, params TValue[] values)
         {
+            var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
+            if ((values == null || values.Length == 0) && !isNullableFilterOperator)
+                return Clear(property);
+
             var valueFilter = ValueFilter.Create(filterOperator, values);
             ReplaceInternal(property, valueFilter);
             return this;
@@ -150,6 +167,9 @@ namespace FS.FilterExpressionCreator.Filters
         /// <param name="filterSyntax">Description of the filter using micro syntax.</param>
         public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty>> property, string filterSyntax)
         {
+            if (filterSyntax == null)
+                return Clear(property);
+
             var valueFilter = ValueFilter.Create(filterSyntax);
             ReplaceInternal(property, valueFilter);
             return this;
@@ -163,6 +183,9 @@ namespace FS.FilterExpressionCreator.Filters
         /// <param name="nestedFilter">The nested class filter.</param>
         public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TProperty> nestedFilter)
         {
+            if (nestedFilter == null)
+                return Clear(property);
+
             ReplaceInternal(property, nestedFilter);
             return this;
         }
@@ -177,6 +200,9 @@ namespace FS.FilterExpressionCreator.Filters
         public EntityFilter<TEntity> Replace<TProperty, TNested>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TNested> nestedFilter)
             where TProperty : IEnumerable<TNested>
         {
+            if (nestedFilter == null)
+                return Clear(property);
+
             ReplaceInternal(property, nestedFilter);
             return this;
         }
@@ -284,6 +310,11 @@ namespace FS.FilterExpressionCreator.Filters
         /// Gets or sets the default interceptor. Can be used to set a system-wide interceptor.
         /// </summary>
         public static IPropertyFilterInterceptor DefaultInterceptor { get; set; }
+
+        /// <summary>
+        /// Indicates whether this filter is empty.
+        /// </summary>
+        public bool IsEmpty => !PropertyFilters.Any() && !NestedFilters.Any();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityFilter"/> class.

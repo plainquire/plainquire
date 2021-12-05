@@ -1,3 +1,9 @@
+# 2.3.0
+
+## Changes
+
+Filter value gets cleared when it is replaced by NULL
+
 # 2.2.1
 
 ## Changes

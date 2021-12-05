@@ -85,18 +85,18 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         }
 
         [TestMethod]
-        public void WhenNoValueForPropertyIsProvided_ThenArgumentExceptionIsThrown()
+        public void WhenNoValueForPropertyIsProvided_ThenFilterIsLeftUnchanged()
         {
             using var _ = new AssertionScope();
 
-            Action createInvalidEntityFilter1 = () => new EntityFilter<TestModel<string>>()
+            var entityFilter1 = new EntityFilter<TestModel<string>>()
                 .Add(x => x.ValueA, (string[])null);
 
-            Action createInvalidEntityFilter2 = () => new EntityFilter<TestModel<string>>()
+            var entityFilter2 = new EntityFilter<TestModel<string>>()
                 .Add(x => x.ValueA, Array.Empty<string>());
 
-            createInvalidEntityFilter1.Should().Throw<ArgumentException>().WithMessage("At least one value is required");
-            createInvalidEntityFilter2.Should().Throw<ArgumentException>().WithMessage("At least one value is required");
+            entityFilter1.Should().Match<EntityFilter<TestModel<string>>>(x => x.IsEmpty);
+            entityFilter2.Should().Match<EntityFilter<TestModel<string>>>(x => x.IsEmpty);
         }
 
         [TestMethod]
