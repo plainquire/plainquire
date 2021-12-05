@@ -1,3 +1,9 @@
+# 2.3.1
+
+## Changes
+
+EntityFilter.IsEmpty() added
+
 # 2.3.0
 
 ## Changes

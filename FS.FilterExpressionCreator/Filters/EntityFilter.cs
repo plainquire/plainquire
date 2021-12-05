@@ -312,11 +312,6 @@ namespace FS.FilterExpressionCreator.Filters
         public static IPropertyFilterInterceptor DefaultInterceptor { get; set; }
 
         /// <summary>
-        /// Indicates whether this filter is empty.
-        /// </summary>
-        public bool IsEmpty => !PropertyFilters.Any() && !NestedFilters.Any();
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="EntityFilter"/> class.
         /// </summary>
         public EntityFilter()
@@ -324,6 +319,11 @@ namespace FS.FilterExpressionCreator.Filters
             PropertyFilters = new List<PropertyFilter>();
             NestedFilters = new List<NestedFilter>();
         }
+
+        /// <summary>
+        /// Indicates whether this filter is empty.
+        /// </summary>
+        public bool IsEmpty() => !PropertyFilters.Any() && !NestedFilters.Any();
 
         /// <summary>
         /// Gets the filter syntax for the given <typeparamref name="TProperty"/>.
