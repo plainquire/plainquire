@@ -12,6 +12,38 @@ namespace FS.FilterExpressionCreator.Extensions
     public static class DateTimeSectionExtensions
     {
         /// <summary>
+        /// Convert a string to <see cref="DateTimeOffset"/>.
+        /// </summary>
+        /// <param name="value">The string to convert.</param>
+        /// <param name="now">Value used for 'now' when parsing relative date/time values (e.g. one-week-ago).</param>
+        /// <param name="cultureInfo">The culture to use when parsing.</param>
+        public static DateTimeOffset ConvertStringToDateTimeOffset(this string value, DateTimeOffset now, CultureInfo cultureInfo = null)
+        {
+            if (TryConvertStringToDateTimeSection(value, now, out var dateTimeSection, cultureInfo))
+                return dateTimeSection.Start;
+            throw new ArgumentException($"{value} could not be converted to date/time section", nameof(value));
+        }
+
+        /// <summary>
+        /// Try to convert a string to <see cref="DateTimeOffset"/>.
+        /// </summary>
+        /// <param name="value">The string to convert.</param>
+        /// <param name="now">Value used for 'now' when parsing relative date/time values (e.g. one-week-ago).</param>
+        /// <param name="dateTimeOffset">The parsed <see cref="DateTimeOffset"/>.</param>
+        /// <param name="cultureInfo">The culture to use when parsing.</param>
+        public static bool TryConvertStringToDateTimeOffset(this string value, DateTimeOffset now, out DateTimeOffset dateTimeOffset, CultureInfo cultureInfo = null)
+        {
+            if (TryConvertStringToDateTimeSection(value, now, out var dateTimeSection, cultureInfo))
+            {
+                dateTimeOffset = dateTimeSection.Start;
+                return true;
+            }
+
+            dateTimeOffset = DateTimeOffset.MinValue;
+            return false;
+        }
+
+        /// <summary>
         /// Convert a string to date time section.
         /// </summary>
         /// <param name="value">The string to convert.</param>
@@ -19,8 +51,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="cultureInfo">The culture to use when parsing.</param>
         public static Section<DateTimeOffset> ConvertStringToDateTimeSection(this string value, DateTimeOffset now, CultureInfo cultureInfo = null)
         {
-            var success = TryConvertStringToDateTimeSection(value, now, out var dateTimeSection);
-            if (success)
+            if (TryConvertStringToDateTimeSection(value, now, out var dateTimeSection, cultureInfo))
                 return dateTimeSection;
             throw new ArgumentException($"{value} could not be converted to date/time section", nameof(value));
         }
