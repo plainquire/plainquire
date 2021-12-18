@@ -1,3 +1,9 @@
+# 2.4.0
+
+## Breaking Changes
+
+Class 'DateTimeSpan' replaced by generic class 'Section\<TType\>'
+
 # 2.3.1
 
 ## Changes

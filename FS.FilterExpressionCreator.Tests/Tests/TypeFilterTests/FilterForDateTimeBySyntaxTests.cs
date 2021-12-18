@@ -1,4 +1,5 @@
 ﻿using FS.FilterExpressionCreator.Exceptions;
+using FS.FilterExpressionCreator.Models;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Extensions;
 using FS.FilterExpressionCreator.Tests.Models;

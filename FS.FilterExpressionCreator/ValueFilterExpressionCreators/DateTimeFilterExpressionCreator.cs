@@ -31,12 +31,12 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 
         /// <inheritdoc />
         public override bool CanCreateExpressionFor(Type type)
-            => new[] { typeof(DateTimeSpan), typeof(DateTime), typeof(DateTimeOffset) }.Contains(type.GetUnderlyingType());
+            => new[] { typeof(Section<DateTimeOffset>), typeof(DateTime), typeof(DateTimeOffset) }.Contains(type.GetUnderlyingType());
 
         /// <inheritdoc />
         protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration configuration)
         {
-            if (value.TryConvertStringToDateTimeSpan(configuration.Now(), out var dateTimeSpan, configuration.CultureInfo))
+            if (value.TryConvertStringToDateTimeSection(configuration.Now(), out var dateTimeSpan, configuration.CultureInfo))
                 return CreateDateTimeExpressionByFilterOperator(propertySelector, filterOperator, dateTimeSpan);
 
             if (configuration.IgnoreParseExceptions)
@@ -45,7 +45,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             throw CreateFilterExpressionCreationException("Unable to parse given filter value", propertySelector, filterOperator, value);
         }
 
-        private Expression CreateDateTimeExpressionByFilterOperator<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, DateTimeSpan value)
+        private Expression CreateDateTimeExpressionByFilterOperator<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, Section<DateTimeOffset> value)
         {
             TProperty valueStart;
             TProperty valueEnd;
