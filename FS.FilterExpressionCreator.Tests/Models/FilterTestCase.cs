@@ -1,9 +1,11 @@
 ﻿using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Models;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Models
 {
+    [ExcludeFromCodeCoverage]
     public class FilterTestCase<TFilterValue, TModelValue> : FilterTestCase
     {
         public FilterOperator FilterOperator { get; set; }
@@ -50,6 +52,7 @@ namespace FS.FilterExpressionCreator.Tests.Models
             };
     }
 
+    [ExcludeFromCodeCoverage]
     public class FilterTestCase
     {
         public int Id { get; set; }

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Models
 {
+
+    [ExcludeFromCodeCoverage]
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
     public class TestModel<TValue>
     {

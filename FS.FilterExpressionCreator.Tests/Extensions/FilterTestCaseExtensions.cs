@@ -4,10 +4,12 @@ using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Tests.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace FS.FilterExpressionCreator.Tests.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class FilterTestCaseExtensions
     {
         public static void Run<TFilterValue, TModelValue>(this FilterTestCase<TFilterValue, TModelValue> testCase, ICollection<TestModel<TModelValue>> testItems, TestModelFilterFunc<TModelValue> filterFunc)

@@ -6,11 +6,13 @@ using FS.FilterExpressionCreator.Tests.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace FS.FilterExpressionCreator.Tests.Tests
 {
+    [ExcludeFromCodeCoverage]
     public static class TestMethods
     {
         public static List<TEntity> FilterDirectByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration configuration, IPropertyFilterInterceptor interceptor)

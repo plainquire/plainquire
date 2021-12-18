@@ -2,10 +2,11 @@
 using FluentAssertions.Execution;
 using FS.FilterExpressionCreator.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.ValueFilterTests
 {
-    [TestClass]
+    [TestClass, ExcludeFromCodeCoverage]
     public class HumanizeFilterSyntaxTests
     {
         [TestMethod]

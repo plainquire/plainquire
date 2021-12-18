@@ -5,11 +5,12 @@ using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 {
-    [TestClass]
+    [TestClass, ExcludeFromCodeCoverage]
     public class NestedFilterTests : TestBase
     {
         [DataTestMethod]

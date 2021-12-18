@@ -2,10 +2,11 @@
 using FS.FilterExpressionCreator.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Tests
 {
-    [TestClass]
+    [TestClass, ExcludeFromCodeCoverage]
     public class DateTimeSpanTests
     {
         [TestMethod]

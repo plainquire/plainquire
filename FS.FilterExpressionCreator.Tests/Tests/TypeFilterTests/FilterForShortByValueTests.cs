@@ -5,10 +5,11 @@ using FS.FilterExpressionCreator.Tests.Extensions;
 using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
 {
-    [TestClass]
+    [TestClass, ExcludeFromCodeCoverage]
     public class FilterForShortByValueTests : TestBase<short>
     {
         [DataTestMethod]

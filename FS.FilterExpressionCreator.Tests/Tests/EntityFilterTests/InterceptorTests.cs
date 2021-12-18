@@ -10,13 +10,14 @@ using FS.FilterExpressionCreator.ValueFilterExpressionCreators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 {
-    [TestClass]
+    [TestClass, ExcludeFromCodeCoverage]
     public class InterceptorTests : TestBase
     {
         [DataTestMethod]

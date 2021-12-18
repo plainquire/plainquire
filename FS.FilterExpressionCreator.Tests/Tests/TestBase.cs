@@ -2,12 +2,15 @@
 using FS.FilterExpressionCreator.Tests.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
 namespace FS.FilterExpressionCreator.Tests.Tests
 {
+
+    [ExcludeFromCodeCoverage]
     public abstract class TestBase<TModelValue> : TestBase
     {
         protected static readonly TestModelFilterFunc<TModelValue>[] TestModelFilterFunctions =
@@ -21,6 +24,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests
         };
     }
 
+
+    [ExcludeFromCodeCoverage]
     public abstract class TestBase
     {
         protected const bool ALL = true;

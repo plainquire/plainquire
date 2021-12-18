@@ -3,10 +3,11 @@ using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Extensions;
 using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
 {
-    [TestClass]
+    [TestClass, ExcludeFromCodeCoverage]
     public class FilterForShortBySyntaxTests : TestBase<short>
     {
         [DataTestMethod]

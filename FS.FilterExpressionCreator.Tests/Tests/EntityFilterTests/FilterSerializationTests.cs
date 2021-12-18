@@ -4,13 +4,14 @@ using FS.FilterExpressionCreator.Newtonsoft.Extensions;
 using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NetSerializer = System.Text.Json.JsonSerializer;
 using NewtonSerializer = Newtonsoft.Json.JsonConvert;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 {
-    [TestClass]
+    [TestClass, ExcludeFromCodeCoverage]
     public class FilterSerializationTests
     {
         [TestMethod]
