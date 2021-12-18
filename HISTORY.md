@@ -1,8 +1,12 @@
-# 2.4.0
+# 3.0.0
 
 ## Breaking Changes
 
 Class 'DateTimeSpan' replaced by generic class 'Section\<TType\>'
+
+## Fixes
+
+Adding ISNULL/NOTNULL filter without values fixed
 
 # 2.3.1
 

@@ -124,10 +124,16 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
         public void WhenPropertyIsFilteredForNull_FilterOperatorIsRecognizedCorrectly(EntityFilterFunc<TestModel<string>> filterFunc)
         {
-            var isNullFilter = new EntityFilter<TestModel<string>>()
+            var isNullFilterAdded = new EntityFilter<TestModel<string>>()
+                .Add(x => x.ValueA, FilterOperator.IsNull);
+
+            var isNotNullFilterAdded = new EntityFilter<TestModel<string>>()
+                .Add(x => x.ValueA, "NOTNULL");
+
+            var isNullFilterReplaced = new EntityFilter<TestModel<string>>()
                 .Replace(x => x.ValueA, FilterOperator.IsNull);
 
-            var isNotNullFilter = new EntityFilter<TestModel<string>>()
+            var isNotNullFilterReplaced = new EntityFilter<TestModel<string>>()
                 .Replace(x => x.ValueA, "NOTNULL");
 
             var testItems = new List<TestModel<string>>
@@ -136,21 +142,32 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
                 new() { ValueA = null },
             };
 
-            var isNullItems = filterFunc(testItems, isNullFilter).ToList();
-            var notNullItems = filterFunc(testItems, isNotNullFilter).ToList();
+            var isNullItemsAdded = filterFunc(testItems, isNullFilterAdded).ToList();
+            var notNullItemsAdded = filterFunc(testItems, isNotNullFilterAdded).ToList();
+            var isNullItemsReplaced = filterFunc(testItems, isNullFilterReplaced).ToList();
+            var notNullItemsReplaced = filterFunc(testItems, isNotNullFilterReplaced).ToList();
 
-            isNullItems.Should().BeEquivalentTo(new[] { testItems[1] });
-            notNullItems.Should().BeEquivalentTo(new[] { testItems[0] });
+            isNullItemsAdded.Should().BeEquivalentTo(new[] { testItems[1] });
+            notNullItemsAdded.Should().BeEquivalentTo(new[] { testItems[0] });
+            isNullItemsReplaced.Should().BeEquivalentTo(new[] { testItems[1] });
+            notNullItemsReplaced.Should().BeEquivalentTo(new[] { testItems[0] });
         }
 
         [DataTestMethod]
         [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
         public void WhenPropertyIsFilteredForNull_GivenValuesAreIgnored(EntityFilterFunc<TestModel<string>> filterFunc)
         {
-            var isNullFilter = new EntityFilter<TestModel<string>>()
+            var isNullFilterAdded = new EntityFilter<TestModel<string>>()
+                .Add(x => x.ValueA, FilterOperator.IsNull, "A", "B");
+
+            var isNotNullFilterAdded = new EntityFilter<TestModel<string>>()
+                // ReSharper disable once StringLiteralTypo
+                .Add(x => x.ValueA, "NOTNULLA,B");
+
+            var isNullFilterReplaced = new EntityFilter<TestModel<string>>()
                 .Replace(x => x.ValueA, FilterOperator.IsNull, "A", "B");
 
-            var isNotNullFilter = new EntityFilter<TestModel<string>>()
+            var isNotNullFilterReplaced = new EntityFilter<TestModel<string>>()
                 // ReSharper disable once StringLiteralTypo
                 .Replace(x => x.ValueA, "NOTNULLA,B");
 
@@ -160,11 +177,15 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
                 new() { ValueA = null },
             };
 
-            var isNullItems = filterFunc(testItems, isNullFilter).ToList();
-            var notNullItems = filterFunc(testItems, isNotNullFilter).ToList();
+            var isNullItemsAdded = filterFunc(testItems, isNullFilterAdded).ToList();
+            var notNullItemsAdded = filterFunc(testItems, isNotNullFilterAdded).ToList();
+            var isNullItemsReplaced = filterFunc(testItems, isNullFilterReplaced).ToList();
+            var notNullItemsReplaced = filterFunc(testItems, isNotNullFilterReplaced).ToList();
 
-            isNullItems.Should().BeEquivalentTo(new[] { testItems[1] });
-            notNullItems.Should().BeEquivalentTo(new[] { testItems[0] });
+            isNullItemsAdded.Should().BeEquivalentTo(new[] { testItems[1] });
+            notNullItemsAdded.Should().BeEquivalentTo(new[] { testItems[0] });
+            isNullItemsReplaced.Should().BeEquivalentTo(new[] { testItems[1] });
+            notNullItemsReplaced.Should().BeEquivalentTo(new[] { testItems[0] });
         }
 
         [DataTestMethod]

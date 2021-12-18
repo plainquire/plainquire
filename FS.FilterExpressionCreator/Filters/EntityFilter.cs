@@ -63,6 +63,21 @@ namespace FS.FilterExpressionCreator.Filters
         /// Adds a filter for the given property. Existing filters for the same property are preserved.
         /// </summary>
         /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="property">The property to filter.</param>
+        /// <param name="filterOperator">The filter operator to use.</param>
+        public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator)
+        {
+            var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
+            if (!isNullableFilterOperator)
+                return this;
+
+            return Add(property, filterOperator, (object[])null);
+        }
+
+        /// <summary>
+        /// Adds a filter for the given property. Existing filters for the same property are preserved.
+        /// </summary>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="property">The property to filter.</param>
         /// <param name="filterOperator">The filter operator to use.</param>
@@ -134,10 +149,21 @@ namespace FS.FilterExpressionCreator.Filters
         /// <param name="property">The property to filter.</param>
         /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
         public EntityFilter<TEntity> Replace<TProperty, TValue>(Expression<Func<TEntity, TProperty>> property, params TValue[] values)
+            => Replace(property, FilterOperator.Default, values);
+
+        /// <summary>
+        /// Replaces the filter for the given property. Existing filters for the same property are removed.
+        /// </summary>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="property">The property to filter.</param>
+        /// <param name="filterOperator">The filter operator to use.</param>
+        public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator)
         {
-            if (values != null && values.FirstOrDefault() is FilterOperator filterOperator)
-                return Replace(property, filterOperator, Array.Empty<object>());
-            return Replace(property, FilterOperator.Default, values);
+            var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
+            if (!isNullableFilterOperator)
+                return this;
+
+            return Replace(property, filterOperator, (object[])null);
         }
 
         /// <summary>
