@@ -28,8 +28,8 @@ namespace FS.FilterExpressionCreator.Interfaces
         /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
         /// <typeparam name="TProperty">The type of the property.</typeparam>
         /// <param name="propertySelector">The property to create the expression for.</param>
-        /// <param name="filter">The filter to create the expression for.</param>
+        /// <param name="filters">The filters to create the expression for.</param>
         /// <param name="configuration">The filter configuration to use.</param>
-        Expression CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter filter, FilterConfiguration configuration);
+        Expression CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[] filters, FilterConfiguration configuration);
     }
 }

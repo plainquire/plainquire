@@ -62,7 +62,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
             FilterTestCase.Create<bool>(1501, "!", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<bool>(1502, "!true", x => !x),
             FilterTestCase.Create<bool>(1503, "!false", x => x),
-            FilterTestCase.Create<bool>(1504, "!true, false", _ => NONE),
+            FilterTestCase.Create<bool>(1504, "!true, !false", _ => ALL),
 
             FilterTestCase.Create<bool>(1600, "<null", new FilterExpressionCreationException("Filter operator 'LessThan' not allowed for property type 'System.Boolean'")),
 

@@ -1,6 +1,7 @@
 ﻿using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Filters;
 using System;
+using System.Linq;
 
 namespace FS.FilterExpressionCreator.Extensions
 {
@@ -20,24 +21,34 @@ namespace FS.FilterExpressionCreator.Extensions
             if (string.IsNullOrWhiteSpace(filterSyntax))
                 return $"{valueName} is unfiltered";
 
-            var filter = ValueFilter.Create(filterSyntax);
-            var operatorName = filter.GetOperatorName<TValue>();
-            if (filter.Operator == FilterOperator.IsNull || filter.Operator == FilterOperator.NotNull)
-                return $"{valueName} {operatorName}";
+            var filters = ValueFilterFactory
+                .Create(filterSyntax)
+                .GroupBy(x => x.Operator)
+                .Select(filterGroup =>
+                {
+                    var filterOperator = filterGroup.Key;
+                    var operatorName = filterOperator.GetOperatorName<TValue>();
 
-            var valuesButLast = filter.Values[..^1];
-            var prefixValueList = string.Join("', '", valuesButLast);
-            var concatKey = filter.Operator == FilterOperator.NotEqual ? "nor" : "or";
-            var valueList = !string.IsNullOrEmpty(prefixValueList)
-                ? $"'{prefixValueList}' {concatKey} '{filter.Values[^1]}'"
-                : $"'{filter.Values[^1]}'";
+                    if (filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull)
+                        return $"{valueName} {operatorName}";
 
-            return $"{valueName} {operatorName} {valueList}";
+                    var filterValues = filterGroup.Select(x => x.Value).ToArray();
+                    var valuesButLast = filterValues[..^1];
+                    var prefixValueList = string.Join("', '", valuesButLast);
+                    //var concatKey = filter.Operator == FilterOperator.NotEqual ? "nor" : "or";
+                    var valueList = !string.IsNullOrEmpty(prefixValueList)
+                        ? $"'{prefixValueList}' or '{filterValues[^1]}'"
+                        : $"'{filterValues[^1]}'";
+
+                    return $"{valueName} {operatorName} {valueList}";
+                });
+
+            return string.Join(" or ", filters);
         }
 
-        private static string GetOperatorName<TValue>(this ValueFilter filter)
+        private static string GetOperatorName<TValue>(this FilterOperator filterOperator)
         {
-            var filterOperator = filter.Operator == FilterOperator.Default ? GetDefaultOperator<TValue>() : filter.Operator;
+            filterOperator = filterOperator != FilterOperator.Default ? filterOperator : GetDefaultOperator<TValue>();
             return filterOperator switch
             {
                 FilterOperator.Contains => "contains",
@@ -50,7 +61,7 @@ namespace FS.FilterExpressionCreator.Extensions
                 FilterOperator.GreaterThan => "is greater than",
                 FilterOperator.IsNull => "is null",
                 FilterOperator.NotNull => "is not null",
-                _ => throw new ArgumentOutOfRangeException(nameof(filter))
+                _ => throw new ArgumentOutOfRangeException(nameof(filterOperator))
             };
         }
 

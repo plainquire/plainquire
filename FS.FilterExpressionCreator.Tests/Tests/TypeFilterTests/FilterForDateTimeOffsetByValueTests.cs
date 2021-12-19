@@ -102,9 +102,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
             FilterTestCase.Create(1902, FilterOperator.GreaterThanOrEqual, new DateTimeOffset[] { new (2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(-2)) }, (DateTimeOffset x) => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(-2))),
             FilterTestCase.Create(1903, FilterOperator.GreaterThanOrEqual, new Section<DateTimeOffset>[] { new(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2020, 01, 01, 0, 0, 0, TimeSpan.Zero)) }, (DateTimeOffset x) => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero)),
 
-            FilterTestCase.Create(2000, FilterOperator.IsNull, (DateTimeOffset[])null, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.DateTimeOffset'")),
+            FilterTestCase.Create(2000, FilterOperator.IsNull, new DateTimeOffset[] { default }, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.DateTimeOffset'")),
 
-            FilterTestCase.Create(2100, FilterOperator.NotNull, (DateTimeOffset[])null, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.DateTimeOffset'")),
+            FilterTestCase.Create(2100, FilterOperator.NotNull, new DateTimeOffset[] { default }, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.DateTimeOffset'")),
         };
         // ReSharper restore RedundantExplicitArrayCreation
     }

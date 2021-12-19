@@ -76,9 +76,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
             FilterTestCase.Create(1901, FilterOperator.GreaterThanOrEqual, new short[] { -10 }, (short _) => ALL),
             FilterTestCase.Create(1902, FilterOperator.GreaterThanOrEqual, new short[] { +5 }, (short x) => x >= +5),
 
-            FilterTestCase.Create(2000, FilterOperator.IsNull, (short[])null, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.Int16'")),
+            FilterTestCase.Create(2000, FilterOperator.IsNull, new short[] { default }, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.Int16'")),
 
-            FilterTestCase.Create(2100, FilterOperator.NotNull, (short[])null, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Int16'")),
+            FilterTestCase.Create(2100, FilterOperator.NotNull, new short[] { default }, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Int16'")),
         };
         // ReSharper restore CompareOfFloatsByEqualityOperator
         // ReSharper restore RedundantExplicitArrayCreation

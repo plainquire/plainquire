@@ -162,14 +162,14 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 
             var isNotNullFilterAdded = new EntityFilter<TestModel<string>>()
                 // ReSharper disable once StringLiteralTypo
-                .Add(x => x.ValueA, "NOTNULLA,B");
+                .Add(x => x.ValueA, "NOTNULLA,NOTNULLB");
 
             var isNullFilterReplaced = new EntityFilter<TestModel<string>>()
                 .Replace(x => x.ValueA, FilterOperator.IsNull, "A", "B");
 
             var isNotNullFilterReplaced = new EntityFilter<TestModel<string>>()
                 // ReSharper disable once StringLiteralTypo
-                .Replace(x => x.ValueA, "NOTNULLA,B");
+                .Replace(x => x.ValueA, "NOTNULLA,NOTNULLB");
 
             var testItems = new List<TestModel<string>>
             {

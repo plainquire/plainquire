@@ -44,9 +44,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
 
             FilterTestCase.Create(1900, FilterOperator.GreaterThanOrEqual, new Guid?[] { Guid.Empty }, new FilterExpressionCreationException("Filter operator 'GreaterThanOrEqual' not allowed for property type 'System.Nullable`1[System.Guid]'")),
 
-            FilterTestCase.Create(2000, FilterOperator.IsNull, (Guid?[])null, (Guid? x) => x == null),
+            FilterTestCase.Create(2000, FilterOperator.IsNull, new Guid?[] { default }, (Guid? x) => x == null),
 
-            FilterTestCase.Create(2100, FilterOperator.NotNull, (Guid?[])null, (Guid? x) => x != null),
+            FilterTestCase.Create(2100, FilterOperator.NotNull, new Guid?[] { default }, (Guid? x) => x != null),
         };
         // ReSharper restore RedundantExplicitArrayCreation
     }

@@ -90,20 +90,36 @@ Filters can be added/replaced using operator/value(s) pairs
 ```csharp
 // Operator/Value(s): Customer contains 'Joe' or 'Doe'
 filter.Add(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
-filter.Replace(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
+
+// Operator/Value(s): Customer contains 'Joe' or equals 'Doe'
+filter.Add(x => x.Customer, ValueFilter.Create(
+    FilterOperator.EqualCaseInsensitive, "Joe"), 
+    ValueFilter.Create(FilterOperator.EqualCaseInsensitive, "Doe")
+);
 ```
 
 or via [filter micro syntax](#filter-micro-syntax)
 
 ```csharp
-// Filter micro syntax: Customer contains 'Joe' or 'Doe'
-filter.Add(x => x.Customer, "~Joe,Doe");
-filter.Replace(x => x.Customer, "~Joe,Doe");
+// Filter micro syntax: Customer contains 'Joe' or 'Doe'.
+filter.Add(x => x.Customer, "~Joe,~Doe");
+
+// Filter micro syntax: Customer contains 'Joe' or equals 'Doe'
+filter.Add(x => x.Customer, "~Joe,=Doe");
 ```
 
-## Multiple Values
+## Combine values with AND and OR
 
-Multiple values are combined using conditional `OR` expect for operator `NOT`. For operator `NOT` given values are combined using conditional `AND`.
+```csharp
+// Filter micro syntax: Customer contains 'Joe' or 'Doe'.
+// Multiple values are combined using conditional `OR`.
+filter.Add(x => x.Customer, "~Joe,~Doe");
+
+// Filter micro syntax: Customer contains 'Joe' and 'Doe'.
+// Multiple adds are combined using conditional `AND`.
+filter.Add(x => x.Customer, "~Joe");
+filter.Add(x => x.Customer, "~Doe");
+```
 
 ## Nested Filters
 
@@ -188,15 +204,18 @@ The filter syntax consists of an operator shortcut (see [filter operators](#filt
 
 ### Examples
 
-| Syntax        | Description                                                  |
-| ------------- | ------------------------------------------------------------ |
-| Joe           | For `string` filtered value contains 'Joe', for `Enum` filtered value is 'Joe' |
-| ~Joe          | Filtered value contains 'Joe', even for `Enum`               |
-| =1\\,2        | Filtered value equals '1,2'                                  |
-| ISNULL        | Filtered value is `null`                                     |
-| >one-week-ago | For `DateTime` filtered value is greater than one week ago, for others types see above |
-| 2020          | For `DateTime` filtered value is between 01/01/2020 and 12/31/2020, for others types see above |
-| 2020-01       | For `DateTime` filtered value is between 01/01/2020 and 1/31/2020, for others types see above |
+| Syntax         | Description                                                  |
+| -------------- | ------------------------------------------------------------ |
+| Joe            | For `string` filtered value contains 'Joe', for `Enum` filtered value is 'Joe' |
+| ~Joe           | Filtered value contains 'Joe', even for `Enum`               |
+| ~1,2           | Filtered value contains 1 or 2                               |
+| =1\\,2         | Filtered value equals '1,2'                                  |
+| <4,>10         | Filtered value is less than 4 or greater than 10             |
+| ~Joe<br />~Doe | Filtered value contains Joe and Doe                          |
+| ISNULL         | Filtered value is `null`                                     |
+| >one-week-ago  | For `DateTime` filtered value is greater than one week ago, for others types see above |
+| 2020           | For `DateTime` filtered value is between 01/01/2020 and 12/31/2020, for others types see above |
+| 2020-01        | For `DateTime` filtered value is between 01/01/2020 and 1/31/2020, for others types see above |
 
 ### Date/Time
 
@@ -235,7 +254,7 @@ var filteredOrders = orders.Where(filterExpression.Compile()).ToList();
 
 ## Interception
 
-Creation of filter expression can be intercepted via `IPropertyFilterInterceptor`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply a interceptor.
+Creation of filter expression can be intercepted via `IPropertyFilterInterceptor`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply an interceptor.
 
 An example can be found in the test code [InterceptorTests](https://github.com/fschick/FilterExpressionCreator/blob/main/FS.FilterExpressionCreator.Tests/Tests/EntityFilterTests/InterceptorTests.cs)
 

@@ -76,9 +76,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
             FilterTestCase.Create(1903, FilterOperator.GreaterThanOrEqual, new float[] { -10 }, (float _) => ALL),
             FilterTestCase.Create(1904, FilterOperator.GreaterThanOrEqual, new float[] { +5.5f }, (float x) => x >= +5.5f),
 
-            FilterTestCase.Create(2000, FilterOperator.IsNull, (float[])null, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.Single'")),
+            FilterTestCase.Create(2000, FilterOperator.IsNull, new float[] { default }, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.Single'")),
 
-            FilterTestCase.Create(2100, FilterOperator.NotNull, (float[])null, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Single'")),
+            FilterTestCase.Create(2100, FilterOperator.NotNull, new float[] { default }, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Single'")),
         };
         // ReSharper restore CompareOfFloatsByEqualityOperator
         // ReSharper restore RedundantExplicitArrayCreation

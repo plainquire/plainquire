@@ -4,6 +4,8 @@
 
 Class 'DateTimeSpan' replaced by generic class 'Section\<TType\>'
 
+Allow individual filter operators for multiple values combined with OR
+
 ## Fixes
 
 Adding ISNULL/NOTNULL filter without values fixed

@@ -59,9 +59,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
 
             FilterTestCase.Create(1900, FilterOperator.GreaterThanOrEqual, new string[] { string.Empty }, new FilterExpressionCreationException("Filter operator 'GreaterThanOrEqual' not allowed for property type 'System.String'")),
 
-            FilterTestCase.Create(2000, FilterOperator.IsNull, (string[])null, (string x) => x == null),
+            FilterTestCase.Create(2000, FilterOperator.IsNull, new string[] { default }, (string x) => x == null),
 
-            FilterTestCase.Create(2100, FilterOperator.NotNull, (string[])null, (string x) => x != null),
+            FilterTestCase.Create(2100, FilterOperator.NotNull, new string[] { default }, (string x) => x != null),
         };
         // ReSharper restore ReplaceWithStringIsNullOrEmpty
         // ReSharper restore RedundantExplicitArrayCreation

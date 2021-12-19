@@ -82,9 +82,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
             FilterTestCase.Create(1900, FilterOperator.GreaterThanOrEqual, new DateTime[] { new(2010, 01, 01) }, (DateTime x) => x >= new DateTime(2010, 01, 01)),
             FilterTestCase.Create(1901, FilterOperator.GreaterThanOrEqual, new Section<DateTimeOffset>[] { new(new DateTime(2010, 01, 01), new DateTime(2020, 01, 01)) }, (DateTime x) => x >= new DateTime(2010, 01, 01)),
 
-            FilterTestCase.Create(2000, FilterOperator.IsNull, (DateTime[])null, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.DateTime'")),
+            FilterTestCase.Create(2000, FilterOperator.IsNull, new DateTime[] { default }, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.DateTime'")),
 
-            FilterTestCase.Create(2100, FilterOperator.NotNull, (DateTime[])null, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.DateTime'")),
+            FilterTestCase.Create(2100, FilterOperator.NotNull, new DateTime[] { default }, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.DateTime'")),
         };
         // ReSharper restore RedundantExplicitArrayCreation
     }

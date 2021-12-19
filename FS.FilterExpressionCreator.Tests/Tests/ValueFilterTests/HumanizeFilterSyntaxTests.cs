@@ -36,9 +36,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.ValueFilterTests
         [TestMethod]
         public void WhenMultipleValuesToFilterOperatorNotAreProvided_ThenTheyAreCombinedWithNor()
         {
-            const string filterSyntax = "!25,26";
+            const string filterSyntax = "<24,>30";
             var humanizedSyntax = filterSyntax.HumanizeFilterSyntax<int>("Age");
-            humanizedSyntax.Should().Be("Age is not '25' nor '26'");
+            humanizedSyntax.Should().Be("Age is less than '24' or Age is greater than '30'");
         }
 
         [TestMethod]

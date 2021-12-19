@@ -108,9 +108,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
             FilterTestCase.Create(1904, FilterOperator.GreaterThanOrEqual, new string[] { "Positive" }, (TestEnum? x) => x >= TestEnum.Positive),
             FilterTestCase.Create(1905, FilterOperator.GreaterThanOrEqual, new string[] { "positive" }, (TestEnum? x) => x >= TestEnum.Positive),
 
-            FilterTestCase.Create(2000, FilterOperator.IsNull, (TestEnum?[])null, (TestEnum? x) => x == null),
+            FilterTestCase.Create(2000, FilterOperator.IsNull, new TestEnum?[] { default }, (TestEnum? x) => x == null),
 
-            FilterTestCase.Create(2100, FilterOperator.NotNull, (TestEnum?[])null, (TestEnum? x) => x != null),
+            FilterTestCase.Create(2100, FilterOperator.NotNull, new TestEnum?[] { default }, (TestEnum? x) => x != null),
         };
         // ReSharper restore RedundantExplicitArrayCreation
     }

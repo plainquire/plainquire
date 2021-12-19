@@ -39,7 +39,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
 
             FilterTestCase.Create(1500, FilterOperator.NotEqual, new bool[] { true }, (bool x) => !x),
             FilterTestCase.Create(1501, FilterOperator.NotEqual, new bool[] { false }, (bool x) => x),
-            FilterTestCase.Create(1502, FilterOperator.NotEqual, new bool[] { true, false }, (bool _) => NONE),
+            FilterTestCase.Create(1502, FilterOperator.NotEqual, new bool[] { true, false }, (bool _) => ALL),
 
             FilterTestCase.Create(1600, FilterOperator.LessThan, new bool[] { false }, new FilterExpressionCreationException("Filter operator 'LessThan' not allowed for property type 'System.Boolean'")),
 
@@ -49,9 +49,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
 
             FilterTestCase.Create(1900, FilterOperator.GreaterThanOrEqual, new bool[] { false }, new FilterExpressionCreationException("Filter operator 'GreaterThanOrEqual' not allowed for property type 'System.Boolean'")),
 
-            FilterTestCase.Create(2000, FilterOperator.IsNull, (bool[])null, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.Boolean'")),
+            FilterTestCase.Create(2000, FilterOperator.IsNull, new bool[] { default }, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.Boolean'")),
 
-            FilterTestCase.Create(2100, FilterOperator.NotNull, (bool[])null, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Boolean'")),
+            FilterTestCase.Create(2100, FilterOperator.NotNull, new bool[] { default }, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Boolean'")),
         };
         // ReSharper restore RedundantExplicitArrayCreation
     }

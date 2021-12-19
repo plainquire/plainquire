@@ -76,9 +76,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
             FilterTestCase.Create(1901, FilterOperator.GreaterThanOrEqual, new float?[] { -10 }, (float? _) => ALL),
             FilterTestCase.Create(1902, FilterOperator.GreaterThanOrEqual, new float?[] { +5.5f }, (float? x) => x >= +5.5f),
 
-            FilterTestCase.Create(2000, FilterOperator.IsNull, (float?[])null, (float? x) => x == null),
+            FilterTestCase.Create(2000, FilterOperator.IsNull, new float?[] { default }, (float? x) => x == null),
 
-            FilterTestCase.Create(2100, FilterOperator.NotNull, (float?[])null, (float? x) => x != null),
+            FilterTestCase.Create(2100, FilterOperator.NotNull, new float?[] { default }, (float? x) => x != null),
         };
         // ReSharper restore CompareOfFloatsByEqualityOperator
         // ReSharper restore RedundantExplicitArrayCreation

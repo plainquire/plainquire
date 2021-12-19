@@ -40,7 +40,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
 
             FilterTestCase.Create(1500, FilterOperator.NotEqual, new bool?[] { true }, (bool? x) => x != true),
             FilterTestCase.Create(1501, FilterOperator.NotEqual, new bool?[] { false }, (bool? x) => x != false),
-            FilterTestCase.Create(1502, FilterOperator.NotEqual, new bool?[] { true, false }, (bool? x) => x != true && x != false),
+            FilterTestCase.Create(1502, FilterOperator.NotEqual, new bool?[] { true, false }, (bool? _) => true),
 
             FilterTestCase.Create(1600, FilterOperator.LessThan, new bool?[] { false }, new FilterExpressionCreationException("Filter operator 'LessThan' not allowed for property type 'System.Nullable`1[System.Boolean]'")),
 
@@ -50,9 +50,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
 
             FilterTestCase.Create(1900, FilterOperator.GreaterThanOrEqual, new bool?[] { false }, new FilterExpressionCreationException("Filter operator 'GreaterThanOrEqual' not allowed for property type 'System.Nullable`1[System.Boolean]'")),
 
-            FilterTestCase.Create(2000, FilterOperator.IsNull, (bool?[])null, (bool? x) => x == null),
+            FilterTestCase.Create(2000, FilterOperator.IsNull, new bool?[] { default }, (bool? x) => x == null),
 
-            FilterTestCase.Create(2100, FilterOperator.NotNull, (bool?[])null, (bool? x) => x != null),
+            FilterTestCase.Create(2100, FilterOperator.NotNull, new bool?[] { default }, (bool? x) => x != null),
         };
         // ReSharper restore RedundantExplicitArrayCreation
     }

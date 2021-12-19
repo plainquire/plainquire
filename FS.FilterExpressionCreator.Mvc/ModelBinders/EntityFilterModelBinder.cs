@@ -33,7 +33,7 @@ namespace FS.FilterExpressionCreator.Mvc.ModelBinders
                 var parameterName = property.GetFilterParameterName(entityFilterAttribute?.Prefix);
                 var parameterValues = bindingContext.ValueProvider.GetValue(parameterName);
                 foreach (var filterSyntax in parameterValues)
-                    entityFilter!.PropertyFilters.Add(new EntityFilter.PropertyFilter(property.Name, ValueFilter.Create(filterSyntax)));
+                    entityFilter!.PropertyFilters.Add(new EntityFilter.PropertyFilter(property.Name, ValueFilterFactory.Create(filterSyntax)));
             }
 
             bindingContext.Result = ModelBindingResult.Success(entityFilter);

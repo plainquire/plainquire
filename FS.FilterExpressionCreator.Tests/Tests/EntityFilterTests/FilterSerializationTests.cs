@@ -18,7 +18,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         public void WhenEntityFilterIsSerializedWithNetAndNewtonsoft_ResultIsEqual()
         {
             var nestedEntityFilterA = new EntityFilter<TestModelNested>()
-                .Replace(x => x.Value, "=NestedA");
+                    .Replace(x => x.Value, "=NestedA");
 
             var nestedEntityFilterB = new EntityFilter<TestModelNested>()
                 .Replace(x => x.Value, "=NestedB");
@@ -140,7 +140,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         private const string FILTER_NESTED_NULL = @"{
 	        ""PropertyFilters"": [{
 		        ""PropertyName"": ""ValueA"",
-		        ""ValueFilter"": ""2020-03-15T00:00:00.0000000Z""
+		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
 	        }],
 	        ""NestedFilters"": null
         }";
@@ -148,7 +148,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         private const string FILTER_NESTED_EMPTY = @"{
 	        ""PropertyFilters"": [{
 		        ""PropertyName"": ""ValueA"",
-		        ""ValueFilter"": ""2020-03-15T00:00:00.0000000Z""
+		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
 	        }],
 	        ""NestedFilters"": []
         }";
@@ -156,7 +156,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         private const string FILTER_NESTED_PROP_NULL = @"{
 	        ""PropertyFilters"": [{
 		        ""PropertyName"": ""ValueA"",
-		        ""ValueFilter"": ""2020-03-15T00:00:00.0000000Z""
+		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
 	        }],
 	        ""NestedFilters"": [{
 		        ""PropertyName"": ""NestedObject"",
@@ -170,7 +170,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         private const string FILTER_NESTED_PROP_EMPTY = @"{
 	        ""PropertyFilters"": [{
 		        ""PropertyName"": ""ValueA"",
-		        ""ValueFilter"": ""2020-03-15T00:00:00.0000000Z""
+		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
 	        }],
 	        ""NestedFilters"": [{
 		        ""PropertyName"": ""NestedObject"",
@@ -184,7 +184,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         private const string FILTER_FULL = @"{
 	        ""PropertyFilters"": [{
 		        ""PropertyName"": ""ValueA"",
-		        ""ValueFilter"": ""2020-03-15T00:00:00.0000000Z""
+		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
 	        }],
 	        ""NestedFilters"": [{
 		        ""PropertyName"": ""NestedObject"",
@@ -192,7 +192,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 		        {
 			        ""PropertyFilters"": [{
 				        ""PropertyName"": ""Value"",
-				        ""ValueFilter"": ""==NestedA""
+				        ""ValueFilters"": [""==NestedA""]
 			        }],
 			        ""NestedFilters"": []
 		        }
@@ -202,7 +202,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 		        {
 			        ""PropertyFilters"": [{
 				        ""PropertyName"": ""Value"",
-				        ""ValueFilter"": ""==NestedB""
+				        ""ValueFilters"": [""==NestedB""]
 			        }],
 			        ""NestedFilters"": []
 		        }

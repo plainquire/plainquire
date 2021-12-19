@@ -4,6 +4,7 @@ using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Interfaces;
 using FS.FilterExpressionCreator.Models;
+using FS.FilterExpressionCreator.PropertyFilterExpressionCreators;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Models;
 using FS.FilterExpressionCreator.ValueFilterExpressionCreators;
@@ -26,7 +27,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
         {
             var filter = new EntityFilter<TestModel<string>>()
                 .Replace(x => x.ValueA, FilterOperator.EqualCaseSensitive, "TestA")
-                .Replace(x => x.ValueB, FilterOperator.EqualCaseSensitive, "TestB");
+                .Replace(x => x.ValueB, FilterOperator.Contains, "TestB");
 
             var testItems = new List<TestModel<string>>
             {
@@ -44,22 +45,38 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
 
         public class FilterStringsCaseInsensitiveInterceptor : IPropertyFilterInterceptor
         {
-            public Expression<Func<TEntity, bool>> CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, ValueFilter filter, FilterConfiguration configuration)
+            public Expression<Func<TEntity, bool>> CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, ValueFilter[] filters, FilterConfiguration configuration)
             {
                 var stringPropertyIsFiltered = propertyInfo.PropertyType == typeof(string);
-                var operatorIsEqualCaseSensitive = filter.Operator == Enums.FilterOperator.EqualCaseSensitive;
-                if (!stringPropertyIsFiltered || !operatorIsEqualCaseSensitive)
+                if (!stringPropertyIsFiltered)
+                    return null;
+
+                var filterToModify = filters
+                    .Where(x => x.Operator == FilterOperator.EqualCaseSensitive)
+                    .ToArray();
+
+                if (!filterToModify.Any())
                     return null;
 
                 var propertySelector = typeof(TEntity).CreatePropertySelector<TEntity, string>(propertyInfo.Name);
-                var filterExpression = filter
-                    .Values
-                    .Select(value => StringFilterExpressionCreator
-                        .CreateStringCaseInsensitiveEqualExpression(propertySelector, value)
-                    )
+
+                var modifiedFilterExpr = filterToModify
+                    .Select(filter => StringFilterExpressionCreator.CreateStringCaseInsensitiveEqualExpression(propertySelector, filter.Value))
                     .Aggregate(Expression.OrElse);
 
-                return propertySelector.CreateLambda<TEntity, string, bool>(filterExpression);
+                var modifiedFilterLambda = propertySelector
+                    .CreateLambda<TEntity, string, bool>(modifiedFilterExpr);
+
+                var unmodifiedFilters = filters
+                    .Where(x => x.Operator != FilterOperator.EqualCaseSensitive)
+                    .ToArray();
+
+                var unmodifiedFilterLambda = PropertyFilterExpressionCreator
+                    .CreateFilter<TEntity>(propertyInfo.PropertyType, propertySelector, unmodifiedFilters, configuration);
+
+                var filterExpression = new[] { modifiedFilterLambda, unmodifiedFilterLambda }.CombineWithConditionalOr();
+
+                return filterExpression;
             }
         }
     }

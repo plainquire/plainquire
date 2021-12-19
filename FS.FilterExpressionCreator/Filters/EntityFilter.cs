@@ -50,6 +50,34 @@ namespace FS.FilterExpressionCreator.Filters
             => GetNestedFilterInternal<TEntity, TList, TProperty>(property);
 
         /// <summary>
+        /// Adds a filter for the given property. Existing filters for the same property are preserved.
+        /// </summary>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="property">The property to filter.</param>
+        /// <param name="filters">The filters to use.</param>
+        public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty>> property, params ValueFilter[] filters)
+        {
+            AddInternal(property, filters);
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a filter for the given property. Existing filters for the same property are preserved.
+        /// </summary>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="property">The property to filter.</param>
+        /// <param name="filterSyntax">Description of the filter using micro syntax.</param>
+        public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty>> property, string filterSyntax)
+        {
+            if (filterSyntax == null)
+                return this;
+
+            var filters = ValueFilterFactory.Create(filterSyntax);
+            AddInternal(property, filters);
+            return this;
+        }
+
+        /// <summary>
         /// Adds a filter for the given property using the default filter operator. Existing filters for the same property are preserved.
         /// </summary>
         /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -57,7 +85,12 @@ namespace FS.FilterExpressionCreator.Filters
         /// <param name="property">The property to filter.</param>
         /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
         public EntityFilter<TEntity> Add<TProperty, TValue>(Expression<Func<TEntity, TProperty>> property, params TValue[] values)
-            => Add(property, FilterOperator.Default, values);
+        {
+            if (values == null || values.Length == 0)
+                return this;
+
+            return Add(property, values.Select(value => ValueFilter.Create(FilterOperator.Default, value)).ToArray());
+        }
 
         /// <summary>
         /// Adds a filter for the given property. Existing filters for the same property are preserved.
@@ -66,13 +99,7 @@ namespace FS.FilterExpressionCreator.Filters
         /// <param name="property">The property to filter.</param>
         /// <param name="filterOperator">The filter operator to use.</param>
         public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator)
-        {
-            var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
-            if (!isNullableFilterOperator)
-                return this;
-
-            return Add(property, filterOperator, (object[])null);
-        }
+            => Add(property, ValueFilter.Create(filterOperator));
 
         /// <summary>
         /// Adds a filter for the given property. Existing filters for the same property are preserved.
@@ -88,24 +115,8 @@ namespace FS.FilterExpressionCreator.Filters
             if ((values == null || values.Length == 0) && !isNullableFilterOperator)
                 return this;
 
-            var valueFilter = ValueFilter.Create(filterOperator, values);
-            AddInternal(property, valueFilter);
-            return this;
-        }
-
-        /// <summary>
-        /// Adds a filter for the given property. Existing filters for the same property are preserved.
-        /// </summary>
-        /// <typeparam name="TProperty">The type of the property.</typeparam>
-        /// <param name="property">The property to filter.</param>
-        /// <param name="filterSyntax">Description of the filter using micro syntax.</param>
-        public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty>> property, string filterSyntax)
-        {
-            if (filterSyntax == null)
-                return this;
-
-            var valueFilter = ValueFilter.Create(filterSyntax);
-            AddInternal(property, valueFilter);
+            var valueFilters = values?.Select(value => ValueFilter.Create(filterOperator, value)).ToArray();
+            AddInternal(property, valueFilters);
             return this;
         }
 
@@ -142,6 +153,34 @@ namespace FS.FilterExpressionCreator.Filters
         }
 
         /// <summary>
+        /// Replaces the filter for the given property. Existing filters for the same property are removed.
+        /// </summary>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="property">The property to filter.</param>
+        /// <param name="filters">The filters to use.</param>
+        public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty>> property, params ValueFilter[] filters)
+        {
+            ReplaceInternal(property, filters);
+            return this;
+        }
+
+        /// <summary>
+        /// Replaces the filter for the given property. Existing filters for the same property are removed.
+        /// </summary>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="property">The property to filter.</param>
+        /// <param name="filterSyntax">Description of the filter using micro syntax.</param>
+        public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty>> property, string filterSyntax)
+        {
+            if (filterSyntax == null)
+                return Clear(property);
+
+            var valueFilters = ValueFilterFactory.Create(filterSyntax);
+            ReplaceInternal(property, valueFilters);
+            return this;
+        }
+
+        /// <summary>
         /// Replaces the filter for the given property using the default filter operator. Existing filters for the same property are removed.
         /// </summary>
         /// <typeparam name="TProperty">The type of the t property.</typeparam>
@@ -149,7 +188,12 @@ namespace FS.FilterExpressionCreator.Filters
         /// <param name="property">The property to filter.</param>
         /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
         public EntityFilter<TEntity> Replace<TProperty, TValue>(Expression<Func<TEntity, TProperty>> property, params TValue[] values)
-            => Replace(property, FilterOperator.Default, values);
+        {
+            if (values == null || values.Length == 0)
+                return this;
+
+            return Replace(property, values.Select(value => ValueFilter.Create(FilterOperator.Default, value)).ToArray());
+        }
 
         /// <summary>
         /// Replaces the filter for the given property. Existing filters for the same property are removed.
@@ -158,13 +202,7 @@ namespace FS.FilterExpressionCreator.Filters
         /// <param name="property">The property to filter.</param>
         /// <param name="filterOperator">The filter operator to use.</param>
         public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator)
-        {
-            var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
-            if (!isNullableFilterOperator)
-                return this;
-
-            return Replace(property, filterOperator, (object[])null);
-        }
+            => Replace(property, ValueFilter.Create(filterOperator));
 
         /// <summary>
         /// Replaces the filter for the given property. Existing filters for the same property are removed.
@@ -180,24 +218,8 @@ namespace FS.FilterExpressionCreator.Filters
             if ((values == null || values.Length == 0) && !isNullableFilterOperator)
                 return Clear(property);
 
-            var valueFilter = ValueFilter.Create(filterOperator, values);
-            ReplaceInternal(property, valueFilter);
-            return this;
-        }
-
-        /// <summary>
-        /// Replaces the filter for the given property. Existing filters for the same property are removed.
-        /// </summary>
-        /// <typeparam name="TProperty">The type of the property.</typeparam>
-        /// <param name="property">The property to filter.</param>
-        /// <param name="filterSyntax">Description of the filter using micro syntax.</param>
-        public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty>> property, string filterSyntax)
-        {
-            if (filterSyntax == null)
-                return Clear(property);
-
-            var valueFilter = ValueFilter.Create(filterSyntax);
-            ReplaceInternal(property, valueFilter);
+            var valueFilters = values?.Select(value => ValueFilter.Create(filterOperator, value)).ToArray();
+            ReplaceInternal(property, valueFilters);
             return this;
         }
 
@@ -360,7 +382,8 @@ namespace FS.FilterExpressionCreator.Filters
         protected string GetPropertyFilterInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> property)
         {
             var propertyName = property.GetPropertyName();
-            return PropertyFilters.FirstOrDefault(x => x.PropertyName == propertyName)?.ValueFilter.ToString();
+            var propertyFilter = PropertyFilters.FirstOrDefault(x => x.PropertyName == propertyName);
+            return ValueFilterFactory.ToString(propertyFilter?.ValueFilters);
         }
 
         /// <summary>
@@ -395,11 +418,11 @@ namespace FS.FilterExpressionCreator.Filters
         /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
         /// <typeparam name="TProperty">The type of the property.</typeparam>
         /// <param name="property">The property to filter.</param>
-        /// <param name="valueFilter">The filter to use.</param>
-        protected void AddInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> property, ValueFilter valueFilter)
+        /// <param name="valueFilters">The filters to use.</param>
+        protected void AddInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> property, ValueFilter[] valueFilters)
         {
             var propertyName = property.GetPropertyName();
-            PropertyFilters.Add(new PropertyFilter(propertyName, valueFilter));
+            PropertyFilters.Add(new PropertyFilter(propertyName, valueFilters));
         }
 
         /// <inheritdoc cref="EntityFilter{TEntity}.Add{TProperty, TNested}(Expression{Func{TEntity, TProperty}}, EntityFilter{TNested})" />
@@ -415,12 +438,12 @@ namespace FS.FilterExpressionCreator.Filters
         /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
         /// <typeparam name="TProperty">The type of the property.</typeparam>
         /// <param name="property">The property to filter.</param>
-        /// <param name="valueFilter">The filter to use.</param>
-        protected void ReplaceInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> property, ValueFilter valueFilter)
+        /// <param name="valueFilters">The filters to use.</param>
+        protected void ReplaceInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> property, ValueFilter[] valueFilters)
         {
             var propertyName = property.GetPropertyName();
             PropertyFilters.RemoveAll(x => x.PropertyName == propertyName);
-            PropertyFilters.Add(new PropertyFilter(propertyName, valueFilter));
+            PropertyFilters.Add(new PropertyFilter(propertyName, valueFilters));
         }
 
         /// <inheritdoc cref="EntityFilter{TEntity}.Replace{TProperty, TNested}(Expression{Func{TEntity, TProperty}}, EntityFilter{TNested})" />
@@ -457,13 +480,13 @@ namespace FS.FilterExpressionCreator.Filters
                     PropertyFilters,
                     x => x.Name,
                     x => x.PropertyName,
-                    (propertyInfo, propertyFilter) => new { Property = propertyInfo, propertyFilter.ValueFilter }
+                    (propertyInfo, propertyFilter) => new { Property = propertyInfo, propertyFilter.ValueFilters }
                 )
                 .Select(x =>
                 {
                     var propertySelector = typeof(TEntity).CreatePropertySelector(x.Property.Name);
-                    return interceptor?.CreatePropertyFilter<TEntity>(x.Property, x.ValueFilter, configuration) ??
-                           PropertyFilterExpressionCreator.CreateFilter<TEntity>(x.Property.PropertyType, propertySelector, x.ValueFilter, configuration);
+                    return interceptor?.CreatePropertyFilter<TEntity>(x.Property, x.ValueFilters, configuration) ??
+                           PropertyFilterExpressionCreator.CreateFilter<TEntity>(x.Property.PropertyType, propertySelector, x.ValueFilters, configuration);
                 })
                 .ToList();
 
@@ -532,12 +555,12 @@ namespace FS.FilterExpressionCreator.Filters
         {
             public string PropertyName { get; }
 
-            public ValueFilter ValueFilter { get; }
+            public ValueFilter[] ValueFilters { get; }
 
-            public PropertyFilter(string propertyName, ValueFilter valueFilter)
+            public PropertyFilter(string propertyName, ValueFilter[] valueFilters)
             {
                 PropertyName = propertyName ?? throw new ArgumentNullException(nameof(propertyName));
-                ValueFilter = valueFilter ?? ValueFilter.Create(null);
+                ValueFilters = valueFilters ?? Array.Empty<ValueFilter>();
             }
         }
 

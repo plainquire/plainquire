@@ -41,37 +41,42 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => true;
 
         /// <inheritdoc />
-        public Expression CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter valueFilter, FilterConfiguration configuration)
+        public Expression CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[] filters, FilterConfiguration configuration)
         {
-            var propertyType = typeof(TProperty);
-
-            if (!SupportedFilterOperators.Contains(valueFilter.Operator))
-                throw CreateFilterExpressionCreationException($"Filter operator '{valueFilter.Operator}' not allowed for property type '{propertyType}'", propertySelector, valueFilter.Operator, valueFilter.Values);
-
-            var propertyCanBeNull = !propertyType.IsValueType || Nullable.GetUnderlyingType(propertyType) != null;
-            switch (valueFilter.Operator)
-            {
-                case FilterOperator.IsNull:
-                    return propertyCanBeNull
-                        ? Expression.Equal(propertySelector.Body, Expression.Constant(null))
-                        : throw CreateFilterExpressionCreationException($"Filter operator '{valueFilter.Operator}' not allowed for property type '{propertyType}'", propertySelector, valueFilter.Operator, valueFilter.Values);
-                case FilterOperator.NotNull:
-                    return propertyCanBeNull
-                        ? Expression.NotEqual(propertySelector.Body, Expression.Constant(null))
-                        : throw CreateFilterExpressionCreationException($"Filter operator '{valueFilter.Operator}' not allowed for property type '{propertyType}'", propertySelector, valueFilter.Operator, valueFilter.Values);
-            }
-
-            if (valueFilter.IsEmpty)
+            if (filters == null || filters.Length == 0)
                 return null;
 
-            var result = valueFilter
-                .Values!
-                .Select(x => CreateExpressionForValue(propertySelector, valueFilter.Operator, x, configuration))
+            var propertyType = typeof(TProperty);
+            var propertyCanBeNull = !propertyType.IsValueType || Nullable.GetUnderlyingType(propertyType) != null;
+
+            var filterExpressions = filters
+                .Select(filter =>
+                {
+                    if (!SupportedFilterOperators.Contains(filter.Operator))
+                        throw CreateFilterExpressionCreationException($"Filter operator '{filter.Operator}' not allowed for property type '{propertyType}'", propertySelector, filter.Operator, filter.Value);
+
+                    if (filter.IsEmpty)
+                        return null;
+
+                    switch (filter.Operator)
+                    {
+                        case FilterOperator.IsNull:
+                            if (!propertyCanBeNull)
+                                throw CreateFilterExpressionCreationException($"Filter operator '{filter.Operator}' not allowed for property type '{propertyType}'", propertySelector, filter.Operator, filter.Value);
+                            return Expression.Equal(propertySelector.Body, Expression.Constant(null));
+                        case FilterOperator.NotNull:
+                            if (!propertyCanBeNull)
+                                throw CreateFilterExpressionCreationException($"Filter operator '{filter.Operator}' not allowed for property type '{propertyType}'", propertySelector, filter.Operator, filter.Value);
+                            return Expression.NotEqual(propertySelector.Body, Expression.Constant(null));
+                        default:
+                            return CreateExpressionForValue(propertySelector, filter.Operator, filter.Value, configuration);
+                    }
+                })
                 .ToList();
 
-            return valueFilter.Operator == FilterOperator.NotEqual
-                ? result.Aggregate(Expression.AndAlso)
-                : result.Aggregate(Expression.OrElse);
+            var filterExpression = filterExpressions.Aggregate(Expression.OrElse);
+
+            return filterExpression;
         }
 
         /// <summary>
