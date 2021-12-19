@@ -37,9 +37,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilterTests
             FilterTestCase.Create(1401, FilterOperator.EqualCaseSensitive, new bool[] { false }, (bool x) => !x),
             FilterTestCase.Create(1402, FilterOperator.EqualCaseSensitive, new bool[] { true, false }, (bool _) => ALL),
 
-            FilterTestCase.Create(1500, FilterOperator.NotEqual, new bool[] { true }, (bool x) => !x),
-            FilterTestCase.Create(1501, FilterOperator.NotEqual, new bool[] { false }, (bool x) => x),
-            FilterTestCase.Create(1502, FilterOperator.NotEqual, new bool[] { true, false }, (bool _) => ALL),
+            FilterTestCase.Create(1502, FilterOperator.NotEqual, new bool[] { true }, (bool x) => !x),
+            FilterTestCase.Create(1503, FilterOperator.NotEqual, new bool[] { false }, (bool x) => x),
+            FilterTestCase.Create(1504, FilterOperator.NotEqual, new bool[] { true, false }, (bool _) => ALL),
 
             FilterTestCase.Create(1600, FilterOperator.LessThan, new bool[] { false }, new FilterExpressionCreationException("Filter operator 'LessThan' not allowed for property type 'System.Boolean'")),
 

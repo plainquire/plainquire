@@ -61,9 +61,9 @@ namespace FS.FilterExpressionCreator.Filters
             if (isNullableFilterOperator)
                 value = default;
             else if (value == null)
-                throw new ArgumentException($"Filter values cannot be null. If filtering for NULL is intended, use filter operator '{FilterOperator.IsNull}' or '{FilterOperator.NotNull}'");
+                throw new ArgumentException($"Filter values cannot be null. If filtering for NULL is intended, use filter operator '{FilterOperator.IsNull}' or '{FilterOperator.NotNull}'", nameof(value));
             else if (!typeof(TValue).IsFilterableProperty())
-                throw new ArgumentException($"The type '{typeof(TValue)}' is not filterable by any known expression creator");
+                throw new ArgumentException($"The type '{typeof(TValue)}' is not filterable by any known expression creator", nameof(value));
 
             return new ValueFilter()
             {
