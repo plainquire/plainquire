@@ -1,4 +1,5 @@
-﻿using FS.FilterExpressionCreator.Filters;
+﻿using FS.FilterExpressionCreator.Extensions;
+using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Mvc.Attributes;
 using FS.FilterExpressionCreator.Mvc.Extensions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -33,7 +34,7 @@ namespace FS.FilterExpressionCreator.Mvc.ModelBinders
                 var parameterName = property.GetFilterParameterName(entityFilterAttribute?.Prefix);
                 var parameterValues = bindingContext.ValueProvider.GetValue(parameterName);
                 foreach (var filterSyntax in parameterValues)
-                    entityFilter!.PropertyFilters.Add(new EntityFilter.PropertyFilter(property.Name, ValueFilterFactory.Create(filterSyntax)));
+                    entityFilter!.PropertyFilters.Add(new EntityFilter.PropertyFilter(property.Name, ValueFilterExtensions.Create(filterSyntax)));
             }
 
             bindingContext.Result = ModelBindingResult.Success(entityFilter);

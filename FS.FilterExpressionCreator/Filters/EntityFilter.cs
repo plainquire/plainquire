@@ -72,7 +72,7 @@ namespace FS.FilterExpressionCreator.Filters
             if (filterSyntax == null)
                 return this;
 
-            var filters = ValueFilterFactory.Create(filterSyntax);
+            var filters = ValueFilterExtensions.Create(filterSyntax);
             AddInternal(property, filters);
             return this;
         }
@@ -175,7 +175,7 @@ namespace FS.FilterExpressionCreator.Filters
             if (filterSyntax == null)
                 return Clear(property);
 
-            var valueFilters = ValueFilterFactory.Create(filterSyntax);
+            var valueFilters = ValueFilterExtensions.Create(filterSyntax);
             ReplaceInternal(property, valueFilters);
             return this;
         }
@@ -383,7 +383,7 @@ namespace FS.FilterExpressionCreator.Filters
         {
             var propertyName = property.GetPropertyName();
             var propertyFilter = PropertyFilters.FirstOrDefault(x => x.PropertyName == propertyName);
-            return ValueFilterFactory.ToString(propertyFilter?.ValueFilters);
+            return ValueFilterExtensions.ToString(propertyFilter?.ValueFilters);
         }
 
         /// <summary>
