@@ -5,6 +5,7 @@ using FS.FilterExpressionCreator.Demo.Database;
 using FS.FilterExpressionCreator.Demo.DTOs;
 using FS.FilterExpressionCreator.Demo.Models;
 using FS.FilterExpressionCreator.Demo.Routing;
+using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
 using LinqToDB;
 using Microsoft.AspNetCore.Mvc;

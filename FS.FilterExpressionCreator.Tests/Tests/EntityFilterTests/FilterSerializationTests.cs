@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Newtonsoft.Extensions;
 using FS.FilterExpressionCreator.Tests.Models;

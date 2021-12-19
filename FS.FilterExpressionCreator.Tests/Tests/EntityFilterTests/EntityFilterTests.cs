@@ -2,6 +2,7 @@
 using FluentAssertions.Execution;
 using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Exceptions;
+using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Models;
@@ -106,7 +107,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             Action createInvalidEntityFilter = () => new EntityFilter<TestModel<string>>()
                 .Add(x => x.ValueA, "A", null);
 
-            createInvalidEntityFilter.Should().Throw<ArgumentException>().WithMessage("Filter values cannot be null. If filtering for NULL is intended, use filter operator 'IsNull' or 'NotNull'");
+            createInvalidEntityFilter.Should().Throw<ArgumentException>().WithMessage("Filter values cannot be null. If filtering for NULL is intended, use filter operator 'IsNull' or 'NotNull' (Parameter 'value')");
         }
 
         [TestMethod]
@@ -117,7 +118,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilterTests
             Action createInvalidEntityFilter1 = () => new EntityFilter<TestModel<string>>()
                 .Replace(x => x.ValueA, FilterOperator.EqualCaseSensitive, new List<string>());
 
-            createInvalidEntityFilter1.Should().Throw<ArgumentException>().WithMessage("The type 'System.Collections.Generic.List`1[System.String]' is not filterable by any known expression creator");
+            createInvalidEntityFilter1.Should().Throw<ArgumentException>().WithMessage("The type 'System.Collections.Generic.List`1[System.String]' is not filterable by any known expression creator (Parameter 'value')");
         }
 
         [DataTestMethod]

@@ -30,16 +30,16 @@ namespace FS.FilterExpressionCreator.Newtonsoft.JsonConverters
         {
             var entityFilter = (EntityFilter)Activator.CreateInstance(objectType);
             var entityFilterData = serializer.Deserialize<EntityFilterData>(reader) ?? new EntityFilterData();
-            entityFilter.PropertyFilters = entityFilterData.PropertyFilters ?? new List<EntityFilter.PropertyFilter>();
-            entityFilter.NestedFilters = entityFilterData.NestedFilters ?? new List<EntityFilter.NestedFilter>();
+            entityFilter.PropertyFilters = entityFilterData.PropertyFilters ?? new List<PropertyFilter>();
+            entityFilter.NestedFilters = entityFilterData.NestedFilters ?? new List<NestedFilter>();
             return entityFilter;
         }
 
         private class EntityFilterData
         {
-            public List<EntityFilter.PropertyFilter> PropertyFilters { get; set; } = new List<EntityFilter.PropertyFilter>();
+            public List<PropertyFilter> PropertyFilters { get; set; } = new List<PropertyFilter>();
 
-            public List<EntityFilter.NestedFilter> NestedFilters { get; set; } = new List<EntityFilter.NestedFilter>();
+            public List<NestedFilter> NestedFilters { get; set; } = new List<NestedFilter>();
         }
     }
 }

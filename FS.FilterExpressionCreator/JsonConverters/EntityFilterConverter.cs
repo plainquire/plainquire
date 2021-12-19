@@ -65,8 +65,8 @@ namespace FS.FilterExpressionCreator.JsonConverters
             var entityFilterData = JsonSerializer.Deserialize<EntityFilterData>(ref reader, options) ?? new EntityFilterData();
             return new TEntityFilter()
             {
-                PropertyFilters = entityFilterData.PropertyFilters ?? new List<EntityFilter.PropertyFilter>(),
-                NestedFilters = entityFilterData.NestedFilters ?? new List<EntityFilter.NestedFilter>()
+                PropertyFilters = entityFilterData.PropertyFilters ?? new List<PropertyFilter>(),
+                NestedFilters = entityFilterData.NestedFilters ?? new List<NestedFilter>()
             };
         }
 
@@ -79,9 +79,9 @@ namespace FS.FilterExpressionCreator.JsonConverters
 
         private class EntityFilterData
         {
-            public List<EntityFilter.PropertyFilter> PropertyFilters { get; set; } = new List<EntityFilter.PropertyFilter>();
+            public List<PropertyFilter> PropertyFilters { get; set; } = new List<PropertyFilter>();
 
-            public List<EntityFilter.NestedFilter> NestedFilters { get; set; } = new List<EntityFilter.NestedFilter>();
+            public List<NestedFilter> NestedFilters { get; set; } = new List<NestedFilter>();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using FS.FilterExpressionCreator.Enums;
-using FS.FilterExpressionCreator.Extensions;
+﻿using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
 using FS.FilterExpressionCreator.JsonConverters;
 using FS.FilterExpressionCreator.Models;
@@ -62,65 +61,6 @@ namespace FS.FilterExpressionCreator.Filters
         }
 
         /// <summary>
-        /// Adds a filter for the given property. Existing filters for the same property are preserved.
-        /// </summary>
-        /// <typeparam name="TProperty">The type of the property.</typeparam>
-        /// <param name="property">The property to filter.</param>
-        /// <param name="filterSyntax">Description of the filter using micro syntax.</param>
-        public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty>> property, string filterSyntax)
-        {
-            if (filterSyntax == null)
-                return this;
-
-            var filters = ValueFilterExtensions.Create(filterSyntax);
-            AddInternal(property, filters);
-            return this;
-        }
-
-        /// <summary>
-        /// Adds a filter for the given property using the default filter operator. Existing filters for the same property are preserved.
-        /// </summary>
-        /// <typeparam name="TProperty">The type of the property.</typeparam>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <param name="property">The property to filter.</param>
-        /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
-        public EntityFilter<TEntity> Add<TProperty, TValue>(Expression<Func<TEntity, TProperty>> property, params TValue[] values)
-        {
-            if (values == null || values.Length == 0)
-                return this;
-
-            return Add(property, values.Select(value => ValueFilter.Create(FilterOperator.Default, value)).ToArray());
-        }
-
-        /// <summary>
-        /// Adds a filter for the given property. Existing filters for the same property are preserved.
-        /// </summary>
-        /// <typeparam name="TProperty">The type of the property.</typeparam>
-        /// <param name="property">The property to filter.</param>
-        /// <param name="filterOperator">The filter operator to use.</param>
-        public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator)
-            => Add(property, ValueFilter.Create(filterOperator));
-
-        /// <summary>
-        /// Adds a filter for the given property. Existing filters for the same property are preserved.
-        /// </summary>
-        /// <typeparam name="TProperty">The type of the property.</typeparam>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <param name="property">The property to filter.</param>
-        /// <param name="filterOperator">The filter operator to use.</param>
-        /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
-        public EntityFilter<TEntity> Add<TProperty, TValue>(Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator, params TValue[] values)
-        {
-            var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
-            if ((values == null || values.Length == 0) && !isNullableFilterOperator)
-                return this;
-
-            var valueFilters = values?.Select(value => ValueFilter.Create(filterOperator, value)).ToArray();
-            AddInternal(property, valueFilters);
-            return this;
-        }
-
-        /// <summary>
         /// Adds a nested filter for the given property. Existing filters for the same property are preserved.
         /// </summary>
         /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -161,65 +101,6 @@ namespace FS.FilterExpressionCreator.Filters
         public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty>> property, params ValueFilter[] filters)
         {
             ReplaceInternal(property, filters);
-            return this;
-        }
-
-        /// <summary>
-        /// Replaces the filter for the given property. Existing filters for the same property are removed.
-        /// </summary>
-        /// <typeparam name="TProperty">The type of the property.</typeparam>
-        /// <param name="property">The property to filter.</param>
-        /// <param name="filterSyntax">Description of the filter using micro syntax.</param>
-        public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty>> property, string filterSyntax)
-        {
-            if (filterSyntax == null)
-                return Clear(property);
-
-            var valueFilters = ValueFilterExtensions.Create(filterSyntax);
-            ReplaceInternal(property, valueFilters);
-            return this;
-        }
-
-        /// <summary>
-        /// Replaces the filter for the given property using the default filter operator. Existing filters for the same property are removed.
-        /// </summary>
-        /// <typeparam name="TProperty">The type of the t property.</typeparam>
-        /// <typeparam name="TValue">The type of the t value.</typeparam>
-        /// <param name="property">The property to filter.</param>
-        /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
-        public EntityFilter<TEntity> Replace<TProperty, TValue>(Expression<Func<TEntity, TProperty>> property, params TValue[] values)
-        {
-            if (values == null || values.Length == 0)
-                return this;
-
-            return Replace(property, values.Select(value => ValueFilter.Create(FilterOperator.Default, value)).ToArray());
-        }
-
-        /// <summary>
-        /// Replaces the filter for the given property. Existing filters for the same property are removed.
-        /// </summary>
-        /// <typeparam name="TProperty">The type of the property.</typeparam>
-        /// <param name="property">The property to filter.</param>
-        /// <param name="filterOperator">The filter operator to use.</param>
-        public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator)
-            => Replace(property, ValueFilter.Create(filterOperator));
-
-        /// <summary>
-        /// Replaces the filter for the given property. Existing filters for the same property are removed.
-        /// </summary>
-        /// <typeparam name="TProperty">The type of the property.</typeparam>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <param name="property">The property to filter.</param>
-        /// <param name="filterOperator">The filter operator to use.</param>
-        /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
-        public EntityFilter<TEntity> Replace<TProperty, TValue>(Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator, params TValue[] values)
-        {
-            var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
-            if ((values == null || values.Length == 0) && !isNullableFilterOperator)
-                return Clear(property);
-
-            var valueFilters = values?.Select(value => ValueFilter.Create(filterOperator, value)).ToArray();
-            ReplaceInternal(property, valueFilters);
             return this;
         }
 
@@ -549,32 +430,6 @@ namespace FS.FilterExpressionCreator.Filters
                 .Concat(nestedObjectFilters)
                 .Concat(nestedListsFilters)
                 .CombineWithConditionalAnd();
-        }
-
-        internal class PropertyFilter
-        {
-            public string PropertyName { get; }
-
-            public ValueFilter[] ValueFilters { get; }
-
-            public PropertyFilter(string propertyName, ValueFilter[] valueFilters)
-            {
-                PropertyName = propertyName ?? throw new ArgumentNullException(nameof(propertyName));
-                ValueFilters = valueFilters ?? Array.Empty<ValueFilter>();
-            }
-        }
-
-        internal class NestedFilter
-        {
-            public string PropertyName { get; }
-
-            public EntityFilter EntityFilter { get; }
-
-            public NestedFilter(string propertyName, EntityFilter entityFilter)
-            {
-                PropertyName = propertyName ?? throw new ArgumentNullException(nameof(propertyName));
-                EntityFilter = entityFilter ?? new EntityFilter();
-            }
         }
     }
 }
