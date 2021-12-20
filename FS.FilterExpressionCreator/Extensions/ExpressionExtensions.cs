@@ -54,19 +54,21 @@ namespace FS.FilterExpressionCreator.Extensions
         public static Expression<Func<TSource, bool>> CombineWithConditionalOr<TSource>(this IEnumerable<Expression<Func<TSource, bool>>> expressions)
             => expressions.Combine(Expression.OrElse);
 
-        /// <summary>
-        /// Replaces the parameter of a lambda expression (<c>x => true</c> => <c>y => true</c>.
-        /// </summary>
-        /// <typeparam name="TOrigin">The type of the origin parameter.</typeparam>
-        /// <typeparam name="TReplacement">The type of the replacement parameter.</typeparam>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <param name="origin">The origin lambda expression.</param>
-        /// <param name="replacement">The lambda expression holding the replacement as parameter.</param>
-        public static Expression<Func<TReplacement, TResult>> ReplaceParameter<TOrigin, TReplacement, TResult>(this Expression<Func<TOrigin, TResult>> origin, Expression<Func<TReplacement, TOrigin>> replacement)
-        {
-            var body = new ExpressionReplaceVisitor(origin.Parameters[0], replacement.Body).Visit(origin.Body);
-            return Expression.Lambda<Func<TReplacement, TResult>>(body!, replacement.Parameters[0]);
-        }
+        // ReSharper disable CommentTypo
+        ///// <summary>
+        ///// Replaces the parameter of a lambda expression (<c>x => true</c> => <c>y => true</c>.
+        ///// </summary>
+        ///// <typeparam name="TOrigin">The type of the origin parameter.</typeparam>
+        ///// <typeparam name="TReplacement">The type of the replacement parameter.</typeparam>
+        ///// <typeparam name="TResult">The type of the result.</typeparam>
+        ///// <param name="origin">The origin lambda expression.</param>
+        ///// <param name="replacement">The lambda expression holding the replacement as parameter.</param>
+        //public static Expression<Func<TReplacement, TResult>> ReplaceParameter<TOrigin, TReplacement, TResult>(this Expression<Func<TOrigin, TResult>> origin, Expression<Func<TReplacement, TOrigin>> replacement)
+        //{
+        //    var body = new ExpressionReplaceVisitor(origin.Parameters[0], replacement.Body).Visit(origin.Body);
+        //    return Expression.Lambda<Func<TReplacement, TResult>>(body!, replacement.Parameters[0]);
+        //}
+        // ReSharper restore CommentTypo
 
         /// <summary>
         /// Replaces the parameter of a lambda expression (<c>x => true</c> => <c>y => true</c>.
@@ -79,22 +81,26 @@ namespace FS.FilterExpressionCreator.Extensions
             return Expression.Lambda(body!, replacement.Parameters[0]);
         }
 
-        /// <summary>
-        /// Return as constant lambda expression (<c>x => true</c>), if the given expression is <c>null</c>.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the source.</typeparam>
-        /// <param name="expression">The expression to check for <c>null</c>.</param>
-        public static Expression<Func<TSource, bool>> TrueIfNull<TSource>(this Expression<Func<TSource, bool>> expression)
-            => expression ?? (Expression<Func<TSource, bool>>)Expression.Lambda(Expression.Constant(true), Expression.Parameter(typeof(TSource), "x"));
+        // ReSharper disable CommentTypo
+        ///// <summary>
+        ///// Return as constant lambda expression (<c>x => true</c>), if the given expression is <c>null</c>.
+        ///// </summary>
+        ///// <typeparam name="TSource">The type of the source.</typeparam>
+        ///// <param name="expression">The expression to check for <c>null</c>.</param>
+        //public static Expression<Func<TSource, bool>> TrueIfNull<TSource>(this Expression<Func<TSource, bool>> expression)
+        //    => expression ?? (Expression<Func<TSource, bool>>)Expression.Lambda(Expression.Constant(true), Expression.Parameter(typeof(TSource), "x"));
+        // ReSharper restore CommentTypo
 
-        /// <summary>
-        /// Add a cast to the given expression.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the source.</typeparam>
-        /// <typeparam name="TDestination">The type to cast to.</typeparam>
-        /// <param name="expression">The expression to cast.</param>
-        public static Expression Cast<TSource, TDestination>(this Expression expression)
-            => expression.Cast(typeof(TSource), typeof(TDestination));
+        // ReSharper disable CommentTypo
+        ///// <summary>
+        ///// Add a cast to the given expression.
+        ///// </summary>
+        ///// <typeparam name="TSource">The type of the source.</typeparam>
+        ///// <typeparam name="TDestination">The type to cast to.</typeparam>
+        ///// <param name="expression">The expression to cast.</param>
+        //public static Expression Cast<TSource, TDestination>(this Expression expression)
+        //    => expression.Cast(typeof(TSource), typeof(TDestination));
+        // ReSharper restore CommentTypo
 
         /// <summary>
         /// Adds a cast to the given expression.
@@ -194,21 +200,23 @@ namespace FS.FilterExpressionCreator.Extensions
         public static Expression StringIsEmpty<TEntity, TProperty>(this Expression<Func<TEntity, TProperty>> property)
             => Expression.Equal(property.Body, _emptyString);
 
-        /// <summary>
-        /// Applies a call to <see cref="Enumerable.Any{TSource}(IEnumerable{TSource})"/> to the given expression.
-        /// </summary>
-        /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
-        /// <typeparam name="TProperty">The type of the property.</typeparam>
-        /// <typeparam name="TNested">The type of the nested predicate.</typeparam>
-        /// <param name="property">The property to add the call.</param>
-        /// <param name="predicate">The nested predicate.</param>
-        public static Expression<Func<TEntity, bool>> EnumerableAny<TEntity, TProperty, TNested>(this Expression<Func<TEntity, TProperty>> property, Expression<Func<TNested, bool>> predicate)
-            where TProperty : IEnumerable<TNested>
-        {
-            var genericEnumerableAnyMethod = _enumerableAnyMethodInfo.MakeGenericMethod(typeof(TProperty).GetGenericArguments().First());
-            var propertyContainsAnyMatchesPredicate = Expression.Call(genericEnumerableAnyMethod, property.Body, predicate);
-            return property.CreateLambda<TEntity, TProperty, bool>(propertyContainsAnyMatchesPredicate);
-        }
+        // ReSharper disable CommentTypo
+        ///// <summary>
+        ///// Applies a call to <see cref="Enumerable.Any{TSource}(IEnumerable{TSource})"/> to the given expression.
+        ///// </summary>
+        ///// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
+        ///// <typeparam name="TProperty">The type of the property.</typeparam>
+        ///// <typeparam name="TNested">The type of the nested predicate.</typeparam>
+        ///// <param name="property">The property to add the call.</param>
+        ///// <param name="predicate">The nested predicate.</param>
+        //public static Expression<Func<TEntity, bool>> EnumerableAny<TEntity, TProperty, TNested>(this Expression<Func<TEntity, TProperty>> property, Expression<Func<TNested, bool>> predicate)
+        //    where TProperty : IEnumerable<TNested>
+        //{
+        //    var genericEnumerableAnyMethod = _enumerableAnyMethodInfo.MakeGenericMethod(typeof(TProperty).GetGenericArguments().First());
+        //    var propertyContainsAnyMatchesPredicate = Expression.Call(genericEnumerableAnyMethod, property.Body, predicate);
+        //    return property.CreateLambda<TEntity, TProperty, bool>(propertyContainsAnyMatchesPredicate);
+        //}
+        // ReSharper restore CommentTypo
 
         /// <summary>
         /// Applies a call to <see cref="Enumerable.Any{TSource}(IEnumerable{TSource})"/> to the given expression.

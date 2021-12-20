@@ -8,7 +8,7 @@
       //"HttpsCertFile": {
       //  "Url": "https://fully.qualified.name:5000",
       //  "Certificate": {
-      //    "Path": "<AbsolutePath>\\fully.qualified.name.pfx",
+      //    "Path": "<AbsolutePath>\\full.qualified.name.pfx",
       //    "Password": "<Password>"
       //  }
       //},

@@ -17,6 +17,7 @@ namespace FS.FilterExpressionCreator.Demo.Pages
             await base.OnInitializedAsync();
             var uri = new Uri(NavigationManager.BaseUri);
             DemoAppLink = $"{uri.Scheme}://{uri.Authority}/demo";
+            // ReSharper disable once StringLiteralTypo
             OpeApiLink = $"{uri.Scheme}://{uri.Authority}/openapi";
         }
     }

@@ -16,6 +16,7 @@ namespace FS.FilterExpressionCreator.Demo.Shared
             await base.OnInitializedAsync();
 
             var uri = new Uri(NavigationManager.BaseUri);
+            // ReSharper disable once StringLiteralTypo
             OpeApiLink = $"{uri.Scheme}://{uri.Authority}/openapi";
         }
     }

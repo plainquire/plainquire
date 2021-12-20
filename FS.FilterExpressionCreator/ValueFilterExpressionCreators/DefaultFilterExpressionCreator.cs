@@ -297,7 +297,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             return new FilterExpressionCreationException(message)
             {
                 FilteredEntity = typeof(TEntity),
-                FilteredProperty = property.Body.ToString(),
+                FilteredProperty = ((MemberExpression)property.Body).Member.Name,
                 FilteredPropertyType = typeof(TProperty),
                 FilterOperator = filterOperator,
                 Value = value,

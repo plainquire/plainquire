@@ -109,7 +109,7 @@ namespace FS.FilterExpressionCreator.Extensions
         public static EntityFilter<TEntity> Replace<TEntity, TProperty, TValue>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty>> property, params TValue[] values)
         {
             if (values == null || values.Length == 0)
-                return entityFilter;
+                return entityFilter.Clear(property);
 
             return entityFilter.Replace(property, values.Select(value => ValueFilter.Create(FilterOperator.Default, value)).ToArray());
         }
