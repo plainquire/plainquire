@@ -12,7 +12,7 @@ API: https://filterexpressioncreator.schick-software.de/openapi/
 - [Getting Started](#getting-started)
 - [Creating Filters](#creating-filters)
   - [General](#general)
-  - [Multiple Values](#multiple-values)
+  - [Combine values with AND and OR](#combine-values-with-and-and-or)
   - [Nested Filters](#nested-filters)
   - [Filter Operators](#filter-operators)
   - [Filter to `null`](#filter-to-null)

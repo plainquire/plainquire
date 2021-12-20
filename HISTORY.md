@@ -4,7 +4,7 @@
 
 Class 'DateTimeSpan' replaced by generic class 'Section\<TType\>'
 
-Allow individual filter operators for multiple values combined with OR
+Allow individual filter operators for multiple values combined with OR, see [Combine values with AND and OR](https://github.com/fschick/FilterExpressionCreator#combine-values-with-and-and-or)
 
 ## Fixes
 
