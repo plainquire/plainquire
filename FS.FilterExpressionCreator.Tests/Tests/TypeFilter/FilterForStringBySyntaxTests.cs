@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using FS.FilterExpressionCreator.Exceptions;
+﻿using FS.FilterExpressionCreator.Exceptions;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Extensions;
 using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
 {

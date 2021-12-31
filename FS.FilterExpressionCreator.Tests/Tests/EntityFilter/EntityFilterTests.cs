@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Exceptions;
@@ -11,6 +7,10 @@ using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 {
