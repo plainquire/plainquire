@@ -18,7 +18,7 @@ API: https://filterexpressioncreator.schick-software.de/openapi/
   - [Filter to `null`](#filter-to-null)
   - [Filter Micro Syntax](#filter-micro-syntax)
     - [Examples](#examples)
-    - [Date/Time](#date-time)
+    - [Date/Time](#date/time)
     - [Enumerations](#enumerations)
   - [Configuration](#configuration)
   - [Interception](#interception)
@@ -27,8 +27,8 @@ API: https://filterexpressioncreator.schick-software.de/openapi/
   - [Model Binding](#model-binding)
   - [Register Model Binders](#register-model-binders)
   - [Configure Model Binding](#configure-model-binding)
-  - [Nested Objects/Lists](#nested-objects-lists)
-- [Support for OpenAPI / Swashbuckle.AspNetCore](#support-for-openapi---swashbuckleaspnetcore)
+  - [Nested Objects/Lists](#nested-objects/lists)
+- [Support for OpenAPI / Swashbuckle.AspNetCore](#support-for-openapi-/-swashbuckleaspnetcore)
   - [Register OpenAPI Support](#register-openapi-support)
   - [Register XML Documentation](#register-xml-documentation)
 - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
@@ -47,8 +47,9 @@ CLI : dotnet add package Schick.FilterExpressionCreator
 ```
 2. Create a new filter
  ```csharp
- using FS.FilterExpressionCreator.Filters;
  using FS.FilterExpressionCreator.Enums;
+ using FS.FilterExpressionCreator.Extensions;
+ using FS.FilterExpressionCreator.Filters;
  
  public class Order
  {
@@ -66,6 +67,11 @@ CLI : dotnet add package Schick.FilterExpressionCreator
  ```
 3. Start filtering
 ```csharp
+using FS.FilterExpressionCreator.Enums;
+using FS.FilterExpressionCreator.Extensions;
+using FS.FilterExpressionCreator.Filters;
+using System.Linq;
+
 var orders = new[] {
     new Order { Customer = "Joe Miller", Number = 100 },
     new Order { Customer = "Joe Smith", Number = 200 },
@@ -111,12 +117,12 @@ filter.Add(x => x.Customer, "~Joe,=Doe");
 ## Combine values with AND and OR
 
 ```csharp
-// Filter micro syntax: Customer contains 'Joe' or 'Doe'.
-// Multiple values are combined using conditional `OR`.
+// OR: Customer contains 'Joe' or 'Doe'.
+// Multiple values given to one call of Add/Replace are combined using conditional `OR`.
 filter.Add(x => x.Customer, "~Joe,~Doe");
 
-// Filter micro syntax: Customer contains 'Joe' and 'Doe'.
-// Multiple adds are combined using conditional `AND`.
+// AND: Customer contains 'Joe' and 'Doe'.
+// Multiple calls to Add/Replace are combined using conditional `AND`.
 filter.Add(x => x.Customer, "~Joe");
 filter.Add(x => x.Customer, "~Doe");
 ```
@@ -130,6 +136,11 @@ Filtering nested objects/lists is supported.
 Nested objects are filtered directly
 
 ```csharp
+using FS.FilterExpressionCreator.Enums;
+using FS.FilterExpressionCreator.Extensions;
+using FS.FilterExpressionCreator.Filters;
+using System.Collections.Generic;
+
 public class Order
 {
     public int Number { get; set; }
@@ -157,15 +168,15 @@ System.Console.WriteLine(filter);
 Nested lists are filtered using `IEnumerable<T>.Any()`
 
 ```csharp
-var positionFilter = new EntityFilter<OrderPosition>()
+var itemFilter = new EntityFilter<OrderItem>()
     .Add(x => x.Article, "==Laptop");
 
 var filter = new EntityFilter<Order>()
-    .Add(x => x.Positions, positionFilter);
+    .Add(x => x.Items, itemFilter);
 
 // Print
 System.Console.WriteLine(filter);
-// x => ((x.Positions != null) AndAlso x.Positions.Any(x => (x.Article == "Laptop")))
+// x => ((x.Items != null) AndAlso x.Items.Any(x => (x.Article == "Laptop")))
 ```
 
 ## Filter Operators
@@ -190,10 +201,10 @@ To filter to `== null` / `!= null` special filter operators exists
 
 ```csharp
 // Filtering for values are NULL
-filter.Add(x => x.Name, FilterOperator.IsNull);
+filter.Add(x => x.Customer, FilterOperator.IsNull);
 
 // Filtering for values are NOT NULL
-filter.Add(x => x.Name, FilterOperator.NotNull, "values", "are", "ignored");
+filter.Add(x => x.Customer, FilterOperator.NotNull, "values", "are", "ignored");
 ```
 
 While filtering for `== null` / `!= null`, given values are ignored.
@@ -256,7 +267,7 @@ var filteredOrders = orders.Where(filterExpression.Compile()).ToList();
 
 Creation of filter expression can be intercepted via `IPropertyFilterInterceptor`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply an interceptor.
 
-An example can be found in the test code [InterceptorTests](https://github.com/fschick/FilterExpressionCreator/blob/main/FS.FilterExpressionCreator.Tests/Tests/EntityFilterTests/InterceptorTests.cs)
+An example can be found in the test code [InterceptorTests](https://github.com/fschick/FilterExpressionCreator/blob/main/FS.FilterExpressionCreator.Tests/Tests/EntityFilter/InterceptorTests.cs)
 
 ## Default Configuration and Interception
 
@@ -281,6 +292,8 @@ public static IPropertyFilterInterceptor DefaultInterceptor { get; set; }
 Model binding for MVC controllers is supported
 
 ```csharp
+using FS.FilterExpressionCreator.Filters;
+
 [HttpGet]
 public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order, ...)
 ```
@@ -312,6 +325,8 @@ By default all public non-complex properties (`string`, `int`, `DateTime`, ...) 
 Parameters can be renamed or hidden using  `FilterAttribute` and `FilterEntityAttribute`. For the code below `OrderNumber` is not mapped anymore and `OrderCustomer` becomes `CustomerName`
 
 ```csharp
+using FS.FilterExpressionCreator.Abstractions.Attributes;
+
 [FilterEntity(Prefix = "")]
 public class Order
 {
@@ -387,12 +402,9 @@ By default `System.Text.Json` is used to serialize/convert Filter Expression Cre
 Package Manager : Install-Package Schick.FilterExpressionCreator.Mvc.Newtonsoft
 CLI : dotnet add package Schick.FilterExpressionCreator.Mvc.Newtonsoft
 ```
-
 ```csharp
 using FS.FilterExpressionCreator.Mvc.Newtonsoft;
-```
 
-```csharp
 // Register support for Newtonsoft by calling 
 // 'AddFilterExpressionsNewtonsoftSupport()' on IMvcBuilder instance
 services.AddControllers().AddFilterExpressionsNewtonsoftSupport();
@@ -438,12 +450,9 @@ When using `Newtonsoft.Json` additional converters are required
 Package Manager : Install-Package Schick.FilterExpressionCreator.Newtonsoft
 CLI : dotnet add package Schick.FilterExpressionCreator.Newtonsoft
 ```
-
 ```csharp
 using FS.FilterExpressionCreator.Newtonsoft.Extensions;
-```
 
-```csharp
 var json = JsonConvert.SerializeObject(filter, JsonConverterExtensions.NewtonsoftConverters);
 filter = JsonConvert.DeserializeObject<EntityFilter<Order>>(json, JsonConverterExtensions.NewtonsoftConverters);
 ```
@@ -459,12 +468,9 @@ var filteredOrders = orders
 ```
 
 or where this isn't possible combine filters with `CombineWithConditionalAnd`
-
 ```csharp
-using FS.FilterExpressionCreator.Extensions;
-```
+using FS.FilterExpressionCreator.Abstractions.Extensions;
 
-```csharp
 var extendedFilter = new[]
     {
         filter.CreateFilter(),

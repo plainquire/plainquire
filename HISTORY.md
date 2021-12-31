@@ -1,3 +1,11 @@
+
+
+# 3.1.0
+
+## Changes
+
+Abstractions, extensions and attributes moved to NuGet package 'FS.FilterExpressionCreator.Abstractions'.
+
 # 3.0.0
 
 ## Breaking Changes
