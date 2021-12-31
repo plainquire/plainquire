@@ -1,5 +1,5 @@
-﻿using FS.FilterExpressionCreator.Filters;
-using FS.FilterExpressionCreator.Models;
+﻿using FS.FilterExpressionCreator.Abstractions.Models;
+using FS.FilterExpressionCreator.Filters;
 using System;
 using System.Linq.Expressions;
 using System.Reflection;

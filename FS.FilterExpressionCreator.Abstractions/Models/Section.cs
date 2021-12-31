@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FS.FilterExpressionCreator.Models
+namespace FS.FilterExpressionCreator.Abstractions.Models
 {
     /// <summary>
     /// Represents a section of <typeparamref name="TType"/>.

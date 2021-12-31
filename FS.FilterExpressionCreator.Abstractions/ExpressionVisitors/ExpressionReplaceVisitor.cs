@@ -1,7 +1,7 @@
 ﻿#pragma warning disable 1591
 using System.Linq.Expressions;
 
-namespace FS.FilterExpressionCreator.ExpressionVisitors
+namespace FS.FilterExpressionCreator.Abstractions.ExpressionVisitors
 {
     // Source: https://www.grax.com/2014/10/combining-function-expressions-in-c
     public class ExpressionReplaceVisitor : ExpressionVisitor

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace FS.FilterExpressionCreator.Models
+namespace FS.FilterExpressionCreator.Abstractions.Models
 {
     /// <summary>
     /// Holds filter specific information.

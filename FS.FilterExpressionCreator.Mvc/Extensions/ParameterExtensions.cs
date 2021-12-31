@@ -1,6 +1,6 @@
-﻿using FS.FilterExpressionCreator.Extensions;
+﻿using FS.FilterExpressionCreator.Abstractions.Attributes;
+using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
-using FS.FilterExpressionCreator.Mvc.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

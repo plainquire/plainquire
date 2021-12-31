@@ -1,6 +1,6 @@
-﻿using FS.FilterExpressionCreator.Filters;
+﻿using FS.FilterExpressionCreator.Abstractions.Models;
+using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Interfaces;
-using FS.FilterExpressionCreator.Models;
 using FS.FilterExpressionCreator.Newtonsoft.Extensions;
 using FS.FilterExpressionCreator.Tests.Models;
 using Newtonsoft.Json;

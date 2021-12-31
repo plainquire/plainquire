@@ -1,4 +1,4 @@
-﻿using FS.FilterExpressionCreator.Mvc.Attributes;
+﻿using FS.FilterExpressionCreator.Abstractions.Attributes;
 using System;
 
 namespace FS.FilterExpressionCreator.Demo.Models

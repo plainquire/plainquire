@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using FS.FilterExpressionCreator.Models;
+using FS.FilterExpressionCreator.Abstractions.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -16,7 +16,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Section
             section1.Start.Should().Be(1);
             section1.End.Should().Be(2);
 
-            var section2 = FilterExpressionCreator.Models.Section.Create(1, 2);
+            var section2 = Abstractions.Models.Section.Create(1, 2);
             section2.Start.Should().Be(1);
             section2.End.Should().Be(2);
         }
@@ -27,19 +27,19 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Section
             var section1 = new Section<int>(1, 2);
             section1.ToString().Should().Be("1_2");
 
-            var section2 = FilterExpressionCreator.Models.Section.Create<NonConvertible>(default, default);
+            var section2 = Abstractions.Models.Section.Create<NonConvertible>(default, default);
             section2.ToString().Should().Be(string.Empty);
 
-            var section3 = FilterExpressionCreator.Models.Section.Create(new DateTime(2020, 1, 1), new DateTime(2020, 1, 1));
+            var section3 = Abstractions.Models.Section.Create(new DateTime(2020, 1, 1), new DateTime(2020, 1, 1));
             section3.ToString().Should().Be("2020-01-01T00:00:00.0000000_2020-01-01T00:00:00.0000000");
 
-            var section4 = FilterExpressionCreator.Models.Section.Create(new NonConvertible(), default);
+            var section4 = Abstractions.Models.Section.Create(new NonConvertible(), default);
             section4.ToString().Should().Be("NonConvertible");
 
-            var section5 = FilterExpressionCreator.Models.Section.Create(default, new NonConvertible());
+            var section5 = Abstractions.Models.Section.Create(default, new NonConvertible());
             section5.ToString().Should().Be("NonConvertible");
 
-            var section6 = FilterExpressionCreator.Models.Section.Create(new NonConvertible(), new NonConvertible());
+            var section6 = Abstractions.Models.Section.Create(new NonConvertible(), new NonConvertible());
             section6.ToString().Should().Be("NonConvertible_NonConvertible");
         }
 

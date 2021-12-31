@@ -1,9 +1,10 @@
 ﻿using FluentAssertions;
+using FS.FilterExpressionCreator.Abstractions.Extensions;
+using FS.FilterExpressionCreator.Abstractions.Models;
 using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Interfaces;
-using FS.FilterExpressionCreator.Models;
 using FS.FilterExpressionCreator.PropertyFilterExpressionCreators;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Models;

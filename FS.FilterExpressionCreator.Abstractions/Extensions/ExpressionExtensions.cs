@@ -1,11 +1,11 @@
-﻿using FS.FilterExpressionCreator.ExpressionVisitors;
+﻿using FS.FilterExpressionCreator.Abstractions.ExpressionVisitors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace FS.FilterExpressionCreator.Extensions
+namespace FS.FilterExpressionCreator.Abstractions.Extensions
 {
     /// <summary>
     /// Extension methods for <see cref="Expression"/>.

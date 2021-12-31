@@ -1,7 +1,8 @@
-﻿using FS.FilterExpressionCreator.Extensions;
+﻿using FS.FilterExpressionCreator.Abstractions.Extensions;
+using FS.FilterExpressionCreator.Abstractions.Models;
+using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
 using FS.FilterExpressionCreator.JsonConverters;
-using FS.FilterExpressionCreator.Models;
 using FS.FilterExpressionCreator.PropertyFilterExpressionCreators;
 using System;
 using System.Collections.Generic;

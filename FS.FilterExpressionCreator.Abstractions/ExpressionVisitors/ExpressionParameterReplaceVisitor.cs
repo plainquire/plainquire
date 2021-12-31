@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 
-namespace FS.FilterExpressionCreator.ExpressionVisitors
+namespace FS.FilterExpressionCreator.Abstractions.ExpressionVisitors
 {
     /// <summary>
     /// Replaces all parameters within an expression with another one.

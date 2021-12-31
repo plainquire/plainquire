@@ -1,6 +1,6 @@
-﻿using FS.FilterExpressionCreator.Filters;
+﻿using FS.FilterExpressionCreator.Abstractions.Models;
+using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Interfaces;
-using FS.FilterExpressionCreator.Models;
 using System.Collections.Generic;
 
 namespace FS.FilterExpressionCreator.Tests.Models

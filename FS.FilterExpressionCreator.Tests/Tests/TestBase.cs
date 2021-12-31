@@ -1,4 +1,4 @@
-﻿using FS.FilterExpressionCreator.Models;
+﻿using FS.FilterExpressionCreator.Abstractions.Models;
 using FS.FilterExpressionCreator.Tests.Models;
 using System;
 using System.Collections.Generic;

@@ -7,6 +7,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FS.FilterExpressionCreator.Abstractions\FS.FilterExpressionCreator.Abstractions.csproj" />
     <ProjectReference Include="..\FS.FilterExpressionCreator.Newtonsoft\FS.FilterExpressionCreator.Newtonsoft.csproj" />
     <ProjectReference Include="..\FS.FilterExpressionCreator\FS.FilterExpressionCreator.csproj" />
   </ItemGroup>

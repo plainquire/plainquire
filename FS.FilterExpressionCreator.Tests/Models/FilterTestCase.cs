@@ -1,5 +1,5 @@
-﻿using FS.FilterExpressionCreator.Enums;
-using FS.FilterExpressionCreator.Models;
+﻿using FS.FilterExpressionCreator.Abstractions.Models;
+using FS.FilterExpressionCreator.Enums;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
