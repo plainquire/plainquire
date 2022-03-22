@@ -228,6 +228,10 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Range
 
             spanB_C.Intersect(spanD_D).Should().BeFalse();
             spanD_D.Intersect(spanB_C).Should().BeFalse();
+
+            spanA_A.Intersect(null).Should().BeFalse();
+            ((Range<DateTimeOffset>)null).Intersect(spanA_A).Should().BeFalse();
+            ((Range<DateTimeOffset>)null).Intersect(null).Should().BeFalse();
         }
 
         [TestMethod]
@@ -252,8 +256,12 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Range
             spanA_C.Intersection(spanB_D).Should().Be(spanB_C);
             spanB_D.Intersection(spanA_C).Should().Be(spanB_C);
 
-            spanB_C.Intersection(spanD_D).Should().BeNull();
-            spanD_D.Intersection(spanB_C).Should().BeNull();
+            spanB_C.Intersection(spanD_D).Should().Be(default);
+            spanD_D.Intersection(spanB_C).Should().Be(default);
+
+            spanA_A.Intersection(null).Should().Be(spanA_A);
+            ((Range<DateTimeOffset>)null).Intersection(spanA_A).Should().Be(spanA_A);
+            ((Range<DateTimeOffset>)null).Intersection(null).Should().Be(default);
         }
 
         [TestMethod]
@@ -280,6 +288,10 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Range
 
             spanB_C.Contains(spanD_D).Should().BeFalse();
             spanD_D.Contains(spanB_C).Should().BeFalse();
+
+            spanA_A.Contains(null).Should().BeFalse();
+            ((Range<DateTimeOffset>)null).Contains(spanA_A).Should().BeFalse();
+            ((Range<DateTimeOffset>)null).Contains(null).Should().BeFalse();
         }
 
         private class NonConvertible : IComparable<NonConvertible>

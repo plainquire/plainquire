@@ -17,6 +17,9 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         public static bool Intersect<TType>(this Range<TType> val1, Range<TType> val2)
             where TType : IComparable<TType>
         {
+            if (val1 == null || val2 == null)
+                return false;
+
             var val1StartIsLowerThanVal2End = val1.Start.CompareTo(val2.End) <= 0;
             var val2StartIsLowerThanVal1End = val2.Start.CompareTo(val1.End) <= 0;
             return val1StartIsLowerThanVal2End && val2StartIsLowerThanVal1End;
@@ -30,6 +33,12 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         public static Range<TType> Intersection<TType>(this Range<TType> val1, Range<TType> val2)
             where TType : IComparable<TType>
         {
+            if (val1 == null)
+                return val2;
+
+            if (val2 == null)
+                return val1;
+
             if (!Intersect(val1, val2))
                 return default;
 
@@ -46,8 +55,8 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         public static bool Contains<TType>(this Range<TType> val1, Range<TType> val2)
             where TType : IComparable<TType>
         {
-            if (val2 == null)
-                throw new ArgumentNullException(nameof(val2));
+            if (val1 == null || val2 == null)
+                return false;
 
             var thisStartIsLowerThanRhsStart = val1.Start.CompareTo(val2.Start) <= 0;
             var thisEndIsGreaterThanRhsEnd = val1.End.CompareTo(val2.End) >= 0;
