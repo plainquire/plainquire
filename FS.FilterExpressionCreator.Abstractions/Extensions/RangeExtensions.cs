@@ -48,6 +48,25 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         }
 
         /// <summary>
+        /// Returns the union range of two <see name="Range{TType}"/>.
+        /// </summary>
+        /// <param name="val1">The first of two <see name="Range{TType}"/> to compare.</param>
+        /// <param name="val2">The second of two <see name="Range{TType}"/> to compare.</param>
+        public static Range<TType> Union<TType>(this Range<TType> val1, Range<TType> val2)
+            where TType : IComparable<TType>
+        {
+            if (val1 == null)
+                return val2;
+
+            if (val2 == null)
+                return val1;
+
+            var start = Min(val1.Start, val2.Start);
+            var end = Max(val1.End, val2.End);
+            return new Range<TType>(start, end);
+        }
+
+        /// <summary>
         /// Checks if one <see name="Range{TType}"/> contains another.
         /// </summary>
         /// <param name="val1">The first of two <see name="Range{TType}"/> to compare.</param>

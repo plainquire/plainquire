@@ -265,6 +265,37 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Range
         }
 
         [TestMethod]
+        public void WhenDateTimeSpansUnionIsCalculated_ResultMatchExpected()
+        {
+            // ReSharper disable InconsistentNaming
+            var spanA_A = new Range<DateTimeOffset>(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2000, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanA_B = new Range<DateTimeOffset>(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanA_C = new Range<DateTimeOffset>(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2020, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanA_D = new Range<DateTimeOffset>(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2030, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanB_B = new Range<DateTimeOffset>(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanB_C = new Range<DateTimeOffset>(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2020, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanB_D = new Range<DateTimeOffset>(new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2030, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            var spanD_D = new Range<DateTimeOffset>(new DateTimeOffset(2030, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2030, 12, 31, 0, 0, 0, TimeSpan.Zero));
+            // ReSharper restore InconsistentNaming
+
+            spanA_B.Union(spanA_A).Should().Be(spanA_B);
+            spanA_A.Union(spanA_B).Should().Be(spanA_B);
+
+            spanA_C.Union(spanB_B).Should().Be(spanA_C);
+            spanB_B.Union(spanA_C).Should().Be(spanA_C);
+
+            spanA_C.Union(spanB_D).Should().Be(spanA_D);
+            spanB_D.Union(spanA_C).Should().Be(spanA_D);
+
+            spanB_C.Union(spanD_D).Should().Be(spanB_D);
+            spanD_D.Union(spanB_C).Should().Be(spanB_D);
+
+            spanA_A.Union(null).Should().Be(spanA_A);
+            ((Range<DateTimeOffset>)null).Union(spanA_A).Should().Be(spanA_A);
+            ((Range<DateTimeOffset>)null).Union(null).Should().Be(default);
+        }
+
+        [TestMethod]
         public void WhenDateTimeSpansContainsIsCalculated_ResultMatchExpected()
         {
             // ReSharper disable InconsistentNaming
