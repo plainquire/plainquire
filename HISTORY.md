@@ -4,21 +4,29 @@
 
 ## Breaking Changes
 
+Classes `Section`/`Section<TType>` renamed to `Range`/`Range<TType>`
+
 Target Framework updated to .NET 6 where applicable
 
-Class 'Section/Section\<TType\>' renamed to 'Range/Range<TType>'
+## Changes
+
+`Intersect`/`Contains` methods of `Range<TType>` implemented as extension methods
+
+Null value handling added to `Range<TType>` extension methods
+
+Creation of union added to `Range<TType>` extension methods
 
 # 3.1.0
 
 ## Changes
 
-Abstractions, extensions and attributes moved to NuGet package 'FS.FilterExpressionCreator.Abstractions'
+Abstractions, extensions and attributes moved to NuGet package `FS.FilterExpressionCreator.Abstractions`
 
 # 3.0.0
 
 ## Breaking Changes
 
-Class 'DateTimeSpan' replaced by generic class 'Section\<TType\>'
+Class `DateTimeSpan` replaced by generic class `Section<TType>`
 
 Allow individual filter operators for multiple values combined with OR, see [Combine values with AND and OR](https://github.com/fschick/FilterExpressionCreator#combine-values-with-and-and-or)
 
@@ -30,7 +38,7 @@ Adding ISNULL/NOTNULL filter without values fixed
 
 ## Changes
 
-EntityFilter.IsEmpty() added
+`EntityFilter.IsEmpty()` added
 
 # 2.3.0
 
@@ -42,13 +50,13 @@ Filter value gets cleared when it is replaced by NULL
 
 ## Changes
 
-DateTimeSpan intersection calculation added
+`DateTimeSpan` intersection calculation added
 
 # 2.2.0
 
 ## New Features
 
-DateTimeSpan equality and comparison functions added
+`DateTimeSpan` equality and comparison functions added
 
 # 2.1.1
 
@@ -66,7 +74,7 @@ Interceptor added to provide custom filter manipulation/translation
 
 ## New Features
 
-Support for DateTimeOffset added
+Support for `DateTimeOffset` added
 
 # 1.1.0
 
@@ -94,7 +102,7 @@ README updated
 
 Link added to syntax to demo
 
-ArgumentException is thrown when given value cannot be filtered
+`ArgumentException` is thrown when given value cannot be filtered
 
 README updated
 
