@@ -110,61 +110,6 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
         public static bool operator >=(Range<TType> val1, Range<TType> val2)
             => ((IConvertible)val1).ToDecimal(null) >= ((IConvertible)val2).ToDecimal(null);
 
-        /// <summary>
-        /// Checks if two <typeparamref name="TType"/> intersects with each other.
-        /// </summary>
-        /// <param name="val1">The first of two <see cref="DateTimeOffset"/> to compare.</param>
-        /// <param name="val2">The second of two <see cref="DateTimeOffset"/> to compare.</param>
-        public static bool Intersect(Range<TType> val1, Range<TType> val2)
-        {
-            var val1StartIsLowerThanVal2End = val1.Start.CompareTo(val2.End) <= 0;
-            var val2StartIsLowerThanVal1End = val2.Start.CompareTo(val1.End) <= 0;
-            return val1StartIsLowerThanVal2End && val2StartIsLowerThanVal1End;
-        }
-
-        /// <summary>
-        /// Checks if a second <typeparamref name="TType"/> intersects with this one.
-        /// </summary>
-        /// <param name="other">The <typeparamref name="TType"/> to check intersection with.</param>
-        public bool Intersect(Range<TType> other)
-            => Intersect(this, other);
-
-        /// <summary>
-        /// Returns the intersected range of two <typeparamref name="TType"/>.
-        /// </summary>
-        /// <param name="val1">The first of two <see cref="DateTimeOffset"/> to compare.</param>
-        /// <param name="val2">The second of two <see cref="DateTimeOffset"/> to compare.</param>
-        public static Range<TType> Intersection(Range<TType> val1, Range<TType> val2)
-        {
-            if (!Intersect(val1, val2))
-                return default;
-
-            var start = Max(val1.Start, val2.Start);
-            var end = Min(val1.End, val2.End);
-            return new Range<TType>(start, end);
-        }
-
-        /// <summary>
-        /// Returns the intersected range of this and a second <typeparamref name="TType"/>.
-        /// </summary>
-        /// <param name="other">The <typeparamref name="TType"/> to check intersection with.</param>
-        public Range<TType> Intersection(Range<TType> other)
-            => Intersection(this, other);
-
-        /// <summary>
-        /// Determines whether this instance contains the <paramref name="other"/>.
-        /// </summary>
-        /// <param name="other">The <typeparamref name="TType"/> to check containment with.</param>
-        public bool Contains(Range<TType> other)
-        {
-            if (other == null)
-                throw new ArgumentNullException(nameof(other));
-
-            var thisStartIsLowerThanRhsStart = Start.CompareTo(other.Start) <= 0;
-            var thisEndIsGreaterThanRhsEnd = End.CompareTo(other.End) >= 0;
-            return thisStartIsLowerThanRhsStart && thisEndIsGreaterThanRhsEnd;
-        }
-
         private static string ToString(TType value)
             => value switch
             {
@@ -183,22 +128,6 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
                 IConvertible convertible => convertible.ToDouble(null),
                 _ => throw new InvalidOperationException($"The type {typeof(TType).Name} is not convertible to {nameof(Double)}"),
             };
-
-        /// <summary>
-        /// Returns the lower of two <typeparamref name="TType"/>.
-        /// </summary>
-        /// <param name="val1">The first of two <typeparamref name="TType"/> to compare.</param>
-        /// <param name="val2">The second of two <typeparamref name="TType"/> to compare.</param>
-        private static TType Min(TType val1, TType val2)
-            => val1.CompareTo(val2) <= 0 ? val1 : val2;
-
-        /// <summary>
-        /// Returns the greater of two <typeparamref name="TType"/>.
-        /// </summary>
-        /// <param name="val1">The first of two <typeparamref name="TType"/> to compare.</param>
-        /// <param name="val2">The second of two <typeparamref name="TType"/> to compare.</param>
-        private static TType Max(TType val1, TType val2)
-            => val1.CompareTo(val2) >= 0 ? val1 : val2;
 
         #region IConvertible
         TypeCode IConvertible.GetTypeCode()

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FS.FilterExpressionCreator.Abstractions.Extensions;
 using FS.FilterExpressionCreator.Abstractions.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
