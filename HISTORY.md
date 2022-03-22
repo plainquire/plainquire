@@ -1,8 +1,10 @@
 
 
-# 3.2.0
+# 4.0.0
 
 ## Breaking Changes
+
+Target Framework updated to .NET 6 where applicable
 
 Class 'Section/Section\<TType\>' renamed to 'Range/Range<TType>'
 

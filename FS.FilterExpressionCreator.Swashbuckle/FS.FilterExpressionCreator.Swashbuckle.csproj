@@ -5,7 +5,7 @@
 
   <ItemGroup>
     <PackageReference Include="LoxSmoke.DocXml" Version="3.4.5" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.0" />
   </ItemGroup>
 
   <ItemGroup>
