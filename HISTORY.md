@@ -1,5 +1,11 @@
 
 
+# 4.0.1
+
+## Fixes
+
+Dependencies set to lowest possible version
+
 # 4.0.0
 
 ## Breaking Changes
