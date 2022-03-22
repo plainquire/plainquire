@@ -1,10 +1,16 @@
 
 
+# 3.2.0
+
+## Breaking Changes
+
+Class 'Section/Section\<TType\>' renamed to 'Range/Range<TType>'
+
 # 3.1.0
 
 ## Changes
 
-Abstractions, extensions and attributes moved to NuGet package 'FS.FilterExpressionCreator.Abstractions'.
+Abstractions, extensions and attributes moved to NuGet package 'FS.FilterExpressionCreator.Abstractions'
 
 # 3.0.0
 

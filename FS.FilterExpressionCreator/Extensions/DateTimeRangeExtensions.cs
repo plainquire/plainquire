@@ -9,7 +9,7 @@ namespace FS.FilterExpressionCreator.Extensions
     /// <summary>
     /// Extension methods for <see cref="DateTime"/>.
     /// </summary>
-    public static class DateTimeSectionExtensions
+    public static class DateTimeRangeExtensions
     {
         /// <summary>
         /// Convert a string to <see cref="DateTimeOffset"/>.
@@ -19,9 +19,9 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="cultureInfo">The culture to use when parsing.</param>
         public static DateTimeOffset ConvertStringToDateTimeOffset(this string value, DateTimeOffset now, CultureInfo cultureInfo = null)
         {
-            if (TryConvertStringToDateTimeSection(value, now, out var dateTimeSection, cultureInfo))
-                return dateTimeSection.Start;
-            throw new ArgumentException($"{value} could not be converted to date/time section", nameof(value));
+            if (TryConvertStringToDateTimeRange(value, now, out var dateTimeRange, cultureInfo))
+                return dateTimeRange.Start;
+            throw new ArgumentException($"{value} could not be converted to date/time range", nameof(value));
         }
 
         /// <summary>
@@ -33,9 +33,9 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="cultureInfo">The culture to use when parsing.</param>
         public static bool TryConvertStringToDateTimeOffset(this string value, DateTimeOffset now, out DateTimeOffset dateTimeOffset, CultureInfo cultureInfo = null)
         {
-            if (TryConvertStringToDateTimeSection(value, now, out var dateTimeSection, cultureInfo))
+            if (TryConvertStringToDateTimeRange(value, now, out var dateTimeRange, cultureInfo))
             {
-                dateTimeOffset = dateTimeSection.Start;
+                dateTimeOffset = dateTimeRange.Start;
                 return true;
             }
 
@@ -44,47 +44,47 @@ namespace FS.FilterExpressionCreator.Extensions
         }
 
         /// <summary>
-        /// Convert a string to date time section.
+        /// Convert a string to date time range.
         /// </summary>
         /// <param name="value">The string to convert.</param>
         /// <param name="now">Value used for 'now' when parsing relative date/time values (e.g. one-week-ago).</param>
         /// <param name="cultureInfo">The culture to use when parsing.</param>
-        public static Section<DateTimeOffset> ConvertStringToDateTimeSection(this string value, DateTimeOffset now, CultureInfo cultureInfo = null)
+        public static Range<DateTimeOffset> ConvertStringToDateTimeRange(this string value, DateTimeOffset now, CultureInfo cultureInfo = null)
         {
-            if (TryConvertStringToDateTimeSection(value, now, out var dateTimeSection, cultureInfo))
-                return dateTimeSection;
-            throw new ArgumentException($"{value} could not be converted to date/time section", nameof(value));
+            if (TryConvertStringToDateTimeRange(value, now, out var dateTimeRange, cultureInfo))
+                return dateTimeRange;
+            throw new ArgumentException($"{value} could not be converted to date/time range", nameof(value));
         }
 
         /// <summary>
-        /// Try to convert a string to date time section.
+        /// Try to convert a string to date time range.
         /// </summary>
         /// <param name="value">The string to convert.</param>
         /// <param name="now">Value used for 'now' when parsing relative date/time values (e.g. one-week-ago).</param>
-        /// <param name="dateTimeSection">The parsed date time section.</param>
+        /// <param name="dateTimeRange">The parsed date time range.</param>
         /// <param name="cultureInfo">The culture to use when parsing.</param>
-        public static bool TryConvertStringToDateTimeSection(this string value, DateTimeOffset now, out Section<DateTimeOffset> dateTimeSection, CultureInfo cultureInfo = null)
+        public static bool TryConvertStringToDateTimeRange(this string value, DateTimeOffset now, out Range<DateTimeOffset> dateTimeRange, CultureInfo cultureInfo = null)
         {
-            dateTimeSection = new Section<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
+            dateTimeRange = new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
             if (value == null)
                 return false;
 
-            if (Abstractions.Extensions.DateTimeSectionExtensions.TryConvertDateTimeSectionFormattedString(value, cultureInfo, out dateTimeSection))
+            if (Abstractions.Extensions.DateTimeRangeExtensions.TryConvertDateTimeRangeFormattedString(value, cultureInfo, out dateTimeRange))
                 return true;
-            if (Abstractions.Extensions.DateTimeSectionExtensions.TryConvertIso8601FormattedString(value, cultureInfo, out dateTimeSection))
+            if (Abstractions.Extensions.DateTimeRangeExtensions.TryConvertIso8601FormattedString(value, cultureInfo, out dateTimeRange))
                 return true;
-            if (TryConvertChronicSectionFormattedString(value, now, out dateTimeSection))
+            if (TryConvertChronicRangeFormattedString(value, now, out dateTimeRange))
                 return true;
-            if (Abstractions.Extensions.DateTimeSectionExtensions.TryConvertUnknownFormattedString(value, cultureInfo, out dateTimeSection))
+            if (Abstractions.Extensions.DateTimeRangeExtensions.TryConvertUnknownFormattedString(value, cultureInfo, out dateTimeRange))
                 return true;
 
             return false;
         }
 
-        private static bool TryConvertChronicSectionFormattedString(string value, DateTimeOffset now, out Section<DateTimeOffset> dateTimeSection)
+        private static bool TryConvertChronicRangeFormattedString(string value, DateTimeOffset now, out Range<DateTimeOffset> dateTimeRange)
         {
-            dateTimeSection = new Section<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
+            dateTimeRange = new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
             var startAndEnd = Regex.Match(value, "^(?<start>.*?)(_(?<end>(.*)))?$");
             var startValue = RemoveHyphenForChronicParse(startAndEnd.Groups["start"].Value);
@@ -101,7 +101,7 @@ namespace FS.FilterExpressionCreator.Extensions
             if (!startAndEnd.Success || start?.Start.HasValue != true || end?.Start.HasValue != true)
                 return false;
 
-            dateTimeSection = new Section<DateTimeOffset>(start.Start.Value, end.Start.Value);
+            dateTimeRange = new Range<DateTimeOffset>(start.Start.Value, end.Start.Value);
             return true;
         }
 

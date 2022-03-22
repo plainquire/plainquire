@@ -8,12 +8,12 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
     /// <summary>
     /// Extension methods for <see cref="DateTime"/>.
     /// </summary>
-    public static class DateTimeSectionExtensions
+    public static class DateTimeRangeExtensions
     {
         /// <summary>
-        /// Creates a new <see cref="Section{TType}"/> using given values. Values not given are expanded to start and end of it's period.
+        /// Creates a new <see cref="Range{TType}"/> using given values. Values not given are expanded to start and end of it's period.
         /// </summary>
-        private static Section<DateTimeOffset> CreateDateTimeSection(int? year = null, int? month = null, int? day = null, int? hour = null, int? minute = null, int? second = null, int? millisecond = null, TimeSpan offset = default)
+        private static Range<DateTimeOffset> CreateDateTimeRange(int? year = null, int? month = null, int? day = null, int? hour = null, int? minute = null, int? second = null, int? millisecond = null, TimeSpan offset = default)
         {
             var start = new DateTimeOffset(
                 year ?? DateTimeOffset.MinValue.Year,
@@ -43,12 +43,12 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
             else
                 end = end.AddMilliseconds(millisecond.Value);
 
-            return new Section<DateTimeOffset>(start, end);
+            return new Range<DateTimeOffset>(start, end);
         }
 
-        internal static bool TryConvertDateTimeSectionFormattedString(string value, IFormatProvider cultureInfo, out Section<DateTimeOffset> dateTimeSection)
+        internal static bool TryConvertDateTimeRangeFormattedString(string value, IFormatProvider cultureInfo, out Range<DateTimeOffset> dateTimeRange)
         {
-            dateTimeSection = new Section<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
+            dateTimeRange = new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
             var startAndEnd = Regex.Match(value, "^(?<start>.+?)_(?<end>.+)$");
             if (!startAndEnd.Success)
@@ -59,13 +59,13 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
             if (!startParsed || !endParsed)
                 return false;
 
-            dateTimeSection = new Section<DateTimeOffset>(start.Start, end.End);
+            dateTimeRange = new Range<DateTimeOffset>(start.Start, end.End);
             return true;
         }
 
-        internal static bool TryConvertIso8601FormattedString(string value, IFormatProvider cultureInfo, out Section<DateTimeOffset> dateTimeSection)
+        internal static bool TryConvertIso8601FormattedString(string value, IFormatProvider cultureInfo, out Range<DateTimeOffset> dateTimeRange)
         {
-            dateTimeSection = new Section<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
+            dateTimeRange = new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
             const string offsetPattern = @"^(?<datetime>.+?)(?<offset>Z|[\+\-]\d{1,2}:\d{1,2})?$";
             const string dateTimePattern = @"^(?<year>\d\d\d\d)(\D(?<month>\d\d))?(\D(?<day>\d\d))?(\D(?<hour>\d\d))?(\D(?<minute>\d\d))?(\D(?<second>\d\d))?(\D(?<millisecond>\d+))?$";
@@ -90,7 +90,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
                 var minute = ParseDateTimePart(dateAndTime, "minute", cultureInfo);
                 var second = ParseDateTimePart(dateAndTime, "second", cultureInfo);
                 var offsetTimeSpan = ParseOffset(offset);
-                dateTimeSection = CreateDateTimeSection(year, month, day, hour, minute, second, null, offsetTimeSpan);
+                dateTimeRange = CreateDateTimeRange(year, month, day, hour, minute, second, null, offsetTimeSpan);
                 return true;
             }
             catch (ArgumentException) { }
@@ -98,7 +98,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
             return false;
         }
 
-        internal static bool TryConvertUnknownFormattedString(string value, CultureInfo cultureInfo, out Section<DateTimeOffset> dateTimeSection)
+        internal static bool TryConvertUnknownFormattedString(string value, CultureInfo cultureInfo, out Range<DateTimeOffset> dateTimeRange)
         {
             var result = DateTimeOffset.TryParse(value, cultureInfo, DateTimeStyles.AssumeUniversal, out var startDate);
 
@@ -116,7 +116,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
             else
                 endDate = startDate.AddYears(1);
 
-            dateTimeSection = new Section<DateTimeOffset>(startDate, endDate);
+            dateTimeRange = new Range<DateTimeOffset>(startDate, endDate);
             return result;
         }
 

@@ -4,17 +4,17 @@ using System.Collections.Generic;
 namespace FS.FilterExpressionCreator.Abstractions.Models
 {
     /// <summary>
-    /// Represents a section of <typeparamref name="TType"/>.
+    /// Represents a range of <typeparamref name="TType"/>.
     /// </summary>
-    public class Section<TType> : IEquatable<Section<TType>>, IConvertible where TType : IComparable<TType>
+    public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType : IComparable<TType>
     {
         /// <summary>
-        /// The start of section.
+        /// The start of range.
         /// </summary>
         public TType Start { get; }
 
         /// <summary>
-        /// The end of section.
+        /// The end of range.
         /// </summary>
         public TType End { get; }
 
@@ -25,11 +25,11 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
         public double Distance => ToDouble(End) - ToDouble(Start);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Section{TType}"/> class.
+        /// Initializes a new instance of the <see cref="Range{TType}"/> class.
         /// </summary>
-        /// <param name="start">The start of section.</param>
-        /// <param name="end">The end of section.</param>
-        public Section(TType start, TType end)
+        /// <param name="start">The start of range.</param>
+        /// <param name="end">The end of range.</param>
+        public Range(TType start, TType end)
         {
             Start = start;
             End = end;
@@ -52,10 +52,10 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
 
         /// <inheritdoc />
         public override bool Equals(object obj)
-            => Equals(obj as Section<TType>);
+            => Equals(obj as Range<TType>);
 
         /// <inheritdoc />
-        public bool Equals(Section<TType> other)
+        public bool Equals(Range<TType> other)
             => other != null && EqualityComparer<TType>.Default.Equals(Start, other.Start) && EqualityComparer<TType>.Default.Equals(End, other.End);
 
         /// <inheritdoc />
@@ -67,47 +67,47 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
         /// </summary>
         /// <param name="val1">The object to compare with <paramref name="val2"/>.</param>
         /// <param name="val2">The object to compare with <paramref name="val1"/>.</param>
-        public static bool operator ==(Section<TType> val1, Section<TType> val2)
-            => EqualityComparer<Section<TType>>.Default.Equals(val1, val2);
+        public static bool operator ==(Range<TType> val1, Range<TType> val2)
+            => EqualityComparer<Range<TType>>.Default.Equals(val1, val2);
 
         /// <summary>
         /// Indicates whether the <paramref name="val1"/> object is not equal to <paramref name="val2"/> object.
         /// </summary>
         /// <param name="val1">The object to compare with <paramref name="val2"/>.</param>
         /// <param name="val2">The object to compare with <paramref name="val1"/>.</param>
-        public static bool operator !=(Section<TType> val1, Section<TType> val2)
+        public static bool operator !=(Range<TType> val1, Range<TType> val2)
             => !(val1 == val2);
 
         /// <summary>
-        /// Indicates whether the section of <paramref name="val1"/> is lower than the section of <paramref name="val2"/> object.
+        /// Indicates whether the range of <paramref name="val1"/> is lower than the range of <paramref name="val2"/> object.
         /// </summary>
         /// <param name="val1">The object to compare with <paramref name="val2"/>.</param>
         /// <param name="val2">The object to compare with <paramref name="val1"/>.</param>
-        public static bool operator <(Section<TType> val1, Section<TType> val2)
+        public static bool operator <(Range<TType> val1, Range<TType> val2)
             => ((IConvertible)val1).ToDecimal(null) < ((IConvertible)val2).ToDecimal(null);
 
         /// <summary>
-        /// Indicates whether the section of <paramref name="val1"/> is greater than the section of <paramref name="val2"/> object.
+        /// Indicates whether the range of <paramref name="val1"/> is greater than the range of <paramref name="val2"/> object.
         /// </summary>
         /// <param name="val1">The object to compare with <paramref name="val2"/>.</param>
         /// <param name="val2">The object to compare with <paramref name="val1"/>.</param>
-        public static bool operator >(Section<TType> val1, Section<TType> val2)
+        public static bool operator >(Range<TType> val1, Range<TType> val2)
             => ((IConvertible)val1).ToDecimal(null) > ((IConvertible)val2).ToDecimal(null);
 
         /// <summary>
-        /// Indicates whether the section of <paramref name="val1"/> is lower than or equal to the section of <paramref name="val2"/> object.
+        /// Indicates whether the range of <paramref name="val1"/> is lower than or equal to the range of <paramref name="val2"/> object.
         /// </summary>
         /// <param name="val1">The object to compare with <paramref name="val2"/>.</param>
         /// <param name="val2">The object to compare with <paramref name="val1"/>.</param>
-        public static bool operator <=(Section<TType> val1, Section<TType> val2)
+        public static bool operator <=(Range<TType> val1, Range<TType> val2)
             => ((IConvertible)val1).ToDecimal(null) <= ((IConvertible)val2).ToDecimal(null);
 
         /// <summary>
-        /// Indicates whether the section of <paramref name="val1"/> is greater than or equal to the section of <paramref name="val2"/> object.
+        /// Indicates whether the range of <paramref name="val1"/> is greater than or equal to the range of <paramref name="val2"/> object.
         /// </summary>
         /// <param name="val1">The object to compare with <paramref name="val2"/>.</param>
         /// <param name="val2">The object to compare with <paramref name="val1"/>.</param>
-        public static bool operator >=(Section<TType> val1, Section<TType> val2)
+        public static bool operator >=(Range<TType> val1, Range<TType> val2)
             => ((IConvertible)val1).ToDecimal(null) >= ((IConvertible)val2).ToDecimal(null);
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
         /// </summary>
         /// <param name="val1">The first of two <see cref="DateTimeOffset"/> to compare.</param>
         /// <param name="val2">The second of two <see cref="DateTimeOffset"/> to compare.</param>
-        public static bool Intersect(Section<TType> val1, Section<TType> val2)
+        public static bool Intersect(Range<TType> val1, Range<TType> val2)
         {
             var val1StartIsLowerThanVal2End = val1.Start.CompareTo(val2.End) <= 0;
             var val2StartIsLowerThanVal1End = val2.Start.CompareTo(val1.End) <= 0;
@@ -126,37 +126,40 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
         /// Checks if a second <typeparamref name="TType"/> intersects with this one.
         /// </summary>
         /// <param name="other">The <typeparamref name="TType"/> to check intersection with.</param>
-        public bool Intersect(Section<TType> other)
+        public bool Intersect(Range<TType> other)
             => Intersect(this, other);
 
         /// <summary>
-        /// Returns the intersected section of two <typeparamref name="TType"/>.
+        /// Returns the intersected range of two <typeparamref name="TType"/>.
         /// </summary>
         /// <param name="val1">The first of two <see cref="DateTimeOffset"/> to compare.</param>
         /// <param name="val2">The second of two <see cref="DateTimeOffset"/> to compare.</param>
-        public static Section<TType> Intersection(Section<TType> val1, Section<TType> val2)
+        public static Range<TType> Intersection(Range<TType> val1, Range<TType> val2)
         {
             if (!Intersect(val1, val2))
                 return default;
 
             var start = Max(val1.Start, val2.Start);
             var end = Min(val1.End, val2.End);
-            return new Section<TType>(start, end);
+            return new Range<TType>(start, end);
         }
 
         /// <summary>
-        /// Returns the intersected section of this and a second <typeparamref name="TType"/>.
+        /// Returns the intersected range of this and a second <typeparamref name="TType"/>.
         /// </summary>
         /// <param name="other">The <typeparamref name="TType"/> to check intersection with.</param>
-        public Section<TType> Intersection(Section<TType> other)
+        public Range<TType> Intersection(Range<TType> other)
             => Intersection(this, other);
 
         /// <summary>
         /// Determines whether this instance contains the <paramref name="other"/>.
         /// </summary>
         /// <param name="other">The <typeparamref name="TType"/> to check containment with.</param>
-        public bool Contains(Section<TType> other)
+        public bool Contains(Range<TType> other)
         {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
             var thisStartIsLowerThanRhsStart = Start.CompareTo(other.Start) <= 0;
             var thisEndIsGreaterThanRhsEnd = End.CompareTo(other.End) >= 0;
             return thisStartIsLowerThanRhsStart && thisEndIsGreaterThanRhsEnd;
@@ -202,13 +205,13 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             => TypeCode.Object;
 
         bool IConvertible.ToBoolean(IFormatProvider provider)
-            => throw new InvalidCastException($"Invalid cast from {nameof(Section)} to {nameof(Boolean)}");
+            => throw new InvalidCastException($"Invalid cast from {nameof(Range)} to {nameof(Boolean)}");
 
         char IConvertible.ToChar(IFormatProvider provider)
-            => throw new InvalidCastException($"Invalid cast from {nameof(Section)} to {nameof(Char)}");
+            => throw new InvalidCastException($"Invalid cast from {nameof(Range)} to {nameof(Char)}");
 
         DateTime IConvertible.ToDateTime(IFormatProvider provider)
-            => throw new InvalidCastException($"Invalid cast from {nameof(Section)} to {nameof(DateTime)}");
+            => throw new InvalidCastException($"Invalid cast from {nameof(Range)} to {nameof(DateTime)}");
 
         string IConvertible.ToString(IFormatProvider provider)
             => this.ToString();
@@ -221,7 +224,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             }
             catch (OverflowException)
             {
-                throw new OverflowException($"Section was too large for a {conversionType.Name}");
+                throw new OverflowException($"Range was too large for a {conversionType.Name}");
             }
         }
 
@@ -230,7 +233,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             var result = ToDouble(End) - ToDouble(Start);
             if (result <= byte.MaxValue)
                 return (byte)result;
-            throw new OverflowException($"Section was too large for a {nameof(Byte)}");
+            throw new OverflowException($"Range was too large for a {nameof(Byte)}");
         }
 
         decimal IConvertible.ToDecimal(IFormatProvider provider)
@@ -241,7 +244,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             }
             catch (OverflowException)
             {
-                throw new OverflowException($"Section was too large for a {nameof(Decimal)}");
+                throw new OverflowException($"Range was too large for a {nameof(Decimal)}");
             }
         }
 
@@ -253,7 +256,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             var result = ToDouble(End) - ToDouble(Start);
             if (result <= short.MaxValue)
                 return (short)result;
-            throw new OverflowException($"Section was too large for a {nameof(Int16)}");
+            throw new OverflowException($"Range was too large for a {nameof(Int16)}");
         }
 
         int IConvertible.ToInt32(IFormatProvider provider)
@@ -261,7 +264,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             var result = ToDouble(End) - ToDouble(Start);
             if (result <= int.MaxValue)
                 return (int)result;
-            throw new OverflowException($"Section was too large for a {nameof(Int32)}");
+            throw new OverflowException($"Range was too large for a {nameof(Int32)}");
         }
 
         long IConvertible.ToInt64(IFormatProvider provider)
@@ -269,7 +272,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             var result = ToDouble(End) - ToDouble(Start);
             if (result <= long.MaxValue)
                 return (long)result;
-            throw new OverflowException($"Section was too large for a {nameof(Int64)}");
+            throw new OverflowException($"Range was too large for a {nameof(Int64)}");
         }
 
         sbyte IConvertible.ToSByte(IFormatProvider provider)
@@ -277,7 +280,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             var result = ToDouble(End) - ToDouble(Start);
             if (result <= sbyte.MaxValue)
                 return (sbyte)result;
-            throw new OverflowException($"Section was too large for a {nameof(SByte)}");
+            throw new OverflowException($"Range was too large for a {nameof(SByte)}");
         }
 
         float IConvertible.ToSingle(IFormatProvider provider)
@@ -285,7 +288,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             var result = ToDouble(End) - ToDouble(Start);
             if (result < float.MaxValue)
                 return (float)result;
-            throw new OverflowException($"Section was too large for a {nameof(Single)}");
+            throw new OverflowException($"Range was too large for a {nameof(Single)}");
         }
 
         ushort IConvertible.ToUInt16(IFormatProvider provider)
@@ -293,7 +296,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             var result = ToDouble(End) - ToDouble(Start);
             if (result <= ushort.MaxValue)
                 return (ushort)result;
-            throw new OverflowException($"Section was too large for a {nameof(UInt16)}");
+            throw new OverflowException($"Range was too large for a {nameof(UInt16)}");
         }
 
         uint IConvertible.ToUInt32(IFormatProvider provider)
@@ -301,7 +304,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             var result = ToDouble(End) - ToDouble(Start);
             if (result <= uint.MaxValue)
                 return (uint)result;
-            throw new OverflowException($"Section was too large for a {nameof(UInt32)}");
+            throw new OverflowException($"Range was too large for a {nameof(UInt32)}");
         }
 
         ulong IConvertible.ToUInt64(IFormatProvider provider)
@@ -309,23 +312,23 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             var result = ToDouble(End) - ToDouble(Start);
             if (result <= ulong.MaxValue)
                 return (ulong)result;
-            throw new OverflowException($"Section was too large for a {nameof(UInt64)}");
+            throw new OverflowException($"Range was too large for a {nameof(UInt64)}");
         }
         #endregion
     }
 
     /// <summary>
-    /// Utility class to create a <see cref="Section{TType}"/>.
+    /// Utility class to create a <see cref="Range{TType}"/>.
     /// </summary>
-    public static class Section
+    public static class Range
     {
         /// <summary>
-        /// Creates a <see cref="Section{TType}"/>.
+        /// Creates a <see cref="Range{TType}"/>.
         /// </summary>
-        /// <typeparam name="TType">The type of the values represented by section.</typeparam>
-        /// <param name="start">The start of section.</param>
-        /// <param name="end">The end of section.</param>
-        public static Section<TType> Create<TType>(TType start, TType end) where TType : IComparable<TType>
-            => new Section<TType>(start, end);
+        /// <typeparam name="TType">The type of the values represented by range.</typeparam>
+        /// <param name="start">The start of range.</param>
+        /// <param name="end">The end of range.</param>
+        public static Range<TType> Create<TType>(TType start, TType end) where TType : IComparable<TType>
+            => new Range<TType>(start, end);
     }
 }
