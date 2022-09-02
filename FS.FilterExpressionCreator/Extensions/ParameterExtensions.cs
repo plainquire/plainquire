@@ -1,12 +1,11 @@
 ﻿using FS.FilterExpressionCreator.Abstractions.Attributes;
-using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace FS.FilterExpressionCreator.Mvc.Extensions
+namespace FS.FilterExpressionCreator.Extensions
 {
     /// <summary>
     /// Extension methods used to handle MVC controller action parameters extension

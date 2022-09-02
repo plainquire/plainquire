@@ -1,5 +1,11 @@
 
 
+# 4.1.0
+
+## Changes
+
+Extension method to convert `EntityFilter<TEntity>` to HTTP query parameters added
+
 # 4.0.1
 
 ## Fixes
@@ -98,17 +104,13 @@ NuGet packages updated
 
 ## Changes
 
-Link to API added to demo page
-
-README updated
+API-Link added to demo page
 
 # 1.0.1
 
 ## Changes
 
-Link added to syntax to demo
-
-`ArgumentException` is thrown when given value cannot be filtered
+Throw `ArgumentException` when given value cannot be filtered
 
 README updated
 

@@ -28,6 +28,7 @@ API: https://filterexpressioncreator.schick-software.de/openapi/
   - [Register Model Binders](#register-model-binders)
   - [Configure Model Binding](#configure-model-binding)
   - [Nested Objects/Lists](#nested-objects/lists)
+  - [Retrieve HTTP query parameters from filter](#Retrieve-HTTP-query-parameters-from-filter)
 - [Support for OpenAPI / Swashbuckle.AspNetCore](#support-for-openapi-/-swashbuckleaspnetcore)
   - [Register OpenAPI Support](#register-openapi-support)
   - [Register XML Documentation](#register-xml-documentation)
@@ -352,6 +353,22 @@ public Task<List<Order>> GetOrders(
     var filter = order.Add(x => x.Address, address);
     // ...
 }
+```
+
+## Retrieve HTTP query parameters from filter
+
+Use the extension method `ToQueryParams()` to convert an `EntityFilter<TEntity>` back to it's HTTP query parameters
+
+```csharp
+var filter = new EntityFilter<Order>()
+    .Add(x => x.Number, FilterOperator.GreaterThan, 200)
+    .Add(x => x.Customer, "Joe");
+
+var queryParams = filter.ToQueryParams();
+
+// Print query parameters
+System.Console.WriteLine(filter);
+// number=>200&customer=Joe
 ```
 
 # Support for OpenAPI / Swashbuckle.AspNetCore

@@ -1,8 +1,12 @@
-﻿using FS.FilterExpressionCreator.Enums;
+﻿using FS.FilterExpressionCreator.Abstractions.Attributes;
+using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Filters;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Web;
 
 namespace FS.FilterExpressionCreator.Extensions
 {
@@ -144,6 +148,32 @@ namespace FS.FilterExpressionCreator.Extensions
             var valueFilters = values?.Select(value => ValueFilter.Create(filterOperator, value)).ToArray();
             entityFilter.Replace(property, valueFilters);
             return entityFilter;
+        }
+
+        /// <summary>
+        /// Converts an entity filter to it's corresponding HTTP query parameters.
+        /// </summary>
+        /// <typeparam name="TEntity">Type of the entity.</typeparam>
+        /// <param name="entityFilter">The filter to act on.</param>
+        public static string ToQueryParams<TEntity>(this EntityFilter<TEntity> entityFilter)
+        {
+            var filteredType = typeof(TEntity);
+            var filterableProperties = filteredType.GetFilterableProperties();
+            var entityFilterAttribute = filteredType.GetCustomAttribute<FilterEntityAttribute>();
+
+            var queryParams = new List<string>();
+            foreach (var property in filterableProperties)
+            {
+                var parameterName = HttpUtility.UrlEncode(property.GetFilterParameterName(entityFilterAttribute?.Prefix));
+                var propertyFilters = entityFilter.PropertyFilters.Where(x => x.PropertyName == property.Name);
+                foreach (var filter in propertyFilters)
+                {
+                    var values = string.Join(',', filter.ValueFilters.Select(v => HttpUtility.UrlEncode(v.ToString())));
+                    queryParams.Add($"{parameterName}={values}");
+                }
+            }
+
+            return string.Join('&', queryParams);
         }
     }
 }

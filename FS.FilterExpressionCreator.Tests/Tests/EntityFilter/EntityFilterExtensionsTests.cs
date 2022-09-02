@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FS.FilterExpressionCreator.Abstractions.Attributes;
 using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
@@ -125,6 +126,37 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
                 .Replace(x => x.ValueA, 1)
                 .Replace(x => x.ValueA, Array.Empty<int>());
             filter3.ToString().Should().Be(string.Empty);
+        }
+
+        [TestMethod]
+        public void WhenConvertedToQueryParams_FilterAttributesAreTakenIntoAccount()
+        {
+            var modelFilter = new EntityFilter<FilterAttributeTestModel>()
+                .Add(x => x.FirstName, "John,Jane")
+                .Add(x => x.LastName, "=Doe")
+                .Add(x => x.Gender, "ShouldNotBeConverted")
+                .Add(x => x.Birthday, ">2020-01-01,ISNULL")
+                .Add(x => x.Birthday, "<2021-01-01");
+
+            var queryParams = modelFilter.ToQueryParams();
+
+            queryParams.Should().Be("testFirstName=John,Jane&testSurname=%3dDoe&testBirthday=%3e2020-01-01,ISNULL&testBirthday=%3c2021-01-01");
+        }
+
+        [ExcludeFromCodeCoverage]
+        [FilterEntity(Prefix = "Test")]
+        [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
+        private class FilterAttributeTestModel
+        {
+            public string FirstName { get; set; }
+
+            [Filter(Name = "Surname")]
+            public string LastName { get; set; }
+
+            [Filter(Visible = false)]
+            public string Gender { get; set; }
+
+            public DateTime? Birthday { get; set; }
         }
     }
 }
