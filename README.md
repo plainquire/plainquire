@@ -25,6 +25,7 @@ API: https://filterexpressioncreator.schick-software.de/openapi/
   - [Default Configuration and Interception](#default-configuration-and-interception)
 - [Using With MVC Controllers](#using-with-mvc-controllers)
   - [Model Binding](#model-binding)
+  - [Filter Sets](#filter-sets)
   - [Register Model Binders](#register-model-binders)
   - [Configure Model Binding](#configure-model-binding)
   - [Nested Objects/Lists](#nested-objects/lists)
@@ -296,10 +297,44 @@ Model binding for MVC controllers is supported
 using FS.FilterExpressionCreator.Filters;
 
 [HttpGet]
-public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order, ...)
+public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order, ...) { }
 ```
 
 The above usage maps the query parameters `OrderNumber` and `OrderCustomer` to the filter parameter  `order`.
+
+## Filter Sets
+
+Multiple entity filters can be combined to a set of filters using the `EntityFilterSetAttribute`.
+
+Instead of
+
+```csharp
+using FS.FilterExpressionCreator.Filters;
+
+[HttpGet]
+public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order, EntityFilter<OrderItem> orderItem, ...) { }
+```
+
+you can write
+
+```csharp
+using FS.FilterExpressionCreator.Filters;
+using FS.FilterExpressionCreator.Abstractions.Attributes;
+
+[HttpGet]
+public Task<List<Order>> GetOrders([FromQuery] OrderFilter filter, ...)
+{ 
+    var order = filter.Order;
+    var orderItem = filter.OrderItem;
+}
+
+[EntityFilterSet]
+public class OrderFilter
+{
+	public EntityFilter<Order> Order { get; set; }
+	public EntityFilter<OrderItem> OrderItem { get; set; }
+}
+```
 
 ## Register Model Binders
 

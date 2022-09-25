@@ -1,9 +1,9 @@
 ﻿using Bogus;
 using Bogus.DataSets;
-using Bogus.Extensions;
 using FS.FilterExpressionCreator.Demo.Database;
 using FS.FilterExpressionCreator.Demo.DTOs;
 using FS.FilterExpressionCreator.Demo.Models;
+using FS.FilterExpressionCreator.Demo.Models.FilterSets;
 using FS.FilterExpressionCreator.Demo.Routing;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
@@ -42,12 +42,11 @@ namespace FS.FilterExpressionCreator.Demo.Controllers
         /// <summary>
         /// Gets filtered freelancers.
         /// </summary>
-        /// <param name="freelancerFilter">The freelancer filter.</param>
-        /// <param name="projectFilter">The project filter.</param>
+        /// <param name="filter">The freelancer/project filter set.</param>
         /// <param name="seed">A seed. Using the same seed returns predictable result.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
         [HttpGet]
-        public Task<FreelancerDto> GetFreelancers([FromQuery] EntityFilter<Freelancer> freelancerFilter, [FromQuery] EntityFilter<Project> projectFilter, int seed = 0, CancellationToken cancellationToken = default)
+        public Task<FreelancerDto> GetFreelancers([FromQuery] FreelancerFilterSet filter, int seed = 0, CancellationToken cancellationToken = default)
         {
             var unfilteredCount = _dbContext.Set<Freelancer>().Count(x => x.Seed == seed);
             if (unfilteredCount == 0)
@@ -56,7 +55,9 @@ namespace FS.FilterExpressionCreator.Demo.Controllers
                 unfilteredCount = _dbContext.Set<Freelancer>().Count(x => x.Seed == seed);
             }
 
-            freelancerFilter ??= new EntityFilter<Freelancer>();
+            var freelancerFilter = filter.Freelancer ?? new EntityFilter<Freelancer>();
+            var projectFilter = filter.Project;
+
             freelancerFilter
                 .Replace(x => x.Projects, projectFilter)
                 .Replace(x => x.Seed, seed);

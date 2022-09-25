@@ -19,6 +19,7 @@ namespace FS.FilterExpressionCreator.Mvc.Extensions
             mvcBuilder.Services.Configure<MvcOptions>(options =>
             {
                 options.ModelBinderProviders.Insert(0, new EntityFilterModelBinderProvider());
+                options.ModelBinderProviders.Insert(0, new EntityFilterSetModelBinderProvider());
             });
 
             return mvcBuilder;

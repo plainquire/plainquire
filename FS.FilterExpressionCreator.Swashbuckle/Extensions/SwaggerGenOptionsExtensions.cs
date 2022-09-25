@@ -20,6 +20,7 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Extensions
         public static SwaggerGenOptions AddFilterExpressionsSupport(this SwaggerGenOptions options, params string[] xmlDocumentationFilePaths)
         {
             options.OperationFilter<EntityFilterParameterReplacer>(new List<string>(xmlDocumentationFilePaths));
+            options.OperationFilter<EntityFilterSetParameterReplacer>(new List<string>(xmlDocumentationFilePaths));
             return options;
         }
     }

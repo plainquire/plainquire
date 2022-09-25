@@ -1,7 +1,6 @@
 ﻿using FS.FilterExpressionCreator.Abstractions.Attributes;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
-using FS.FilterExpressionCreator.Mvc.Extensions;
 using LoxSmoke.DocXml;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
@@ -48,7 +47,12 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters
             }
         }
 
-        private static IEnumerable<EntityFilterParameter> GetEntityFilterParameters(OpenApiOperation operation, OperationFilterContext context)
+        /// <summary>
+        /// Return all parameters of type <see cref="EntityFilter{TEntity}"/> from the given context.
+        /// </summary>
+        /// <param name="operation">The API operation.</param>
+        /// <param name="context">The operation filter context.</param>
+        protected virtual IEnumerable<EntityFilterParameter> GetEntityFilterParameters(OpenApiOperation operation, OperationFilterContext context)
             => context
                 .ApiDescription
                 .ParameterDescriptions
@@ -83,11 +87,26 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters
         private string GetXmlDocumentationSummary(MemberInfo member)
             => _docXmlReaders.Select(x => x.GetMemberComment(member)).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
 
-        private readonly struct EntityFilterParameter
+        /// <summary>
+        /// A single entity filter parameter.
+        /// </summary>
+        protected readonly struct EntityFilterParameter
         {
+            /// <summary>
+            /// Gets the OpenAPI parameter.
+            /// </summary>
             public OpenApiParameter Parameter { get; }
+
+            /// <summary>
+            /// Gets the type of the filtered entity.
+            /// </summary>
             public Type FilteredType { get; }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="EntityFilterParameterReplacer"/> class.
+            /// </summary>
+            /// <param name="parameter">Gets the OpenAPI parameter.</param>
+            /// <param name="filteredType">Gets the type of the filtered entity.</param>
             public EntityFilterParameter(OpenApiParameter parameter, Type filteredType)
             {
                 Parameter = parameter;
