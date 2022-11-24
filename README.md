@@ -1,6 +1,6 @@
-# Filter Expression Creator
+# C# / VB / .NET LINQ Filter Expression Creator
 
-Library to dynamically create lambda expressions to filter lists and database queries.
+Dynamically creates lambda expressions to filter enumerable and database queries via `System.Linq.Enumerable.Where(...)`.
 
 # Demo #
 
