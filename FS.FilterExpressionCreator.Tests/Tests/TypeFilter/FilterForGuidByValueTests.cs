@@ -20,14 +20,14 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
         private static readonly TestModel<Guid>[] _testItems = {
             new() { ValueA = Guid.Parse("df72ce74-686c-4c0f-a11f-5c8e50a213ab") },
             new() { ValueA = Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2") },
-            new() { ValueA = Guid.Parse("9e3aada6-c0cc-4d4d-bea3-7058777e98d1") },
+            new() { ValueA = Guid.Parse("6cda682c-c0cc-4d4d-bea3-7058777e98d1") },
         };
 
         // ReSharper disable RedundantExplicitArrayCreation
         private static readonly FilterTestCase<Guid, Guid>[] _testCases = {
             FilterTestCase.Create(1100, FilterOperator.Default, new Guid[] { Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2") }, (Guid x) => x == Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")),
 
-            FilterTestCase.Create(1200, FilterOperator.Contains, new Guid[] { Guid.Empty }, new FilterExpressionCreationException("Filter operator 'Contains' not allowed for property type 'System.Guid'")),
+            FilterTestCase.Create(1200, FilterOperator.Contains, new Guid[] { Guid.Parse("df72ce74-686c-4c0f-a11f-5c8e50a213ab") }, (Guid x) => x == Guid.Parse("df72ce74-686c-4c0f-a11f-5c8e50a213ab")),
 
             FilterTestCase.Create(1300, FilterOperator.EqualCaseInsensitive, new Guid[] { Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2") }, (Guid x) => x == Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")),
 

@@ -1,4 +1,5 @@
-﻿using FS.FilterExpressionCreator.Abstractions.Models;
+﻿using FS.FilterExpressionCreator.Abstractions.Extensions;
+using FS.FilterExpressionCreator.Abstractions.Models;
 using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
@@ -16,6 +17,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => new[]
             {
                 FilterOperator.Default,
+                FilterOperator.Contains,
                 FilterOperator.EqualCaseSensitive,
                 FilterOperator.EqualCaseInsensitive,
                 FilterOperator.NotEqual,
@@ -32,8 +34,9 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         {
             if (Guid.TryParse(value, out var guidValue))
                 return CreateGuidExpressionByFilterOperator(propertySelector, filterOperator, guidValue);
+            if (filterOperator == FilterOperator.Contains)
+                return CreateGuidContainsExpression(propertySelector, value);
 
-            // TODO: Check how partial GUID handling could be implemented.
             if (configuration.IgnoreParseExceptions)
                 return null;
 
@@ -50,10 +53,21 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
                     return CreateEqualExpression(propertySelector, value);
                 case FilterOperator.NotEqual:
                     return CreateNotEqualExpression(propertySelector, value);
+                case FilterOperator.Contains:
+                    return CreateGuidContainsExpression(propertySelector, value);
                 // TODO: Implement LessThan/LessThanOrEqual/GreaterThan/GreaterThanOrEqual
                 default:
                     throw CreateFilterExpressionCreationException($"Filter operator '{filterOperator}' not allowed for property type '{typeof(TProperty)}'", propertySelector, filterOperator, value);
             }
+        }
+
+        private static Expression CreateGuidContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object value)
+        {
+            var valueToUpper = Expression.Constant(value.ToString().ToUpper(), typeof(string));
+            var propertyToString = propertySelector.Body.ObjectToString();
+            var propertyToUpper = propertyToString.StringToUpper();
+            var propertyContainsValue = propertyToUpper.StringContains(valueToUpper);
+            return propertyContainsValue;
         }
     }
 }

@@ -6,6 +6,8 @@
 
 Support for numeric contains operator added
 
+Support for GUID contains operator added
+
 # 4.2.0
 
 ## Changes
