@@ -5,7 +5,7 @@
 
   <ItemGroup>
     <PackageReference Include="Chronic.Core" Version="0.4.0" />
-    <PackageReference Include="System.Text.Json" Version="6.0.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.7" />
   </ItemGroup>
 
   <ItemGroup>
