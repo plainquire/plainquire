@@ -16,6 +16,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         private static readonly MethodInfo _stringToUpperMethodInfo = typeof(string).GetMethod(nameof(string.ToUpper), Type.EmptyTypes);
         private static readonly MethodInfo _stringContainsMethodInfo = typeof(string).GetMethod(nameof(string.Contains), new[] { typeof(string) });
         private static readonly MethodInfo _enumerableAnyMethodInfo = typeof(Enumerable).GetMethods().First(method => method.Name == nameof(Enumerable.Any) && method.GetParameters().Select(x => x.Name).SequenceEqual(new[] { "source", "predicate" }));
+        private static readonly MethodInfo _objectToStringMethodInfo = typeof(object).GetMethods().First(method => method.Name == nameof(ToString));
 
         /// <summary>
         /// Combines a property and a expression body to a lambda expression.
@@ -149,6 +150,13 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
 
             return memberExpression.Member.Name;
         }
+
+        /// <summary>
+        /// Applies a call to <see cref="object.ToString()"/> to the given expression.
+        /// </summary>
+        /// <param name="expression">The expression to add the call.</param>
+        public static Expression ObjectToString(this Expression expression)
+            => Expression.Call(expression, _objectToStringMethodInfo);
 
         /// <summary>
         /// Applies a call to <see cref="string.ToUpper()"/> to the given expression.

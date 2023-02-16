@@ -1,5 +1,17 @@
 
 
+# 4.3.0
+
+## Changes
+
+Support for numeric contains operator added
+
+# 4.2.0
+
+## Changes
+
+Support for entity filter sets added
+
 # 4.1.0
 
 ## Changes

@@ -1,5 +1,4 @@
 ﻿using FS.FilterExpressionCreator.Enums;
-using FS.FilterExpressionCreator.Exceptions;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Extensions;
 using FS.FilterExpressionCreator.Tests.Models;
@@ -35,6 +34,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
             new() { ValueA = -0f },
             new() { ValueA = +5.5f },
             new() { ValueA = +9f },
+            new() { ValueA = null },
         };
 
         // ReSharper disable RedundantExplicitArrayCreation
@@ -46,7 +46,10 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
             FilterTestCase.Create(1101, FilterOperator.Default, new float?[] { -10 }, (float? _) => NONE),
             FilterTestCase.Create(1102, FilterOperator.Default, new float?[] { +5.5f }, (float? x) => x == +5.5f),
 
-            FilterTestCase.Create(1200, FilterOperator.Contains, new float?[] { 0 }, new FilterExpressionCreationException("Filter operator 'Contains' not allowed for property type 'System.Nullable`1[System.Single]'")),
+            FilterTestCase.Create(1200, FilterOperator.Contains, new float?[] { +5f }, (float? x) => x == +5.5f || x == -5.5f),
+            FilterTestCase.Create(1201, FilterOperator.Contains, new float?[] { -5f }, (float? x) => x == -5.5f),
+            FilterTestCase.Create(1202, FilterOperator.Contains, new float?[] { +3f }, (float? _) => NONE),
+            FilterTestCase.Create(1203, FilterOperator.Contains, new float?[] { +0f }, (float? x) => x == 0),
 
             FilterTestCase.Create(1300, FilterOperator.EqualCaseInsensitive, new float?[] { -5.5f }, (float? x) => x == -5.5f),
             FilterTestCase.Create(1301, FilterOperator.EqualCaseInsensitive, new float?[] { -10 }, (float? _) => NONE),
@@ -69,11 +72,11 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
             FilterTestCase.Create(1702, FilterOperator.LessThanOrEqual, new float?[] { +5.5f }, (float? x) => x <= +5.5f),
 
             FilterTestCase.Create(1800, FilterOperator.GreaterThan, new float?[] { -5.5f }, (float? x) => x > -5.5f),
-            FilterTestCase.Create(1801, FilterOperator.GreaterThan, new float?[] { -10 }, (float? _) => ALL),
+            FilterTestCase.Create(1801, FilterOperator.GreaterThan, new float?[] { -10 }, (float? x) => x >=-10f),
             FilterTestCase.Create(1802, FilterOperator.GreaterThan, new float?[] { +5.5f }, (float? x) => x > +5.5f),
 
             FilterTestCase.Create(1900, FilterOperator.GreaterThanOrEqual, new float?[] { -5.5f }, (float? x) => x >= -5.5f),
-            FilterTestCase.Create(1901, FilterOperator.GreaterThanOrEqual, new float?[] { -10 }, (float? _) => ALL),
+            FilterTestCase.Create(1901, FilterOperator.GreaterThanOrEqual, new float?[] { -10 }, (float? x) => x >=-10f),
             FilterTestCase.Create(1902, FilterOperator.GreaterThanOrEqual, new float?[] { +5.5f }, (float? x) => x >= +5.5f),
 
             FilterTestCase.Create(2000, FilterOperator.IsNull, new float?[] { default }, (float? x) => x == null),

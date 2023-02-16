@@ -46,7 +46,10 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
             FilterTestCase.Create(1103, FilterOperator.Default, new float[] { -10 }, (float _) => NONE),
             FilterTestCase.Create(1104, FilterOperator.Default, new float[] { +5.5f }, (float x) => x == +5.5f),
 
-            FilterTestCase.Create(1200, FilterOperator.Contains, new float[] { 0 }, new FilterExpressionCreationException("Filter operator 'Contains' not allowed for property type 'System.Single'")),
+            FilterTestCase.Create(1200, FilterOperator.Contains, new float[] { +5f }, (float x) => x == +5.5f || x == -5.5f),
+            FilterTestCase.Create(1201, FilterOperator.Contains, new float[] { -5f }, (float x) => x == -5.5f),
+            FilterTestCase.Create(1202, FilterOperator.Contains, new float[] { +3f }, (float _) => NONE),
+            FilterTestCase.Create(1203, FilterOperator.Contains, new float[] { +0f }, (float x) => x == 0),
 
             FilterTestCase.Create(1302, FilterOperator.EqualCaseInsensitive, new float[] { -5.5f }, (float x) => x == -5.5f),
             FilterTestCase.Create(1303, FilterOperator.EqualCaseInsensitive, new float[] { -10 }, (float _) => NONE),

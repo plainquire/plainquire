@@ -21,6 +21,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
             new() { ValueA = -0 },
             new() { ValueA = +5 },
             new() { ValueA = +9 },
+            new() { ValueA = null },
         };
 
         private static readonly FilterTestCase<short?, short?>[] _testCases = {
@@ -30,7 +31,10 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
             FilterTestCase.Create<short?>(1103, "-10", _ => NONE),
             FilterTestCase.Create<short?>(1104, "+5", x => x == +5),
 
-            FilterTestCase.Create<short?>(1200, "~null", new FilterExpressionCreationException("Filter operator 'Contains' not allowed for property type 'System.Nullable`1[System.Int16]'")),
+            FilterTestCase.Create<short?>(1200, "~5", x => x == +5 || x == -5),
+            FilterTestCase.Create<short?>(1201, "~-5", x => x == -5),
+            FilterTestCase.Create<short?>(1202, "~3", _ => NONE),
+            FilterTestCase.Create<short?>(1203, "~0", x => x == 0),
 
             FilterTestCase.Create<short?>(1300, "=null", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<short?>(1301, "=", new FilterExpressionCreationException("Unable to parse given filter value")),
@@ -65,13 +69,13 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
             FilterTestCase.Create<short?>(1800, ">null", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<short?>(1801, ">", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<short?>(1802, ">-5", x => x > -5),
-            FilterTestCase.Create<short?>(1803, ">-10", _ => ALL),
+            FilterTestCase.Create<short?>(1803, ">-10", x => x >= -10),
             FilterTestCase.Create<short?>(1804, ">+5", x => x > +5),
 
             FilterTestCase.Create<short?>(1900, ">=null", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<short?>(1901, ">=", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<short?>(1902, ">=-5", x => x >= -5),
-            FilterTestCase.Create<short?>(1903, ">=-10", _ => ALL),
+            FilterTestCase.Create<short?>(1903, ">=-10", x => x >= -10),
             FilterTestCase.Create<short?>(1904, ">=+5", x => x >= +5),
 
             FilterTestCase.Create<short?>(2000, "ISNULL", x => x == null),

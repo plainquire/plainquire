@@ -36,7 +36,10 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
             FilterTestCase.Create<float>(1104, "+5.5", x => x == +5.5f, CultureEnUs),
             FilterTestCase.Create<float>(1105, "-5.5,+5.5", x => x == -5.5f || x == +5.5f, CultureEnUs),
 
-            FilterTestCase.Create<float>(1200, "~null", new FilterExpressionCreationException("Filter operator 'Contains' not allowed for property type 'System.Single'")),
+            FilterTestCase.Create<float>(1200, "~5", x => x == +5.5f || x == -5.5f),
+            FilterTestCase.Create<float>(1201, "~-5", x => x == -5.5f),
+            FilterTestCase.Create<float>(1202, "~3", _ => NONE),
+            FilterTestCase.Create<float>(1203, "~0", x => x == 0),
 
             FilterTestCase.Create<float>(1300, "=null", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<float>(1301, "=", new FilterExpressionCreationException("Unable to parse given filter value")),

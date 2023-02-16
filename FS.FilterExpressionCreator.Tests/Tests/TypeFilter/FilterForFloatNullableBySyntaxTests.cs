@@ -21,6 +21,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
             new() { ValueA = -0f },
             new() { ValueA = +5.5f },
             new() { ValueA = +9f },
+            new() { ValueA = null },
         };
 
         // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -33,7 +34,10 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
             FilterTestCase.Create<float?>(1103, "-10", _ => NONE),
             FilterTestCase.Create<float?>(1104, "+5.5", x => x == +5.5f, CultureEnUs),
 
-            FilterTestCase.Create<float?>(1200, "~null", new FilterExpressionCreationException("Filter operator 'Contains' not allowed for property type 'System.Nullable`1[System.Single]'")),
+            FilterTestCase.Create<float?>(1200, "~5", x => x == +5.5f || x == -5.5f),
+            FilterTestCase.Create<float?>(1201, "~-5", x => x == -5.5f),
+            FilterTestCase.Create<float?>(1202, "~3", _ => NONE),
+            FilterTestCase.Create<float?>(1203, "~0", x => x == 0),
 
             FilterTestCase.Create<float?>(1300, "=null", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<float?>(1301, "=", new FilterExpressionCreationException("Unable to parse given filter value")),
@@ -68,13 +72,13 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
             FilterTestCase.Create<float?>(1800, ">null", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<float?>(1801, ">", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<float?>(1802, ">-5.5", x => x > -5.5f, CultureEnUs),
-            FilterTestCase.Create<float?>(1803, ">-10", _ => ALL),
+            FilterTestCase.Create<float?>(1803, ">-10", x => x > -10f, CultureEnUs),
             FilterTestCase.Create<float?>(1804, ">+5.5", x => x > +5.5f, CultureEnUs),
 
             FilterTestCase.Create<float?>(1900, ">=null", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<float?>(1901, ">=", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<float?>(1902, ">=-5.5", x => x >= -5.5f, CultureEnUs),
-            FilterTestCase.Create<float?>(1903, ">=-10", _ => ALL),
+            FilterTestCase.Create<float?>(1903, ">=-10", x => x > -10f, CultureEnUs),
             FilterTestCase.Create<float?>(1904, ">=+5.5", x => x >= +5.5f, CultureEnUs),
 
             FilterTestCase.Create<float?>(2000, "ISNULL", x => x == null),

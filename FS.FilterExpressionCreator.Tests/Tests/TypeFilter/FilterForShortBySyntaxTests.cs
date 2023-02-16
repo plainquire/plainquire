@@ -30,7 +30,10 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
             FilterTestCase.Create<short>(1103, "-10", _ => NONE),
             FilterTestCase.Create<short>(1104, "+5", x => x == +5),
 
-            FilterTestCase.Create<short>(1200, "~null", new FilterExpressionCreationException("Filter operator 'Contains' not allowed for property type 'System.Int16'")),
+            FilterTestCase.Create<short>(1200, "~5", x => x == +5 || x == -5),
+            FilterTestCase.Create<short>(1201, "~-5", x => x == -5),
+            FilterTestCase.Create<short>(1202, "~3", _ => NONE),
+            FilterTestCase.Create<short>(1203, "~0", x => x == 0),
 
             FilterTestCase.Create<short>(1300, "=null", new FilterExpressionCreationException("Unable to parse given filter value")),
             FilterTestCase.Create<short>(1301, "=", new FilterExpressionCreationException("Unable to parse given filter value")),

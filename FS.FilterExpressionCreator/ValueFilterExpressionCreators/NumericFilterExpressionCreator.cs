@@ -1,4 +1,5 @@
-﻿using FS.FilterExpressionCreator.Abstractions.Models;
+﻿using FS.FilterExpressionCreator.Abstractions.Extensions;
+using FS.FilterExpressionCreator.Abstractions.Models;
 using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
@@ -19,6 +20,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => new[]
             {
                 FilterOperator.Default,
+                FilterOperator.Contains,
                 FilterOperator.EqualCaseInsensitive,
                 FilterOperator.EqualCaseSensitive,
                 FilterOperator.NotEqual,
@@ -53,13 +55,14 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 
             switch (filterOperator)
             {
-                // Implement contains
                 case FilterOperator.Default:
                 case FilterOperator.EqualCaseInsensitive:
                 case FilterOperator.EqualCaseSensitive:
                     return CreateEqualExpression(propertySelector, typedValue);
                 case FilterOperator.NotEqual:
                     return CreateNotEqualExpression(propertySelector, typedValue);
+                case FilterOperator.Contains:
+                    return CreateNumericContainsExpression(propertySelector, typedValue);
                 case FilterOperator.LessThan:
                     return CreateLessThanExpression(propertySelector, typedValue);
                 case FilterOperator.LessThanOrEqual:
@@ -71,6 +74,15 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
                 default:
                     throw CreateFilterExpressionCreationException($"Filter operator '{filterOperator}' not allowed for property type '{typeof(TProperty)}'", propertySelector, filterOperator, typedValue);
             }
+        }
+
+        private static Expression CreateNumericContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, TProperty typedValue)
+        {
+            var valueToUpper = Expression.Constant(typedValue.ToString().ToUpper(), typeof(string));
+            var propertyToString = propertySelector.Body.ObjectToString();
+            var propertyToUpper = propertyToString.StringToUpper();
+            var propertyContainsValue = propertyToUpper.StringContains(valueToUpper);
+            return propertyContainsValue;
         }
     }
 }
