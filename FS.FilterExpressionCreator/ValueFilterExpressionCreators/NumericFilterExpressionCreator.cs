@@ -76,9 +76,19 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             }
         }
 
-        private static Expression CreateNumericContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, TProperty typedValue)
+        /// <summary>
+        /// Creates numeric contains expression.
+        /// </summary>
+        /// <typeparam name="TEntity">Type of the entity.</typeparam>
+        /// <typeparam name="TProperty">Type of the property.</typeparam>
+        /// <param name="propertySelector">The property selector.</param>
+        /// <param name="value">The value to check for.</param>
+        /// <returns>
+        /// The new numeric contains expression.
+        /// </returns>
+        public static Expression CreateNumericContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object value)
         {
-            var valueToUpper = Expression.Constant(typedValue.ToString().ToUpper(), typeof(string));
+            var valueToUpper = Expression.Constant(value.ToString().ToUpper(), typeof(string));
             var propertyToString = propertySelector.Body.ObjectToString();
             var propertyToUpper = propertyToString.StringToUpper();
             var propertyContainsValue = propertyToUpper.StringContains(valueToUpper);

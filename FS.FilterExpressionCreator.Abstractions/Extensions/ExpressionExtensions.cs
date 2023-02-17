@@ -104,17 +104,6 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         // ReSharper restore CommentTypo
 
         /// <summary>
-        /// Adds a cast to the given expression.
-        /// </summary>
-        /// <param name="expression">The expression to cast.</param>
-        /// <param name="sourceType">The type of the source.</param>
-        /// <param name="destinationType">The type to cast to.</param>
-        public static Expression Cast(this Expression expression, Type sourceType, Type destinationType)
-            => sourceType != destinationType
-                ? Expression.Convert(expression, destinationType)
-                : expression;
-
-        /// <summary>
         /// Creates typed property selector for the given type.
         /// </summary>
         /// <param name="declaringType">The Type of the declaring class/struct/record.</param>
@@ -157,6 +146,17 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         /// <param name="expression">The expression to add the call.</param>
         public static Expression ObjectToString(this Expression expression)
             => Expression.Call(expression, _objectToStringMethodInfo);
+
+        /// <summary>
+        /// Adds a cast to the given expression.
+        /// </summary>
+        /// <param name="expression">The expression to cast.</param>
+        /// <param name="sourceType">The type of the source.</param>
+        /// <param name="destinationType">The type to cast to.</param>
+        public static Expression Cast(this Expression expression, Type sourceType, Type destinationType)
+            => sourceType != destinationType
+                ? Expression.Convert(expression, destinationType)
+                : expression;
 
         /// <summary>
         /// Applies a call to <see cref="string.ToUpper()"/> to the given expression.

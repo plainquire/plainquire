@@ -49,8 +49,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         {
             public Expression<Func<TEntity, bool>> CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, Filters.ValueFilter[] filters, FilterConfiguration configuration)
             {
-                var stringPropertyIsFiltered = propertyInfo.PropertyType == typeof(string);
-                if (!stringPropertyIsFiltered)
+                var filteredPropertyIsTypeOfString = propertyInfo.PropertyType == typeof(string);
+                if (!filteredPropertyIsTypeOfString)
                     return null;
 
                 var filterToModify = filters
