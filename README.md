@@ -159,7 +159,7 @@ var addressFilter = new EntityFilter<Address>()
     .Add(x => x.City, "==Berlin");
 
 var filter = new EntityFilter<Order>()
-    .Add(x => x.Address, addressFilter);
+    .AddNested(x => x.Address, addressFilter);
 
 // Print
 System.Console.WriteLine(filter);
@@ -174,7 +174,7 @@ var itemFilter = new EntityFilter<OrderItem>()
     .Add(x => x.Article, "==Laptop");
 
 var filter = new EntityFilter<Order>()
-    .Add(x => x.Items, itemFilter);
+    .AddNested(x => x.Items, itemFilter);
 
 // Print
 System.Console.WriteLine(filter);
@@ -385,7 +385,7 @@ public Task<List<Order>> GetOrders(
     [FromQuery] EntityFilter<Address> address
 )
 {
-    var filter = order.Add(x => x.Address, address);
+    var filter = order.AddNested(x => x.Address, address);
     // ...
 }
 ```

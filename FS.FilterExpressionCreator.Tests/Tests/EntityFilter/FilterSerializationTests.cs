@@ -26,8 +26,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 
             var entityFilter = new EntityFilter<TestModel<string>>()
                 .Replace(x => x.ValueA, "Hello")
-                .Replace(x => x.NestedObject, nestedEntityFilterA)
-                .Replace(x => x.NestedList, nestedEntityFilterB);
+                .ReplaceNested(x => x.NestedObject, nestedEntityFilterA)
+                .ReplaceNested(x => x.NestedList, nestedEntityFilterB);
 
             var netJson = NetSerializer.Serialize(entityFilter);
             var newtonJson = NewtonSerializer.SerializeObject(entityFilter, JsonConverterExtensions.NewtonsoftConverters);

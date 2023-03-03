@@ -67,7 +67,7 @@ namespace FS.FilterExpressionCreator.Filters
         /// <typeparam name="TProperty">The type of the property.</typeparam>
         /// <param name="property">The property to filter.</param>
         /// <param name="nestedFilter">The nested class filter.</param>
-        public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TProperty> nestedFilter)
+        public EntityFilter<TEntity> AddNested<TProperty>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TProperty> nestedFilter)
         {
             if (nestedFilter == null)
                 return this;
@@ -75,6 +75,11 @@ namespace FS.FilterExpressionCreator.Filters
             AddInternal(property, nestedFilter);
             return this;
         }
+
+        /// <inheritdoc cref="AddNested{TProperty}(Expression{Func{TEntity, TProperty}}, EntityFilter{TProperty})" />
+        [Obsolete("Use " + nameof(AddNested) + " instead.")]
+        public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TProperty> nestedFilter)
+            => AddNested(property, nestedFilter);
 
         /// <summary>
         /// Adds a nested filter for the given enumerable property. Existing filters for the same property are preserved.
@@ -83,7 +88,7 @@ namespace FS.FilterExpressionCreator.Filters
         /// <typeparam name="TNested">The type of the nested filter.</typeparam>
         /// <param name="property">The property to filter. Must implement <see cref="IEnumerable{T}"/>.</param>
         /// <param name="nestedFilter">The nested class filter.</param>
-        public EntityFilter<TEntity> Add<TProperty, TNested>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TNested> nestedFilter)
+        public EntityFilter<TEntity> AddNested<TProperty, TNested>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TNested> nestedFilter)
             where TProperty : IEnumerable<TNested>
         {
             if (nestedFilter == null)
@@ -92,6 +97,12 @@ namespace FS.FilterExpressionCreator.Filters
             AddInternal(property, nestedFilter);
             return this;
         }
+
+        /// <inheritdoc cref="AddNested{TProperty, TNested}(Expression{Func{TEntity, TProperty}}, EntityFilter{TNested})" />
+        [Obsolete("Use " + nameof(AddNested) + " instead.")]
+        public EntityFilter<TEntity> Add<TProperty, TNested>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TNested> nestedFilter)
+            where TProperty : IEnumerable<TNested>
+            => AddNested(property, nestedFilter);
 
         /// <summary>
         /// Replaces the filter for the given property. Existing filters for the same property are removed.
@@ -111,7 +122,7 @@ namespace FS.FilterExpressionCreator.Filters
         /// <typeparam name="TProperty">The type of the property.</typeparam>
         /// <param name="property">The property to filter.</param>
         /// <param name="nestedFilter">The nested class filter.</param>
-        public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TProperty> nestedFilter)
+        public EntityFilter<TEntity> ReplaceNested<TProperty>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TProperty> nestedFilter)
         {
             if (nestedFilter == null)
                 return Clear(property);
@@ -119,6 +130,11 @@ namespace FS.FilterExpressionCreator.Filters
             ReplaceInternal(property, nestedFilter);
             return this;
         }
+
+        /// <inheritdoc cref="ReplaceNested{TProperty}(Expression{Func{TEntity, TProperty}}, EntityFilter{TProperty})" />
+        [Obsolete("Use " + nameof(ReplaceNested) + " instead.")]
+        public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TProperty> nestedFilter)
+            => ReplaceNested(property, nestedFilter);
 
         /// <summary>
         /// Replaces the nested filter for the given enumerable property. Existing filters for the same property are removed.
@@ -127,7 +143,7 @@ namespace FS.FilterExpressionCreator.Filters
         /// <typeparam name="TNested">The type of the nested filter.</typeparam>
         /// <param name="property">The property to filter. Must implement <see cref="IEnumerable{T}"/>.</param>
         /// <param name="nestedFilter">The nested class filter.</param>
-        public EntityFilter<TEntity> Replace<TProperty, TNested>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TNested> nestedFilter)
+        public EntityFilter<TEntity> ReplaceNested<TProperty, TNested>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TNested> nestedFilter)
             where TProperty : IEnumerable<TNested>
         {
             if (nestedFilter == null)
@@ -136,6 +152,12 @@ namespace FS.FilterExpressionCreator.Filters
             ReplaceInternal(property, nestedFilter);
             return this;
         }
+
+        /// <inheritdoc cref="ReplaceNested{TProperty, TNested}(Expression{Func{TEntity, TProperty}}, EntityFilter{TNested})" />
+        [Obsolete("Use " + nameof(ReplaceNested) + " instead.")]
+        public EntityFilter<TEntity> Replace<TProperty, TNested>(Expression<Func<TEntity, TProperty>> property, EntityFilter<TNested> nestedFilter)
+            where TProperty : IEnumerable<TNested>
+            => ReplaceNested(property, nestedFilter);
 
         /// <summary>
         /// Remove all filters for the specified property.

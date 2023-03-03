@@ -59,7 +59,7 @@ namespace FS.FilterExpressionCreator.Demo.Controllers
             var projectFilter = filter.Project;
 
             freelancerFilter
-                .Replace(x => x.Projects, projectFilter)
+                .ReplaceNested(x => x.Projects, projectFilter)
                 .Replace(x => x.Seed, seed);
 
             var query = _dbContext.Set<Freelancer>().Include(x => x.Projects).Where(freelancerFilter);

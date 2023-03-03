@@ -23,7 +23,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 
             var outerFilter = new EntityFilter<TestModel<string>>()
                 .Replace(x => x.ValueA, "=OuterA")
-                .Replace(x => x.NestedObject, nestedFilter);
+                .ReplaceNested(x => x.NestedObject, nestedFilter);
 
             var testItems = new List<TestModel<string>>
             {
@@ -46,7 +46,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 
             var outerFilter = new EntityFilter<TestModel<string>>()
                 .Replace(x => x.ValueA, "=OuterA")
-                .Replace(x => x.NestedList, nestedFilter);
+                .ReplaceNested(x => x.NestedList, nestedFilter);
 
             var testItems = new List<TestModel<string>>
             {
@@ -76,7 +76,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
                 .Replace(x => x.Value, "=NestedA");
 
             var outerFilter = new EntityFilter<TestModel<string>>()
-                .Add(x => x.NestedObject, nestedFilter);
+                .AddNested(x => x.NestedObject, nestedFilter);
 
             var items = new TestModel<string>[] { new() { NestedObject = null } };
 
@@ -91,7 +91,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
                 .Replace(x => x.Value, "=NestedA");
 
             var outerFilter = new EntityFilter<TestModel<string>>()
-                .Add(x => x.NestedList, nestedFilter);
+                .AddNested(x => x.NestedList, nestedFilter);
 
             var items = new TestModel<string>[] { new() { NestedList = null } };
 
@@ -105,7 +105,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         {
             var outerFilter = new EntityFilter<TestModel<string>>()
                 .Add(x => x.ValueA, "A")
-                .Add(x => x.NestedList, (EntityFilter<TestModelNested>)null);
+                .AddNested(x => x.NestedList, (EntityFilter<TestModelNested>)null);
 
             var testItems = new TestModel<string>[] { new() { ValueA = "A" } };
 

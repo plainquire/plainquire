@@ -243,13 +243,13 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
                 .Add(x => x.Value, FilterOperator.EqualCaseSensitive, "A");
 
             var objectFilter = new EntityFilter<TestModel<string>>()
-                .Add(x => x.NestedObject, nestedFilter);
+                .AddNested(x => x.NestedObject, nestedFilter);
             var retrievedObjectFilter = objectFilter
                 .GetNestedFilter(x => x.NestedObject);
             retrievedObjectFilter.Should().BeEquivalentTo(nestedFilter);
 
             var listFilter = new EntityFilter<TestModel<string>>()
-                .Add(x => x.NestedList, nestedFilter);
+                .AddNested(x => x.NestedList, nestedFilter);
             var retrievedListFilter = listFilter
                 .GetNestedFilter<List<TestModelNested>, TestModelNested>(x => x.NestedList);
             retrievedListFilter.Should().BeEquivalentTo(nestedFilter);

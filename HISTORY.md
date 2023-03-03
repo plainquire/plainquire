@@ -1,5 +1,11 @@
 
 
+# 4.4.0
+
+## Changes
+
+Renamed methods to add/replace nested filters from 'Add|Replace(...)' to 'AddNested|ReplaceNested(...)'
+
 # 4.3.0
 
 ## Changes
