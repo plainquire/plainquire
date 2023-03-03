@@ -21,7 +21,7 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters
         { }
 
         /// <inheritdoc />
-        protected override IEnumerable<EntityFilterParameter> GetEntityFilterParameters(OpenApiOperation operation, OperationFilterContext context)
+        protected override List<EntityFilterParameter> GetEntityFilterParameters(OpenApiOperation operation, OperationFilterContext context)
             => context
                 .ApiDescription
                 .ParameterDescriptions

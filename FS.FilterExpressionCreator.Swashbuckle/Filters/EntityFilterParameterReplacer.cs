@@ -3,6 +3,8 @@ using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
 using LoxSmoke.DocXml;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -19,6 +21,8 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters
     /// <seealso cref="IOperationFilter" />
     public class EntityFilterParameterReplacer : IOperationFilter
     {
+        private const string ENTITY_EXTENSION_PREFIX = "x-entity-filter-";
+
         private readonly List<DocXmlReader> _docXmlReaders;
 
         /// <summary>
@@ -45,6 +49,9 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters
                 foreach (var parameter in propertyParameters)
                     operation.Parameters.Insert(parameterIndex++, parameter);
             }
+
+            var hasParametersFromEntityFilter = entityFilterParameters.Any();
+            operation.Extensions[ENTITY_EXTENSION_PREFIX + "has-filter-parameters"] = new OpenApiBoolean(hasParametersFromEntityFilter);
         }
 
         /// <summary>
@@ -52,7 +59,7 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters
         /// </summary>
         /// <param name="operation">The API operation.</param>
         /// <param name="context">The operation filter context.</param>
-        protected virtual IEnumerable<EntityFilterParameter> GetEntityFilterParameters(OpenApiOperation operation, OperationFilterContext context)
+        protected virtual List<EntityFilterParameter> GetEntityFilterParameters(OpenApiOperation operation, OperationFilterContext context)
             => context
                 .ApiDescription
                 .ParameterDescriptions
@@ -69,7 +76,7 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters
         private static bool IsEntityFilterParameter(ApiParameterDescription description)
             => description.ParameterDescriptor.ParameterType.IsGenericEntityFilter();
 
-        private IEnumerable<OpenApiParameter> ExpandToPropertyParameters(Type filteredType)
+        private List<OpenApiParameter> ExpandToPropertyParameters(Type filteredType)
         {
             var filterableProperties = filteredType.GetFilterableProperties();
             var entityFilterAttribute = filteredType.GetCustomAttribute<FilterEntityAttribute>();
@@ -81,7 +88,12 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters
                     Description = GetXmlDocumentationSummary(property),
                     Schema = new OpenApiSchema { Type = "string" },
                     In = ParameterLocation.Query,
-                });
+                    Extensions = new Dictionary<string, IOpenApiExtension>
+                    {
+                        [ENTITY_EXTENSION_PREFIX + "property-type"] = new OpenApiString(property.PropertyType.GetUnderlyingType().Name)
+                    },
+                })
+                .ToList();
         }
 
         private string GetXmlDocumentationSummary(MemberInfo member)

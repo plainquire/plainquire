@@ -2,6 +2,10 @@
 
 # 4.4.0
 
+## New Features
+
+Added extended type information for parameters created by filters
+
 ## Changes
 
 Renamed methods to add/replace nested filters from 'Add|Replace(...)' to 'AddNested|ReplaceNested(...)'
