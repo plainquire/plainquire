@@ -1,5 +1,15 @@
 
 
+# 4.5.0
+
+## New Features
+
+Method `GetPropertyFilterValues` added to `EntityFilter` to retrieve filter values
+
+## Changes
+
+Method to get filter syntax for property renamed from `GetPropertyFilter` to `GetPropertyFilterSyntax`
+
 # 4.4.0
 
 ## New Features
@@ -8,7 +18,7 @@ Added extended type information for parameters created by filters
 
 ## Changes
 
-Renamed methods to add/replace nested filters from 'Add|Replace(...)' to 'AddNested|ReplaceNested(...)'
+Methods to add/replace for nested filters renamed from `Add|Replace(...)` to `AddNested|ReplaceNested(...)`
 
 # 4.3.0
 

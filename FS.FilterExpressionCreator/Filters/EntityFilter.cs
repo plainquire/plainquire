@@ -23,13 +23,26 @@ namespace FS.FilterExpressionCreator.Filters
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
     public class EntityFilter<TEntity> : EntityFilter
     {
+        /// <inheritdoc cref="GetPropertyFilterSyntax{TProperty}(Expression{Func{TEntity, TProperty}})" />
+        [Obsolete("Use " + nameof(GetPropertyFilterSyntax) + " instead.")]
+        public string GetPropertyFilter<TProperty>(Expression<Func<TEntity, TProperty>> property)
+            => GetPropertyFilterSyntax(property);
+
         /// <summary>
-        /// Gets the filter syntax for the given <typeparamref name="TProperty"/>.
+        /// Gets the filter syntax for the given <paramref name="property"/>.
         /// </summary>
         /// <typeparam name="TProperty">The type of the property.</typeparam>
         /// <param name="property">The property to get the filter for.</param>
-        public string GetPropertyFilter<TProperty>(Expression<Func<TEntity, TProperty>> property)
-            => GetPropertyFilterInternal(property);
+        public string GetPropertyFilterSyntax<TProperty>(Expression<Func<TEntity, TProperty>> property)
+            => GetPropertyFilterSyntaxInternal(property);
+
+        /// <summary>
+        /// Get the filters applied to the given property.
+        /// </summary>
+        /// <typeparam name="TProperty">Type of the property.</typeparam>
+        /// <param name="property">The property to get the filter for.</param>
+        public ValueFilter[] GetPropertyFilterValues<TProperty>(Expression<Func<TEntity, TProperty>> property)
+            => GetPropertyFilterValuesInternal(property);
 
         /// <summary>
         /// Gets the <see cref="EntityFilter{TProperty}"/> for the given nested class <typeparamref name="TProperty"/>.
@@ -283,11 +296,23 @@ namespace FS.FilterExpressionCreator.Filters
         /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
         /// <typeparam name="TProperty">The type of the property.</typeparam>
         /// <param name="property">The property to get the filter for.</param>
-        protected string GetPropertyFilterInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> property)
+        protected string GetPropertyFilterSyntaxInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> property)
         {
             var propertyName = property.GetPropertyName();
             var propertyFilter = PropertyFilters.FirstOrDefault(x => x.PropertyName == propertyName);
             return ValueFilterExtensions.ToString(propertyFilter?.ValueFilters);
+        }
+
+        /// <summary>
+        /// Get the filters applied to the given property.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
+        /// <typeparam name="TProperty">Type of the property.</typeparam>
+        /// <param name="property">The property to get the filter for.</param>
+        protected ValueFilter[] GetPropertyFilterValuesInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> property)
+        {
+            var propertyName = property.GetPropertyName();
+            return PropertyFilters.FirstOrDefault(predicate => predicate.PropertyName == propertyName)?.ValueFilters;
         }
 
         /// <summary>

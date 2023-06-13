@@ -7,6 +7,7 @@ using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -223,15 +224,52 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         }
 
         [TestMethod]
-        public void WhenPropertyFilterIsRetrieved_ThenFilterSyntaxIsSameAsGiven()
+        public void WhenPropertyFilterStringForSingleValueIsRetrieved_ThenFilterSyntaxIsSameAsGiven()
         {
             var filterSyntax = ">=2000";
             var filter = new EntityFilter<TestModel<DateTime>>()
                 .Add(x => x.ValueA, filterSyntax);
 
-            var retrievedFilterSyntax = filter.GetPropertyFilter(x => x.ValueA);
+            var retrievedFilterSyntax = filter.GetPropertyFilterSyntax(x => x.ValueA);
 
             retrievedFilterSyntax.Should().Be(filterSyntax);
+        }
+
+        [TestMethod]
+        public void WhenPropertyFilterStringForMultipleValuesIsRetrieved_ThenFilterSyntaxIsSameAsGiven()
+        {
+            var filterSyntax = ">=2000,<3000";
+            var filter = new EntityFilter<TestModel<DateTime>>()
+                .Add(x => x.ValueA, filterSyntax);
+
+            var retrievedFilterSyntax = filter.GetPropertyFilterSyntax(x => x.ValueA);
+
+            retrievedFilterSyntax.Should().Be(filterSyntax);
+        }
+
+        [TestMethod]
+        public void WhenPropertyFilterValuesForSingleValueIsRetrieved_ThenFilterSyntaxIsSameAsGiven()
+        {
+            var filterValues = new[] { Filters.ValueFilter.Create(">=2000") };
+            var filter = new EntityFilter<TestModel<DateTime>>()
+                .Add(x => x.ValueA, filterValues);
+
+            var retrievedFilterValues = filter.GetPropertyFilterValues(x => x.ValueA);
+
+            retrievedFilterValues.Should().BeEquivalentTo(filterValues);
+        }
+
+        [TestMethod]
+        public void WhenPropertyFilterValuesForMultipleValuesIsRetrieved_ThenFilterSyntaxIsSameAsGiven()
+        {
+            var filterValues = new[] { Filters.ValueFilter.Create(">=2000"), Filters.ValueFilter.Create("<2000") };
+            var filter = new EntityFilter<TestModel<DateTime>>()
+                .Add(x => x.ValueA, filterValues);
+
+            var retrievedFilterValues = filter.GetPropertyFilterValues(x => x.ValueA);
+            var g = JsonConvert.SerializeObject(retrievedFilterValues, Formatting.Indented);
+
+            retrievedFilterValues.Should().BeEquivalentTo(filterValues);
         }
 
         [TestMethod]

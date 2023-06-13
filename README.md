@@ -11,8 +11,9 @@ API: https://filterexpressioncreator.schick-software.de/openapi/
 # Table of Content
 - [Getting Started](#getting-started)
 - [Creating Filters](#creating-filters)
-  - [General](#general)
+  - [Add or replace values](#add-or-replace-values)
   - [Combine values with AND and OR](#combine-values-with-and-and-or)
+  - [Retrieve values and syntax](#retrieve-values-and-syntax)
   - [Nested Filters](#nested-filters)
   - [Filter Operators](#filter-operators)
   - [Filter to `null`](#filter-to-null)
@@ -91,7 +92,7 @@ var filteredOrders = dbContext.Orders.Where(filter).ToList();
 
 # Creating Filters
 
-## General
+## Add or replace values
 
 Filters can be added/replaced using operator/value(s) pairs
 
@@ -119,14 +120,36 @@ filter.Add(x => x.Customer, "~Joe,=Doe");
 ## Combine values with AND and OR
 
 ```csharp
-// OR: Customer contains 'Joe' or 'Doe'.
-// Multiple values given to one call of Add/Replace are combined using conditional `OR`.
-filter.Add(x => x.Customer, "~Joe,~Doe");
-
 // AND: Customer contains 'Joe' and 'Doe'.
 // Multiple calls to Add/Replace are combined using conditional `AND`.
 filter.Add(x => x.Customer, "~Joe");
 filter.Add(x => x.Customer, "~Doe");
+
+// OR: Customer contains 'Joe' or 'Doe'.
+// Multiple values given to one call of Add/Replace are combined using conditional `OR`.
+filter.Add(x => x.Customer, "~Joe,~Doe");
+```
+
+## Retrieve values and syntax
+```csharp
+// With values from above, filterSytax contains "~Joe,~Doe"
+filter.Add(x => x.Customer, "~Joe,~Doe");
+string filterSytax = filter.GetPropertyFilterSyntax(x => x.Customer);
+
+// Retrive objects describing the filter values
+ValueFilter[] filterValues = filter.GetPropertyFilterValues(x => x.Customer);
+```
+```json
+// filterValues equals to
+[{
+  "Operator": "GreaterThanOrEqual",
+  "Value": "2000",
+  "IsEmpty": false
+}, {
+  "Operator": "LessThan",
+  "Value": "2000",
+  "IsEmpty": false
+}]
 ```
 
 ## Nested Filters
