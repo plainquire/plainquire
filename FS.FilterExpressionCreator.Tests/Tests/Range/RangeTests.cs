@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Execution;
 using FS.FilterExpressionCreator.Abstractions.Extensions;
 using FS.FilterExpressionCreator.Abstractions.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -232,6 +233,80 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Range
             spanA_A.Intersect(null).Should().BeFalse();
             ((Range<DateTimeOffset>)null).Intersect(spanA_A).Should().BeFalse();
             ((Range<DateTimeOffset>)null).Intersect(null).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void OverlappingRangesWithOpenSide_DoIntersect()
+        {
+            var overlappingRanges = new[] {
+                new {
+                    Id = 1,
+                    RangeA =  new Range<string>(default, default),
+                    RangeB =  new Range<string>(default, default)
+                },
+                new {
+                    Id = 2,
+                    RangeA =  new Range<string>("10", default),
+                    RangeB =  new Range<string>("10", default)
+                },
+                new {
+                    Id = 3,
+                    RangeA =  new Range<string>(default, "10"),
+                    RangeB =  new Range<string>(default, "10")
+                },
+
+                new {
+                    Id = 4,
+                    RangeA =  new Range<string>(default, "10"),
+                    RangeB =  new Range<string>("10", default)
+                },
+                new {
+                    Id = 5,
+                    RangeA =  new Range<string>("10", "10"),
+                    RangeB =  new Range<string>("10", default)
+                },
+                new {
+                    Id = 6,
+                    RangeA =  new Range<string>("10", "10"),
+                    RangeB =  new Range<string>(default, "10")
+                },
+            };
+
+            using var _ = new AssertionScope();
+            foreach (var ranges in overlappingRanges)
+            {
+                ranges.RangeA.Intersect(ranges.RangeB).Should().BeTrue(because: $"ranges with Id {ranges.Id} overlaps");
+                ranges.RangeB.Intersect(ranges.RangeA).Should().BeTrue(because: $"ranges with Id {ranges.Id} overlaps");
+            }
+        }
+
+        [TestMethod]
+        public void DistinctRangesWithOpenSide_DoNotIntersect()
+        {
+            var distinctRanges = new[] {
+                new {
+                    Id = 1,
+                    RangeA =  new Range<string>(default, "10"),
+                    RangeB =  new Range<string>("11", default)
+                },
+                new {
+                    Id = 2,
+                    RangeA =  new Range<string>("10", "10"),
+                    RangeB =  new Range<string>("11", default)
+                },
+                new {
+                    Id = 3,
+                    RangeA =  new Range<string>("10", "10"),
+                    RangeB =  new Range<string>(default, "09")
+                },
+            };
+
+            using var _ = new AssertionScope();
+            foreach (var ranges in distinctRanges)
+            {
+                ranges.RangeA.Intersect(ranges.RangeB).Should().BeFalse(because: $"ranges with Id {ranges.Id} are distinct");
+                ranges.RangeB.Intersect(ranges.RangeA).Should().BeFalse(because: $"ranges with Id {ranges.Id} are distinct");
+            }
         }
 
         [TestMethod]

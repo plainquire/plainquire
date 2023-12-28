@@ -20,9 +20,9 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
             if (val1 == null || val2 == null)
                 return false;
 
-            var val1StartIsLowerThanVal2End = val1.Start.CompareTo(val2.End) <= 0;
-            var val2StartIsLowerThanVal1End = val2.Start.CompareTo(val1.End) <= 0;
-            return val1StartIsLowerThanVal2End && val2StartIsLowerThanVal1End;
+            var val1StartIsLowerOrEqualThanVal2End = val1.Start == null || val2.End == null || val1.Start.CompareTo(val2.End) <= 0;
+            var val2StartIsLowerOrEqualThanVal1End = val2.Start == null || val1.End == null || val2.Start.CompareTo(val1.End) <= 0;
+            return val1StartIsLowerOrEqualThanVal2End && val2StartIsLowerOrEqualThanVal1End;
         }
 
         /// <summary>
