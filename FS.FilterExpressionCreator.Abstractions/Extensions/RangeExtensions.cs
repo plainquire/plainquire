@@ -77,9 +77,9 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
             if (val1 == null || val2 == null)
                 return false;
 
-            var thisStartIsLowerThanRhsStart = val1.Start.CompareTo(val2.Start) <= 0;
-            var thisEndIsGreaterThanRhsEnd = val1.End.CompareTo(val2.End) >= 0;
-            return thisStartIsLowerThanRhsStart && thisEndIsGreaterThanRhsEnd;
+            var val1StartIsLowerOrEqualThanVal2Start = val1.Start == null || (val2.Start != null && val1.Start.CompareTo(val2.Start) <= 0);
+            var val1EndIsGreaterOrEqualThanVal2End = val1.End == null || (val2.End != null && val1.End.CompareTo(val2.End) >= 0);
+            return val1StartIsLowerOrEqualThanVal2Start && val1EndIsGreaterOrEqualThanVal2End;
         }
 
         /// <summary>

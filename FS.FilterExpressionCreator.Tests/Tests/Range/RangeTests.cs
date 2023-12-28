@@ -70,6 +70,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Range
             IConvertible rangeAvg = new Range<double>(50, 75);
             IConvertible rangeMax = new Range<double>(double.MinValue, double.MaxValue);
 
+            using var __ = new AssertionScope();
+
             Action toBoolean = () => _ = rangeMax.ToBoolean(null);
             toBoolean.Should().Throw<InvalidCastException>().WithMessage("Invalid cast from Range to Boolean");
 
@@ -398,6 +400,68 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Range
             spanA_A.Contains(null).Should().BeFalse();
             ((Range<DateTimeOffset>)null).Contains(spanA_A).Should().BeFalse();
             ((Range<DateTimeOffset>)null).Contains(null).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void EqualRangesWithOpenSide_ContainsItselfOther()
+        {
+            var containingRanges = new[] {
+                new {
+                    Id = 1,
+                    Range =  new Range<string>(default, default),
+                },
+                new {
+                    Id = 2,
+                    Range =  new Range<string>("10", default),
+                },
+                new {
+                    Id = 3,
+                    Range =  new Range<string>(default, "10"),
+                },
+            };
+
+            using var _ = new AssertionScope();
+            foreach (var ranges in containingRanges)
+                ranges.Range.Contains(ranges.Range).Should().BeTrue(because: $"range with Id {ranges.Id} should contain itself");
+        }
+
+        [TestMethod]
+        public void ContainerRangeWithOpenSide_ContainsInner()
+        {
+            var containingRanges = new[] {
+                new {
+                    Id = 1,
+                    Outer =  new Range<string>(default, default),
+                    Inner =  new Range<string>("10", default),
+                },
+                new {
+                    Id = 2,
+                    Outer =  new Range<string>(default, default),
+                    Inner =  new Range<string>(default, "10"),
+                },
+                new {
+                    Id = 3,
+                    Outer =  new Range<string>(default, default),
+                    Inner =  new Range<string>("10", "10"),
+                },
+                new {
+                    Id = 4,
+                    Outer =  new Range<string>("10", default),
+                    Inner =  new Range<string>("11", default),
+                },
+                new {
+                    Id = 5,
+                    Outer =  new Range<string>(default, "11"),
+                    Inner =  new Range<string>(default, "10"),
+                },
+            };
+
+            using var _ = new AssertionScope();
+            foreach (var ranges in containingRanges)
+            {
+                ranges.Outer.Contains(ranges.Inner).Should().BeTrue(because: $"container range with Id {ranges.Id} should contain inner range");
+                ranges.Inner.Contains(ranges.Outer).Should().BeFalse(because: $"inner range with Id {ranges.Id} should not contain container range");
+            }
         }
 
         private class NonConvertible : IComparable<NonConvertible>
