@@ -6,7 +6,6 @@ using FS.FilterExpressionCreator.Demo.Models;
 using FS.FilterExpressionCreator.Demo.Models.FilterSets;
 using FS.FilterExpressionCreator.Demo.Routing;
 using FS.FilterExpressionCreator.Extensions;
-using FS.FilterExpressionCreator.Filters;
 using LinqToDB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -55,7 +54,7 @@ namespace FS.FilterExpressionCreator.Demo.Controllers
                 unfilteredCount = _dbContext.Set<Freelancer>().Count(x => x.Seed == seed);
             }
 
-            var freelancerFilter = filter.Freelancer ?? new EntityFilter<Freelancer>();
+            var freelancerFilter = filter.Freelancer;
             var projectFilter = filter.Project;
 
             freelancerFilter

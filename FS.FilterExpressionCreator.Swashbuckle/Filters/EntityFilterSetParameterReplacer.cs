@@ -16,8 +16,8 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters
     public class EntityFilterSetParameterReplacer : EntityFilterParameterReplacer, IOperationFilter
     {
         /// <inheritdoc />
-        public EntityFilterSetParameterReplacer(IEnumerable<string> xmlDocumentationFilePaths = null)
-        : base(xmlDocumentationFilePaths)
+        public EntityFilterSetParameterReplacer(IEnumerable<string>? xmlDocumentationFilePaths)
+            : base(xmlDocumentationFilePaths)
         { }
 
         /// <inheritdoc />

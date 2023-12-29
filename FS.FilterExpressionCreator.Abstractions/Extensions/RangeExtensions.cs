@@ -14,7 +14,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         /// </summary>
         /// <param name="val1">The first of two <see name="Range{TType}"/> to compare.</param>
         /// <param name="val2">The second of two <see name="Range{TType}"/> to compare.</param>
-        public static bool Intersect<TType>(this Range<TType> val1, Range<TType> val2)
+        public static bool Intersect<TType>(this Range<TType>? val1, Range<TType>? val2)
             where TType : IComparable<TType>
         {
             if (val1 == null || val2 == null)
@@ -30,7 +30,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         /// </summary>
         /// <param name="val1">The first of two <see name="Range{TType}"/> to compare.</param>
         /// <param name="val2">The second of two <see name="Range{TType}"/> to compare.</param>
-        public static Range<TType> Intersection<TType>(this Range<TType> val1, Range<TType> val2)
+        public static Range<TType>? Intersection<TType>(this Range<TType>? val1, Range<TType>? val2)
             where TType : IComparable<TType>
         {
             if (val1 == null)
@@ -52,7 +52,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         /// </summary>
         /// <param name="val1">The first of two <see name="Range{TType}"/> to compare.</param>
         /// <param name="val2">The second of two <see name="Range{TType}"/> to compare.</param>
-        public static Range<TType> Union<TType>(this Range<TType> val1, Range<TType> val2)
+        public static Range<TType>? Union<TType>(this Range<TType>? val1, Range<TType>? val2)
             where TType : IComparable<TType>
         {
             if (val1 == null)
@@ -71,7 +71,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         /// </summary>
         /// <param name="val1">The first of two <see name="Range{TType}"/> to compare.</param>
         /// <param name="val2">The second of two <see name="Range{TType}"/> to compare.</param>
-        public static bool Contains<TType>(this Range<TType> val1, Range<TType> val2)
+        public static bool Contains<TType>(this Range<TType>? val1, Range<TType>? val2)
             where TType : IComparable<TType>
         {
             if (val1 == null || val2 == null)
@@ -87,17 +87,33 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         /// </summary>
         /// <param name="val1">The first of two <typeparamref name="TType"/> to compare.</param>
         /// <param name="val2">The second of two <typeparamref name="TType"/> to compare.</param>
-        public static TType Min<TType>(TType val1, TType val2)
+        public static TType? Min<TType>(TType? val1, TType? val2)
             where TType : IComparable<TType>
-            => val1.CompareTo(val2) <= 0 ? val1 : val2;
+        {
+            if (val1 == null)
+                return val1;
+
+            if (val2 == null)
+                return val2;
+
+            return val1.CompareTo(val2) <= 0 ? val1 : val2;
+        }
 
         /// <summary>
         /// Returns the greater of two <typeparamref name="TType"/>.
         /// </summary>
         /// <param name="val1">The first of two <typeparamref name="TType"/> to compare.</param>
         /// <param name="val2">The second of two <typeparamref name="TType"/> to compare.</param>
-        public static TType Max<TType>(TType val1, TType val2)
+        public static TType? Max<TType>(TType? val1, TType? val2)
             where TType : IComparable<TType>
-            => val1.CompareTo(val2) >= 0 ? val1 : val2;
+        {
+            if (val1 == null)
+                return val2;
+
+            if (val2 == null)
+                return val1;
+
+            return val1.CompareTo(val2) >= 0 ? val1 : val2;
+        }
     }
 }

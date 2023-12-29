@@ -31,15 +31,15 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => type.GetUnderlyingType() == typeof(bool);
 
         /// <inheritdoc />
-        protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration configuration)
+        protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration)
         {
             if (bool.TryParse(value, out var boolValue))
                 return CreateBoolExpressionByFilterOperator(propertySelector, filterOperator, boolValue);
 
-            if (configuration.BoolTrueStrings.Contains(value.ToUpper()))
+            if (configuration.BoolTrueStrings.Contains(value?.ToUpper()))
                 return CreateBoolExpressionByFilterOperator(propertySelector, filterOperator, true);
 
-            if (configuration.BoolFalseStrings.Contains(value.ToUpper()))
+            if (configuration.BoolFalseStrings.Contains(value?.ToUpper()))
                 return CreateBoolExpressionByFilterOperator(propertySelector, filterOperator, false);
 
             if (configuration.IgnoreParseExceptions)

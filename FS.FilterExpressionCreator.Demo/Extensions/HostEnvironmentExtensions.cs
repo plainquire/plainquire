@@ -8,9 +8,9 @@ namespace FS.FilterExpressionCreator.Demo.Extensions
     {
         private static readonly Assembly _entryAssembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
 
-        public static string GetWebRootPath(this IHostEnvironment hostEnvironment)
+        public static string? GetWebRootPath(this IHostEnvironment hostEnvironment)
         {
-            var distWebRootPath = Path.Combine(hostEnvironment.ContentRootPath, _entryAssembly.GetName().Name, "dist");
+            var distWebRootPath = Path.Combine(hostEnvironment.ContentRootPath, _entryAssembly.GetName().Name!, "dist");
             if (Directory.Exists(distWebRootPath))
                 return distWebRootPath;
 

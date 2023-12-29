@@ -17,7 +17,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="value">The string to convert.</param>
         /// <param name="now">Value used for 'now' when parsing relative date/time values (e.g. one-week-ago).</param>
         /// <param name="cultureInfo">The culture to use when parsing.</param>
-        public static DateTimeOffset ConvertStringToDateTimeOffset(this string value, DateTimeOffset now, CultureInfo cultureInfo = null)
+        public static DateTimeOffset ConvertStringToDateTimeOffset(this string value, DateTimeOffset now, CultureInfo? cultureInfo = null)
         {
             if (TryConvertStringToDateTimeRange(value, now, out var dateTimeRange, cultureInfo))
                 return dateTimeRange.Start;
@@ -31,7 +31,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="now">Value used for 'now' when parsing relative date/time values (e.g. one-week-ago).</param>
         /// <param name="dateTimeOffset">The parsed <see cref="DateTimeOffset"/>.</param>
         /// <param name="cultureInfo">The culture to use when parsing.</param>
-        public static bool TryConvertStringToDateTimeOffset(this string value, DateTimeOffset now, out DateTimeOffset dateTimeOffset, CultureInfo cultureInfo = null)
+        public static bool TryConvertStringToDateTimeOffset(this string value, DateTimeOffset now, out DateTimeOffset dateTimeOffset, CultureInfo? cultureInfo = null)
         {
             if (TryConvertStringToDateTimeRange(value, now, out var dateTimeRange, cultureInfo))
             {
@@ -49,7 +49,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="value">The string to convert.</param>
         /// <param name="now">Value used for 'now' when parsing relative date/time values (e.g. one-week-ago).</param>
         /// <param name="cultureInfo">The culture to use when parsing.</param>
-        public static Range<DateTimeOffset> ConvertStringToDateTimeRange(this string value, DateTimeOffset now, CultureInfo cultureInfo = null)
+        public static Range<DateTimeOffset> ConvertStringToDateTimeRange(this string value, DateTimeOffset now, CultureInfo? cultureInfo = null)
         {
             if (TryConvertStringToDateTimeRange(value, now, out var dateTimeRange, cultureInfo))
                 return dateTimeRange;
@@ -63,7 +63,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="now">Value used for 'now' when parsing relative date/time values (e.g. one-week-ago).</param>
         /// <param name="dateTimeRange">The parsed date time range.</param>
         /// <param name="cultureInfo">The culture to use when parsing.</param>
-        public static bool TryConvertStringToDateTimeRange(this string value, DateTimeOffset now, out Range<DateTimeOffset> dateTimeRange, CultureInfo cultureInfo = null)
+        public static bool TryConvertStringToDateTimeRange(this string? value, DateTimeOffset now, out Range<DateTimeOffset> dateTimeRange, CultureInfo? cultureInfo = null)
         {
             dateTimeRange = new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
@@ -98,7 +98,7 @@ namespace FS.FilterExpressionCreator.Extensions
             if (start != null && endIsEmpty)
                 end = new Span(now.DateTime, now.DateTime);
 
-            if (!startAndEnd.Success || start?.Start.HasValue != true || end?.Start.HasValue != true)
+            if (!startAndEnd.Success || start?.Start == null || end?.Start == null)
                 return false;
 
             dateTimeRange = new Range<DateTimeOffset>(start.Start.Value, end.Start.Value);

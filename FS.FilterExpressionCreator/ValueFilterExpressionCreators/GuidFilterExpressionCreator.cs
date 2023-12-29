@@ -32,7 +32,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => type.GetUnderlyingType() == typeof(Guid);
 
         /// <inheritdoc />
-        protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration configuration)
+        protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration)
         {
             if (Guid.TryParse(value, out var guidValue))
                 return CreateGuidExpressionByFilterOperator(propertySelector, filterOperator, guidValue);
@@ -73,9 +73,9 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <returns>
         /// The new unique identifier contains expression.
         /// </returns>
-        public static Expression CreateGuidContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object value)
+        public static Expression CreateGuidContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object? value)
         {
-            var valueToUpper = Expression.Constant(value.ToString().ToUpper(), typeof(string));
+            var valueToUpper = Expression.Constant(value?.ToString().ToUpper(), typeof(string));
             var propertyToString = propertySelector.Body.ObjectToString();
             var propertyToUpper = propertyToString.StringToUpper();
             var propertyContainsValue = propertyToUpper.StringContains(valueToUpper);

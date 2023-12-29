@@ -14,9 +14,9 @@ namespace FS.FilterExpressionCreator.Demo.Shared
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
-            ProductName = AssemblyExtensions.GetProgramProduct();
-            ProductVersion = AssemblyExtensions.GetProgramProductVersion();
-            Copyright = AssemblyExtensions.GetProgramCopyright();
+            ProductName = AssemblyExtensions.GetProgramProduct() ?? string.Empty;
+            ProductVersion = AssemblyExtensions.GetProgramProductVersion() ?? string.Empty;
+            Copyright = AssemblyExtensions.GetProgramCopyright() ?? string.Empty;
         }
     }
 }

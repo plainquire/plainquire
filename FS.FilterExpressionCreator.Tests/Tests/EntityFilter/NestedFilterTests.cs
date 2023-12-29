@@ -19,8 +19,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
         public void WhenNestedEntityFilterIsApplied_ThenNestedPropertyIsFiltered(EntityFilterFunc<TestModel<string>> filterFunc)
         {
-            var nestedFilter = new EntityFilter<TestModelNested>()
-                .Replace(x => x.Value, "=NestedA");
+            var nestedFilter = new EntityFilter<TestModelNested?>()
+                .Replace(x => x!.Value, "=NestedA");
 
             var outerFilter = new EntityFilter<TestModel<string>>()
                 .Replace(x => x.ValueA, "=OuterA")
@@ -65,7 +65,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         [TestMethod]
         public void WhenNestedPropertyFilterIsAdded_ThenArgumentExceptionIsThrown()
         {
-            ((Action)(() => new EntityFilter<TestModel<string>>().Add(x => x.NestedObject.Value, "=NestedA")))
+            ((Action)(() => new EntityFilter<TestModel<string>>().Add(x => x.NestedObject!.Value, "=NestedA")))
                 .Should()
                 .Throw<ArgumentException>().WithMessage("Given property must be a first level property access expression like person => person.Name (Parameter 'property')");
         }
@@ -73,8 +73,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         [TestMethod]
         public void WhenNestedObjectOfFilterIsNull_ThenValidFilterIsCreated()
         {
-            var nestedFilter = new EntityFilter<TestModelNested>()
-                .Replace(x => x.Value, "=NestedA");
+            var nestedFilter = new EntityFilter<TestModelNested?>()
+                .Replace(x => x!.Value, "=NestedA");
 
             var outerFilter = new EntityFilter<TestModel<string>>()
                 .AddNested(x => x.NestedObject, nestedFilter);
@@ -106,7 +106,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         {
             var outerFilter = new EntityFilter<TestModel<string>>()
                 .Add(x => x.ValueA, "A")
-                .AddNested(x => x.NestedList, (EntityFilter<TestModelNested>)null);
+                .AddNested(x => x.NestedList, (EntityFilter<TestModelNested>?)null);
 
             var testItems = new TestModel<string>[] { new() { ValueA = "A" } };
 

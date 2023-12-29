@@ -8,7 +8,6 @@ using System.Reflection;
 
 namespace FS.FilterExpressionCreator.Tests.Attributes
 {
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.Method)]
     public class FilterTestDataSourceAttribute : Attribute, ITestDataSource
@@ -45,10 +44,10 @@ namespace FS.FilterExpressionCreator.Tests.Attributes
             return testCases.SelectMany(_ => filterFunctions, (testCase, filterFunc) => new[] { testCase, filterFunc }).ToList();
         }
 
-        public string GetDisplayName(MethodInfo methodInfo, object[] data)
+        public string GetDisplayName(MethodInfo methodInfo, object?[]? data)
         {
-            var testCaseId = ((FilterTestCase)data[0]).Id;
-            var filterFunctionName = ((Delegate)data[1]).Method.Name;
+            var testCaseId = ((FilterTestCase?)data?[0])?.Id ?? throw new InvalidOperationException("Unable to get test case ID.");
+            var filterFunctionName = ((Delegate?)data[1])?.Method.Name ?? throw new InvalidOperationException("Unable to get the name of filter function.");
             return $"Id {testCaseId}, {filterFunctionName}: {methodInfo.Name}";
         }
     }

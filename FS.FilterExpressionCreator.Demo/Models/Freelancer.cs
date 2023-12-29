@@ -1,12 +1,14 @@
 ﻿using FS.FilterExpressionCreator.Abstractions.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Demo.Models
 {
     /// <summary>
     /// Freelancer.
     /// </summary>
+    [SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
     [FilterEntity(Prefix = "")]
     public class Freelancer
     {
@@ -24,12 +26,12 @@ namespace FS.FilterExpressionCreator.Demo.Models
         /// <summary>
         /// First name.
         /// </summary>
-        public string FirstName { get; set; }
+        public required string FirstName { get; set; }
 
         /// <summary>
         /// Last name.
         /// </summary>
-        public string LastName { get; set; }
+        public required string LastName { get; set; }
 
         /// <summary>
         /// Gender.

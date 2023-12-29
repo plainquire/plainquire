@@ -30,6 +30,6 @@ namespace FS.FilterExpressionCreator.Interfaces
         /// <param name="propertySelector">The property to create the expression for.</param>
         /// <param name="filters">The filters to create the expression for.</param>
         /// <param name="configuration">The filter configuration to use.</param>
-        Expression CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[] filters, FilterConfiguration configuration);
+        Expression? CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[] filters, FilterConfiguration configuration);
     }
 }

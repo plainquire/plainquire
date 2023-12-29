@@ -44,7 +44,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => true;
 
         /// <inheritdoc />
-        public Expression CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[] filters, FilterConfiguration configuration)
+        public Expression? CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[]? filters, FilterConfiguration configuration)
         {
             if (filters == null || filters.Length == 0)
                 return null;
@@ -91,7 +91,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <param name="filterOperator">The filter operator to use.</param>
         /// <param name="value">The value to create the expression for.</param>
         /// <param name="configuration">The filter configuration to use.</param>
-        protected internal virtual Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration configuration)
+        protected internal virtual Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration)
         {
             switch (filterOperator)
             {
@@ -122,7 +122,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="value">The value to use.</param>
-        public static Expression CreateEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
+        public static Expression CreateEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue? value)
             => CreateEqualExpression(propertySelector, typeof(TValue), value);
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="valueType">The type of the value.</param>
         /// <param name="value">The value to use.</param>
-        protected static Expression CreateEqualExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object value)
+        protected static Expression CreateEqualExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object? value)
         {
             var (propertyExpression, valueExpression) = CreateAndCastExpressionParts(propertySelector, valueType, value);
             return Expression.Equal(propertyExpression, valueExpression);
@@ -147,7 +147,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="value">The value to use.</param>
-        public static Expression CreateNotEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
+        public static Expression CreateNotEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue? value)
             => CreateNotEqualExpression(propertySelector, typeof(TValue), value);
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="valueType">The type of the value.</param>
         /// <param name="value">The value to use.</param>
-        protected static Expression CreateNotEqualExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object value)
+        protected static Expression CreateNotEqualExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object? value)
         {
             var (propertyExpression, valueExpression) = CreateAndCastExpressionParts(propertySelector, valueType, value);
             return Expression.NotEqual(propertyExpression, valueExpression);
@@ -172,7 +172,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="value">The value to use.</param>
-        public static Expression CreateLessThanExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
+        public static Expression CreateLessThanExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue? value)
             => CreateLessThanExpression(propertySelector, typeof(TValue), value);
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="valueType">The type of the value.</param>
         /// <param name="value">The value to use.</param>
-        protected static Expression CreateLessThanExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object value)
+        protected static Expression CreateLessThanExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object? value)
         {
             var (propertyExpression, valueExpression) = CreateAndCastExpressionParts(propertySelector, valueType, value);
             return Expression.LessThan(propertyExpression, valueExpression);
@@ -197,7 +197,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="value">The value to use.</param>
-        public static Expression CreateLessThanOrEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
+        public static Expression CreateLessThanOrEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue? value)
             => CreateLessThanOrEqualExpression(propertySelector, typeof(TValue), value);
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="valueType">The type of the value.</param>
         /// <param name="value">The value to use.</param>
-        protected static Expression CreateLessThanOrEqualExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object value)
+        protected static Expression CreateLessThanOrEqualExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object? value)
         {
             var (propertyExpression, valueExpression) = CreateAndCastExpressionParts(propertySelector, valueType, value);
             return Expression.LessThanOrEqual(propertyExpression, valueExpression);
@@ -222,7 +222,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="value">The value to use.</param>
-        public static Expression CreateGreaterThanExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
+        public static Expression CreateGreaterThanExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue? value)
             => CreateGreaterThanExpression(propertySelector, typeof(TValue), value);
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="valueType">The type of the value.</param>
         /// <param name="value">The value to use.</param>
-        protected static Expression CreateGreaterThanExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object value)
+        protected static Expression CreateGreaterThanExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object? value)
         {
             var (propertyExpression, valueExpression) = CreateAndCastExpressionParts(propertySelector, valueType, value);
             return Expression.GreaterThan(propertyExpression, valueExpression);
@@ -247,7 +247,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="value">The value to use.</param>
-        public static Expression CreateGreaterThanOrEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue value)
+        public static Expression CreateGreaterThanOrEqualExpression<TEntity, TProperty, TValue>(Expression<Func<TEntity, TProperty>> propertySelector, TValue? value)
             => CreateGreaterThanOrEqualExpression(propertySelector, typeof(TValue), value);
 
         /// <summary>
@@ -258,13 +258,13 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <param name="propertySelector">The property to use.</param>
         /// <param name="valueType">The type of the value.</param>
         /// <param name="value">The value to use.</param>
-        protected static Expression CreateGreaterThanOrEqualExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object value)
+        protected static Expression CreateGreaterThanOrEqualExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object? value)
         {
             var (propertyExpression, valueExpression) = CreateAndCastExpressionParts(propertySelector, valueType, value);
             return Expression.GreaterThanOrEqual(propertyExpression, valueExpression);
         }
 
-        private static (Expression propertyExpression, Expression valueExpression) CreateAndCastExpressionParts<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object value)
+        private static (Expression propertyExpression, Expression valueExpression) CreateAndCastExpressionParts<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, Type valueType, object? value)
         {
             var underlingValueType = valueType.GetUnderlyingType();
             var partsHaveSameUnderlyingTypes = typeof(TProperty).GetUnderlyingType() == underlingValueType;
@@ -295,7 +295,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
         /// <param name="property">The property the filter is created for.</param>
         /// <param name="filterOperator">The filter operator.</param>
         /// <param name="value">The value to filter.</param>
-        protected FilterExpressionCreationException CreateFilterExpressionCreationException<TEntity, TProperty, TValue>(string message, Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator, TValue value)
+        protected FilterExpressionCreationException CreateFilterExpressionCreationException<TEntity, TProperty, TValue>(string message, Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator, TValue? value)
         {
             return new FilterExpressionCreationException(message)
             {

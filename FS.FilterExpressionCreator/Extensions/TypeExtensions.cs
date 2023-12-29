@@ -2,6 +2,7 @@
 using FS.FilterExpressionCreator.PropertyFilterExpressionCreators;
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Extensions
 {
@@ -13,7 +14,8 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <summary>
         /// Returns the underlying type when type is <see cref="Nullable{T}"/>; otherwise the type is returned.
         /// </summary>
-        public static Type GetUnderlyingType(this Type type)
+        [return: NotNullIfNotNull("type")]
+        public static Type? GetUnderlyingType(this Type? type)
             => type != null
                 ? Nullable.GetUnderlyingType(type) ?? type
                 : null;

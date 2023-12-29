@@ -25,7 +25,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="entityFilter">The entity filter.</param>
         /// <param name="property">The property to filter.</param>
         /// <param name="filterSyntax">Description of the filter using micro syntax.</param>
-        public static EntityFilter<TEntity> Add<TEntity, TProperty>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty>> property, string filterSyntax)
+        public static EntityFilter<TEntity> Add<TEntity, TProperty>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, string? filterSyntax)
         {
             if (filterSyntax == null)
                 return entityFilter;
@@ -44,7 +44,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="entityFilter">The entity filter.</param>
         /// <param name="property">The property to filter.</param>
         /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
-        public static EntityFilter<TEntity> Add<TEntity, TProperty, TValue>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty>> property, params TValue[] values)
+        public static EntityFilter<TEntity> Add<TEntity, TProperty, TValue>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, params TValue[]? values)
         {
             if (values == null || values.Length == 0)
                 return entityFilter;
@@ -60,7 +60,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="entityFilter">The entity filter.</param>
         /// <param name="property">The property to filter.</param>
         /// <param name="filterOperator">The filter operator to use.</param>
-        public static EntityFilter<TEntity> Add<TEntity, TProperty>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator)
+        public static EntityFilter<TEntity> Add<TEntity, TProperty>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, FilterOperator filterOperator)
             => entityFilter.Add(property, ValueFilter.Create(filterOperator));
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="property">The property to filter.</param>
         /// <param name="filterOperator">The filter operator to use.</param>
         /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
-        public static EntityFilter<TEntity> Add<TEntity, TProperty, TValue>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator, params TValue[] values)
+        public static EntityFilter<TEntity> Add<TEntity, TProperty, TValue>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, FilterOperator filterOperator, params TValue[]? values)
         {
             var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
             if ((values == null || values.Length == 0) && !isNullableFilterOperator)
@@ -92,7 +92,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="entityFilter">The entity filter.</param>
         /// <param name="property">The property to filter.</param>
         /// <param name="filterSyntax">Description of the filter using micro syntax.</param>
-        public static EntityFilter<TEntity> Replace<TEntity, TProperty>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty>> property, string filterSyntax)
+        public static EntityFilter<TEntity> Replace<TEntity, TProperty>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, string? filterSyntax)
         {
             if (filterSyntax == null)
                 return entityFilter.Clear(property);
@@ -111,7 +111,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="entityFilter">The entity filter.</param>
         /// <param name="property">The property to filter.</param>
         /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
-        public static EntityFilter<TEntity> Replace<TEntity, TProperty, TValue>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty>> property, params TValue[] values)
+        public static EntityFilter<TEntity> Replace<TEntity, TProperty, TValue>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, params TValue[]? values)
         {
             if (values == null || values.Length == 0)
                 return entityFilter.Clear(property);
@@ -127,7 +127,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="entityFilter">The entity filter.</param>
         /// <param name="property">The property to filter.</param>
         /// <param name="filterOperator">The filter operator to use.</param>
-        public static EntityFilter<TEntity> Replace<TEntity, TProperty>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator)
+        public static EntityFilter<TEntity> Replace<TEntity, TProperty>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, FilterOperator filterOperator)
             => entityFilter.Replace(property, ValueFilter.Create(filterOperator));
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace FS.FilterExpressionCreator.Extensions
         /// <param name="property">The property to filter.</param>
         /// <param name="filterOperator">The filter operator to use.</param>
         /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
-        public static EntityFilter<TEntity> Replace<TEntity, TProperty, TValue>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty>> property, FilterOperator filterOperator, params TValue[] values)
+        public static EntityFilter<TEntity> Replace<TEntity, TProperty, TValue>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, FilterOperator filterOperator, params TValue[]? values)
         {
             var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
             if ((values == null || values.Length == 0) && !isNullableFilterOperator)

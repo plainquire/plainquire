@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Models
 {
+    [SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
     [ExcludeFromCodeCoverage]
     public class TestModelNested
     {
@@ -10,6 +11,6 @@ namespace FS.FilterExpressionCreator.Tests.Models
 
         public Guid ParentId { get; set; }
 
-        public string Value { get; set; }
+        public required string Value { get; set; }
     }
 }

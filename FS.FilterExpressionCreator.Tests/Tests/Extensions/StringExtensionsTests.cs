@@ -18,7 +18,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Extensions
             var lowerCase2 = "".LowercaseFirstChar();
             lowerCase2.Should().Be("");
 
-            var lowerCase3 = ((string)null).LowercaseFirstChar();
+            var lowerCase3 = ((string?)null).LowercaseFirstChar();
             lowerCase3.Should().BeNull();
         }
 
@@ -31,7 +31,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Extensions
             var uppercase2 = "".UppercaseFirstChar();
             uppercase2.Should().Be("");
 
-            var uppercase3 = ((string)null).UppercaseFirstChar();
+            var uppercase3 = ((string?)null).UppercaseFirstChar();
             uppercase3.Should().BeNull();
         }
     }

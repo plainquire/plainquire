@@ -46,7 +46,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
             return new Range<DateTimeOffset>(start, end);
         }
 
-        internal static bool TryConvertDateTimeRangeFormattedString(string value, IFormatProvider cultureInfo, out Range<DateTimeOffset> dateTimeRange)
+        internal static bool TryConvertDateTimeRangeFormattedString(string value, IFormatProvider? cultureInfo, out Range<DateTimeOffset> dateTimeRange)
         {
             dateTimeRange = new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
@@ -63,7 +63,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
             return true;
         }
 
-        internal static bool TryConvertIso8601FormattedString(string value, IFormatProvider cultureInfo, out Range<DateTimeOffset> dateTimeRange)
+        internal static bool TryConvertIso8601FormattedString(string value, IFormatProvider? cultureInfo, out Range<DateTimeOffset> dateTimeRange)
         {
             dateTimeRange = new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
@@ -98,7 +98,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
             return false;
         }
 
-        internal static bool TryConvertUnknownFormattedString(string value, CultureInfo cultureInfo, out Range<DateTimeOffset> dateTimeRange)
+        internal static bool TryConvertUnknownFormattedString(string value, CultureInfo? cultureInfo, out Range<DateTimeOffset> dateTimeRange)
         {
             var result = DateTimeOffset.TryParse(value, cultureInfo, DateTimeStyles.AssumeUniversal, out var startDate);
 
@@ -120,8 +120,8 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
             return result;
         }
 
-        private static int? ParseDateTimePart(Match lMatch, string name, IFormatProvider cultureInfo)
-            => int.TryParse(lMatch.Groups[name].Value, NumberStyles.Any, cultureInfo, out var intValue) ? intValue : (int?)null;
+        private static int? ParseDateTimePart(Match lMatch, string name, IFormatProvider? cultureInfo)
+            => int.TryParse(lMatch.Groups[name].Value, NumberStyles.Any, cultureInfo, out var intValue) ? intValue : null;
 
         private static TimeSpan ParseOffset(string offset)
         {

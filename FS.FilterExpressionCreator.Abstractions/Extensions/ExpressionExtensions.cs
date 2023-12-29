@@ -13,8 +13,8 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
     public static class ExpressionExtensions
     {
         private static readonly ConstantExpression _emptyString = Expression.Constant(string.Empty, typeof(string));
-        private static readonly MethodInfo _stringToUpperMethodInfo = typeof(string).GetMethod(nameof(string.ToUpper), Type.EmptyTypes);
-        private static readonly MethodInfo _stringContainsMethodInfo = typeof(string).GetMethod(nameof(string.Contains), new[] { typeof(string) });
+        private static readonly MethodInfo _stringToUpperMethodInfo = typeof(string).GetMethod(nameof(string.ToUpper), Type.EmptyTypes)!;
+        private static readonly MethodInfo _stringContainsMethodInfo = typeof(string).GetMethod(nameof(string.Contains), new[] { typeof(string) })!;
         private static readonly MethodInfo _enumerableAnyMethodInfo = typeof(Enumerable).GetMethods().First(method => method.Name == nameof(Enumerable.Any) && method.GetParameters().Select(x => x.Name).SequenceEqual(new[] { "source", "predicate" }));
         private static readonly MethodInfo _objectToStringMethodInfo = typeof(object).GetMethods().First(method => method.Name == nameof(ToString));
 
@@ -44,7 +44,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         /// </summary>
         /// <typeparam name="TSource">The type of the source.</typeparam>
         /// <param name="expressions">The expressions to combine.</param>
-        public static Expression<Func<TSource, bool>> CombineWithConditionalAnd<TSource>(this IEnumerable<Expression<Func<TSource, bool>>> expressions)
+        public static Expression<Func<TSource, bool>>? CombineWithConditionalAnd<TSource>(this IEnumerable<Expression<Func<TSource, bool>>?> expressions)
             => expressions.Combine(Expression.AndAlso);
 
         /// <summary>
@@ -52,24 +52,8 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         /// </summary>
         /// <typeparam name="TSource">The type of the source.</typeparam>
         /// <param name="expressions">The expressions to combine.</param>
-        public static Expression<Func<TSource, bool>> CombineWithConditionalOr<TSource>(this IEnumerable<Expression<Func<TSource, bool>>> expressions)
+        public static Expression<Func<TSource, bool>>? CombineWithConditionalOr<TSource>(this IEnumerable<Expression<Func<TSource, bool>>?> expressions)
             => expressions.Combine(Expression.OrElse);
-
-        // ReSharper disable CommentTypo
-        ///// <summary>
-        ///// Replaces the parameter of a lambda expression (<c>x => true</c> => <c>y => true</c>.
-        ///// </summary>
-        ///// <typeparam name="TOrigin">The type of the origin parameter.</typeparam>
-        ///// <typeparam name="TReplacement">The type of the replacement parameter.</typeparam>
-        ///// <typeparam name="TResult">The type of the result.</typeparam>
-        ///// <param name="origin">The origin lambda expression.</param>
-        ///// <param name="replacement">The lambda expression holding the replacement as parameter.</param>
-        //public static Expression<Func<TReplacement, TResult>> ReplaceParameter<TOrigin, TReplacement, TResult>(this Expression<Func<TOrigin, TResult>> origin, Expression<Func<TReplacement, TOrigin>> replacement)
-        //{
-        //    var body = new ExpressionReplaceVisitor(origin.Parameters[0], replacement.Body).Visit(origin.Body);
-        //    return Expression.Lambda<Func<TReplacement, TResult>>(body!, replacement.Parameters[0]);
-        //}
-        // ReSharper restore CommentTypo
 
         /// <summary>
         /// Replaces the parameter of a lambda expression (<c>x => true</c> => <c>y => true</c>.
@@ -79,29 +63,8 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         public static LambdaExpression ReplaceParameter(this LambdaExpression origin, LambdaExpression replacement)
         {
             var body = new ExpressionReplaceVisitor(origin.Parameters[0], replacement.Body).Visit(origin.Body);
-            return Expression.Lambda(body!, replacement.Parameters[0]);
+            return Expression.Lambda(body, replacement.Parameters[0]);
         }
-
-        // ReSharper disable CommentTypo
-        ///// <summary>
-        ///// Return as constant lambda expression (<c>x => true</c>), if the given expression is <c>null</c>.
-        ///// </summary>
-        ///// <typeparam name="TSource">The type of the source.</typeparam>
-        ///// <param name="expression">The expression to check for <c>null</c>.</param>
-        //public static Expression<Func<TSource, bool>> TrueIfNull<TSource>(this Expression<Func<TSource, bool>> expression)
-        //    => expression ?? (Expression<Func<TSource, bool>>)Expression.Lambda(Expression.Constant(true), Expression.Parameter(typeof(TSource), "x"));
-        // ReSharper restore CommentTypo
-
-        // ReSharper disable CommentTypo
-        ///// <summary>
-        ///// Add a cast to the given expression.
-        ///// </summary>
-        ///// <typeparam name="TSource">The type of the source.</typeparam>
-        ///// <typeparam name="TDestination">The type to cast to.</typeparam>
-        ///// <param name="expression">The expression to cast.</param>
-        //public static Expression Cast<TSource, TDestination>(this Expression expression)
-        //    => expression.Cast(typeof(TSource), typeof(TDestination));
-        // ReSharper restore CommentTypo
 
         /// <summary>
         /// Creates typed property selector for the given type.
@@ -208,24 +171,6 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
         public static Expression StringIsEmpty<TEntity, TProperty>(this Expression<Func<TEntity, TProperty>> property)
             => Expression.Equal(property.Body, _emptyString);
 
-        // ReSharper disable CommentTypo
-        ///// <summary>
-        ///// Applies a call to <see cref="Enumerable.Any{TSource}(IEnumerable{TSource})"/> to the given expression.
-        ///// </summary>
-        ///// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
-        ///// <typeparam name="TProperty">The type of the property.</typeparam>
-        ///// <typeparam name="TNested">The type of the nested predicate.</typeparam>
-        ///// <param name="property">The property to add the call.</param>
-        ///// <param name="predicate">The nested predicate.</param>
-        //public static Expression<Func<TEntity, bool>> EnumerableAny<TEntity, TProperty, TNested>(this Expression<Func<TEntity, TProperty>> property, Expression<Func<TNested, bool>> predicate)
-        //    where TProperty : IEnumerable<TNested>
-        //{
-        //    var genericEnumerableAnyMethod = _enumerableAnyMethodInfo.MakeGenericMethod(typeof(TProperty).GetGenericArguments().First());
-        //    var propertyContainsAnyMatchesPredicate = Expression.Call(genericEnumerableAnyMethod, property.Body, predicate);
-        //    return property.CreateLambda<TEntity, TProperty, bool>(propertyContainsAnyMatchesPredicate);
-        //}
-        // ReSharper restore CommentTypo
-
         /// <summary>
         /// Applies a call to <see cref="Enumerable.Any{TSource}(IEnumerable{TSource})"/> to the given expression.
         /// </summary>
@@ -239,24 +184,17 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
             return Expression.Lambda(propertyContainsAnyMatchesPredicate, property.Parameters);
         }
 
-        private static Expression<Func<TSource, bool>> Combine<TSource>(this IEnumerable<Expression<Func<TSource, bool>>> expressions, Func<Expression, Expression, BinaryExpression> fn)
+        private static Expression<Func<TSource, bool>>? Combine<TSource>(this IEnumerable<Expression<Func<TSource, bool>>?> expressions, Func<Expression, Expression, BinaryExpression> fn)
         {
-            expressions = expressions
-                .Where(x => x != null)
+            var notNullExpressions = expressions
+                .WhereNotNull()
                 .ToList();
 
-            if (!expressions.Any())
+            if (!notNullExpressions.Any())
                 return null;
 
-            return expressions.Aggregate((first, second) =>
+            return notNullExpressions.Aggregate((first, second) =>
             {
-                // Parameter rewrite seems to work with 'Invoke' in EF Core 2.x.
-                // If not, use the good old ExpressionVisitor, examples at https://stackoverflow.com/a/5431309/1271211, https://stackoverflow.com/a/6736589/1271211
-                //var invocation = Expression.Invoke(second, first.Parameters);
-                //var conditionalExpr = fn(first.Body, invocation);
-                //var finalExpr = Expression.Lambda<Func<TSource, bool>>(conditionalExpr, first.Parameters);
-                //return finalExpr;
-
                 // Parameter rewrite doesn't work with 'Invoke' in EF Core 3.x anymore.
                 // Use the good old ExpressionVisitor, example at https://stackoverflow.com/a/5431309/1271211
                 var replacedSecond = new ExpressionParameterReplaceVisitor(second.Parameters, first.Parameters).VisitAndConvert(second.Body, fn.Method.Name);
@@ -272,5 +210,8 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions
                 return convert.Operand;
             return property.Body;
         }
+
+        private static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) where T : class
+            => enumerable.OfType<T>();
     }
 }

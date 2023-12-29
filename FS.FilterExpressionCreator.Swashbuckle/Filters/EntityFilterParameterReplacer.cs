@@ -9,7 +9,6 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -20,7 +19,6 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters
     /// Implements <see cref="IOperationFilter" />
     /// </summary>
     /// <seealso cref="IOperationFilter" />
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class EntityFilterParameterReplacer : IOperationFilter
     {
         private const string ENTITY_EXTENSION_PREFIX = "x-entity-filter-";
@@ -31,7 +29,7 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters
         /// Initializes a new instance of the <see cref="EntityFilterParameterReplacer"/> class.
         /// </summary>
         /// <param name="xmlDocumentationFilePaths">Paths to XML documentation files. Used to provide parameter descriptions.</param>
-        public EntityFilterParameterReplacer(IEnumerable<string> xmlDocumentationFilePaths = null)
+        public EntityFilterParameterReplacer(IEnumerable<string>? xmlDocumentationFilePaths)
             => _docXmlReaders = xmlDocumentationFilePaths?.Select(x => new DocXmlReader(x)).ToList() ?? new List<DocXmlReader>();
 
         /// <summary>
@@ -98,7 +96,7 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters
                 .ToList();
         }
 
-        private string GetXmlDocumentationSummary(MemberInfo member)
+        private string? GetXmlDocumentationSummary(MemberInfo member)
             => _docXmlReaders.Select(x => x.GetMemberComment(member)).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
 
         /// <summary>

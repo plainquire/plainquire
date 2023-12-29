@@ -3,6 +3,7 @@ using FS.FilterExpressionCreator.Filters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Newtonsoft.JsonConverters
 {
@@ -18,15 +19,18 @@ namespace FS.FilterExpressionCreator.Newtonsoft.JsonConverters
             => objectType.IsGenericEntityFilter() || objectType == typeof(EntityFilter);
 
         /// <inheritdoc />
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, [NotNull] object? value, JsonSerializer serializer)
         {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
             var entityFilter = (EntityFilter)value;
             var entityFilterData = new EntityFilterData { PropertyFilters = entityFilter.PropertyFilters, NestedFilters = entityFilter.NestedFilters };
             serializer.Serialize(writer, entityFilterData);
         }
 
         /// <inheritdoc />
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
             var entityFilter = (EntityFilter)Activator.CreateInstance(objectType);
             var entityFilterData = serializer.Deserialize<EntityFilterData>(reader) ?? new EntityFilterData();
@@ -37,9 +41,9 @@ namespace FS.FilterExpressionCreator.Newtonsoft.JsonConverters
 
         private class EntityFilterData
         {
-            public List<PropertyFilter> PropertyFilters { get; set; } = new List<PropertyFilter>();
+            public List<PropertyFilter>? PropertyFilters { get; set; } = new();
 
-            public List<NestedFilter> NestedFilters { get; set; } = new List<NestedFilter>();
+            public List<NestedFilter>? NestedFilters { get; set; } = new();
         }
     }
 }

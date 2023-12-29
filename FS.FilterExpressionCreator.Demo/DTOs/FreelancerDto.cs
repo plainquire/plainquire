@@ -11,7 +11,7 @@ namespace FS.FilterExpressionCreator.Demo.DTOs
         /// <summary>
         /// Data retrieved by database query
         /// </summary>
-        public List<Freelancer> Data { get; set; }
+        public List<Freelancer>? Data { get; set; }
 
         /// <summary>
         /// Count of records return by query
@@ -27,16 +27,16 @@ namespace FS.FilterExpressionCreator.Demo.DTOs
         /// <summary>
         /// Sql command used to query database
         /// </summary>
-        public string SqlQuery { get; set; }
+        public string? SqlQuery { get; set; }
 
         /// <summary>
         /// Filter expression used to query database
         /// </summary>
-        public string FilterExpression { get; set; }
+        public string? FilterExpression { get; set; }
 
         /// <summary>
         /// HTTP query used to retrieve data
         /// </summary>
-        public string HttpQuery { get; set; }
+        public string? HttpQuery { get; set; }
     }
 }

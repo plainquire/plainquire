@@ -7,7 +7,6 @@ using System.Reflection;
 
 namespace FS.FilterExpressionCreator.Tests.Attributes
 {
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.Method)]
     public class FilterFuncDataSourceAttribute : Attribute, ITestDataSource
@@ -21,7 +20,7 @@ namespace FS.FilterExpressionCreator.Tests.Attributes
             _entityType = entityType;
         }
 
-        public IEnumerable<object[]> GetData(MethodInfo methodInfo)
+        public IEnumerable<object?[]> GetData(MethodInfo methodInfo)
         {
             if (methodInfo.DeclaringType == null)
                 throw new InvalidOperationException("Class name executing this test not found");
@@ -30,14 +29,13 @@ namespace FS.FilterExpressionCreator.Tests.Attributes
             if (filterFuncMethod == null)
                 throw new InvalidOperationException($"Method {_filterFuncMethod} not found in type '{methodInfo.DeclaringType.Name}'");
 
-            var filterFunctions = (IEnumerable<object>)filterFuncMethod.Invoke(null, new object[] { _entityType });
-
+            var filterFunctions = (IEnumerable<object>?)filterFuncMethod.Invoke(null, new object[] { _entityType });
             return filterFunctions?.Select(filterFunc => new[] { filterFunc }) ?? throw new InvalidOperationException();
         }
 
-        public string GetDisplayName(MethodInfo methodInfo, object[] data)
+        public string GetDisplayName(MethodInfo methodInfo, object?[]? data)
         {
-            var filterFunctionName = ((Delegate)data[0]).Method.Name;
+            var filterFunctionName = ((Delegate?)data?[0])?.Method.Name ?? throw new InvalidOperationException("Unable to get filter method name.");
             return $"{filterFunctionName}: {methodInfo.Name}";
         }
     }

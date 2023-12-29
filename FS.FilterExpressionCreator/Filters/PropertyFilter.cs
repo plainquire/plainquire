@@ -8,7 +8,7 @@ namespace FS.FilterExpressionCreator.Filters
 
         public ValueFilter[] ValueFilters { get; }
 
-        public PropertyFilter(string propertyName, ValueFilter[] valueFilters)
+        public PropertyFilter(string propertyName, ValueFilter[]? valueFilters)
         {
             PropertyName = propertyName ?? throw new ArgumentNullException(nameof(propertyName));
             ValueFilters = valueFilters ?? Array.Empty<ValueFilter>();

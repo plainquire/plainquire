@@ -11,12 +11,12 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
         /// <summary>
         /// The start of range.
         /// </summary>
-        public TType Start { get; }
+        public TType? Start { get; }
 
         /// <summary>
         /// The end of range.
         /// </summary>
-        public TType End { get; }
+        public TType? End { get; }
 
         /// <summary>
         /// Gets the distance between <see cref="Start"/> and <see cref="End"/>.
@@ -29,7 +29,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
         /// </summary>
         /// <param name="start">The start of range.</param>
         /// <param name="end">The end of range.</param>
-        public Range(TType start, TType end)
+        public Range(TType? start, TType? end)
         {
             Start = start;
             End = end;
@@ -53,12 +53,12 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
         }
 
         /// <inheritdoc />
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => Equals(obj as Range<TType>);
 
         /// <inheritdoc />
-        public bool Equals(Range<TType> other)
-            => other != null && EqualityComparer<TType>.Default.Equals(Start, other.Start) && EqualityComparer<TType>.Default.Equals(End, other.End);
+        public bool Equals(Range<TType>? other)
+            => other != null && EqualityComparer<TType?>.Default.Equals(Start, other.Start) && EqualityComparer<TType?>.Default.Equals(End, other.End);
 
         /// <inheritdoc />
         public override int GetHashCode()
@@ -69,15 +69,15 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
         /// </summary>
         /// <param name="val1">The object to compare with <paramref name="val2"/>.</param>
         /// <param name="val2">The object to compare with <paramref name="val1"/>.</param>
-        public static bool operator ==(Range<TType> val1, Range<TType> val2)
-            => EqualityComparer<Range<TType>>.Default.Equals(val1, val2);
+        public static bool operator ==(Range<TType>? val1, Range<TType>? val2)
+            => EqualityComparer<Range<TType>?>.Default.Equals(val1, val2);
 
         /// <summary>
         /// Indicates whether the <paramref name="val1"/> object is not equal to <paramref name="val2"/> object.
         /// </summary>
         /// <param name="val1">The object to compare with <paramref name="val2"/>.</param>
         /// <param name="val2">The object to compare with <paramref name="val1"/>.</param>
-        public static bool operator !=(Range<TType> val1, Range<TType> val2)
+        public static bool operator !=(Range<TType>? val1, Range<TType>? val2)
             => !(val1 == val2);
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
         public static bool operator >=(Range<TType> val1, Range<TType> val2)
             => ((IConvertible)val1).ToDecimal(null) >= ((IConvertible)val2).ToDecimal(null);
 
-        private static string ToString(TType value)
+        private static string? ToString(TType? value)
             => value switch
             {
                 null => null,
@@ -121,7 +121,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
                 _ => value.ToString()
             };
 
-        private static double ToDouble(TType val)
+        private static double ToDouble(TType? val)
             => val switch
             {
                 null => 0,
@@ -259,7 +259,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
         /// <typeparam name="TType">The type of the values represented by range.</typeparam>
         /// <param name="start">The start of range.</param>
         /// <param name="end">The end of range.</param>
-        public static Range<TType> Create<TType>(TType start, TType end) where TType : IComparable<TType>
+        public static Range<TType> Create<TType>(TType? start, TType? end) where TType : IComparable<TType>
             => new Range<TType>(start, end);
     }
 }

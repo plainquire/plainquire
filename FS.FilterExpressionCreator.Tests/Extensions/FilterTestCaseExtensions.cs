@@ -20,7 +20,7 @@ namespace FS.FilterExpressionCreator.Tests.Extensions
             RunInternal(testRunner, testCase.ExpectedException);
         }
 
-        private static void RunInternal(Action testRunner, Exception expectedException)
+        private static void RunInternal(Action testRunner, Exception? expectedException)
         {
             if (expectedException == null)
                 testRunner();

@@ -1412,13 +1412,13 @@ namespace FS.FilterExpressionCreator.Demo.Models
         /// Gets the description for a code name.
         /// </summary>
         /// <param name="codeName">Name of the code.</param>
-        public static string GetDescription(string codeName)
+        public static string? GetDescription(string codeName)
             => _codeNames.FirstOrDefault(x => x.CodeName == codeName)?.Description;
     }
 
     internal class ProjectCodeName
     {
-        public string CodeName { get; init; }
-        public string Description { get; init; }
+        public required string CodeName { get; init; }
+        public required string Description { get; init; }
     }
 }

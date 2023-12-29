@@ -14,19 +14,19 @@ namespace FS.FilterExpressionCreator.Newtonsoft.JsonConverters
     public class ValueFilterConverter : JsonConverter<ValueFilter>
     {
         /// <inheritdoc />
-        public override ValueFilter ReadJson(JsonReader reader, Type objectType, ValueFilter existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override ValueFilter ReadJson(JsonReader reader, Type objectType, ValueFilter? existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             var filterSyntax = reader.Value switch
             {
                 DateTime dtValue => dtValue.ToString("o"),
-                _ => (string)reader.Value
+                _ => (string?)reader.Value
             };
 
             return ValueFilter.Create(filterSyntax);
         }
 
         /// <inheritdoc />
-        public override void WriteJson(JsonWriter writer, ValueFilter value, JsonSerializer serializer)
-            => writer.WriteValue(value.ToString());
+        public override void WriteJson(JsonWriter writer, ValueFilter? value, JsonSerializer serializer)
+            => writer.WriteValue(value?.ToString());
     }
 }

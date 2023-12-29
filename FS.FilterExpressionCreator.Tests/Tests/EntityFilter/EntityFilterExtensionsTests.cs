@@ -27,7 +27,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         {
             var filter = new EntityFilter<TestModel<bool>>()
                 .Add(x => x.ValueA, "1")
-                .Add(x => x.ValueA, (string)null);
+                .Add(x => x.ValueA, (string?)null);
             filter.ToString().Should().Be("x => (x.ValueA == True)");
         }
 
@@ -36,18 +36,18 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         {
             var filter1 = new EntityFilter<TestModel<int>>()
                 .Add(x => x.ValueA, FilterOperator.Default, 1)
-                .Add(x => x.ValueA, FilterOperator.Default, (int[])null);
+                .Add(x => x.ValueA, FilterOperator.Default, (int[]?)null);
             filter1.ToString().Should().Be("x => (x.ValueA == 1)");
 
 
             var filter2 = new EntityFilter<TestModel<int?>>()
                 .Add(x => x.ValueA, FilterOperator.IsNull, 1)
-                .Add(x => x.ValueA, FilterOperator.IsNull, (int[])null);
+                .Add(x => x.ValueA, FilterOperator.IsNull, (int[]?)null);
             filter2.ToString().Should().Be("x => (x.ValueA == null)");
 
             var filter3 = new EntityFilter<TestModel<int>>()
                 .Add(x => x.ValueA, 1)
-                .Add(x => x.ValueA, (int[])null);
+                .Add(x => x.ValueA, (int[]?)null);
             filter3.ToString().Should().Be("x => (x.ValueA == 1)");
         }
 
@@ -85,7 +85,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         {
             var filter = new EntityFilter<TestModel<bool>>()
                 .Replace(x => x.ValueA, "1")
-                .Replace(x => x.ValueA, (string)null);
+                .Replace(x => x.ValueA, (string?)null);
             filter.ToString().Should().Be(string.Empty);
         }
 
@@ -94,18 +94,18 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         {
             var filter1 = new EntityFilter<TestModel<int>>()
                 .Replace(x => x.ValueA, FilterOperator.Default, 1)
-                .Replace(x => x.ValueA, FilterOperator.Default, (int[])null);
+                .Replace(x => x.ValueA, FilterOperator.Default, (int[]?)null);
             filter1.ToString().Should().Be(string.Empty);
 
 
             var filter2 = new EntityFilter<TestModel<int?>>()
                 .Replace(x => x.ValueA, FilterOperator.IsNull, 1)
-                .Replace(x => x.ValueA, FilterOperator.IsNull, (int[])null);
+                .Replace(x => x.ValueA, FilterOperator.IsNull, (int[]?)null);
             filter2.ToString().Should().Be(string.Empty);
 
             var filter3 = new EntityFilter<TestModel<int>>()
                 .Replace(x => x.ValueA, 1)
-                .Replace(x => x.ValueA, (int[])null);
+                .Replace(x => x.ValueA, (int[]?)null);
             filter3.ToString().Should().Be(string.Empty);
         }
 
@@ -148,13 +148,13 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
         private class FilterAttributeTestModel
         {
-            public string FirstName { get; set; }
+            public string? FirstName { get; set; }
 
             [Filter(Name = "Surname")]
-            public string LastName { get; set; }
+            public string? LastName { get; set; }
 
             [Filter(Visible = false)]
-            public string Gender { get; set; }
+            public string? Gender { get; set; }
 
             public DateTime? Birthday { get; set; }
         }

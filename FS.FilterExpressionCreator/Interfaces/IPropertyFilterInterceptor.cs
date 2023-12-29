@@ -20,6 +20,6 @@ namespace FS.FilterExpressionCreator.Interfaces
         /// <param name="filters">The filters values.</param>
         /// <param name="configuration">The active filter configuration</param>
         /// <returns>An expression to used to filter the given property or <c>null</c> to use the default filter creator.</returns>
-        public Expression<Func<TEntity, bool>> CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, ValueFilter[] filters, FilterConfiguration configuration);
+        public Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, ValueFilter[] filters, FilterConfiguration configuration);
     }
 }

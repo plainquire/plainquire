@@ -7,17 +7,16 @@ namespace FS.FilterExpressionCreator.Demo.Pages
 {
     public class IndexPage : ComponentBase
     {
-        [Inject] private NavigationManager NavigationManager { get; set; }
+        [Inject] private NavigationManager NavigationManager { get; set; } = default!;
 
-        protected string DemoAppLink;
-        protected string OpeApiLink;
+        protected string DemoAppLink = string.Empty;
+        protected string OpeApiLink = string.Empty;
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
             var uri = new Uri(NavigationManager.BaseUri);
             DemoAppLink = $"{uri.Scheme}://{uri.Authority}/demo";
-            // ReSharper disable once StringLiteralTypo
             OpeApiLink = $"{uri.Scheme}://{uri.Authority}/openapi";
         }
     }

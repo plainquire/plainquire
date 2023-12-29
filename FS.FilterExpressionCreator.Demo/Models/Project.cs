@@ -1,11 +1,13 @@
 ﻿using FS.FilterExpressionCreator.Abstractions.Attributes;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Demo.Models
 {
     /// <summary>
     /// Project.
     /// </summary>
+    [SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
     public class Project
     {
         /// <summary>
@@ -16,12 +18,12 @@ namespace FS.FilterExpressionCreator.Demo.Models
         /// <summary>
         /// Project title
         /// </summary>
-        public string Title { get; set; }
+        public required string Title { get; set; }
 
         /// <summary>
         /// Description of the project.
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// Identifier of the owning <see cref="Freelancer"/>.

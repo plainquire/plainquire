@@ -48,7 +48,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 
         public class FilterStringsCaseInsensitiveInterceptor : IPropertyFilterInterceptor
         {
-            public Expression<Func<TEntity, bool>> CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, Filters.ValueFilter[] filters, FilterConfiguration configuration)
+            public Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, Filters.ValueFilter[] filters, FilterConfiguration configuration)
             {
                 var filteredPropertyIsTypeOfString = propertyInfo.PropertyType == typeof(string);
                 if (!filteredPropertyIsTypeOfString)

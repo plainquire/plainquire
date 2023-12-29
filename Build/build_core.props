@@ -2,6 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <DefineConstants Condition="'$(TargetFramework)' == 'net6.0'">$(DefineConstants);NET_CORE</DefineConstants>
+    <Nullable>enable</Nullable>
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

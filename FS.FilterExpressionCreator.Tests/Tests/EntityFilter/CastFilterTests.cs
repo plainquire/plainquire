@@ -63,7 +63,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         public class ModelDto
         {
             public Guid Id { get; set; }
-            public string Name { get; init; }
+            public string? Name { get; init; }
             public short Age { get; init; }
             public DateTime? Created { get; init; }
         }
@@ -72,7 +72,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         public class Model
         {
             public Guid Id { get; set; }
-            public string Name { get; }
+            public string? Name { get; }
             public int Age { get; }
             public DateTime Created { get; }
         }

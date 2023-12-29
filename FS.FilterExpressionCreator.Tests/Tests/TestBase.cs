@@ -14,17 +14,16 @@ namespace FS.FilterExpressionCreator.Tests.Tests
     public abstract class TestBase<TModelValue> : TestBase
     {
         protected static readonly TestModelFilterFunc<TModelValue>[] TestModelFilterFunctions =
-        {
+        [
             TestMethods.FilterDirectByLinq,
             TestMethods.FilterNetCloneByLinq,
             TestMethods.FilterNewtonCloneByLinq,
             TestMethods.FilterDirectByEF,
             TestMethods.FilterNetCloneByEF,
             TestMethods.FilterNewtonCloneByEF,
-        };
+        ];
     }
 
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [ExcludeFromCodeCoverage]
     public abstract class TestBase
     {

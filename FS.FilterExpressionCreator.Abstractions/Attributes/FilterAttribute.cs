@@ -15,7 +15,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Attributes
         /// from MVC controllers.
         /// Default is the name of the property.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Set to <c>false</c> to hide this property from binding done via <see><cref>EntityFilter{TEntity}</cref></see> from MVC controllers

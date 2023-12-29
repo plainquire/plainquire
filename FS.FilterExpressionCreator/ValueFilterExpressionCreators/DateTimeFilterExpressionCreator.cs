@@ -36,7 +36,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => new[] { typeof(Range<DateTimeOffset>), typeof(DateTime), typeof(DateTimeOffset) }.Contains(type.GetUnderlyingType());
 
         /// <inheritdoc />
-        protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration configuration)
+        protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration)
         {
             if (value.TryConvertStringToDateTimeRange(configuration.Now(), out var dateTimeSpan, configuration.CultureInfo))
                 return CreateDateTimeExpressionByFilterOperator(propertySelector, filterOperator, dateTimeSpan);

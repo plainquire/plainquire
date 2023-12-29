@@ -7,7 +7,7 @@ namespace FS.FilterExpressionCreator.Demo.Shared
 {
     public class NavMenuComponent : ComponentBase
     {
-        [Inject] private NavigationManager NavigationManager { get; set; }
+        [Inject] private NavigationManager NavigationManager { get; set; } = default!;
 
         protected string OpeApiLink = string.Empty;
 

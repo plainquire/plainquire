@@ -8,7 +8,7 @@ namespace FS.FilterExpressionCreator.Filters
 
         public EntityFilter EntityFilter { get; }
 
-        public NestedFilter(string propertyName, EntityFilter entityFilter)
+        public NestedFilter(string propertyName, EntityFilter? entityFilter)
         {
             PropertyName = propertyName ?? throw new ArgumentNullException(nameof(propertyName));
             EntityFilter = entityFilter ?? new EntityFilter();

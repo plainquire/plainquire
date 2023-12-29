@@ -19,7 +19,7 @@ namespace FS.FilterExpressionCreator.Demo.Controllers
         /// </summary>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
         [HttpGet]
-        public Task<string> GetProductName(CancellationToken cancellationToken = default)
+        public Task<string?> GetProductName(CancellationToken cancellationToken = default)
             => Task.FromResult(AssemblyExtensions.GetProgramProduct());
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace FS.FilterExpressionCreator.Demo.Controllers
         /// </summary>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
         [HttpGet]
-        public Task<string> GetProductVersion(CancellationToken cancellationToken = default)
+        public Task<string?> GetProductVersion(CancellationToken cancellationToken = default)
             => Task.FromResult(AssemblyExtensions.GetProgramProductVersion());
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace FS.FilterExpressionCreator.Demo.Controllers
         /// </summary>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
         [HttpGet]
-        public Task<string> GetProductCopyright(CancellationToken cancellationToken = default)
+        public Task<string?> GetProductCopyright(CancellationToken cancellationToken = default)
             => Task.FromResult(AssemblyExtensions.GetProgramCopyright());
     }
 }

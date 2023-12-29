@@ -5,20 +5,19 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Models
 {
-
     [ExcludeFromCodeCoverage]
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
     public class TestModel<TValue>
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        public TValue ValueA { get; set; }
+        public TValue? ValueA { get; set; }
 
-        public TValue ValueB { get; set; }
+        public TValue? ValueB { get; set; }
 
-        public TestModelNested NestedObject { get; set; }
+        public TestModelNested? NestedObject { get; set; }
 
-        public List<TestModelNested> NestedList { get; set; }
+        public List<TestModelNested>? NestedList { get; set; }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string DebuggerDisplay

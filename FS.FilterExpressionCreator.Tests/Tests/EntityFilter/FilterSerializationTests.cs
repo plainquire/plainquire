@@ -12,7 +12,6 @@ using NewtonSerializer = Newtonsoft.Json.JsonConvert;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 {
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [TestClass, ExcludeFromCodeCoverage]
     public class FilterSerializationTests
     {
@@ -123,8 +122,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 
         private static (T NetFilter, T NewtonFilter) Deserialize<T>(string json)
         {
-            var netFilter = NetSerializer.Deserialize<T>(json);
-            var newtonFilter = NewtonSerializer.DeserializeObject<T>(json, JsonConverterExtensions.NewtonsoftConverters);
+            var netFilter = NetSerializer.Deserialize<T>(json) ?? throw new InvalidOperationException("");
+            var newtonFilter = NewtonSerializer.DeserializeObject<T>(json, JsonConverterExtensions.NewtonsoftConverters) ?? throw new InvalidOperationException("");
             return (netFilter, newtonFilter);
         }
 

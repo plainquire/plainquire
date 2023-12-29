@@ -235,8 +235,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Range
             spanD_D.Intersect(spanB_C).Should().BeFalse();
 
             spanA_A.Intersect(null).Should().BeFalse();
-            ((Range<DateTimeOffset>)null).Intersect(spanA_A).Should().BeFalse();
-            ((Range<DateTimeOffset>)null).Intersect(null).Should().BeFalse();
+            ((Range<DateTimeOffset>?)null).Intersect(spanA_A).Should().BeFalse();
+            ((Range<DateTimeOffset>?)null).Intersect(null).Should().BeFalse();
         }
 
         [TestMethod]
@@ -339,8 +339,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Range
             spanD_D.Intersection(spanB_C).Should().Be(default);
 
             spanA_A.Intersection(null).Should().Be(spanA_A);
-            ((Range<DateTimeOffset>)null).Intersection(spanA_A).Should().Be(spanA_A);
-            ((Range<DateTimeOffset>)null).Intersection(null).Should().Be(default);
+            ((Range<DateTimeOffset>?)null).Intersection(spanA_A).Should().Be(spanA_A);
+            ((Range<DateTimeOffset>?)null).Intersection(null).Should().Be(default);
         }
 
         [TestMethod]
@@ -370,8 +370,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Range
             spanD_D.Union(spanB_C).Should().Be(spanB_D);
 
             spanA_A.Union(null).Should().Be(spanA_A);
-            ((Range<DateTimeOffset>)null).Union(spanA_A).Should().Be(spanA_A);
-            ((Range<DateTimeOffset>)null).Union(null).Should().Be(default);
+            ((Range<DateTimeOffset>?)null).Union(spanA_A).Should().Be(spanA_A);
+            ((Range<DateTimeOffset>?)null).Union(null).Should().Be(default);
         }
 
         [TestMethod]
@@ -400,8 +400,8 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Range
             spanD_D.Contains(spanB_C).Should().BeFalse();
 
             spanA_A.Contains(null).Should().BeFalse();
-            ((Range<DateTimeOffset>)null).Contains(spanA_A).Should().BeFalse();
-            ((Range<DateTimeOffset>)null).Contains(null).Should().BeFalse();
+            ((Range<DateTimeOffset>?)null).Contains(spanA_A).Should().BeFalse();
+            ((Range<DateTimeOffset>?)null).Contains(null).Should().BeFalse();
         }
 
         [TestMethod]
@@ -468,7 +468,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.Range
 
         private class NonConvertible : IComparable<NonConvertible>
         {
-            public int CompareTo(NonConvertible other)
+            public int CompareTo(NonConvertible? other)
                 => throw new NotImplementedException();
 
             public override string ToString()

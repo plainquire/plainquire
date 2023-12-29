@@ -16,8 +16,8 @@ namespace FS.FilterExpressionCreator.Demo.Pages
 {
     public class DemoPage : ComponentBase
     {
-        [Inject] private HttpClient HttpClient { get; set; }
-        [Inject] private NavigationManager NavigationManager { get; set; }
+        [Inject] private HttpClient HttpClient { get; set; } = default!;
+        [Inject] private NavigationManager NavigationManager { get; set; } = default!;
 
         private readonly Random _randomizer = new();
 
@@ -77,7 +77,7 @@ namespace FS.FilterExpressionCreator.Demo.Pages
         }
 
         protected async Task FormatSql()
-            => QueryResult.SqlQuery = await FormatSql(QueryResult.SqlQuery);
+            => QueryResult.SqlQuery = await FormatSql(QueryResult.SqlQuery!);
 
         private void SetQueryModelFromUrl(string url)
         {
@@ -105,10 +105,10 @@ namespace FS.FilterExpressionCreator.Demo.Pages
                 throw new InvalidOperationException("Unable to query database.");
 
             var json = await response.Content.ReadAsStringAsync();
-            QueryResult = JsonConvert.DeserializeObject<FreelancerDto>(json);
+            QueryResult = JsonConvert.DeserializeObject<FreelancerDto>(json) ?? new();
         }
 
-        private async Task<string> FormatSql(string sql)
+        private async Task<string?> FormatSql(string sql)
         {
             var requestUri = "https://sqlformat.org/api/v1/format";
             requestUri = QueryHelpers.AddQueryString(requestUri, "sql", sql);
@@ -125,14 +125,14 @@ namespace FS.FilterExpressionCreator.Demo.Pages
 
         protected class FreelancerQueryModel
         {
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-            public string Gender { get; set; }
-            public string Birthday { get; set; }
-            public string HourlyRate { get; set; }
-            public string YearsOfExperience { get; set; }
-            public string ProjectTitle { get; set; }
-            public string Seed { get; set; }
+            public string? FirstName { get; set; }
+            public string? LastName { get; set; }
+            public string? Gender { get; set; }
+            public string? Birthday { get; set; }
+            public string? HourlyRate { get; set; }
+            public string? YearsOfExperience { get; set; }
+            public string? ProjectTitle { get; set; }
+            public string? Seed { get; set; }
 
             public static FreelancerQueryModel FromQuery(Dictionary<string, StringValues> queryParameters)
             {
@@ -145,12 +145,12 @@ namespace FS.FilterExpressionCreator.Demo.Pages
             public Dictionary<string, StringValues> ToQuery()
                 => GetType()
                      .GetProperties()
-                     .Select(x => new { x.Name, Value = (string)x.GetMethod?.Invoke(this, null) })
+                     .Select(x => new { x.Name, Value = (string?)x.GetMethod?.Invoke(this, null) })
                      .Where(x => !string.IsNullOrEmpty(x.Value))
                      .ToDictionary(x => x.Name.LowercaseFirstChar(), x => new StringValues(x.Value));
 
-            public void SetByName(string propertyName, string value)
-                => GetType().GetProperty(propertyName)?.SetMethod?.Invoke(this, new object[] { value });
+            public void SetByName(string propertyName, string? value)
+                => GetType().GetProperty(propertyName)?.SetMethod?.Invoke(this, new object?[] { value });
 
             public void Clear()
             {
@@ -167,7 +167,7 @@ namespace FS.FilterExpressionCreator.Demo.Pages
         private class SqlFormatResult
         {
             // ReSharper disable once UnusedAutoPropertyAccessor.Local
-            public string Result { get; set; }
+            public string? Result { get; set; }
         }
     }
 }

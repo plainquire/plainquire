@@ -39,7 +39,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
             => _primitiveNumberTypes.Contains(type.GetUnderlyingType());
 
         /// <inheritdoc />
-        protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string value, FilterConfiguration configuration)
+        protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration)
         {
             if (decimal.TryParse(value, NumberStyles.Any, configuration.CultureInfo, out var decimalValue))
                 return CreateNumberExpressionByFilterOperator(propertySelector, filterOperator, decimalValue);

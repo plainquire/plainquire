@@ -42,7 +42,7 @@ namespace FS.FilterExpressionCreator.Filters
         /// <summary>
         /// Gets the values to filter for. Multiple values are combined with logical OR.
         /// </summary>
-        public string Value { get; private set; }
+        public string? Value { get; private set; }
 
         /// <summary>
         /// Indicates whether this filter is empty.
@@ -57,7 +57,7 @@ namespace FS.FilterExpressionCreator.Filters
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="filterOperator">The filter operator.</param>
         /// <param name="value">The value to filter for. Unused, if <paramref name="filterOperator"/> is <see cref="FilterOperator.IsNull"/> or <see cref="FilterOperator.NotNull"/>; otherwise at least one value is required.</param>
-        public static ValueFilter Create<TValue>(FilterOperator filterOperator, TValue value)
+        public static ValueFilter Create<TValue>(FilterOperator filterOperator, TValue? value)
         {
             var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
             if (isNullableFilterOperator)
@@ -99,21 +99,22 @@ namespace FS.FilterExpressionCreator.Filters
         /// Creates the specified filter.
         /// </summary>
         /// <param name="filterSyntax">The filter micro syntax to create the filter from.</param>
-        public static ValueFilter Create(string filterSyntax)
+        public static ValueFilter Create(string? filterSyntax)
         {
             var (filterOperator, value) = ExtractPropertyFilterOperator(filterSyntax);
             return Create(filterOperator, value);
         }
 
         /// <inheritdoc />
-        public override string ToString()
+        public override string? ToString()
         {
             if (string.IsNullOrEmpty(_filterOperatorToPrefixMap[Operator]) && Value == null)
                 return null;
+
             return _filterOperatorToPrefixMap[Operator] + Value;
         }
 
-        private static string ValueToFilterString(object value)
+        private static string ValueToFilterString(object? value)
         {
             var result = value switch
             {
@@ -126,7 +127,7 @@ namespace FS.FilterExpressionCreator.Filters
             return result;
         }
 
-        private static (FilterOperator, string) ExtractPropertyFilterOperator(string filter)
+        private static (FilterOperator, string?) ExtractPropertyFilterOperator(string? filter)
         {
             var filterOperator = FilterOperator.Default;
 
@@ -166,6 +167,6 @@ namespace FS.FilterExpressionCreator.Filters
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private string DebuggerDisplay => ToString();
+        private string? DebuggerDisplay => ToString();
     }
 }

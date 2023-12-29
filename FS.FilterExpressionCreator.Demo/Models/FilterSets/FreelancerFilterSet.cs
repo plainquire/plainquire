@@ -12,11 +12,11 @@ namespace FS.FilterExpressionCreator.Demo.Models.FilterSets
         /// <summary>
         /// Gets or sets the filter for freelancers.
         /// </summary>
-        public EntityFilter<Freelancer> Freelancer { get; set; }
+        public EntityFilter<Freelancer> Freelancer { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the filter for projects.
         /// </summary>
-        public EntityFilter<Project> Project { get; set; }
+        public EntityFilter<Project> Project { get; set; } = new();
     }
 }

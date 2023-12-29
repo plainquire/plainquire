@@ -7,7 +7,6 @@ using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -15,7 +14,6 @@ using System.Linq;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 {
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [TestClass, ExcludeFromCodeCoverage]
     public class EntityFilterTests : TestBase
     {
@@ -32,7 +30,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
                 new() { ValueA = new DateTime(1999, 01, 01)},
                 new() { ValueA = new DateTime(2000, 01, 01)},
                 new() { ValueA = new DateTime(2000, 12, 31)},
-                new() { ValueA = new DateTime(2001, 01, 01)},
+                new() { ValueA = new DateTime(2001, 01, 01)}
             };
 
             var filteredEntitiesLinq = filterFunc(testItems, testItemsFilter);
@@ -50,7 +48,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
             var testItems = new List<TestModel<string>>
             {
                 new() { ValueA = "A" },
-                new() { ValueA = "B" },
+                new() { ValueA = "B" }
             };
 
             var filteredEntities = filterFunc(testItems, testItemsFilter).ToList();
@@ -69,7 +67,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
             var testItems = new List<TestModel<string>>
             {
                 new() { ValueA = "A", ValueB = "1" },
-                new() { ValueA = "B", ValueB = "2" },
+                new() { ValueA = "B", ValueB = "2" }
             };
 
             var filteredEntities = filterFunc(testItems, testItemsFilter).ToList();
@@ -94,7 +92,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
             using var _ = new AssertionScope();
 
             var entityFilter1 = new EntityFilter<TestModel<string>>()
-                .Add(x => x.ValueA, (string[])null);
+                .Add(x => x.ValueA, (string[]?)null);
 
             var entityFilter2 = new EntityFilter<TestModel<string>>()
                 .Add(x => x.ValueA, Array.Empty<string>());
@@ -142,7 +140,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
             var testItems = new List<TestModel<string>>
             {
                 new() { ValueA = "A" },
-                new() { ValueA = null },
+                new() { ValueA = null }
             };
 
             var isNullItemsAdded = filterFunc(testItems, isNullFilterAdded).ToList();
@@ -177,7 +175,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
             var testItems = new List<TestModel<string>>
             {
                 new() { ValueA = "A" },
-                new() { ValueA = null },
+                new() { ValueA = null }
             };
 
             var isNullItemsAdded = filterFunc(testItems, isNullFilterAdded).ToList();
@@ -202,7 +200,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
             {
                 new() { ValueA = "A" },
                 new() { ValueA = "" },
-                new() { ValueA = null },
+                new() { ValueA = null }
             };
 
             var filteredItems = filterFunc(testItems, filter).ToList();
@@ -227,7 +225,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         [TestMethod]
         public void WhenPropertyFilterStringForSingleValueIsRetrieved_ThenFilterSyntaxIsSameAsGiven()
         {
-            var filterSyntax = ">=2000";
+            const string filterSyntax = ">=2000";
             var filter = new EntityFilter<TestModel<DateTime>>()
                 .Add(x => x.ValueA, filterSyntax);
 
@@ -237,9 +235,9 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         }
 
         [TestMethod]
-        public void WhenPropertyFilterStringForMultipleValuesIsRetrieved_ThenFilterSyntaxIsSameAsGiven()
+        public void WhenPropertyFilterStringForMultipleValuesAreRetrieved_ThenFilterSyntaxIsSameAsGiven()
         {
-            var filterSyntax = ">=2000,<3000";
+            const string filterSyntax = ">=2000,<3000";
             var filter = new EntityFilter<TestModel<DateTime>>()
                 .Add(x => x.ValueA, filterSyntax);
 
@@ -261,14 +259,13 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
         }
 
         [TestMethod]
-        public void WhenPropertyFilterValuesForMultipleValuesIsRetrieved_ThenFilterSyntaxIsSameAsGiven()
+        public void WhenPropertyFilterValuesForMultipleValuesAreRetrieved_ThenFilterSyntaxIsSameAsGiven()
         {
             var filterValues = new[] { Filters.ValueFilter.Create(">=2000"), Filters.ValueFilter.Create("<2000") };
             var filter = new EntityFilter<TestModel<DateTime>>()
                 .Add(x => x.ValueA, filterValues);
 
             var retrievedFilterValues = filter.GetPropertyFilterValues(x => x.ValueA);
-            var g = JsonConvert.SerializeObject(retrievedFilterValues, Formatting.Indented);
 
             retrievedFilterValues.Should().BeEquivalentTo(filterValues);
         }
