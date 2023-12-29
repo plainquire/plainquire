@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [TestClass, ExcludeFromCodeCoverage]
     public class CastFilterTests : TestBase
     {

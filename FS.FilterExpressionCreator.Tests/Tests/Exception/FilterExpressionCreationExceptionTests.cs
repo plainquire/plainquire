@@ -10,6 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.Exception
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [TestClass, ExcludeFromCodeCoverage]
     public class FilterExpressionCreationExceptionTests : TestBase
     {

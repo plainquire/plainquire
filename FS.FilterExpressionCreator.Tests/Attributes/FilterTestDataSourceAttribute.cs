@@ -8,6 +8,7 @@ using System.Reflection;
 
 namespace FS.FilterExpressionCreator.Tests.Attributes
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.Method)]
     public class FilterTestDataSourceAttribute : Attribute, ITestDataSource

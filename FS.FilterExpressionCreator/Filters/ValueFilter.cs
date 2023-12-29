@@ -4,6 +4,7 @@ using FS.FilterExpressionCreator.JsonConverters;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace FS.FilterExpressionCreator.Filters
@@ -11,6 +12,7 @@ namespace FS.FilterExpressionCreator.Filters
     /// <summary>
     /// Defines a filter for a property.
     /// </summary>
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [JsonConverter(typeof(ValueFilterConverter))]
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
     public class ValueFilter

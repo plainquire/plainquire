@@ -12,6 +12,7 @@ using NewtonSerializer = Newtonsoft.Json.JsonConvert;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [TestClass, ExcludeFromCodeCoverage]
     public class FilterSerializationTests
     {

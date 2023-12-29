@@ -5,12 +5,14 @@ using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq.Expressions;
 
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 {
     /// <inheritdoc cref="INumericFilterExpressionCreator"/>
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class NumericFilterExpressionCreator : DefaultFilterExpressionCreator, INumericFilterExpressionCreator
     {
         private static readonly List<Type> _primitiveNumberTypes = new List<Type> { typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal) };

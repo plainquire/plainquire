@@ -7,12 +7,14 @@ using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 {
     /// <inheritdoc />
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class DefaultFilterExpressionCreator : IValueFilterExpressionCreator
     {
         /// <summary>

@@ -4,12 +4,14 @@ using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators
 {
     /// <inheritdoc cref="IDateTimeFilterExpressionCreator"/>
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class DateTimeFilterExpressionCreator : DefaultFilterExpressionCreator, IDateTimeFilterExpressionCreator
     {
         /// <inheritdoc />

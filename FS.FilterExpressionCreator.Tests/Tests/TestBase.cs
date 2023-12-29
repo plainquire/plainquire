@@ -24,7 +24,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests
         };
     }
 
-
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [ExcludeFromCodeCoverage]
     public abstract class TestBase
     {

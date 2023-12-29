@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Models
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [ExcludeFromCodeCoverage]
     public class FilterTestCase<TFilterValue, TModelValue> : FilterTestCase
     {
@@ -52,6 +53,7 @@ namespace FS.FilterExpressionCreator.Tests.Models
             };
     }
 
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [ExcludeFromCodeCoverage]
     public class FilterTestCase
     {

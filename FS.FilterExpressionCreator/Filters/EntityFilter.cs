@@ -7,6 +7,7 @@ using FS.FilterExpressionCreator.PropertyFilterExpressionCreators;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -19,6 +20,7 @@ namespace FS.FilterExpressionCreator.Filters
     /// Hub to create filter expressions for <typeparamref name="TEntity"/> with fluent API.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity to create the filter for.</typeparam>
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [JsonConverter(typeof(EntityFilterConverterFactory))]
     [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
     public class EntityFilter<TEntity> : EntityFilter
@@ -258,6 +260,7 @@ namespace FS.FilterExpressionCreator.Filters
     }
 
     /// <inheritdoc cref="EntityFilter{TEntity}" />
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [JsonConverter(typeof(EntityFilterConverter))]
     public class EntityFilter
     {

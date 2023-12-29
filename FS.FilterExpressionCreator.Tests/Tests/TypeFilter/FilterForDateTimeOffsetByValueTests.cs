@@ -10,6 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     [TestClass, ExcludeFromCodeCoverage]
     public class FilterForDateTimeOffsetByValueTests : TestBase<DateTimeOffset>
     {

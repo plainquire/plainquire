@@ -1,8 +1,11 @@
-﻿namespace FS.FilterExpressionCreator.Demo.Models.Configuration
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace FS.FilterExpressionCreator.Demo.Models.Configuration
 {
     /// <summary>
     /// Global application configuration
     /// </summary>
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class FilterExpressionCreatorConfiguration
     {
         /// <summary>
