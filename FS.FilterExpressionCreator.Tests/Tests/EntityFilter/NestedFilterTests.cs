@@ -9,109 +9,108 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
+namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter;
+
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+[TestClass, ExcludeFromCodeCoverage]
+public class NestedFilterTests : TestBase
 {
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
-    [TestClass, ExcludeFromCodeCoverage]
-    public class NestedFilterTests : TestBase
+    [DataTestMethod]
+    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    public void WhenNestedEntityFilterIsApplied_ThenNestedPropertyIsFiltered(EntityFilterFunc<TestModel<string>> filterFunc)
     {
-        [DataTestMethod]
-        [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
-        public void WhenNestedEntityFilterIsApplied_ThenNestedPropertyIsFiltered(EntityFilterFunc<TestModel<string>> filterFunc)
+        var nestedFilter = new EntityFilter<TestModelNested?>()
+            .Replace(x => x!.Value, "=NestedA");
+
+        var outerFilter = new EntityFilter<TestModel<string>>()
+            .Replace(x => x.ValueA, "=OuterA")
+            .ReplaceNested(x => x.NestedObject, nestedFilter);
+
+        var testItems = new List<TestModel<string>>
         {
-            var nestedFilter = new EntityFilter<TestModelNested?>()
-                .Replace(x => x!.Value, "=NestedA");
+            new() { ValueA = "OuterA", NestedObject = new() { Value = "NestedA" } },
+            new() { ValueA = "OuterA", NestedObject = new() { Value = "NestedB" } },
+            new() { ValueA = "OuterB", NestedObject = new() { Value = "NestedB" } },
+        };
 
-            var outerFilter = new EntityFilter<TestModel<string>>()
-                .Replace(x => x.ValueA, "=OuterA")
-                .ReplaceNested(x => x.NestedObject, nestedFilter);
+        var filteredEntities = filterFunc(testItems, outerFilter);
 
-            var testItems = new List<TestModel<string>>
-            {
-                new() { ValueA = "OuterA", NestedObject = new() { Value = "NestedA" } },
-                new() { ValueA = "OuterA", NestedObject = new() { Value = "NestedB" } },
-                new() { ValueA = "OuterB", NestedObject = new() { Value = "NestedB" } },
-            };
+        filteredEntities.Should().BeEquivalentTo(new[] { testItems[0] });
+    }
 
-            var filteredEntities = filterFunc(testItems, outerFilter);
+    [DataTestMethod]
+    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    public void WhenNestedEntityFilterIsApplied_ThenNestedListIsFiltered(EntityFilterFunc<TestModel<string>> filterFunc)
+    {
+        var nestedFilter = new EntityFilter<TestModelNested>()
+            .Replace(x => x.Value, "=NestedA");
 
-            filteredEntities.Should().BeEquivalentTo(new[] { testItems[0] });
-        }
+        var outerFilter = new EntityFilter<TestModel<string>>()
+            .Replace(x => x.ValueA, "=OuterA")
+            .ReplaceNested(x => x.NestedList, nestedFilter);
 
-        [DataTestMethod]
-        [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
-        public void WhenNestedEntityFilterIsApplied_ThenNestedListIsFiltered(EntityFilterFunc<TestModel<string>> filterFunc)
+        var testItems = new List<TestModel<string>>
         {
-            var nestedFilter = new EntityFilter<TestModelNested>()
-                .Replace(x => x.Value, "=NestedA");
+            new() { ValueA = "OuterA", NestedList = new() { new() { Value = "NestedA" } } },
+            new() { ValueA = "OuterA", NestedList = new() { new() { Value = "NestedB" } } },
+            new() { ValueA = "OuterA", NestedList = new() { new() { Value = "NestedA" }, new() { Value = "NestedB" } } },
+            new() { ValueA = "OuterB", NestedList = new() { new() { Value = "NestedB" } } },
+        };
 
-            var outerFilter = new EntityFilter<TestModel<string>>()
-                .Replace(x => x.ValueA, "=OuterA")
-                .ReplaceNested(x => x.NestedList, nestedFilter);
+        var filteredEntities = filterFunc(testItems, outerFilter);
 
-            var testItems = new List<TestModel<string>>
-            {
-                new() { ValueA = "OuterA", NestedList = new() { new() { Value = "NestedA" } } },
-                new() { ValueA = "OuterA", NestedList = new() { new() { Value = "NestedB" } } },
-                new() { ValueA = "OuterA", NestedList = new() { new() { Value = "NestedA" }, new() { Value = "NestedB" } } },
-                new() { ValueA = "OuterB", NestedList = new() { new() { Value = "NestedB" } } },
-            };
+        filteredEntities.Should().BeEquivalentTo(new[] { testItems[0], testItems[2] });
+    }
 
-            var filteredEntities = filterFunc(testItems, outerFilter);
+    [TestMethod]
+    public void WhenNestedPropertyFilterIsAdded_ThenArgumentExceptionIsThrown()
+    {
+        ((Action)(() => new EntityFilter<TestModel<string>>().Add(x => x.NestedObject!.Value, "=NestedA")))
+            .Should()
+            .Throw<ArgumentException>().WithMessage("Given property must be a first level property access expression like person => person.Name (Parameter 'property')");
+    }
 
-            filteredEntities.Should().BeEquivalentTo(new[] { testItems[0], testItems[2] });
-        }
+    [TestMethod]
+    public void WhenNestedObjectOfFilterIsNull_ThenValidFilterIsCreated()
+    {
+        var nestedFilter = new EntityFilter<TestModelNested?>()
+            .Replace(x => x!.Value, "=NestedA");
 
-        [TestMethod]
-        public void WhenNestedPropertyFilterIsAdded_ThenArgumentExceptionIsThrown()
-        {
-            ((Action)(() => new EntityFilter<TestModel<string>>().Add(x => x.NestedObject!.Value, "=NestedA")))
-                .Should()
-                .Throw<ArgumentException>().WithMessage("Given property must be a first level property access expression like person => person.Name (Parameter 'property')");
-        }
+        var outerFilter = new EntityFilter<TestModel<string>>()
+            .AddNested(x => x.NestedObject, nestedFilter);
 
-        [TestMethod]
-        public void WhenNestedObjectOfFilterIsNull_ThenValidFilterIsCreated()
-        {
-            var nestedFilter = new EntityFilter<TestModelNested?>()
-                .Replace(x => x!.Value, "=NestedA");
+        var items = new TestModel<string>[] { new() { NestedObject = null } };
 
-            var outerFilter = new EntityFilter<TestModel<string>>()
-                .AddNested(x => x.NestedObject, nestedFilter);
+        var filteredItems = items.Where(outerFilter).ToList();
+        filteredItems.Should().BeEmpty();
+    }
 
-            var items = new TestModel<string>[] { new() { NestedObject = null } };
+    [TestMethod]
+    public void WhenNestedListOfFilterIsNull_ThenValidFilterIsCreated()
+    {
+        var nestedFilter = new EntityFilter<TestModelNested>()
+            .Replace(x => x.Value, "=NestedA");
 
-            var filteredItems = items.Where(outerFilter).ToList();
-            filteredItems.Should().BeEmpty();
-        }
+        var outerFilter = new EntityFilter<TestModel<string>>()
+            .AddNested(x => x.NestedList, nestedFilter);
 
-        [TestMethod]
-        public void WhenNestedListOfFilterIsNull_ThenValidFilterIsCreated()
-        {
-            var nestedFilter = new EntityFilter<TestModelNested>()
-                .Replace(x => x.Value, "=NestedA");
+        var items = new TestModel<string>[] { new() { NestedList = null } };
 
-            var outerFilter = new EntityFilter<TestModel<string>>()
-                .AddNested(x => x.NestedList, nestedFilter);
+        var filteredItems = items.Where(outerFilter).ToList();
+        filteredItems.Should().BeEmpty();
+    }
 
-            var items = new TestModel<string>[] { new() { NestedList = null } };
+    [DataTestMethod]
+    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    public void WhenNestedGivenNestedFilterIsNull_ThenEmptyNestedFilterIsCreated(EntityFilterFunc<TestModel<string>> filterFunc)
+    {
+        var outerFilter = new EntityFilter<TestModel<string>>()
+            .Add(x => x.ValueA, "A")
+            .AddNested(x => x.NestedList, (EntityFilter<TestModelNested>?)null);
 
-            var filteredItems = items.Where(outerFilter).ToList();
-            filteredItems.Should().BeEmpty();
-        }
+        var testItems = new TestModel<string>[] { new() { ValueA = "A" } };
 
-        [DataTestMethod]
-        [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
-        public void WhenNestedGivenNestedFilterIsNull_ThenEmptyNestedFilterIsCreated(EntityFilterFunc<TestModel<string>> filterFunc)
-        {
-            var outerFilter = new EntityFilter<TestModel<string>>()
-                .Add(x => x.ValueA, "A")
-                .AddNested(x => x.NestedList, (EntityFilter<TestModelNested>?)null);
-
-            var testItems = new TestModel<string>[] { new() { ValueA = "A" } };
-
-            var filteredEntities = filterFunc(testItems, outerFilter);
-            filteredEntities.Should().BeEquivalentTo(new[] { testItems[0] });
-        }
+        var filteredEntities = filterFunc(testItems, outerFilter);
+        filteredEntities.Should().BeEquivalentTo(new[] { testItems[0] });
     }
 }

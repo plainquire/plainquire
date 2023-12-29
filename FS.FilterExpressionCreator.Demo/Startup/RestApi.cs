@@ -5,29 +5,28 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Converters;
 
-namespace FS.FilterExpressionCreator.Demo.Startup
+namespace FS.FilterExpressionCreator.Demo.Startup;
+
+internal static class RestApi
 {
-    internal static class RestApi
+    public static IApplicationBuilder RegisterRestApiRoutes(this IApplicationBuilder applicationBuilder)
+        => applicationBuilder
+            .UseEndpoints(endpoints => endpoints.MapControllers());
+
+    public static IServiceCollection RegisterRestApiController(this IServiceCollection services)
     {
-        public static IApplicationBuilder RegisterRestApiRoutes(this IApplicationBuilder applicationBuilder)
-            => applicationBuilder
-                .UseEndpoints(endpoints => endpoints.MapControllers());
+        services
+            .AddControllers(options =>
+            {
+                options.OutputFormatters.RemoveType<StringOutputFormatter>();
+            })
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.Converters.Add(new StringEnumConverter());
+            })
+            .AddFilterExpressionsSupport()
+            .AddFilterExpressionsNewtonsoftSupport();
 
-        public static IServiceCollection RegisterRestApiController(this IServiceCollection services)
-        {
-            services
-                .AddControllers(options =>
-                {
-                    options.OutputFormatters.RemoveType<StringOutputFormatter>();
-                })
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
-                })
-                .AddFilterExpressionsSupport()
-                .AddFilterExpressionsNewtonsoftSupport();
-
-            return services;
-        }
+        return services;
     }
 }

@@ -1,11 +1,10 @@
-﻿namespace FS.FilterExpressionCreator.Tests.Models
+﻿namespace FS.FilterExpressionCreator.Tests.Models;
+
+public enum TestEnum : short
 {
-    public enum TestEnum : short
-    {
-        Negative = -1,
-        Neutral = 0,
-        Positive = 1,
-        Positive2 = 2,
-        Positive4 = 4
-    }
+    Negative = -1,
+    Neutral = 0,
+    Positive = 1,
+    Positive2 = 2,
+    Positive4 = 4
 }

@@ -1,23 +1,22 @@
-﻿namespace FS.FilterExpressionCreator.Demo.Models
+﻿namespace FS.FilterExpressionCreator.Demo.Models;
+
+/// <summary>
+/// Gender enum
+/// </summary>
+public enum Gender
 {
     /// <summary>
-    /// Gender enum
+    /// Divers
     /// </summary>
-    public enum Gender
-    {
-        /// <summary>
-        /// Divers
-        /// </summary>
-        Divers = 0,
+    Divers = 0,
 
-        /// <summary>
-        /// Male
-        /// </summary>
-        Male = 1,
+    /// <summary>
+    /// Male
+    /// </summary>
+    Male = 1,
 
-        /// <summary>
-        /// Female
-        /// </summary>
-        Female = 2,
-    }
+    /// <summary>
+    /// Female
+    /// </summary>
+    Female = 2,
 }

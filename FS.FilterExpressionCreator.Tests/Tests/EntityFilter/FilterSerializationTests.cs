@@ -10,135 +10,135 @@ using System.Linq;
 using NetSerializer = System.Text.Json.JsonSerializer;
 using NewtonSerializer = Newtonsoft.Json.JsonConvert;
 
-namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
+namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter;
+
+[TestClass, ExcludeFromCodeCoverage]
+public class FilterSerializationTests
 {
-    [TestClass, ExcludeFromCodeCoverage]
-    public class FilterSerializationTests
+    [TestMethod]
+    public void WhenEntityFilterIsSerializedWithNetAndNewtonsoft_ResultIsEqual()
     {
-        [TestMethod]
-        public void WhenEntityFilterIsSerializedWithNetAndNewtonsoft_ResultIsEqual()
+        var nestedEntityFilterA = new EntityFilter<TestModelNested>()
+            .Replace(x => x.Value, "=NestedA");
+
+        var nestedEntityFilterB = new EntityFilter<TestModelNested>()
+            .Replace(x => x.Value, "=NestedB");
+
+        var entityFilter = new EntityFilter<TestModel<string>>()
+            .Replace(x => x.ValueA, "Hello")
+            .ReplaceNested(x => x.NestedObject, nestedEntityFilterA)
+            .ReplaceNested(x => x.NestedList, nestedEntityFilterB);
+
+        var netJson = NetSerializer.Serialize(entityFilter);
+        var newtonJson = NewtonSerializer.SerializeObject(entityFilter, JsonConverterExtensions.NewtonsoftConverters);
+
+        netJson.Should().Be(newtonJson);
+    }
+
+    [TestMethod]
+    public void WhenEmptyEntityFilterIsDeserialized_ThenValidEmptyFilterIsCreated()
+    {
+        var (netFilter, newtonFilter) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_EMPTY);
+
+        netFilter.ToString().Should().BeEquivalentTo(newtonFilter.ToString());
+
+        netFilter.CreateFilter().Should().BeNull();
+    }
+
+    [TestMethod]
+    public void WhenEntityFilterWithEmptyPropertiesIsDeserialized_ThenValidEmptyFilterIsCreated()
+    {
+        var (netFilter1, newtonFilter1) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_PROP_NULL);
+        var (netFilter2, newtonFilter2) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_PROP_EMPTY);
+
+        netFilter1.ToString().Should().BeEquivalentTo(newtonFilter1.ToString());
+        netFilter2.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
+        netFilter1.ToString().Should().BeEquivalentTo(netFilter2.ToString());
+
+        netFilter1.CreateFilter().Should().BeNull();
+    }
+
+    [TestMethod]
+    public void WhenEntityFilterWithEmptyNestedIsDeserialized_ThenValidFilterIsCreated()
+    {
+        var (netFilter1, newtonFilter1) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_NULL);
+        var (netFilter2, newtonFilter2) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_EMPTY);
+
+        netFilter1.ToString().Should().BeEquivalentTo(newtonFilter1.ToString());
+        netFilter1.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
+        netFilter2.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
+
+        var items = new TestModel<DateTime>[]
         {
-            var nestedEntityFilterA = new EntityFilter<TestModelNested>()
-                    .Replace(x => x.Value, "=NestedA");
+            new () { ValueA = new DateTime(2020, 03, 14, 0 ,0 , 0, DateTimeKind.Utc )},
+            new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc )},
+            new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc )},
+        };
 
-            var nestedEntityFilterB = new EntityFilter<TestModelNested>()
-                .Replace(x => x.Value, "=NestedB");
+        var filteredItems = items.Where(netFilter1).ToList();
+        filteredItems.Should().BeEquivalentTo(new[] { items[1] });
+    }
 
-            var entityFilter = new EntityFilter<TestModel<string>>()
-                .Replace(x => x.ValueA, "Hello")
-                .ReplaceNested(x => x.NestedObject, nestedEntityFilterA)
-                .ReplaceNested(x => x.NestedList, nestedEntityFilterB);
+    [TestMethod]
+    public void WhenEntityFilterWithEmptyNestedPropertyIsDeserialized_ThenValidFilterIsCreated()
+    {
+        var (netFilter1, newtonFilter1) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_PROP_NULL);
+        var (netFilter2, newtonFilter2) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_PROP_EMPTY);
 
-            var netJson = NetSerializer.Serialize(entityFilter);
-            var newtonJson = NewtonSerializer.SerializeObject(entityFilter, JsonConverterExtensions.NewtonsoftConverters);
+        netFilter1.ToString().Should().BeEquivalentTo(newtonFilter1.ToString());
+        netFilter1.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
+        netFilter2.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
 
-            netJson.Should().Be(newtonJson);
-        }
-
-        [TestMethod]
-        public void WhenEmptyEntityFilterIsDeserialized_ThenValidEmptyFilterIsCreated()
+        var items = new TestModel<DateTime>[]
         {
-            var (netFilter, newtonFilter) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_EMPTY);
+            new () { ValueA = new DateTime(2020, 03, 14, 0 ,0 , 0, DateTimeKind.Utc )},
+            new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc )},
+            new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc )},
+        };
 
-            netFilter.ToString().Should().BeEquivalentTo(newtonFilter.ToString());
+        var filteredItems = items.Where(netFilter1).ToList();
+        filteredItems.Should().BeEquivalentTo(new[] { items[1] });
+    }
 
-            netFilter.CreateFilter().Should().BeNull();
-        }
+    [TestMethod]
+    public void WhenFullEntityFilterIsDeserialized_ThenValidFilterIsCreated()
+    {
+        var (netFilter, newtonFilter) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_FULL);
 
-        [TestMethod]
-        public void WhenEntityFilterWithEmptyPropertiesIsDeserialized_ThenValidEmptyFilterIsCreated()
+        netFilter.ToString().Should().BeEquivalentTo(newtonFilter.ToString());
+
+        var items = new TestModel<DateTime>[]
         {
-            var (netFilter1, newtonFilter1) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_PROP_NULL);
-            var (netFilter2, newtonFilter2) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_PROP_EMPTY);
+            new () { ValueA = new DateTime(2020, 03, 14, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedA" }, NestedList = new() { new () { Value= "NestedA" } } },
+            new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedA" }, NestedList = new() { new () { Value= "NestedA" } } },
+            new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedA" }, NestedList = new() { new () { Value= "NestedB" } } },
+            new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedB" }, NestedList = new() { new () { Value= "NestedB" } } },
+            new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedB" }, NestedList = new() { new () { Value= "NestedB" } } },
+        };
 
-            netFilter1.ToString().Should().BeEquivalentTo(newtonFilter1.ToString());
-            netFilter2.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
-            netFilter1.ToString().Should().BeEquivalentTo(netFilter2.ToString());
+        var filteredItems = items.Where(netFilter).ToList();
+        filteredItems.Should().BeEquivalentTo(new[] { items[2] });
+    }
 
-            netFilter1.CreateFilter().Should().BeNull();
-        }
+    private static (T NetFilter, T NewtonFilter) Deserialize<T>(string json)
+    {
+        var netFilter = NetSerializer.Deserialize<T>(json) ?? throw new InvalidOperationException("");
+        var newtonFilter = NewtonSerializer.DeserializeObject<T>(json, JsonConverterExtensions.NewtonsoftConverters) ?? throw new InvalidOperationException("");
+        return (netFilter, newtonFilter);
+    }
 
-        [TestMethod]
-        public void WhenEntityFilterWithEmptyNestedIsDeserialized_ThenValidFilterIsCreated()
-        {
-            var (netFilter1, newtonFilter1) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_NULL);
-            var (netFilter2, newtonFilter2) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_EMPTY);
-
-            netFilter1.ToString().Should().BeEquivalentTo(newtonFilter1.ToString());
-            netFilter1.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
-            netFilter2.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
-
-            var items = new TestModel<DateTime>[]
-            {
-                new () { ValueA = new DateTime(2020, 03, 14, 0 ,0 , 0, DateTimeKind.Utc )},
-                new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc )},
-                new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc )},
-            };
-
-            var filteredItems = items.Where(netFilter1).ToList();
-            filteredItems.Should().BeEquivalentTo(new[] { items[1] });
-        }
-
-        [TestMethod]
-        public void WhenEntityFilterWithEmptyNestedPropertyIsDeserialized_ThenValidFilterIsCreated()
-        {
-            var (netFilter1, newtonFilter1) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_PROP_NULL);
-            var (netFilter2, newtonFilter2) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_PROP_EMPTY);
-
-            netFilter1.ToString().Should().BeEquivalentTo(newtonFilter1.ToString());
-            netFilter1.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
-            netFilter2.ToString().Should().BeEquivalentTo(newtonFilter2.ToString());
-
-            var items = new TestModel<DateTime>[]
-            {
-                new () { ValueA = new DateTime(2020, 03, 14, 0 ,0 , 0, DateTimeKind.Utc )},
-                new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc )},
-                new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc )},
-            };
-
-            var filteredItems = items.Where(netFilter1).ToList();
-            filteredItems.Should().BeEquivalentTo(new[] { items[1] });
-        }
-
-        [TestMethod]
-        public void WhenFullEntityFilterIsDeserialized_ThenValidFilterIsCreated()
-        {
-            var (netFilter, newtonFilter) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_FULL);
-
-            netFilter.ToString().Should().BeEquivalentTo(newtonFilter.ToString());
-
-            var items = new TestModel<DateTime>[]
-            {
-                new () { ValueA = new DateTime(2020, 03, 14, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedA" }, NestedList = new() { new () { Value= "NestedA" } } },
-                new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedA" }, NestedList = new() { new () { Value= "NestedA" } } },
-                new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedA" }, NestedList = new() { new () { Value= "NestedB" } } },
-                new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedB" }, NestedList = new() { new () { Value= "NestedB" } } },
-                new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedB" }, NestedList = new() { new () { Value= "NestedB" } } },
-            };
-
-            var filteredItems = items.Where(netFilter).ToList();
-            filteredItems.Should().BeEquivalentTo(new[] { items[2] });
-        }
-
-        private static (T NetFilter, T NewtonFilter) Deserialize<T>(string json)
-        {
-            var netFilter = NetSerializer.Deserialize<T>(json) ?? throw new InvalidOperationException("");
-            var newtonFilter = NewtonSerializer.DeserializeObject<T>(json, JsonConverterExtensions.NewtonsoftConverters) ?? throw new InvalidOperationException("");
-            return (netFilter, newtonFilter);
-        }
-
-        private const string FILTER_EMPTY = @"{
+    private const string FILTER_EMPTY = @"{
         }";
 
-        private const string FILTER_PROP_NULL = @"{
+    private const string FILTER_PROP_NULL = @"{
 	        ""PropertyFilters"": null
         }";
 
-        private const string FILTER_PROP_EMPTY = @"{
+    private const string FILTER_PROP_EMPTY = @"{
 	        ""PropertyFilters"": []
         }";
 
-        private const string FILTER_NESTED_NULL = @"{
+    private const string FILTER_NESTED_NULL = @"{
 	        ""PropertyFilters"": [{
 		        ""PropertyName"": ""ValueA"",
 		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
@@ -146,7 +146,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 	        ""NestedFilters"": null
         }";
 
-        private const string FILTER_NESTED_EMPTY = @"{
+    private const string FILTER_NESTED_EMPTY = @"{
 	        ""PropertyFilters"": [{
 		        ""PropertyName"": ""ValueA"",
 		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
@@ -154,7 +154,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 	        ""NestedFilters"": []
         }";
 
-        private const string FILTER_NESTED_PROP_NULL = @"{
+    private const string FILTER_NESTED_PROP_NULL = @"{
 	        ""PropertyFilters"": [{
 		        ""PropertyName"": ""ValueA"",
 		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
@@ -168,7 +168,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 	        }]
         }";
 
-        private const string FILTER_NESTED_PROP_EMPTY = @"{
+    private const string FILTER_NESTED_PROP_EMPTY = @"{
 	        ""PropertyFilters"": [{
 		        ""PropertyName"": ""ValueA"",
 		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
@@ -182,7 +182,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 	        }]
         }";
 
-        private const string FILTER_FULL = @"{
+    private const string FILTER_FULL = @"{
 	        ""PropertyFilters"": [{
 		        ""PropertyName"": ""ValueA"",
 		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
@@ -209,5 +209,4 @@ namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter
 		        }
 	        }]
         }";
-    }
 }

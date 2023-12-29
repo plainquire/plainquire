@@ -7,44 +7,42 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace FS.FilterExpressionCreator.Tests.Tests
+namespace FS.FilterExpressionCreator.Tests.Tests;
+
+[ExcludeFromCodeCoverage]
+public abstract class TestBase<TModelValue> : TestBase
 {
+    protected static readonly TestModelFilterFunc<TModelValue>[] TestModelFilterFunctions =
+    [
+        TestMethods.FilterDirectByLinq,
+        TestMethods.FilterNetCloneByLinq,
+        TestMethods.FilterNewtonCloneByLinq,
+        TestMethods.FilterDirectByEF,
+        TestMethods.FilterNetCloneByEF,
+        TestMethods.FilterNewtonCloneByEF,
+    ];
+}
 
-    [ExcludeFromCodeCoverage]
-    public abstract class TestBase<TModelValue> : TestBase
+[ExcludeFromCodeCoverage]
+public abstract class TestBase
+{
+    protected const bool ALL = true;
+    protected const bool NONE = false;
+
+    protected static readonly FilterConfiguration IgnoreParseExceptions = new() { IgnoreParseExceptions = true };
+    // ReSharper disable once StringLiteralTypo
+    protected static readonly FilterConfiguration CultureDeDe = new() { CultureInfo = new CultureInfo("de-DE"), BoolFalseStrings = new[] { "NEIN", "0" }, BoolTrueStrings = new[] { "JA", "1" } };
+    protected static readonly FilterConfiguration CultureEnUs = new() { CultureInfo = new CultureInfo("en-Us") };
+
+    protected static IEnumerable<object> GetEntityFilterFunctions(Type type)
     {
-        protected static readonly TestModelFilterFunc<TModelValue>[] TestModelFilterFunctions =
-        [
-            TestMethods.FilterDirectByLinq,
-            TestMethods.FilterNetCloneByLinq,
-            TestMethods.FilterNewtonCloneByLinq,
-            TestMethods.FilterDirectByEF,
-            TestMethods.FilterNetCloneByEF,
-            TestMethods.FilterNewtonCloneByEF,
-        ];
-    }
+        var filterFuncType = typeof(EntityFilterFunc<>).MakeGenericType(type);
 
-    [ExcludeFromCodeCoverage]
-    public abstract class TestBase
-    {
-        protected const bool ALL = true;
-        protected const bool NONE = false;
-
-        protected static readonly FilterConfiguration IgnoreParseExceptions = new() { IgnoreParseExceptions = true };
-        // ReSharper disable once StringLiteralTypo
-        protected static readonly FilterConfiguration CultureDeDe = new() { CultureInfo = new CultureInfo("de-DE"), BoolFalseStrings = new[] { "NEIN", "0" }, BoolTrueStrings = new[] { "JA", "1" } };
-        protected static readonly FilterConfiguration CultureEnUs = new() { CultureInfo = new CultureInfo("en-Us") };
-
-        protected static IEnumerable<object> GetEntityFilterFunctions(Type type)
-        {
-            var filterFuncType = typeof(EntityFilterFunc<>).MakeGenericType(type);
-
-            return typeof(TestMethods)
-                .GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
-                .Select(method => method
-                    .MakeGenericMethod(type)
-                    .CreateDelegate(filterFuncType)
-                );
-        }
+        return typeof(TestMethods)
+            .GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+            .Select(method => method
+                        .MakeGenericMethod(type)
+                        .CreateDelegate(filterFuncType)
+            );
     }
 }
