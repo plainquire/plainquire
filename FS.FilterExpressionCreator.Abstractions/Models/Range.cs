@@ -41,13 +41,15 @@ namespace FS.FilterExpressionCreator.Abstractions.Models
             var start = ToString(Start);
             var end = ToString(End);
 
-            if (start != null && end != null)
-                return $"{start}_{end}";
-            if (start != null)
-                return start;
-            if (end != null)
-                return end;
-            return string.Empty;
+            return $"{start}_{end}";
+
+            //if (start != null && end != null)
+            //    return $"{start}_{end}";
+            //if (start != null)
+            //    return start;
+            //if (end != null)
+            //    return end;
+            //return string.Empty;
         }
 
         /// <inheritdoc />
