@@ -211,8 +211,8 @@ System.Console.WriteLine(filter);
 | -------------------- | ------------ | ------------------------------------------------------------ |
 | Default              |              | Selects the operator according to the filtered type. When filtering `string` the default is `Contains`; otherwise `EqualCaseInsensitive` |
 | Contains             | ~            | Hits when the filtered property contains the filter value    |
-| EqualCaseInsensitive | =            | Hits when the filtered property equals the filter value (case insensitive) |
-| EqualCaseSensitive   | ==           | Hits when the filtered property equals the filter value (case sensitive) |
+| EqualCaseInsensitive | =            | Hits when the filtered property equals the filter value (case-insensitive) |
+| EqualCaseSensitive   | ==           | Hits when the filtered property equals the filter value (case-sensitive) |
 | NotEqual             | !            | Negates the `Default` operator. Operators other than `Default` can not be negated (currently) |
 | LessThan             | <            | Hits when the filtered property is less than the filter value |
 | LessThanOrEqual      | <=           | Hits when the filtered property is less than or equal to the filter value |
@@ -508,7 +508,7 @@ var copy = filter.Clone();
 
 Filters can be cast between entities, e.g. to convert them between DTOs and database models.
 
-Properties are matched by type (check if assignable) and name (case sensitive)
+Properties are matched by type (check if assignable) and name (case-sensitive)
 
 ```csharp
 var dtoFilter = new EntityFilter<OrderDto>().Add(...);

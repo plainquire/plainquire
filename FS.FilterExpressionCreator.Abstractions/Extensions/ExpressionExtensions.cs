@@ -19,7 +19,7 @@ public static class ExpressionExtensions
     private static readonly MethodInfo _objectToStringMethodInfo = typeof(object).GetMethods().First(method => method.Name == nameof(ToString));
 
     /// <summary>
-    /// Combines a property and a expression body to a lambda expression.
+    /// Combines a property and an expression body to a lambda expression.
     /// </summary>
     /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
     /// <typeparam name="TProperty">The type of the property.</typeparam>
@@ -30,7 +30,7 @@ public static class ExpressionExtensions
         => Expression.Lambda<Func<TEntity, TResult>>(expression, propertySelector.Parameters);
 
     /// <summary>
-    /// Combines a property and a expression body to a lambda expression.
+    /// Combines a property and an expression body to a lambda expression.
     /// </summary>
     /// <typeparam name="TEntity">The type of the class that declares member from <paramref name="propertySelector"/>.</typeparam>
     /// <typeparam name="TResult">The type of the result.</typeparam>
@@ -56,7 +56,7 @@ public static class ExpressionExtensions
         => expressions.Combine(Expression.OrElse);
 
     /// <summary>
-    /// Replaces the parameter of a lambda expression (<c>x => true</c> => <c>y => true</c>.
+    /// Replaces the parameter of a lambda expression (<c>x => true</c> => <c>y => true</c>).
     /// </summary>
     /// <param name="origin">The origin lambda expression.</param>
     /// <param name="replacement">The lambda expression holding the replacement as parameter.</param>
@@ -75,7 +75,7 @@ public static class ExpressionExtensions
         => (Expression<Func<TEntity, TProperty>>)declaringType.CreatePropertySelector(propertyName);
 
     /// <summary>
-    /// Creates a untyped property selector for the given type.
+    /// Creates an untyped property selector for the given type.
     /// </summary>
     /// <param name="declaringType">The Type of the declaring class/struct/record.</param>
     /// <param name="propertyName">The Name of the property.</param>

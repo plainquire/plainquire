@@ -11,7 +11,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions;
 public static class DateTimeRangeExtensions
 {
     /// <summary>
-    /// Creates a new <see cref="Range{TType}"/> using given values. Values not given are expanded to start and end of it's period.
+    /// Creates a new <see cref="Range{TType}"/> using given values. Values not given are expanded to start and end of its period.
     /// </summary>
     private static Range<DateTimeOffset> CreateDateTimeRange(int? year = null, int? month = null, int? day = null, int? hour = null, int? minute = null, int? second = null, int? millisecond = null, TimeSpan offset = default)
     {

@@ -177,7 +177,7 @@ public class EntityFilter<TEntity> : EntityFilter
 
     /// <summary>
     /// Casts this filter to a different entity type (by creating a deep clone).
-    /// Filtered properties are matched by type (check if assignable) and name (case sensitive).
+    /// Filtered properties are matched by type (check if assignable) and name (case-sensitive).
     /// </summary>
     /// <typeparam name="TDestination">The type of the destination entity to filter.</typeparam>
     public EntityFilter<TDestination> Cast<TDestination>()

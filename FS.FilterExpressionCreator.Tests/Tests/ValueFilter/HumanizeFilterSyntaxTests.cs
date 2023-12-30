@@ -72,7 +72,7 @@ public class HumanizeFilterSyntaxTests
 
         const string filterSyntax3 = "==A";
         var humanizedSyntax3 = filterSyntax3.HumanizeFilterSyntax<string>("Age");
-        humanizedSyntax3.Should().Be("Age is (case sensitive) 'A'");
+        humanizedSyntax3.Should().Be("Age is (case-sensitive) 'A'");
 
         const string filterSyntax4 = "!A";
         var humanizedSyntax4 = filterSyntax4.HumanizeFilterSyntax<string>("Age");
