@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace FS.FilterExpressionCreator.Extensions;
+namespace FS.FilterExpressionCreator.ToBeDefined.Extensions;
 
 /// <summary>
 /// Extension methods for <see cref="string"/>.
@@ -11,7 +11,7 @@ public static class StringExtensions
     /// Lower-cases the first character.
     /// </summary>
     /// <param name="value">The value.</param>
-    [return: NotNullIfNotNull("value")]
+    [return: NotNullIfNotNull(nameof(value))]
     public static string? LowercaseFirstChar(this string? value)
         => !string.IsNullOrEmpty(value)
             ? char.ToLowerInvariant(value[0]) + value[1..]
@@ -21,7 +21,7 @@ public static class StringExtensions
     /// Upper-cases the first character.
     /// </summary>
     /// <param name="value">The value.</param>
-    [return: NotNullIfNotNull("value")]
+    [return: NotNullIfNotNull(nameof(value))]
     public static string? UppercaseFirstChar(this string? value)
         => !string.IsNullOrEmpty(value)
             ? char.ToUpperInvariant(value[0]) + value[1..]

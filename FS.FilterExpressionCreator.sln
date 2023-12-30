@@ -28,7 +28,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{33F53241
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6A2D1E04-9F3C-400E-AB98-FC8F5F825854}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FS.FilterExpressionCreator.Abstractions", "FS.FilterExpressionCreator.Abstractions\FS.FilterExpressionCreator.Abstractions.csproj", "{767390FC-F1B0-4346-9749-0961D861A1AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FS.FilterExpressionCreator.Abstractions", "FS.FilterExpressionCreator.Abstractions\FS.FilterExpressionCreator.Abstractions.csproj", "{767390FC-F1B0-4346-9749-0961D861A1AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FS.FilterExpressionCreator.ToBeDefined", "FS.FilterExpressionCreator.ToBeDefined\FS.FilterExpressionCreator.ToBeDefined.csproj", "{6CB161CF-735D-478E-B48A-DF4FEB13E730}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +70,10 @@ Global
 		{767390FC-F1B0-4346-9749-0961D861A1AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{767390FC-F1B0-4346-9749-0961D861A1AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{767390FC-F1B0-4346-9749-0961D861A1AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CB161CF-735D-478E-B48A-DF4FEB13E730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CB161CF-735D-478E-B48A-DF4FEB13E730}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CB161CF-735D-478E-B48A-DF4FEB13E730}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CB161CF-735D-478E-B48A-DF4FEB13E730}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

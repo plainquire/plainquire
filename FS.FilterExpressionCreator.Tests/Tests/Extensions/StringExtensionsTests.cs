@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using FS.FilterExpressionCreator.Extensions;
+using FS.FilterExpressionCreator.ToBeDefined.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics.CodeAnalysis;
 

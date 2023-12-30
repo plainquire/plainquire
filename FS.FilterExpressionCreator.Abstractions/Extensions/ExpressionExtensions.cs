@@ -87,23 +87,6 @@ public static class ExpressionExtensions
     }
 
     /// <summary>
-    /// Gets the name of a first level property.
-    /// </summary>
-    /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
-    /// <param name="property">The property to get the name for.</param>
-    /// <exception cref="ArgumentException">Given property must be a first level property access expression like person => person.Name, nameof(property)</exception>
-    public static string GetPropertyName<TEntity, TProperty>(this Expression<Func<TEntity, TProperty>> property)
-    {
-        var body = UnboxBody(property);
-
-        if (body is not MemberExpression { Expression: ParameterExpression } memberExpression)
-            throw new ArgumentException("Given property must be a first level property access expression like person => person.Name", nameof(property));
-
-        return memberExpression.Member.Name;
-    }
-
-    /// <summary>
     /// Applies a call to <see cref="object.ToString()"/> to the given expression.
     /// </summary>
     /// <param name="expression">The expression to add the call.</param>
@@ -202,13 +185,6 @@ public static class ExpressionExtensions
             var finalExpr = Expression.Lambda<Func<TSource, bool>>(conditionalExpr, first.Parameters);
             return finalExpr;
         });
-    }
-
-    private static Expression UnboxBody<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> property)
-    {
-        if (property.Body is UnaryExpression { NodeType: ExpressionType.Convert } convert)
-            return convert.Operand;
-        return property.Body;
     }
 
     private static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) where T : class

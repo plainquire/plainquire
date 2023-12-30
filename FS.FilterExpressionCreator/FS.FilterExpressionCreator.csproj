@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FS.FilterExpressionCreator.Abstractions\FS.FilterExpressionCreator.Abstractions.csproj" />
+    <ProjectReference Include="..\FS.FilterExpressionCreator.ToBeDefined\FS.FilterExpressionCreator.ToBeDefined.csproj" />
   </ItemGroup>
 
 </Project>
