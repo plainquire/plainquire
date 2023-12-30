@@ -27,11 +27,6 @@ namespace FS.FilterExpressionCreator.Filters;
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class EntityFilter<TEntity> : EntityFilter
 {
-    /// <inheritdoc cref="GetPropertyFilterSyntax{TProperty}(Expression{Func{TEntity, TProperty}})" />
-    [Obsolete("Use " + nameof(GetPropertyFilterSyntax) + " instead.")]
-    public string? GetPropertyFilter<TProperty>(Expression<Func<TEntity, TProperty?>> property)
-        => GetPropertyFilterSyntax(property);
-
     /// <summary>
     /// Gets the filter syntax for the given <paramref name="property"/>.
     /// </summary>
@@ -93,11 +88,6 @@ public class EntityFilter<TEntity> : EntityFilter
         return this;
     }
 
-    /// <inheritdoc cref="AddNested{TProperty}(Expression{Func{TEntity, TProperty}}, EntityFilter{TProperty})" />
-    [Obsolete("Use " + nameof(AddNested) + " instead.")]
-    public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TProperty>? nestedFilter)
-        => AddNested(property, nestedFilter);
-
     /// <summary>
     /// Adds a nested filter for the given enumerable property. Existing filters for the same property are preserved.
     /// </summary>
@@ -114,12 +104,6 @@ public class EntityFilter<TEntity> : EntityFilter
         AddInternal(property, nestedFilter);
         return this;
     }
-
-    /// <inheritdoc cref="AddNested{TProperty, TNested}(Expression{Func{TEntity, TProperty}}, EntityFilter{TNested})" />
-    [Obsolete("Use " + nameof(AddNested) + " instead.")]
-    public EntityFilter<TEntity> Add<TProperty, TNested>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TNested>? nestedFilter)
-        where TProperty : IEnumerable<TNested>
-        => AddNested(property, nestedFilter);
 
     /// <summary>
     /// Replaces the filter for the given property. Existing filters for the same property are removed.
@@ -148,11 +132,6 @@ public class EntityFilter<TEntity> : EntityFilter
         return this;
     }
 
-    /// <inheritdoc cref="ReplaceNested{TProperty}(Expression{Func{TEntity, TProperty}}, EntityFilter{TProperty})" />
-    [Obsolete("Use " + nameof(ReplaceNested) + " instead.")]
-    public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TProperty> nestedFilter)
-        => ReplaceNested(property, nestedFilter);
-
     /// <summary>
     /// Replaces the nested filter for the given enumerable property. Existing filters for the same property are removed.
     /// </summary>
@@ -169,12 +148,6 @@ public class EntityFilter<TEntity> : EntityFilter
         ReplaceInternal(property, nestedFilter);
         return this;
     }
-
-    /// <inheritdoc cref="ReplaceNested{TProperty, TNested}(Expression{Func{TEntity, TProperty}}, EntityFilter{TNested})" />
-    [Obsolete("Use " + nameof(ReplaceNested) + " instead.")]
-    public EntityFilter<TEntity> Replace<TProperty, TNested>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TNested> nestedFilter)
-        where TProperty : IEnumerable<TNested>
-        => ReplaceNested(property, nestedFilter);
 
     /// <summary>
     /// Remove all filters for the specified property.
