@@ -12,16 +12,25 @@ https://filterexpressioncreator.schick-software.de/openapi/
 
 # Table of Content
 - [Filter Entities](#filter-entities)
-  - [Quick Start](#quick-start)
-  - [REST / MVC](#rest-mvc)
-  - [Swagger / OpenAPI](#swagger-openapi)
-  - [Filter Operators / Syntax](#filter-operators-syntax)
-  - [Configuration](#configuration)
-  - [Interception](#interception)
-  - [Default Configuration and Interception](#default-configuration-and-interception)
-  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
-  - [Advanced Scenarios](#advanced-scenarios)
+   * [Quick Start](#quick-start)
+   * [REST / MVC](#rest-mvc)
+   * [Swagger / OpenAPI](#swagger-openapi)
+   * [Filter Operators / Syntax](#filter-operators-syntax)
+   * [Configuration](#configuration)
+   * [Interception](#interception)
+   * [Default Configuration and Interception](#default-configuration-and-interception)
+   * [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
+   * [Advanced Scenarios](#advanced-scenarios)
 - [Sort Entities](#sort-entities)
+   * [Quick Start](#quick-start-1)
+   * [REST / MVC](#rest-mvc-1)
+   * [Swagger / OpenAPI](#swagger-openapi-1)
+   * [Sort Operators / Syntax](#sort-operators-syntax)
+   * [Configuration](#configuration-1)
+   * [Interception](#interception-1)
+   * [Default Configuration and Interception](#default-configuration-and-interception-1)
+   * [Support for Newtonsoft.Json](#support-for-newtonsoftjson-1)
+   * [Advanced Scenarios](#advanced-scenarios-1)
 
 # Filter Entities
 
@@ -125,8 +134,8 @@ public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> filter)
 
 ### Configure Model Binding
 
-By default parameters for properties of filtered entity are named `{Entity}{Property}`.
-By default all public non-complex properties (`string`, `int`, `DateTime`, ...) are recognized.
+By default, parameters for properties of filtered entity are named `{Entity}{Property}`.
+By default, all public non-complex properties (`string`, `int`, `DateTime`, ...) are recognized.
 Parameters can be renamed or removed using  `FilterAttribute` and `FilterEntityAttribute`.
 
 For the code below `Number` is not mapped anymore and `Customer` becomes `CustomerName`:
@@ -216,7 +225,7 @@ The filter micro syntax consists of a comma separated list of an operator shortc
 | Contains             | ~            | Hits when the filtered property contains the filter value    |
 | EqualCaseInsensitive | =            | Hits when the filtered property equals the filter value (case-insensitive) |
 | EqualCaseSensitive   | ==           | Hits when the filtered property equals the filter value (case-sensitive) |
-| NotEqual             | !            | Negates the `Default` operator. Operators other than `Default` can not be negated (currently) |
+| NotEqual             | !            | Negates the `Default` operator. Operators other than `Default` cannot be negated (currently) |
 | LessThan             | <            | Hits when the filtered property is less than the filter value |
 | LessThanOrEqual      | <=           | Hits when the filtered property is less than or equal to the filter value |
 | GreaterThan          | >            | Hits when the filtered property is greater than the filter value |
@@ -324,7 +333,7 @@ Details can be found here: [https://github.com/mojombo/chronic](https://github.c
 
 ### Enum
 
-`Enum` values can be filtered by it's name as well as by it's numeric representation.
+`Enum` values can be filtered by its name as well as by it's numeric representation.
 
 ```csharp
 // Equals by name
@@ -556,4 +565,354 @@ var extendedFilter = new[]
     .CombineWithConditionalAnd();
 
 var filteredOrders = orders.Where(extendedFilter.Compile());
+```
+
+# Sort Entities
+
+## Quick Start
+
+Install the NuGet packages:
+```
+Package Manager : Install-Package Schick.SortQueryableCreator
+CLI : dotnet add package Schick.SortQueryableCreator
+```
+Create a filter:
+ ```csharp
+using FS.SortQueryableCreator.Enums;
+using FS.SortQueryableCreator.Extensions;
+using FS.SortQueryableCreator.Sorts;
+
+var orders = new[] {
+    new Order { Customer = "Joe Miller", Number = 100 },
+    new Order { Customer = "Joe Smith", Number = 200 },
+    new Order { Customer = "Joe Smith", Number = 300 },
+};
+
+// Create sort
+ var sort = new EntitySort<Order>()
+     .Add(x => x.Customer, SortDirection.Ascending)
+     .Add(x => x.Number, SortDirection.Descending);
+
+// Print sort
+Console.WriteLine($"{orders.OrderBy(sort)}");
+// Output: orders.OrderBy(x => IIF((x == null), null, x.Customer)).ThenByDescending(x => x.Number)
+
+// Use sort with LINQ
+var sortedOrders = orders.OrderBy(sort).ToList();
+// Or queryables (e.g. Entity Framework)
+var sortedOrders = dbContext.Orders.OrderBy(sort).ToList();
+
+[FilterEntity]
+public class Order
+{
+    public int Number { get; set; }
+    public string Customer { get; set; }
+}
+ ```
+
+Or bind filter from query-parameters:
+
+```csharp
+using FS.SortQueryableCreator.Extensions;
+using FS.SortQueryableCreator.Sorts;
+
+[HttpGet]
+public Task<List<Order>> GetOrders([FromQuery] EntitySort<Order> sort)
+{
+    return dbContext.Orders.OrderBy(sort).ToList();
+}
+```
+
+## REST / MVC
+
+Model binding for MVC controllers is supported.
+
+To sort an entity via model binding, the entity must be marked with `FilterEntityAttribute`
+
+### Register Model Binders
+
+```
+Package Manager : Install-Package Schick.SortQueryableCreator.Mvc
+CLI : dotnet add package Schick.SortQueryableCreator.Mvc
+```
+
+```csharp
+using FS.SortQueryableCreator.Mvc.Extensions;
+
+// Register required stuff by calling 'AddSortQueryableSupport()' on IMvcBuilder instance
+services.AddControllers().AddSortQueryableSupport();
+```
+
+### Map HTTP query parameter to `EntitySort`
+
+With model binding enabled, REST requests can be sorted using query parameter `orderBy`:
+
+```csharp
+using FS.SortQueryableCreator.Sorts;
+
+var getOrdersUrl = "/GetOrders?orderBy=customer,number-desc"
+
+[HttpGet]
+public Task<List<Order>> GetOrders([FromQuery] EntitySort<Order> sort)
+{
+    var orders = new List<Order>();
+    var sortedOrders = orders.OrderBy(sort);
+    Console.WriteLine($"{sortedOrders.OrderBy(sort)}");
+    // Output: orders.OrderBy(x => IIF((x == null), null, x.Customer)).ThenByDescending(x => x.Number)
+    
+    var queryParams = sort.ToString();
+    // Output: Customer-asc, Number-desc
+}
+```
+
+### Configure Model Binding
+
+By default, parameters for properties of sorted entity are named `{Entity}{Property}`.
+By default, all public non-complex properties (`string`, `int`, `DateTime`, ...) are recognized.
+Parameters can be renamed or removed using  `FilterAttribute` and `FilterEntityAttribute`.
+
+For the code below `Number` is not mapped anymore and `Customer` becomes `CustomerName`:
+
+```csharp
+using FS.FilterExpressionCreator.Abstractions.Attributes;
+
+// Remove prefix, e.g. property 'Number' is mapped from 'number', not 'orderNumber'
+// Use 'sortBy' as query parameter name instead of default 'orderBy'
+[FilterEntity(Prefix = "", SortByParameter = "sortBy")]
+public class Order
+{
+     // 'Number' is removed from filter and will be ignored
+    [Filter(Sortable = false)]
+    public int Number { get; set; }
+
+    // 'Customer' is mapped from query-parameter 'customerName'
+    [Filter(Name = "CustomerName")]
+    public string Customer { get; set; }
+}
+```
+### Order Sets
+
+Multiple entity sorts can be combined to a set of filters using the `EntitySortSetAttribute`.
+
+You can write:
+
+```csharp
+using FS.FilterExpressionCreator.Filters;
+using FS.FilterExpressionCreator.Abstractions.Attributes;
+
+[HttpGet]
+// Use
+public Task<List<Order>> GetOrders([FromQuery] OrderSortSet orderSet)
+{ 
+    var orderSort = orderSet.Order;
+    var orderItemSort = orderSet.OrderItem;
+}
+
+// Instead of
+public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> orderSort, EntityFilter<OrderItem> orderItemSort) { ... }
+
+[EntityFilterSet]
+public class OrderSortSet
+{
+	public EntitySort<Order> Order { get; set; }
+	public EntitySort<OrderItem> OrderItem { get; set; }
+}
+```
+## Swagger / OpenAPI
+### Register OpenAPI Support
+Swagger / OpenAPI is supported when using [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
+``` 
+Package Manager : Install-Package Schick.SortQueryableCreator.Swashbuckle
+CLI : dotnet add package Schick.SortQueryableCreator.Swashbuckle
+```
+
+```csharp
+using FS.SortQueryableCreator.Swashbuckle.Extensions;
+
+services.AddSwaggerGen(options =>
+{    
+    // Register filters used to modify swagger.json
+    options.AddSortQueryableSupport();
+});
+```
+
+## Sort Operators / Syntax
+
+The filter micro syntax consists of a property to sort with an optional sort direction marker before or after (e.g. `customer-asc`). For the HTTP query parameter, a comma separated list of properties is allowed (`orderBy=customer,number-desc`).
+
+Allowed sort direction markers are:
+
+Ascending prefix: `+`, `asc-`, `asc ` (with trailing space)
+Ascending postfix: `+`, `-asc`, ` asc` (with leading space)
+Descending prefix: `-`, `~`, `desc-`, `desc ` (with trailing space)
+Descending postfix: `-`, `~`, `-desc`, `-dsc`, ` desc`, ` dsc` (with leading space)
+
+When no sort marker is given, sort is done in ascending order.
+
+### Add Sorting
+
+Multiple values given to one call are combined using conditional `OR`.
+
+Customer contains `Joe` || `Doe`:
+
+```csharp
+var sort = new EntitySort<Order>();
+
+// via operator
+sort.Add(x => x.Address, SortDirection.Ascending);
+
+// via syntax
+sort.Add("Address-asc")
+
+// via query parameter
+var getOrdersUrl = "/GetOrders?orderBy=customer-asc"
+```
+
+### Nested Sorting
+
+Nested objects are sorted directly (`x=> x.OrderBy(order => order.Customer)`). 
+Deep property paths (e.g. `order => order.Customer.Length`) are supported. 
+Methods calls (e.g. `order => order.Customer.SubString(1)`) are not supported for security reasons.
+
+Nested lists cannot be sorted directly. You can create an own `EntitySort` for it and sort the nested list by.
+
+```csharp
+// Create sort
+var addressSort = new EntitySort<Address>()
+    .Add(x => x.City);
+
+// AddNested() is equivalent to adding the paths directly
+var orderSort = new EntitySort<Order>()
+    .AddNested(x => x.Address, addressSort);
+
+// Is equivalent to AddNested() above
+var orderSort = new EntitySort<Order>()
+    .Add(x => x.Address.City, SortDirection.Ascending);
+
+// Print filter
+Console.WriteLine(orders.OrderBy(orderSort).ToString());
+// Output:
+// orders => orders.OrderBy(x => IIF((IIF((x == null), null, x.Address) == null), null, x.Address.City))
+
+public class Order
+{
+    public int Number { get; set; }
+    public string Customer { get; set; }
+    public Address Address { get; set; }
+}
+
+public record Address(string Street, string City);
+```
+
+### Retrieve Syntax and Sort Direction
+
+```csharp
+var orderSort = new EntitySort<Order>()
+    .Add(x => x.Customer, SortDirection.Ascending);
+
+// Retrive sort syntax
+var syntax = orderSort.GetPropertySortSyntax(x => x.Customer);
+// Output: Customer-asc
+
+// Retrive sort direction
+var direction = orderSort.GetPropertySortDirection(x => x.Customer);
+// Output: Ascending 
+
+// Retrive sort expression string:
+var orderExpression = orders.OrderBy(orderSort).ToString()
+```
+
+## Configuration
+
+Creation of sort expression can be configured via `SortConfiguration`. 
+
+```csharp
+using FS.SortQueryableCreator.Abstractions.Configurations;
+
+var configuration = new SortConfiguration { IgnoreParseExceptions = true };
+var sortedOrders = orders.OrderBy(sortParam, configuration).ToList();
+```
+
+## Interception
+
+Creation of sort expression can be intercepted via `IPropertySortQueryableInterceptor`. 
+
+An example can be found in the test code [InterceptorTests](https://github.com/fschick/FilterExpressionCreator/blob/main/FS.SortQueryableCreator.Tests/Tests/EntitySort/InterceptorTests.cs)
+
+## Default Configuration and Interception
+
+`EntitySort` has static properties to provide a system-wide configuration and/or interceptors
+
+```c#
+public class EntitySort
+{
+	public static SortConfiguration DefaultConfiguration { get; set; } = new FilterConfiguration();
+
+	public static IPropertySortQueryableInterceptor? DefaultInterceptor { get; set; }
+}
+```
+
+## Support for Newtonsoft.Json
+
+By default, `System.Text.Json` is used to serialize/convert Sort Queryable Creator specific stuff. If you like to use Newtonsoft.Json you must register it:
+
+```
+Package Manager : Install-Package Schick.SortQueryableCreator.Mvc.Newtonsoft
+CLI : dotnet add package Schick.SortQueryableCreator.Mvc.Newtonsoft
+```
+
+```csharp
+using FS.SortQueryableCreator.Mvc.Newtonsoft;
+
+// Register support for Newtonsoft by calling 
+// 'AddSortQueryableNewtonsoftSupport()' on IMvcBuilder instance
+services.AddControllers().AddSortQueryableNewtonsoftSupport();
+```
+
+## Advanced Scenarios
+
+### Deep Copy
+
+The `EntitySort<T>` class supports deep cloning by calling the `Clone()` method
+
+```csharp
+var copy = filter.Clone();
+```
+
+### Cast Sorting
+
+Sorting can be cast between entities, e.g. to convert them between DTOs and database models.
+
+Properties are matched by type (check if assignable) and name (case-sensitive)
+
+```csharp
+var dtoSort = new EntitySort<OrderDto>().Add(...);
+var orderSort = dtoFilter.Cast<Order>();
+```
+
+### Serialize Sort
+
+#### Using `System.Text.Json`
+
+Objects of type `EntitySort<T>` can be serialized via `System.Text.Json.JsonSerializer` without further requirements
+
+```csharp
+var json = JsonSerializer.Serialize(filter);
+filter = JsonSerializer.Deserialize<EntitySort<Order>>(json);
+```
+
+#### Using `Newtonsoft.Json`
+
+When using `Newtonsoft.Json` additional converters are required
+
+``` 
+Package Manager : Install-Package Schick.SortQueryableCreator.Newtonsoft
+CLI : dotnet add package Schick.SortQueryableCreator.Newtonsoft
+```
+
+```csharp
+using FS.FilterExpressionCreator.Newtonsoft.Extensions;
+
+var json = JsonConvert.SerializeObject(sort, JsonConverterExtensions.NewtonsoftConverters);
+sort = JsonConvert.DeserializeObject<EntitySort<Order>>(json, JsonConverterExtensions.NewtonsoftConverters);
 ```

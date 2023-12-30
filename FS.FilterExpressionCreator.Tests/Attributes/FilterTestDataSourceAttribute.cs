@@ -48,6 +48,7 @@ public class FilterTestDataSourceAttribute : Attribute, ITestDataSource
     {
         var testCaseId = ((FilterTestCase?)data?[0])?.Id ?? throw new InvalidOperationException("Unable to get test case ID.");
         var filterFunctionName = ((Delegate?)data[1])?.Method.Name ?? throw new InvalidOperationException("Unable to get the name of filter function.");
+        //TODO: Check format from SortTestDataSourceAttribute
         return $"Id {testCaseId}, {filterFunctionName}: {methodInfo.Name}";
     }
 }

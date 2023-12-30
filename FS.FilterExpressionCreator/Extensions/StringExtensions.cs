@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace FS.FilterExpressionCreator.ToBeDefined.Extensions;
+namespace FS.FilterExpressionCreator.Extensions;
 
 /// <summary>
 /// Extension methods for <see cref="string"/>.
 /// </summary>
-public static class StringExtensions
+internal static class StringExtensions
 {
     /// <summary>
     /// Lower-cases the first character.

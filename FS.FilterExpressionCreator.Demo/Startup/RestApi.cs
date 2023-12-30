@@ -1,5 +1,7 @@
 ﻿using FS.FilterExpressionCreator.Mvc.Extensions;
 using FS.FilterExpressionCreator.Mvc.Newtonsoft.Extensions;
+using FS.SortQueryableCreator.Mvc.Extensions;
+using FS.SortQueryableCreator.Mvc.Newtonsoft.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +27,9 @@ internal static class RestApi
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
             })
             .AddFilterExpressionSupport()
-            .AddFilterExpressionsNewtonsoftSupport();
+            .AddFilterExpressionNewtonsoftSupport()
+            .AddSortQueryableSupport()
+            .AddSortQueryableNewtonsoftSupport();
 
         return services;
     }

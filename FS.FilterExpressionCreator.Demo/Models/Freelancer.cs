@@ -20,7 +20,7 @@ public class Freelancer
     /// <summary>
     /// The seed this freelancer belongs too.
     /// </summary>
-    [Filter(Filterable = false)]
+    [Filter(Filterable = false, Sortable = false)]
     public int Seed { get; set; }
 
     /// <summary>
@@ -52,6 +52,11 @@ public class Freelancer
     /// Years of Experience.
     /// </summary>
     public int YearsOfExperience { get; set; }
+
+    /// <summary>
+    /// Address.
+    /// </summary>
+    public Address Address { get; set; } = new();
 
     /// <summary>
     /// The projects done.

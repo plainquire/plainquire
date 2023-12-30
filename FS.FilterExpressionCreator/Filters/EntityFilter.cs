@@ -4,7 +4,6 @@ using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
 using FS.FilterExpressionCreator.JsonConverters;
 using FS.FilterExpressionCreator.PropertyFilterExpressionCreators;
-using FS.FilterExpressionCreator.ToBeDefined.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

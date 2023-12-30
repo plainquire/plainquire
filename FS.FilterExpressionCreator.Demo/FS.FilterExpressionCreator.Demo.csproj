@@ -28,6 +28,11 @@
     <ProjectReference Include="..\FS.FilterExpressionCreator.Mvc\FS.FilterExpressionCreator.Mvc.csproj" />
     <ProjectReference Include="..\FS.FilterExpressionCreator.Swashbuckle\FS.FilterExpressionCreator.Swashbuckle.csproj" />
     <ProjectReference Include="..\FS.FilterExpressionCreator\FS.FilterExpressionCreator.csproj" />
+    <ProjectReference Include="..\FS.SortQueryableCreator.Mvc.Newtonsoft\FS.SortQueryableCreator.Mvc.Newtonsoft.csproj" />
+    <ProjectReference Include="..\FS.SortQueryableCreator.Mvc\FS.SortQueryableCreator.Mvc.csproj" />
+    <ProjectReference Include="..\FS.SortQueryableCreator.Newtonsoft\FS.SortQueryableCreator.Newtonsoft.csproj" />
+    <ProjectReference Include="..\FS.SortQueryableCreator.Swashbuckle\FS.SortQueryableCreator.Swashbuckle.csproj" />
+    <ProjectReference Include="..\FS.SortQueryableCreator\FS.SortQueryableCreator.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +40,10 @@
     <Watch Include="..\**\*.razor" />
     <Watch Include="..\**\*.scss" />
     <Watch Include="..\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Watch Remove="Models\FilterSets\FreelancerSortSet.cs" />
   </ItemGroup>
 
 </Project>

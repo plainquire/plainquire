@@ -18,4 +18,9 @@ public class FreelancerFilterSet
     /// Gets or sets the filter for projects.
     /// </summary>
     public EntityFilter<Project> Project { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets the filter for addresses.
+    /// </summary>
+    public EntityFilter<Address> Address { get; set; } = new();
 }

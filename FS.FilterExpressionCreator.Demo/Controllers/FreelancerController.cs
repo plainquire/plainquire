@@ -15,6 +15,8 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using FS.SortQueryableCreator.Extensions;
+using Address = FS.FilterExpressionCreator.Demo.Models.Address;
 
 namespace FS.FilterExpressionCreator.Demo.Controllers;
 
@@ -42,10 +44,11 @@ public class FreelancerController : Controller
     /// Gets filtered freelancers.
     /// </summary>
     /// <param name="filter">The freelancer/project filter set.</param>
+    /// <param name="orderBy">The freelancer/address sort order set.</param>
     /// <param name="seed">A seed. Using the same seed returns predictable result.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
     [HttpGet]
-    public Task<FreelancerDto> GetFreelancers([FromQuery] FreelancerFilterSet filter, int seed = 0, CancellationToken cancellationToken = default)
+    public Task<FreelancerDto> GetFreelancers([FromQuery] FreelancerFilterSet filter, [FromQuery] FreelancerSortSet orderBy, int seed = 0, CancellationToken cancellationToken = default)
     {
         var unfilteredCount = _dbContext.Set<Freelancer>().Count(x => x.Seed == seed);
         if (unfilteredCount == 0)
@@ -61,7 +64,15 @@ public class FreelancerController : Controller
             .ReplaceNested(x => x.Projects, projectFilter)
             .Replace(x => x.Seed, seed);
 
-        var query = _dbContext.Set<Freelancer>().Include(x => x.Projects).Where(freelancerFilter);
+        var freelancerOrderBy = orderBy.Freelancer;
+        freelancerOrderBy.AddNested(freelancer => freelancer.Address, orderBy.Address);
+
+        var query = _dbContext
+            .Set<Freelancer>()
+            .OrderBy(freelancerOrderBy)
+            .Include(x => x.Projects)
+            .Where(freelancerFilter);
+
         var data = query.ToList();
         var freelancers = new FreelancerDto
         {
@@ -109,6 +120,11 @@ public class FreelancerController : Controller
         amount = Math.Max(0, Math.Min(amount, 100));
         locale = locale.Replace('-', '_');
 
+        var address = new Faker<Address>(locale)
+            .StrictMode(true)
+            .RuleFor(x => x.Street, faker => faker.Address.StreetAddress())
+            .RuleFor(x => x.City, faker => faker.Address.City());
+
         var projects = new Faker<Project>()
             .StrictMode(true)
             .RuleFor(x => x.Id, faker => faker.Random.Uuid())
@@ -133,6 +149,7 @@ public class FreelancerController : Controller
             .RuleFor(x => x.Birthday, faker => faker.Date.Between(today.AddYears(-maxAge), today.AddYears(-minAge)).Date.OrNull(faker, .25f))
             .RuleFor(x => x.HourlyRate, faker => Math.Round(faker.Random.Double(minHourlyRate, maxHourlyRate), 2))
             .RuleFor(x => x.YearsOfExperience, (faker, freelancer) => faker.Random.Int(0, (today.Year - freelancer.Birthday?.Year ?? maxAge) - minAge))
+            .RuleFor(x => x.Address, _ => address.Generate())
             .RuleFor(x => x.Projects, faker => projects.Take(faker.Random.Int(0, 5)).ToList())
             .FinishWith((_, freelancer) => freelancer.Projects.ForEach(x => x.FreelancerId = freelancer.Id))
             .UseSeed(seed)

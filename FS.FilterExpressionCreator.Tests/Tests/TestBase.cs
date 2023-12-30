@@ -12,6 +12,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests;
 [ExcludeFromCodeCoverage]
 public abstract class TestBase<TModelValue> : TestBase
 {
+    // TODO: Compare with FS.SortQueryableCreator.Tests and check if usable anywhere.
     protected static readonly TestModelFilterFunc<TModelValue>[] TestModelFilterFunctions =
     [
         TestMethods.FilterDirectByLinq,
@@ -34,6 +35,7 @@ public abstract class TestBase
     protected static readonly FilterConfiguration CultureDeDe = new() { CultureInfo = new CultureInfo("de-DE"), BoolFalseStrings = ["NEIN", "0"], BoolTrueStrings = ["JA", "1"] };
     protected static readonly FilterConfiguration CultureEnUs = new() { CultureInfo = new CultureInfo("en-Us") };
 
+    // TODO: Check if this can be refactored to use the same as FS.SortQueryableCreator.Tests.Tests.TestMethods.GetEntityFilterFunctions
     protected static IEnumerable<object> GetEntityFilterFunctions(Type type)
     {
         var filterFuncType = typeof(EntityFilterFunc<>).MakeGenericType(type);

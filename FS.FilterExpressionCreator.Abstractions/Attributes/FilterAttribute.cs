@@ -21,4 +21,9 @@ public class FilterAttribute : Attribute
     /// Set to <c>false</c> to disable filtering for this property.
     /// </summary>
     public bool Filterable { get; set; } = true;
+
+    /// <summary>
+    /// Set to <c>false</c> to disable sorting for this property.
+    /// </summary>
+    public bool Sortable { get; set; } = true;
 }

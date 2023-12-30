@@ -9,7 +9,7 @@ namespace FS.FilterExpressionCreator.Extensions;
 /// <summary>
 /// Extension methods for <see cref="Type"/>.
 /// </summary>
-public static class TypeExtensions
+internal static class TypeExtensions
 {
     /// <summary>
     /// Returns the underlying type when type is <see cref="Nullable{T}"/>; otherwise the type is returned.

@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using FS.FilterExpressionCreator.ToBeDefined.Extensions;
+using FS.FilterExpressionCreator.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics.CodeAnalysis;
 
@@ -15,11 +15,14 @@ public class StringExtensionsTests
         // ReSharper disable once StringLiteralTypo
         lowerCase1.Should().Be("hELLO");
 
-        var lowerCase2 = "".LowercaseFirstChar();
-        lowerCase2.Should().Be("");
+        var lowerCase2 = "H".LowercaseFirstChar();
+        lowerCase2.Should().Be("h");
 
-        var lowerCase3 = ((string?)null).LowercaseFirstChar();
-        lowerCase3.Should().BeNull();
+        var lowerCase3 = "".LowercaseFirstChar();
+        lowerCase3.Should().Be("");
+
+        var lowerCase4 = ((string?)null).LowercaseFirstChar();
+        lowerCase4.Should().BeNull();
     }
 
     [TestMethod]

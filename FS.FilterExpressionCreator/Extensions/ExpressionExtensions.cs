@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace FS.FilterExpressionCreator.ToBeDefined.Extensions;
+namespace FS.FilterExpressionCreator.Extensions;
 
 /// <summary>
 /// Extension methods for <see cref="Expression"/>.
 /// </summary>
-public static class ExpressionExtensions
+internal static class ExpressionExtensions
 {
     /// <summary>
     /// Gets the name of a first level property.
@@ -25,7 +25,7 @@ public static class ExpressionExtensions
         return memberExpression.Member.Name;
     }
 
-    private static Expression UnboxBody<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> property)
+    public static Expression UnboxBody<TEntity, TProperty>(this Expression<Func<TEntity, TProperty>> property)
     {
         if (property.Body is UnaryExpression { NodeType: ExpressionType.Convert } convert)
             return convert.Operand;

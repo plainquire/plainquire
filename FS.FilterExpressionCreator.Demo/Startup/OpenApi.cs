@@ -1,6 +1,7 @@
 ﻿using FS.FilterExpressionCreator.Demo.Extensions;
 using FS.FilterExpressionCreator.Demo.Routing;
 using FS.FilterExpressionCreator.Swashbuckle.Extensions;
+using FS.SortQueryableCreator.Swashbuckle.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -24,11 +25,16 @@ internal static class OpenApi
                 c.RoutePrefix = OPEN_API_UI_ROUTE.Trim('/');
                 c.SwaggerEndpoint($"{V1ApiController.API_VERSION}/{OPEN_API_SPEC}", $"API version {V1ApiController.API_VERSION}");
                 c.DisplayRequestDuration();
+                c.EnableDeepLinking();
+                c.EnableTryItOutByDefault();
+                c.ConfigObject.AdditionalItems.Add("requestSnippetsEnabled", true);
+                c.InjectStylesheet("/css/swagger-ui/custom.css");
             });
 
     internal static IServiceCollection RegisterOpenApiController(this IServiceCollection services)
     {
         var filterExpressionCreatorDoc = Path.Combine(AppContext.BaseDirectory, "FS.FilterExpressionCreator.xml");
+        var sortCreatorDoc = Path.Combine(AppContext.BaseDirectory, "FS.SortQueryableCreator.xml");
         var filterExpressionCreatorDemoDoc = Path.Combine(AppContext.BaseDirectory, "FS.FilterExpressionCreator.Demo.xml");
 
         return services
@@ -37,7 +43,9 @@ internal static class OpenApi
             {
                 c.SwaggerDoc(V1ApiController.API_VERSION, new OpenApiInfo { Title = $"{AssemblyExtensions.GetProgramProduct()} API", Version = V1ApiController.API_VERSION });
                 c.AddFilterExpressionSupport(filterExpressionCreatorDoc, filterExpressionCreatorDemoDoc);
+                c.AddSortQueryableSupport(sortCreatorDoc, filterExpressionCreatorDemoDoc);
                 c.IncludeXmlComments(filterExpressionCreatorDoc);
+                c.IncludeXmlComments(sortCreatorDoc);
                 c.IncludeXmlComments(filterExpressionCreatorDemoDoc);
             });
     }

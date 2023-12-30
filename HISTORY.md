@@ -14,6 +14,8 @@ Obsolete methods removed from `EntityFilter.cs`
 
 `AddFilterExpressionsSupport` renamed to `AddFilterExpressionSupport`
 
+`AddFilterExpressionsNewtonsoftSupport` renamed to `AddFilterExpressionNewtonsoftSupport`
+
 `FilterConfiguration` moved to namespace `FS.FilterExpressionCreator.Abstractions.Configurations`
 
 ## Changes

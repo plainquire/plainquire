@@ -1,10 +1,8 @@
 ﻿using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Filters;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace FS.FilterExpressionCreator.Extensions;
 
@@ -15,13 +13,37 @@ namespace FS.FilterExpressionCreator.Extensions;
 public static class ValueFilterExtensions
 {
     /// <summary>
-    /// Create <see cref="ValueFilter"/> from filterSyntax.
+    /// Humanizes the filter syntax.
     /// </summary>
-    /// <param name="filterSyntax">The filter micro syntax to create the filter from.</param>
-    public static ValueFilter[] Create(string filterSyntax)
+    /// <typeparam name="TValue">The type of the filtered value.</typeparam>
+    /// <param name="filterSyntax">The filter syntax.</param>
+    /// <param name="valueName">Name of the value.</param>
+    public static string HumanizeFilterSyntax<TValue>(this string? filterSyntax, string valueName)
     {
-        var filters = SplitValues(filterSyntax);
-        return filters.Select(ValueFilter.Create).ToArray();
+        if (string.IsNullOrWhiteSpace(filterSyntax))
+            return $"{valueName} is unfiltered";
+
+        var filters = ValueFiltersFactory.Create(filterSyntax)
+            .GroupBy(x => x.Operator)
+            .Select(filterGroup =>
+            {
+                var filterOperator = filterGroup.Key;
+                var operatorName = filterOperator.GetOperatorName<TValue>();
+
+                if (filterOperator is FilterOperator.IsNull or FilterOperator.NotNull)
+                    return $"{valueName} {operatorName}";
+
+                var filterValues = filterGroup.Select(x => x.Value).ToArray();
+                var valuesButLast = filterValues[..^1];
+                var prefixValueList = string.Join("', '", valuesButLast);
+                var valueList = !string.IsNullOrEmpty(prefixValueList)
+                    ? $"'{prefixValueList}' or '{filterValues[^1]}'"
+                    : $"'{filterValues[^1]}'";
+
+                return $"{valueName} {operatorName} {valueList}";
+            });
+
+        return string.Join(" or ", filters);
     }
 
     /// <summary>
@@ -39,41 +61,6 @@ public static class ValueFilterExtensions
             .Select(x => x.ToString()?.Replace(",", "\\,"));
 
         return string.Join(",", filterStrings);
-    }
-
-    /// <summary>
-    /// Humanizes the filter syntax.
-    /// </summary>
-    /// <typeparam name="TValue">The type of the filtered value.</typeparam>
-    /// <param name="filterSyntax">The filter syntax.</param>
-    /// <param name="valueName">Name of the value.</param>
-    public static string HumanizeFilterSyntax<TValue>(this string? filterSyntax, string valueName)
-    {
-        if (string.IsNullOrWhiteSpace(filterSyntax))
-            return $"{valueName} is unfiltered";
-
-        var filters = Create(filterSyntax)
-            .GroupBy(x => x.Operator)
-            .Select(filterGroup =>
-            {
-                var filterOperator = filterGroup.Key;
-                var operatorName = filterOperator.GetOperatorName<TValue>();
-
-                if (filterOperator is FilterOperator.IsNull or FilterOperator.NotNull)
-                    return $"{valueName} {operatorName}";
-
-                var filterValues = filterGroup.Select(x => x.Value).ToArray();
-                var valuesButLast = filterValues[..^1];
-                var prefixValueList = string.Join("', '", valuesButLast);
-                //var concatKey = filter.Operator == FilterOperator.NotEqual ? "nor" : "or";
-                var valueList = !string.IsNullOrEmpty(prefixValueList)
-                    ? $"'{prefixValueList}' or '{filterValues[^1]}'"
-                    : $"'{filterValues[^1]}'";
-
-                return $"{valueName} {operatorName} {valueList}";
-            });
-
-        return string.Join(" or ", filters);
     }
 
     private static string GetOperatorName<TValue>(this FilterOperator filterOperator)
@@ -99,19 +86,4 @@ public static class ValueFilterExtensions
         => typeof(TValue) == typeof(string)
             ? FilterOperator.Contains
             : FilterOperator.EqualCaseInsensitive;
-
-    private static IEnumerable<string> SplitValues(string? filterSyntax)
-    {
-        if (filterSyntax == null)
-            return Enumerable.Empty<string>();
-
-        return Regex
-            .Split(filterSyntax, @"(?<!\\)[\|,]")
-            .Select(element => element
-                .Replace(@"\|", @"|")
-                .Replace(@"\,", @",")
-                .Replace(@"\\", @"\")
-            )
-            .ToArray();
-    }
 }

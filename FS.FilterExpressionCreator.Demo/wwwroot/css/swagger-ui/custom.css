@@ -1,0 +1,6 @@
+﻿.swagger-ui select[multiple] {
+    height: 160px;
+    width: 100%;
+    max-width: 340px;
+    resize: both;
+}

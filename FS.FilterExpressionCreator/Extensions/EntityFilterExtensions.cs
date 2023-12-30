@@ -30,7 +30,7 @@ public static class EntityFilterExtensions
         if (filterSyntax == null)
             return entityFilter;
 
-        var filters = ValueFilterExtensions.Create(filterSyntax);
+        var filters = ValueFiltersFactory.Create(filterSyntax);
         entityFilter.Add(property, filters);
         return entityFilter;
     }
@@ -97,7 +97,7 @@ public static class EntityFilterExtensions
         if (filterSyntax == null)
             return entityFilter.Clear(property);
 
-        var valueFilters = ValueFilterExtensions.Create(filterSyntax);
+        var valueFilters = ValueFiltersFactory.Create(filterSyntax);
         entityFilter.Replace(property, valueFilters);
         return entityFilter;
     }

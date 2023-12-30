@@ -11,6 +11,7 @@ namespace FS.FilterExpressionCreator.Tests.Tests.TypeFilter;
 [TestClass, ExcludeFromCodeCoverage]
 public class FilterForBoolBySyntaxTests : TestBase<bool>
 {
+    //TODO: Second parameter required?
     [DataTestMethod]
     [FilterTestDataSource(nameof(_testCases), nameof(TestModelFilterFunctions))]
     public void FilterForBoolBySyntax_WorksAsExpected(FilterTestCase<bool, bool> testCase, TestModelFilterFunc<bool> filterFunc)

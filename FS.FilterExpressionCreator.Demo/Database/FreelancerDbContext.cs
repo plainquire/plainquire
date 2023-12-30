@@ -32,5 +32,9 @@ public class FreelancerDbContext : DbContext
             .HasMany(x => x.Projects)
             .WithOne()
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder
+            .Entity<Freelancer>()
+            .OwnsOne(x => x.Address);
     }
 }

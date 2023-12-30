@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../Build/build_core.props" />
+  <Import Project="../Build/build_version.props" />
+  <Import Project="../Build/build_xml_documentation.props" />
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.25" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FS.SortQueryableCreator.Newtonsoft\FS.SortQueryableCreator.Newtonsoft.csproj" />
+  </ItemGroup>
+
+</Project>

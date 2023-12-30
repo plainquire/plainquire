@@ -137,7 +137,8 @@ public class ValueFilter
 
         var trimmedFilter = filter.TrimStart();
 
-        // Order of if-statements mus be from longest to shortest filter operator, e.g. '==' must be parsed before '=' matches
+        // TODO: Check if this can be shortened by automatic length detection
+        // Order of if-statements must be from longest to shortest filter operator, e.g. '==' must be parsed before '=' matches
         if (trimmedFilter.StartsWith(_filterOperatorToPrefixMap[FilterOperator.IsNull]))
             filterOperator = FilterOperator.IsNull;
         else if (trimmedFilter.StartsWith(_filterOperatorToPrefixMap[FilterOperator.NotNull]))

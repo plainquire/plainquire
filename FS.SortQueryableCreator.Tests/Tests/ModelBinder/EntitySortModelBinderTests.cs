@@ -1,0 +1,137 @@
+﻿using FluentAssertions;
+using FluentAssertions.Execution;
+using FS.FilterExpressionCreator.Abstractions.Attributes;
+using FS.SortQueryableCreator.Enums;
+using FS.SortQueryableCreator.Mvc.ModelBinders;
+using FS.SortQueryableCreator.Sorts;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+
+namespace FS.SortQueryableCreator.Tests.Tests.ModelBinder;
+
+[TestClass, ExcludeFromCodeCoverage]
+public class EntitySortModelBinderTests
+{
+    [FilterEntity(Prefix = "", SortByParameter = "sortBy")]
+    public record PersonWithSortBy(
+        [property: Filter(Name = "Fullname")] string Name,
+        [property: Filter] DateTime? Birthday,
+        [property: Filter(Sortable = true)] Address Address
+    );
+
+    [FilterEntity(Prefix = "")]
+    public record PersonWithOrderBy(
+        [property: Filter(Name = "Fullname")] string Name,
+        [property: Filter] DateTime? Birthday,
+        [property: Filter] Address Address
+    );
+
+    [FilterEntity]
+    public record Address(string Street, Country Country);
+
+    [FilterEntity]
+    public record Country(string Name);
+
+    [TestMethod]
+    public void WhenQueryParametersAreParsed_EntitySortMatchesGivenParameters()
+    {
+        // Arrange
+        var queryParameters = new Dictionary<string, string>
+        {
+            ["sortBy"] = "fullname, birthday-desc",
+            ["sortBy[0]"] = "name, notExists",
+            ["sortBy[1]"] = "~address.Street.length",
+        };
+
+        var bindingContext = CreateBindingContext<EntitySort<PersonWithSortBy>>(queryParameters);
+        var binder = new EntitySortModelBinder();
+
+        // Act
+        binder.BindModelAsync(bindingContext);
+
+        // Assert
+        using var _ = new AssertionScope();
+
+        bindingContext.Result.IsModelSet.Should().BeTrue();
+
+        var personSort = (EntitySort<PersonWithSortBy>)bindingContext.Result.Model!;
+
+        personSort._propertySorts
+            .OrderBy(propertySort => propertySort.Position)
+            .Select(propertySort => new { propertySort.PropertyPath, propertySort.Direction })
+            .Should()
+            .ContainInOrder( 
+                new { PropertyPath = "Name", Direction = SortDirection.Ascending },
+                new { PropertyPath = "Birthday", Direction = SortDirection.Descending },
+                new { PropertyPath = "Address.Street.length", Direction = SortDirection.Descending }
+            );
+    }
+
+    [TestMethod]
+    public void WhenQueryParametersAreParsedForTwoEntities_FinalOrderMatchesQueryParams()
+    {
+        // Arrange
+        var queryParameters = new Dictionary<string, string>
+        {
+            ["orderBy"] = "fullname, birthday, addressStreet"
+        };
+
+        var binder = new EntitySortModelBinder();
+        var personBindingContext = CreateBindingContext<EntitySort<PersonWithOrderBy>>(queryParameters);
+        var addressBindingContext = CreateBindingContext<EntitySort<Address>>(queryParameters);
+
+        // Act
+        binder.BindModelAsync(personBindingContext);
+        binder.BindModelAsync(addressBindingContext);
+
+        // Assert
+        using var _ = new AssertionScope();
+
+        personBindingContext.Result.IsModelSet.Should().BeTrue();
+        addressBindingContext.Result.IsModelSet.Should().BeTrue();
+
+        var personSort = (EntitySort<PersonWithOrderBy>)personBindingContext.Result.Model!;
+        var addressSort = (EntitySort<Address>)addressBindingContext.Result.Model!;
+
+        var combinedSort = personSort.AddNested(x => x.Address, addressSort);
+        combinedSort._propertySorts
+            .OrderBy(propertySort => propertySort.Position)
+            .Select(propertySort => propertySort.PropertyPath)
+            .Should()
+            .ContainInOrder("Name", "Birthday", "Address.Street");
+    }
+
+    private static DefaultModelBindingContext CreateBindingContext<TModel>(Dictionary<string, string> queryParameters)
+    {
+        var modelType = typeof(TModel);
+
+        var bindingSource = new BindingSource("", "", false, false);
+        var routeValueDictionary = new RouteValueDictionary(queryParameters!);
+        var valueProvider = new RouteValueProvider(bindingSource, routeValueDictionary);
+
+        var bindingContext = new DefaultModelBindingContext
+        {
+            ModelMetadata = new EmptyModelMetadataProvider().GetMetadataForType(modelType),
+            ModelName = modelType.Name,
+            ModelState = new ModelStateDictionary(),
+            ValueProvider = valueProvider,
+            ActionContext = new ActionContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    Request = { QueryString = new QueryBuilder(queryParameters).ToQueryString() }
+                }
+            }
+        };
+
+        return bindingContext;
+    }
+}
