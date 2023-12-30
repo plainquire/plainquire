@@ -1,4 +1,4 @@
-﻿using FS.FilterExpressionCreator.Abstractions.Models;
+﻿using FS.FilterExpressionCreator.Abstractions.Configurations;
 using FS.FilterExpressionCreator.Exceptions;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Extensions;

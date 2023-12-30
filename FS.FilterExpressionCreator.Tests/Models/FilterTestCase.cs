@@ -1,4 +1,4 @@
-﻿using FS.FilterExpressionCreator.Abstractions.Models;
+﻿using FS.FilterExpressionCreator.Abstractions.Configurations;
 using FS.FilterExpressionCreator.Enums;
 using System;
 using System.Diagnostics.CodeAnalysis;

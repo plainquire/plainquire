@@ -1,7 +1,7 @@
 ﻿#pragma warning disable CS1580 // Invalid type for parameter in XML comment cref attribute
 
+using FS.FilterExpressionCreator.Abstractions.Configurations;
 using FS.FilterExpressionCreator.Abstractions.Extensions;
-using FS.FilterExpressionCreator.Abstractions.Models;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
 using FS.FilterExpressionCreator.JsonConverters;

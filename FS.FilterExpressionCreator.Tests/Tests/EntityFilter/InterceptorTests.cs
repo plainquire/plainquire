@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
+using FS.FilterExpressionCreator.Abstractions.Configurations;
 using FS.FilterExpressionCreator.Abstractions.Extensions;
-using FS.FilterExpressionCreator.Abstractions.Models;
 using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;

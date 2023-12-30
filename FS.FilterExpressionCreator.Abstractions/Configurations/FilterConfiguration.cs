@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Globalization;
 
-namespace FS.FilterExpressionCreator.Abstractions.Models;
+namespace FS.FilterExpressionCreator.Abstractions.Configurations;
 
 /// <summary>
-/// Holds filter specific information.
+/// Holds filter specific configuration.
 /// </summary>
 public class FilterConfiguration
 {

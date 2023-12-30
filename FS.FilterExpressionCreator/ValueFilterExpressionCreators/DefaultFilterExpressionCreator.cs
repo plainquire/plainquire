@@ -1,5 +1,5 @@
-﻿using FS.FilterExpressionCreator.Abstractions.Extensions;
-using FS.FilterExpressionCreator.Abstractions.Models;
+﻿using FS.FilterExpressionCreator.Abstractions.Configurations;
+using FS.FilterExpressionCreator.Abstractions.Extensions;
 using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Exceptions;
 using FS.FilterExpressionCreator.Extensions;
