@@ -18,5 +18,5 @@ public enum Gender
     /// <summary>
     /// Female
     /// </summary>
-    Female = 2,
+    Female = 2
 }

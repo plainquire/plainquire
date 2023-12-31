@@ -37,7 +37,7 @@ public class InterceptorTests : TestBase
             new() { ValueA = "TestA", ValueB = "TestB" },
             // ReSharper disable once StringLiteralTypo
             new() { ValueA = "TESTA", ValueB = "TestB" },
-            new() { ValueA = "TestB", ValueB = "TestB" },
+            new() { ValueA = "TestB", ValueB = "TestB" }
         };
 
         var interceptor = new FilterStringsCaseInsensitiveInterceptor();

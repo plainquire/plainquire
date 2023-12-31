@@ -31,7 +31,8 @@ public class FilterForDateTimeByValueTests : TestBase<DateTime>
         }
     }
 
-    private static readonly TestModel<DateTime>[] _testItems = {
+    private static readonly TestModel<DateTime>[] _testItems =
+    [
         new() { ValueA = new DateTime(1900, 01, 01) },
         new() { ValueA = new DateTime(2000, 01, 01) },
         new() { ValueA = new DateTime(2010, 01, 01) },
@@ -46,11 +47,12 @@ public class FilterForDateTimeByValueTests : TestBase<DateTime>
         new() { ValueA = new DateTime(2010, 06, 16) },
         new() { ValueA = new DateTime(2010, 07, 01) },
         new() { ValueA = new DateTime(2011, 01, 01) },
-        new() { ValueA = new DateTime(2020, 01, 01) },
-    };
+        new() { ValueA = new DateTime(2020, 01, 01) }
+    ];
 
     // ReSharper disable RedundantExplicitArrayCreation
-    private static readonly object[] _testCases = {
+    private static readonly object[] _testCases =
+    [
         FilterTestCase.Create(1100, FilterOperator.Default, new DateTime[] { new (2010, 01, 01) }, (DateTime x) => x >= new DateTime(2010, 01, 01) && x < new DateTime(2010, 01, 01, 0, 0, 1)),
         FilterTestCase.Create(1101, FilterOperator.Default, new DateTime[] { new (2100, 01, 01) }, (DateTime _) => NONE),
         FilterTestCase.Create(1102, FilterOperator.Default, new Range<DateTimeOffset>[] { new (new DateTime(2010, 06, 01), new DateTime(2010, 06, 15, 12, 31, 00)) }, (DateTime x) => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 15, 12, 31, 01)),
@@ -85,7 +87,7 @@ public class FilterForDateTimeByValueTests : TestBase<DateTime>
 
         FilterTestCase.Create(2000, FilterOperator.IsNull, new DateTime[] { default }, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.DateTime'")),
 
-        FilterTestCase.Create(2100, FilterOperator.NotNull, new DateTime[] { default }, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.DateTime'")),
-    };
+        FilterTestCase.Create(2100, FilterOperator.NotNull, new DateTime[] { default }, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.DateTime'"))
+    ];
     // ReSharper restore RedundantExplicitArrayCreation
 }

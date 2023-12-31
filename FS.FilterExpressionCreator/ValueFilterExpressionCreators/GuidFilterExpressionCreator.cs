@@ -24,7 +24,7 @@ public class GuidFilterExpressionCreator : DefaultFilterExpressionCreator, IGuid
             FilterOperator.EqualCaseInsensitive,
             FilterOperator.NotEqual,
             FilterOperator.IsNull,
-            FilterOperator.NotNull,
+            FilterOperator.NotNull
         };
 
     /// <inheritdoc />

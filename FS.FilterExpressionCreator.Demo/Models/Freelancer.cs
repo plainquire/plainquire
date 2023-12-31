@@ -56,5 +56,5 @@ public class Freelancer
     /// <summary>
     /// The projects done.
     /// </summary>
-    public List<Project> Projects { get; set; } = new();
+    public List<Project> Projects { get; set; } = [];
 }

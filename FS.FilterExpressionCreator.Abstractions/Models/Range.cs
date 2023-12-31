@@ -128,7 +128,7 @@ public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType :
             DateTime dateTime => dateTime.Ticks,
             DateTimeOffset dateTime => dateTime.Ticks,
             IConvertible convertible => convertible.ToDouble(null),
-            _ => throw new InvalidOperationException($"The type {typeof(TType).Name} is not convertible to {nameof(Double)}"),
+            _ => throw new InvalidOperationException($"The type {typeof(TType).Name} is not convertible to {nameof(Double)}")
         };
 
     #region IConvertible
@@ -260,5 +260,5 @@ public static class Range
     /// <param name="start">The start of range.</param>
     /// <param name="end">The end of range.</param>
     public static Range<TType> Create<TType>(TType? start, TType? end) where TType : IComparable<TType>
-        => new Range<TType>(start, end);
+        => new(start, end);
 }

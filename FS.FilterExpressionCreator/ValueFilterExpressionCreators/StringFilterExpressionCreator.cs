@@ -24,7 +24,7 @@ public class StringFilterExpressionCreator : DefaultFilterExpressionCreator, ISt
             FilterOperator.EqualCaseInsensitive,
             FilterOperator.NotEqual,
             FilterOperator.IsNull,
-            FilterOperator.NotNull,
+            FilterOperator.NotNull
         };
 
     /// <inheritdoc />

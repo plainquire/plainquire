@@ -1,0 +1,8 @@
+# Remove the line below if you want to inherit .editorconfig settings from higher directories
+root = true
+
+# C# files
+[*.cs]
+
+# Suppression preferences
+dotnet_remove_unnecessary_suppression_exclusions = category: ReSharper

@@ -16,8 +16,10 @@ public static class FilterTestCaseExtensions
 {
     public static void Run<TFilterValue, TModelValue>(this FilterTestCase<TFilterValue, TModelValue> testCase, ICollection<TestModel<TModelValue>> testItems, TestModelFilterFunc<TModelValue> filterFunc)
     {
-        void testRunner() => RunAndCheckExpectedItems(testCase, testItems, filterFunc);
         RunInternal(testRunner, testCase.ExpectedException);
+        return;
+
+        void testRunner() => RunAndCheckExpectedItems(testCase, testItems, filterFunc);
     }
 
     private static void RunInternal(Action testRunner, Exception? expectedException)
@@ -29,7 +31,7 @@ public static class FilterTestCaseExtensions
             typeof(FilterTestCaseExtensions)
                 .GetMethod(nameof(RunAndCheckExpectedException), System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic)!
                 .MakeGenericMethod(expectedException.GetType())
-                .Invoke(null, new object[] { testRunner, expectedException });
+                .Invoke(null, [testRunner, expectedException]);
     }
 
     private static void RunAndCheckExpectedItems<TFilterValue, TModelValue>(FilterTestCase<TFilterValue, TModelValue> testCase, ICollection<TestModel<TModelValue>> testItems, TestModelFilterFunc<TModelValue> filterFunc)

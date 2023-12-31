@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <DefineConstants Condition="'$(TargetFramework)' == 'netstandard2.1'">$(DefineConstants);NET_STANDARD</DefineConstants>
     <Nullable>enable</Nullable>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>12.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

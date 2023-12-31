@@ -16,23 +16,25 @@ public class FilterForShortNullableBySyntaxTests : TestBase<short?>
     public void FilterForShortNullableBySyntax_WorksAsExpected(FilterTestCase<short?, short?> testCase, TestModelFilterFunc<short?> filterFunc)
         => testCase.Run(_testItems, filterFunc);
 
-    private static readonly TestModel<short?>[] _testItems = {
+    private static readonly TestModel<short?>[] _testItems =
+    [
         new() { ValueA = -9 },
         new() { ValueA = -5 },
         new() { ValueA = -0 },
         new() { ValueA = +5 },
         new() { ValueA = +9 },
-        new() { ValueA = null },
-    };
+        new() { ValueA = null }
+    ];
 
-    private static readonly FilterTestCase<short?, short?>[] _testCases = {
+    private static readonly FilterTestCase<short?, short?>[] _testCases =
+    [
         FilterTestCase.Create<short?>(1100, "null", new FilterExpressionCreationException("Unable to parse given filter value")),
         FilterTestCase.Create<short?>(1101, "", new FilterExpressionCreationException("Unable to parse given filter value")),
         FilterTestCase.Create<short?>(1102, "-5", x => x == -5),
         FilterTestCase.Create<short?>(1103, "-10", _ => NONE),
         FilterTestCase.Create<short?>(1104, "+5", x => x == +5),
 
-        FilterTestCase.Create<short?>(1200, "~5", x => x == +5 || x == -5),
+        FilterTestCase.Create<short?>(1200, "~5", x => x is +5 or -5),
         FilterTestCase.Create<short?>(1201, "~-5", x => x == -5),
         FilterTestCase.Create<short?>(1202, "~3", _ => NONE),
         FilterTestCase.Create<short?>(1203, "~0", x => x == 0),
@@ -81,6 +83,6 @@ public class FilterForShortNullableBySyntaxTests : TestBase<short?>
 
         FilterTestCase.Create<short?>(2000, "ISNULL", x => x == null),
 
-        FilterTestCase.Create<short?>(2100, "NOTNULL", x => x != null),
-    };
+        FilterTestCase.Create<short?>(2100, "NOTNULL", x => x != null)
+    ];
 }

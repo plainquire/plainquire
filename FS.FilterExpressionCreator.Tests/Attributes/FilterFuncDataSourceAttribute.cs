@@ -29,7 +29,7 @@ public class FilterFuncDataSourceAttribute : Attribute, ITestDataSource
         if (filterFuncMethod == null)
             throw new InvalidOperationException($"Method {_filterFuncMethod} not found in type '{methodInfo.DeclaringType.Name}'");
 
-        var filterFunctions = (IEnumerable<object>?)filterFuncMethod.Invoke(null, new object[] { _entityType });
+        var filterFunctions = (IEnumerable<object>?)filterFuncMethod.Invoke(null, [_entityType]);
         return filterFunctions?.Select(filterFunc => new[] { filterFunc }) ?? throw new InvalidOperationException();
     }
 

@@ -16,18 +16,20 @@ public class FilterForFloatBySyntaxTests : TestBase<float>
     public void FilterForFloatBySyntax_WorksAsExpected(FilterTestCase<float, float> testCase, TestModelFilterFunc<float> filterFunc)
         => testCase.Run(_testItems, filterFunc);
 
-    private static readonly TestModel<float>[] _testItems = {
+    private static readonly TestModel<float>[] _testItems =
+    [
         new() { ValueA = -9f },
         new() { ValueA = -5.5f },
         new() { ValueA = -0f },
         new() { ValueA = +5.5f },
-        new() { ValueA = +9f },
-    };
+        new() { ValueA = +9f }
+    ];
 
     // ReSharper disable CompareOfFloatsByEqualityOperator
-    private static readonly FilterTestCase<float, float>[] _testCases = {
+    private static readonly FilterTestCase<float, float>[] _testCases =
+    [
         FilterTestCase.Create<float>(1000, "-5\\,5", x => x == -5.5f, CultureDeDe),
-        FilterTestCase.Create<float>(1001, "-5\\,5,+5\\,5", x => x == -5.5f ||  x == 5.5f, CultureDeDe),
+        FilterTestCase.Create<float>(1001, "-5\\,5,+5\\,5", x => x is -5.5f or 5.5f, CultureDeDe),
         FilterTestCase.Create<float>(1002, "-5,5,+5,5", _ => NONE, CultureDeDe),
 
         FilterTestCase.Create<float>(1100, "null", new FilterExpressionCreationException("Unable to parse given filter value")),
@@ -35,9 +37,9 @@ public class FilterForFloatBySyntaxTests : TestBase<float>
         FilterTestCase.Create<float>(1102, "-5.5", x => x == -5.5f, CultureEnUs),
         FilterTestCase.Create<float>(1103, "-10", _ => NONE),
         FilterTestCase.Create<float>(1104, "+5.5", x => x == +5.5f, CultureEnUs),
-        FilterTestCase.Create<float>(1105, "-5.5,+5.5", x => x == -5.5f || x == +5.5f, CultureEnUs),
+        FilterTestCase.Create<float>(1105, "-5.5,+5.5", x => x is -5.5f or +5.5f, CultureEnUs),
 
-        FilterTestCase.Create<float>(1200, "~5", x => x == +5.5f || x == -5.5f),
+        FilterTestCase.Create<float>(1200, "~5", x => x is +5.5f or -5.5f),
         FilterTestCase.Create<float>(1201, "~-5", x => x == -5.5f),
         FilterTestCase.Create<float>(1202, "~3", _ => NONE),
         FilterTestCase.Create<float>(1203, "~0", x => x == 0),
@@ -86,7 +88,7 @@ public class FilterForFloatBySyntaxTests : TestBase<float>
 
         FilterTestCase.Create<float>(2000, "ISNULL", new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.Single'")),
 
-        FilterTestCase.Create<float>(2100, "NOTNULL", new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Single'")),
-    };
+        FilterTestCase.Create<float>(2100, "NOTNULL", new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Single'"))
+    ];
     // ReSharper restore CompareOfFloatsByEqualityOperator
 }

@@ -30,7 +30,7 @@ public class NestedFilterTests : TestBase
         {
             new() { ValueA = "OuterA", NestedObject = new() { Value = "NestedA" } },
             new() { ValueA = "OuterA", NestedObject = new() { Value = "NestedB" } },
-            new() { ValueA = "OuterB", NestedObject = new() { Value = "NestedB" } },
+            new() { ValueA = "OuterB", NestedObject = new() { Value = "NestedB" } }
         };
 
         var filteredEntities = filterFunc(testItems, outerFilter);
@@ -51,10 +51,10 @@ public class NestedFilterTests : TestBase
 
         var testItems = new List<TestModel<string>>
         {
-            new() { ValueA = "OuterA", NestedList = new() { new() { Value = "NestedA" } } },
-            new() { ValueA = "OuterA", NestedList = new() { new() { Value = "NestedB" } } },
-            new() { ValueA = "OuterA", NestedList = new() { new() { Value = "NestedA" }, new() { Value = "NestedB" } } },
-            new() { ValueA = "OuterB", NestedList = new() { new() { Value = "NestedB" } } },
+            new() { ValueA = "OuterA", NestedList = [new() { Value = "NestedA" }] },
+            new() { ValueA = "OuterA", NestedList = [new() { Value = "NestedB" }] },
+            new() { ValueA = "OuterA", NestedList = [new() { Value = "NestedA" }, new() { Value = "NestedB" }] },
+            new() { ValueA = "OuterB", NestedList = [new() { Value = "NestedB" }] }
         };
 
         var filteredEntities = filterFunc(testItems, outerFilter);

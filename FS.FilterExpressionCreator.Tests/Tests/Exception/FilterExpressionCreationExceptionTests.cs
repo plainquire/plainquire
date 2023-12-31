@@ -35,7 +35,7 @@ public class FilterExpressionCreationExceptionTests : TestBase
                 FilterOperator.EqualCaseInsensitive,
                 FilterOperator.NotEqual,
                 FilterOperator.IsNull,
-                FilterOperator.NotNull,
+                FilterOperator.NotNull
             }
         };
 

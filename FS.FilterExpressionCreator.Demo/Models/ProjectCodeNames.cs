@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace FS.FilterExpressionCreator.Demo.Models;
@@ -6,13 +7,14 @@ namespace FS.FilterExpressionCreator.Demo.Models;
 /// <summary>
 /// Project code names taken from Wikipedia.
 /// </summary>
+[SuppressMessage("ReSharper", "ArrangeObjectCreationWhenTypeNotEvident")]
 public static class ProjectCodeNames
 {
     /// <summary>
     /// Project code names
     /// </summary>
-    private static readonly List<ProjectCodeName> _codeNames = new()
-    {
+    private static readonly List<ProjectCodeName> _codeNames =
+    [
         // ReSharper disable StringLiteralTypo
         new() { CodeName = "4Course", Description = "Sun 4 × 1.05 GB 3.5\" SCSI2 disks in Dinnerbox+ package" },
         new() { CodeName = "83%", Description = "UHU Linux 1.1 Beta 4" },
@@ -1399,9 +1401,9 @@ public static class ProjectCodeNames
         new() { CodeName = "Zoot", Description = "Red Hat Linux 6.2" },
         new() { CodeName = "Zulu", Description = "Sun 200M triangle graphics" },
         new() { CodeName = "ZX", Description = "Sun Leo 24-bit color frame buffer" },
-        new() { CodeName = "Zydeco", Description = "Apple Macintosh Quadra 950" },
+        new() { CodeName = "Zydeco", Description = "Apple Macintosh Quadra 950" }
         // ReSharper restore StringLiteralTypo
-    };
+    ];
 
     /// <summary>
     /// Project code names

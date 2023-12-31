@@ -5,6 +5,4 @@
 /// Implements the <see cref="IValueFilterExpressionCreator"/>
 /// </summary>
 /// <seealso cref="IValueFilterExpressionCreator"/>
-public interface IStringFilterExpressionCreator : IValueFilterExpressionCreator
-{
-}
+public interface IStringFilterExpressionCreator : IValueFilterExpressionCreator;

@@ -32,7 +32,7 @@ public class DefaultFilterExpressionCreator : IValueFilterExpressionCreator
             FilterOperator.GreaterThanOrEqual,
             FilterOperator.GreaterThan,
             FilterOperator.IsNull,
-            FilterOperator.NotNull,
+            FilterOperator.NotNull
         };
 
     /// <inheritdoc />
@@ -305,7 +305,7 @@ public class DefaultFilterExpressionCreator : IValueFilterExpressionCreator
             FilterOperator = filterOperator,
             Value = value,
             ValueType = typeof(TValue),
-            SupportedFilterOperators = SupportedFilterOperators,
+            SupportedFilterOperators = SupportedFilterOperators
         };
     }
 }

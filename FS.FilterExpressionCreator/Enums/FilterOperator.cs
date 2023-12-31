@@ -66,5 +66,5 @@ public enum FilterOperator
     /// <summary>
     /// Filter for elements that are not NULL
     /// </summary>
-    NotNull,
+    NotNull
 }

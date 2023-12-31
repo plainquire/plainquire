@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS1580 // Invalid type for parameter in XML comment cref attribute
-
-using FS.FilterExpressionCreator.Abstractions.Configurations;
+﻿using FS.FilterExpressionCreator.Abstractions.Configurations;
 using FS.FilterExpressionCreator.Abstractions.Extensions;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
@@ -21,7 +19,7 @@ namespace FS.FilterExpressionCreator.Filters;
 /// <summary>
 /// Hub to create filter expressions for <typeparamref name="TEntity"/> with fluent API.
 /// </summary>
-/// <typeparam name="TEntity">The type of the entity to create the filter for.</typeparam>
+/// <typeparam name="TEntity">The entity type to be filtered.</typeparam>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [JsonConverter(typeof(EntityFilterConverterFactory))]
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
@@ -30,7 +28,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <summary>
     /// Gets the filter syntax for the given <paramref name="property"/>.
     /// </summary>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to get the filter for.</param>
     public string? GetPropertyFilterSyntax<TProperty>(Expression<Func<TEntity, TProperty?>> property)
         => GetPropertyFilterSyntaxInternal(property);
@@ -38,7 +36,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <summary>
     /// Get the filters applied to the given property.
     /// </summary>
-    /// <typeparam name="TProperty">Type of the property.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to get the filter for.</param>
     public ValueFilter[]? GetPropertyFilterValues<TProperty>(Expression<Func<TEntity, TProperty?>> property)
         => GetPropertyFilterValuesInternal(property);
@@ -46,7 +44,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <summary>
     /// Gets the <see cref="EntityFilter{TProperty}"/> for the given nested class <typeparamref name="TProperty"/>.
     /// </summary>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to get the filter for.</param>
     public EntityFilter<TProperty>? GetNestedFilter<TProperty>(Expression<Func<TEntity, TProperty?>> property)
         => GetNestedFilterInternal(property);
@@ -55,7 +53,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// Gets the <see cref="EntityFilter{TProperty}"/> for the given nested list <typeparamref name="TList"/>.
     /// </summary>
     /// <typeparam name="TList">The type of the list of <typeparamref name="TProperty"/>.</typeparam>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to get the filter for.</param>
     public EntityFilter<TProperty>? GetNestedFilter<TList, TProperty>(Expression<Func<TEntity, TList?>> property)
         where TList : IEnumerable<TProperty>
@@ -64,7 +62,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <summary>
     /// Adds a filter for the given property. Existing filters for the same property are preserved.
     /// </summary>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to filter.</param>
     /// <param name="filters">The filters to use.</param>
     public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty?>> property, params ValueFilter[]? filters)
@@ -76,7 +74,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <summary>
     /// Adds a nested filter for the given property. Existing filters for the same property are preserved.
     /// </summary>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to filter.</param>
     /// <param name="nestedFilter">The nested class filter.</param>
     public EntityFilter<TEntity> AddNested<TProperty>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TProperty>? nestedFilter)
@@ -84,15 +82,15 @@ public class EntityFilter<TEntity> : EntityFilter
         if (nestedFilter == null)
             return this;
 
-        AddInternal(property, nestedFilter);
+        AddNestedInternal(property, nestedFilter);
         return this;
     }
 
     /// <summary>
     /// Adds a nested filter for the given enumerable property. Existing filters for the same property are preserved.
     /// </summary>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
-    /// <typeparam name="TNested">The type of the nested filter.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
+    /// <typeparam name="TNested">The nested entity type to be filtered.</typeparam>
     /// <param name="property">The property to filter. Must implement <see cref="IEnumerable{T}"/>.</param>
     /// <param name="nestedFilter">The nested class filter.</param>
     public EntityFilter<TEntity> AddNested<TProperty, TNested>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TNested>? nestedFilter)
@@ -101,14 +99,14 @@ public class EntityFilter<TEntity> : EntityFilter
         if (nestedFilter == null)
             return this;
 
-        AddInternal(property, nestedFilter);
+        AddNestedInternal(property, nestedFilter);
         return this;
     }
 
     /// <summary>
     /// Replaces the filter for the given property. Existing filters for the same property are removed.
     /// </summary>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to filter.</param>
     /// <param name="filters">The filters to use.</param>
     public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty?>> property, params ValueFilter[]? filters)
@@ -120,7 +118,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <summary>
     /// Replaces the nested filter for the given property. Existing filters for the same property are removed.
     /// </summary>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to filter.</param>
     /// <param name="nestedFilter">The nested class filter.</param>
     public EntityFilter<TEntity> ReplaceNested<TProperty>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TProperty>? nestedFilter)
@@ -128,15 +126,15 @@ public class EntityFilter<TEntity> : EntityFilter
         if (nestedFilter == null)
             return Clear(property);
 
-        ReplaceInternal(property, nestedFilter);
+        ReplaceNestedInternal(property, nestedFilter);
         return this;
     }
 
     /// <summary>
     /// Replaces the nested filter for the given enumerable property. Existing filters for the same property are removed.
     /// </summary>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
-    /// <typeparam name="TNested">The type of the nested filter.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
+    /// <typeparam name="TNested">The nested entity type to be filtered.</typeparam>
     /// <param name="property">The property to filter. Must implement <see cref="IEnumerable{T}"/>.</param>
     /// <param name="nestedFilter">The nested class filter.</param>
     public EntityFilter<TEntity> ReplaceNested<TProperty, TNested>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TNested>? nestedFilter)
@@ -145,14 +143,14 @@ public class EntityFilter<TEntity> : EntityFilter
         if (nestedFilter == null)
             return Clear(property);
 
-        ReplaceInternal(property, nestedFilter);
+        ReplaceNestedInternal(property, nestedFilter);
         return this;
     }
 
     /// <summary>
     /// Remove all filters for the specified property.
     /// </summary>
-    /// <typeparam name="TProperty">The type of the t property.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to remove all filters for.</param>
     public EntityFilter<TEntity> Clear<TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
@@ -190,8 +188,8 @@ public class EntityFilter<TEntity> : EntityFilter
         {
             var sameDestinationPropertyExists = destinationProperties
                 .Exists(x =>
-                            x.Name == sourceProperty.Name &&
-                            x.PropertyType.IsAssignableFrom(sourceProperty.PropertyType)
+                    x.Name == sourceProperty.Name &&
+                    x.PropertyType.IsAssignableFrom(sourceProperty.PropertyType)
                 );
 
             if (!sameDestinationPropertyExists)
@@ -259,8 +257,8 @@ public class EntityFilter
     /// </summary>
     public EntityFilter()
     {
-        PropertyFilters = new List<PropertyFilter>();
-        NestedFilters = new List<NestedFilter>();
+        PropertyFilters = [];
+        NestedFilters = [];
     }
 
     /// <summary>
@@ -271,8 +269,8 @@ public class EntityFilter
     /// <summary>
     /// Gets the filter syntax for the given <typeparamref name="TProperty"/>.
     /// </summary>
-    /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <typeparam name="TEntity">The entity type to be filtered.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to get the filter for.</param>
     protected string? GetPropertyFilterSyntaxInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
@@ -284,8 +282,8 @@ public class EntityFilter
     /// <summary>
     /// Get the filters applied to the given property.
     /// </summary>
-    /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
-    /// <typeparam name="TProperty">Type of the property.</typeparam>
+    /// <typeparam name="TEntity">The entity type to be filtered.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to get the filter for.</param>
     protected ValueFilter[]? GetPropertyFilterValuesInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
@@ -296,8 +294,8 @@ public class EntityFilter
     /// <summary>
     /// Gets the <see cref="EntityFilter{TProperty}"/> for the given nested class <typeparamref name="TProperty"/>.
     /// </summary>
-    /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <typeparam name="TEntity">The entity type to be filtered.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to get the filter for.</param>
     protected EntityFilter<TProperty>? GetNestedFilterInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
@@ -308,9 +306,9 @@ public class EntityFilter
     /// <summary>
     /// Gets the <see cref="EntityFilter{TProperty}"/> for the given nested list <typeparamref name="TList"/>.
     /// </summary>
-    /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
+    /// <typeparam name="TEntity">The entity type to be filtered.</typeparam>
     /// <typeparam name="TList">The type of the list of <typeparamref name="TProperty"/>.</typeparam>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to get the filter for.</param>
     protected EntityFilter<TProperty>? GetNestedFilterInternal<TEntity, TList, TProperty>(Expression<Func<TEntity, TList?>> property)
         where TList : IEnumerable<TProperty>
@@ -322,8 +320,8 @@ public class EntityFilter
     /// <summary>
     /// Adds a filter for the given property. Existing filters for the same property are preserved.
     /// </summary>
-    /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <typeparam name="TEntity">The entity type to be filtered.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to filter.</param>
     /// <param name="valueFilters">The filters to use.</param>
     protected void AddInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property, ValueFilter[]? valueFilters)
@@ -332,8 +330,15 @@ public class EntityFilter
         PropertyFilters.Add(new PropertyFilter(propertyName, valueFilters));
     }
 
-    /// <inheritdoc cref="EntityFilter{TEntity}.Add{TProperty, TNested}(Expression{Func{TEntity, TProperty}}, EntityFilter{TNested})" />
-    protected void AddInternal<TEntity, TProperty, TNested>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TNested> nestedFilter)
+    /// <summary>
+    /// Adds a nested filter for the given property. Existing filters for the same property are preserved.
+    /// </summary>
+    /// <typeparam name="TEntity">The entity type to be filtered.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
+    /// <typeparam name="TNested">The nested entity type to be filtered.</typeparam>
+    /// <param name="property">The property to filter.</param>
+    /// <param name="nestedFilter">The nested class filter.</param>
+    protected void AddNestedInternal<TEntity, TProperty, TNested>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TNested> nestedFilter)
     {
         var propertyName = property.GetPropertyName();
         NestedFilters.Add(new NestedFilter(propertyName, nestedFilter));
@@ -342,8 +347,8 @@ public class EntityFilter
     /// <summary>
     /// Replaces the filter for the given property using the default filter operator. Existing filters for the same property are removed.
     /// </summary>
-    /// <typeparam name="TEntity">The type of the class that declares <typeparamref name="TProperty"/>.</typeparam>
-    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <typeparam name="TEntity">The entity type to be filtered.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to filter.</param>
     /// <param name="valueFilters">The filters to use.</param>
     protected void ReplaceInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property, ValueFilter[]? valueFilters)
@@ -353,8 +358,15 @@ public class EntityFilter
         PropertyFilters.Add(new PropertyFilter(propertyName, valueFilters));
     }
 
-    /// <inheritdoc cref="EntityFilter{TEntity}.Replace{TProperty, TNested}(Expression{Func{TEntity, TProperty}}, EntityFilter{TNested})" />
-    protected void ReplaceInternal<TEntity, TProperty, TNested>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TNested> nestedFilter)
+    /// <summary>
+    /// Replaces the nested filter for the given property. Existing filters for the same property are removed.
+    /// </summary>
+    /// <typeparam name="TEntity">The entity type to be filtered.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
+    /// <typeparam name="TNested">The nested entity type to be filtered.</typeparam>
+    /// <param name="property">The property to filter.</param>
+    /// <param name="nestedFilter">The nested class filter.</param>
+    protected void ReplaceNestedInternal<TEntity, TProperty, TNested>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TNested> nestedFilter)
     {
         var propertyName = property.GetPropertyName();
         NestedFilters.RemoveAll(x => x.PropertyName == propertyName);
@@ -409,7 +421,7 @@ public class EntityFilter
             .Select(x =>
             {
                 var createFilterExpression = _createFilterMethod.MakeGenericMethod(x.Property.PropertyType);
-                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, new object?[] { configuration, interceptor });
+                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, [configuration, interceptor]);
                 if (nestedFilterExpression == null)
                     return null;
 
@@ -437,7 +449,7 @@ public class EntityFilter
             {
                 var propertyType = x.Property.PropertyType.GetGenericArguments()[0];
                 var createFilterExpression = _createFilterMethod.MakeGenericMethod(propertyType);
-                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, new object?[] { configuration, interceptor });
+                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, [configuration, interceptor]);
                 if (nestedFilterExpression == null)
                     return null;
 

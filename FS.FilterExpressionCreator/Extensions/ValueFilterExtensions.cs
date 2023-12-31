@@ -52,15 +52,14 @@ public static class ValueFilterExtensions
         if (string.IsNullOrWhiteSpace(filterSyntax))
             return $"{valueName} is unfiltered";
 
-        var filters = ValueFilterExtensions
-            .Create(filterSyntax)
+        var filters = Create(filterSyntax)
             .GroupBy(x => x.Operator)
             .Select(filterGroup =>
             {
                 var filterOperator = filterGroup.Key;
                 var operatorName = filterOperator.GetOperatorName<TValue>();
 
-                if (filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull)
+                if (filterOperator is FilterOperator.IsNull or FilterOperator.NotNull)
                     return $"{valueName} {operatorName}";
 
                 var filterValues = filterGroup.Select(x => x.Value).ToArray();
@@ -109,9 +108,9 @@ public static class ValueFilterExtensions
         return Regex
             .Split(filterSyntax, @"(?<!\\)[\|,]")
             .Select(element => element
-                        .Replace(@"\|", @"|")
-                        .Replace(@"\,", @",")
-                        .Replace(@"\\", @"\")
+                .Replace(@"\|", @"|")
+                .Replace(@"\,", @",")
+                .Replace(@"\\", @"\")
             )
             .ToArray();
     }

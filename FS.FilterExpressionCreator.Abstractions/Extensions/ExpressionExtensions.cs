@@ -14,7 +14,7 @@ public static class ExpressionExtensions
 {
     private static readonly ConstantExpression _emptyString = Expression.Constant(string.Empty, typeof(string));
     private static readonly MethodInfo _stringToUpperMethodInfo = typeof(string).GetMethod(nameof(string.ToUpper), Type.EmptyTypes)!;
-    private static readonly MethodInfo _stringContainsMethodInfo = typeof(string).GetMethod(nameof(string.Contains), new[] { typeof(string) })!;
+    private static readonly MethodInfo _stringContainsMethodInfo = typeof(string).GetMethod(nameof(string.Contains), [typeof(string)])!;
     private static readonly MethodInfo _enumerableAnyMethodInfo = typeof(Enumerable).GetMethods().First(method => method.Name == nameof(Enumerable.Any) && method.GetParameters().Select(x => x.Name).SequenceEqual(new[] { "source", "predicate" }));
     private static readonly MethodInfo _objectToStringMethodInfo = typeof(object).GetMethods().First(method => method.Name == nameof(ToString));
 
@@ -97,7 +97,7 @@ public static class ExpressionExtensions
     {
         var body = UnboxBody(property);
 
-        if (!(body is MemberExpression { Expression: ParameterExpression _ } memberExpression))
+        if (body is not MemberExpression { Expression: ParameterExpression } memberExpression)
             throw new ArgumentException("Given property must be a first level property access expression like person => person.Name", nameof(property));
 
         return memberExpression.Member.Name;

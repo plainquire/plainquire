@@ -143,19 +143,20 @@ public class EntityFilterExtensionsTests
         queryParams.Should().Be("testFirstName=John,Jane&testSurname=%3dDoe&testBirthday=%3e2020-01-01,ISNULL&testBirthday=%3c2021-01-01");
     }
 
+    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
+    [SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
     [ExcludeFromCodeCoverage]
     [FilterEntity(Prefix = "Test")]
-    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
     private class FilterAttributeTestModel
     {
-        public string? FirstName { get; set; }
+        public string? FirstName { get; }
 
         [Filter(Name = "Surname")]
-        public string? LastName { get; set; }
+        public string? LastName { get; }
 
         [Filter(Visible = false)]
-        public string? Gender { get; set; }
+        public string? Gender { get; }
 
-        public DateTime? Birthday { get; set; }
+        public DateTime? Birthday { get; }
     }
 }

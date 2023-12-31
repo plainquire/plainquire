@@ -29,25 +29,27 @@ public class FilterForFloatNullableByValueTests : TestBase<float?>
         }
     }
 
-    private static readonly TestModel<float?>[] _testItems = {
+    private static readonly TestModel<float?>[] _testItems =
+    [
         new() { ValueA = -9f },
         new() { ValueA = -5.5f },
         new() { ValueA = -0f },
         new() { ValueA = +5.5f },
         new() { ValueA = +9f },
-        new() { ValueA = null },
-    };
+        new() { ValueA = null }
+    ];
 
     // ReSharper disable RedundantExplicitArrayCreation
     // ReSharper disable CompareOfFloatsByEqualityOperator
-    private static readonly object[] _testCases = {
+    private static readonly object[] _testCases =
+    [
         FilterTestCase.Create(1000, FilterOperator.EqualCaseInsensitive, new int?[] { -9 }, (float? x) => x == -9f),
 
         FilterTestCase.Create(1100, FilterOperator.Default, new float?[] { -5.5f }, (float? x) => x == -5.5f),
         FilterTestCase.Create(1101, FilterOperator.Default, new float?[] { -10 }, (float? _) => NONE),
         FilterTestCase.Create(1102, FilterOperator.Default, new float?[] { +5.5f }, (float? x) => x == +5.5f),
 
-        FilterTestCase.Create(1200, FilterOperator.Contains, new float?[] { +5f }, (float? x) => x == +5.5f || x == -5.5f),
+        FilterTestCase.Create(1200, FilterOperator.Contains, new float?[] { +5f }, (float? x) => x is +5.5f or -5.5f),
         FilterTestCase.Create(1201, FilterOperator.Contains, new float?[] { -5f }, (float? x) => x == -5.5f),
         FilterTestCase.Create(1202, FilterOperator.Contains, new float?[] { +3f }, (float? _) => NONE),
         FilterTestCase.Create(1203, FilterOperator.Contains, new float?[] { +0f }, (float? x) => x == 0),
@@ -73,17 +75,17 @@ public class FilterForFloatNullableByValueTests : TestBase<float?>
         FilterTestCase.Create(1702, FilterOperator.LessThanOrEqual, new float?[] { +5.5f }, (float? x) => x <= +5.5f),
 
         FilterTestCase.Create(1800, FilterOperator.GreaterThan, new float?[] { -5.5f }, (float? x) => x > -5.5f),
-        FilterTestCase.Create(1801, FilterOperator.GreaterThan, new float?[] { -10 }, (float? x) => x >=-10f),
+        FilterTestCase.Create(1801, FilterOperator.GreaterThan, new float?[] { -10 }, (float? x) => x >= -10f),
         FilterTestCase.Create(1802, FilterOperator.GreaterThan, new float?[] { +5.5f }, (float? x) => x > +5.5f),
 
         FilterTestCase.Create(1900, FilterOperator.GreaterThanOrEqual, new float?[] { -5.5f }, (float? x) => x >= -5.5f),
-        FilterTestCase.Create(1901, FilterOperator.GreaterThanOrEqual, new float?[] { -10 }, (float? x) => x >=-10f),
+        FilterTestCase.Create(1901, FilterOperator.GreaterThanOrEqual, new float?[] { -10 }, (float? x) => x >= -10f),
         FilterTestCase.Create(1902, FilterOperator.GreaterThanOrEqual, new float?[] { +5.5f }, (float? x) => x >= +5.5f),
 
         FilterTestCase.Create(2000, FilterOperator.IsNull, new float?[] { default }, (float? x) => x == null),
 
-        FilterTestCase.Create(2100, FilterOperator.NotNull, new float?[] { default }, (float? x) => x != null),
-    };
+        FilterTestCase.Create(2100, FilterOperator.NotNull, new float?[] { default }, (float? x) => x != null)
+    ];
     // ReSharper restore CompareOfFloatsByEqualityOperator
     // ReSharper restore RedundantExplicitArrayCreation
 }

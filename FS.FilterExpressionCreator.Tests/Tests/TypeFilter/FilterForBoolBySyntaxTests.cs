@@ -17,12 +17,13 @@ public class FilterForBoolBySyntaxTests : TestBase<bool>
         => testCase.Run(_testItems, filterFunc);
 
     private static readonly TestModel<bool>[] _testItems =
-    {
+    [
         new() { ValueA = true },
-        new() { ValueA = false },
-    };
+        new() { ValueA = false }
+    ];
 
-    private static readonly FilterTestCase<bool, bool>[] _testCases = {
+    private static readonly FilterTestCase<bool, bool>[] _testCases =
+    [
         // ReSharper disable RedundantBoolCompare
         FilterTestCase.Create<bool>(1000, "null", _ => ALL, IgnoreParseExceptions),
         FilterTestCase.Create<bool>(1001, "=null", _ => ALL, IgnoreParseExceptions),
@@ -75,6 +76,6 @@ public class FilterForBoolBySyntaxTests : TestBase<bool>
 
         FilterTestCase.Create<bool>(2000, "ISNULL", new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.Boolean'")),
 
-        FilterTestCase.Create<bool>(2100, "NOTNULL", new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Boolean'")),
-    };
+        FilterTestCase.Create<bool>(2100, "NOTNULL", new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Boolean'"))
+    ];
 }

@@ -23,7 +23,7 @@ public class BooleanFilterExpressionCreator : DefaultFilterExpressionCreator, IB
             FilterOperator.EqualCaseInsensitive,
             FilterOperator.NotEqual,
             FilterOperator.IsNull,
-            FilterOperator.NotNull,
+            FilterOperator.NotNull
         };
 
     /// <inheritdoc />

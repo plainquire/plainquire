@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 namespace FS.FilterExpressionCreator.Filters;
 
 /// <summary>
-/// Defines a filter for a property.
+/// Defines a single filter.
 /// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [JsonConverter(typeof(ValueFilterConverter))]
@@ -20,7 +20,8 @@ public class ValueFilter
     /// <summary>
     /// Map between <see cref="Operator"/> and the string prefix used for JSON API calls.
     /// </summary>
-    private static readonly Dictionary<FilterOperator, string> _filterOperatorToPrefixMap = new Dictionary<FilterOperator, string> {
+    private static readonly Dictionary<FilterOperator, string> _filterOperatorToPrefixMap = new()
+    {
         {FilterOperator.Default, string.Empty},
         {FilterOperator.Contains, "~"},
         {FilterOperator.EqualCaseInsensitive, "="},
@@ -31,7 +32,7 @@ public class ValueFilter
         {FilterOperator.LessThan, "<"},
         {FilterOperator.LessThanOrEqual, "<="},
         {FilterOperator.IsNull, "ISNULL"},
-        {FilterOperator.NotNull, "NOTNULL"},
+        {FilterOperator.NotNull, "NOTNULL"}
     };
 
     /// <summary>
@@ -59,7 +60,7 @@ public class ValueFilter
     /// <param name="value">The value to filter for. Unused, if <paramref name="filterOperator"/> is <see cref="FilterOperator.IsNull"/> or <see cref="FilterOperator.NotNull"/>; otherwise at least one value is required.</param>
     public static ValueFilter Create<TValue>(FilterOperator filterOperator, TValue? value)
     {
-        var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
+        var isNullableFilterOperator = filterOperator is FilterOperator.IsNull or FilterOperator.NotNull;
         if (isNullableFilterOperator)
             value = default;
         else if (value == null)
@@ -67,7 +68,7 @@ public class ValueFilter
         else if (!typeof(TValue).IsFilterableProperty())
             throw new ArgumentException($"The type '{typeof(TValue)}' is not filterable by any known expression creator", nameof(value));
 
-        return new ValueFilter()
+        return new ValueFilter
         {
             Operator = filterOperator,
             Value = ValueToFilterString(value)
@@ -80,7 +81,7 @@ public class ValueFilter
     /// <param name="filterOperator">The filter operator.</param>
     public static ValueFilter Create(FilterOperator filterOperator)
     {
-        var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
+        var isNullableFilterOperator = filterOperator is FilterOperator.IsNull or FilterOperator.NotNull;
         if (!isNullableFilterOperator)
             throw new InvalidOperationException("A value is required for operators other than NULL/NOT NULL.");
 
@@ -101,7 +102,7 @@ public class ValueFilter
     /// <param name="filterSyntax">The filter micro syntax to create the filter from.</param>
     public static ValueFilter Create(string? filterSyntax)
     {
-        var (filterOperator, value) = ExtractPropertyFilterOperator(filterSyntax);
+        var (filterOperator, value) = ExtractFilterOperator(filterSyntax);
         return Create(filterOperator, value);
     }
 
@@ -121,13 +122,13 @@ public class ValueFilter
             null => string.Empty,
             DateTime dateTime => dateTime.ToString("o"),
             DateTimeOffset dateTime => dateTime.ToString("o"),
-            _ => value.ToString(),
+            _ => value.ToString()
         };
 
         return result;
     }
 
-    private static (FilterOperator, string?) ExtractPropertyFilterOperator(string? filter)
+    private static (FilterOperator, string?) ExtractFilterOperator(string? filter)
     {
         var filterOperator = FilterOperator.Default;
 

@@ -16,13 +16,15 @@ public class FilterForBoolNullableBySyntaxTests : TestBase<bool?>
     public void FilterForBoolNullableBySyntax_WorksAsExpected(FilterTestCase<bool?, bool?> testCase, TestModelFilterFunc<bool?> filterFunc)
         => testCase.Run(_testItems, filterFunc);
 
-    private static readonly TestModel<bool?>[] _testItems = {
+    private static readonly TestModel<bool?>[] _testItems =
+    [
         new() { ValueA = true },
         new() { ValueA = false },
-        new() { ValueA = null },
-    };
+        new() { ValueA = null }
+    ];
 
-    private static readonly FilterTestCase<bool?, bool?>[] _testCases = {
+    private static readonly FilterTestCase<bool?, bool?>[] _testCases =
+    [
         FilterTestCase.Create<bool?>(1000, "null", _ => ALL, IgnoreParseExceptions),
         FilterTestCase.Create<bool?>(1001, "=null", _ => ALL, IgnoreParseExceptions),
         FilterTestCase.Create<bool?>(1002, "TRUE", x => x == true),
@@ -38,7 +40,7 @@ public class FilterForBoolNullableBySyntaxTests : TestBase<bool?>
         FilterTestCase.Create<bool?>(1101, "", new FilterExpressionCreationException("Unable to parse given filter value")),
         FilterTestCase.Create<bool?>(1102, "true", x => x == true),
         FilterTestCase.Create<bool?>(1103, "false", x => x == false),
-        FilterTestCase.Create<bool?>(1104, "true, false", x => x == true || x == false),
+        FilterTestCase.Create<bool?>(1104, "true, false", x => x is true or false),
 
         FilterTestCase.Create<bool?>(1200, "~", new FilterExpressionCreationException("Filter operator 'Contains' not allowed for property type 'System.Nullable`1[System.Boolean]'")),
 
@@ -46,13 +48,13 @@ public class FilterForBoolNullableBySyntaxTests : TestBase<bool?>
         FilterTestCase.Create<bool?>(1301, "=", new FilterExpressionCreationException("Unable to parse given filter value")),
         FilterTestCase.Create<bool?>(1302, "=true", x => x == true),
         FilterTestCase.Create<bool?>(1303, "=false", x => x == false),
-        FilterTestCase.Create<bool?>(1304, "=true, false", x => x == true || x == false),
+        FilterTestCase.Create<bool?>(1304, "=true, false", x => x is true or false),
 
         FilterTestCase.Create<bool?>(1400, "==null", new FilterExpressionCreationException("Unable to parse given filter value")),
         FilterTestCase.Create<bool?>(1401, "==", new FilterExpressionCreationException("Unable to parse given filter value")),
         FilterTestCase.Create<bool?>(1402, "==true", x => x == true),
         FilterTestCase.Create<bool?>(1403, "==false", x => x == false),
-        FilterTestCase.Create<bool?>(1404, "==true, false", x => x == true || x == false),
+        FilterTestCase.Create<bool?>(1404, "==true, false", x => x is true or false),
 
         FilterTestCase.Create<bool?>(1500, "!null", new FilterExpressionCreationException("Unable to parse given filter value")),
         FilterTestCase.Create<bool?>(1501, "!", new FilterExpressionCreationException("Unable to parse given filter value")),
@@ -70,6 +72,6 @@ public class FilterForBoolNullableBySyntaxTests : TestBase<bool?>
 
         FilterTestCase.Create<bool?>(2000, "ISNULL", x => x == null),
 
-        FilterTestCase.Create<bool?>(2100, "NOTNULL", x => x != null),
-    };
+        FilterTestCase.Create<bool?>(2100, "NOTNULL", x => x != null)
+    ];
 }

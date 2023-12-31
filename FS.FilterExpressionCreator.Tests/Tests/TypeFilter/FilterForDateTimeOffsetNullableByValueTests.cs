@@ -30,7 +30,8 @@ public class FilterForDateTimeOffsetNullableByValueTests : TestBase<DateTimeOffs
         }
     }
 
-    private static readonly TestModel<DateTimeOffset?>[] _testItems = {
+    private static readonly TestModel<DateTimeOffset?>[] _testItems =
+    [
         new() { ValueA = null },
         new() { ValueA = new DateTimeOffset(1900, 01, 01, 0, 0, 0, TimeSpan.Zero) },
         new() { ValueA = new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero) },
@@ -48,11 +49,12 @@ public class FilterForDateTimeOffsetNullableByValueTests : TestBase<DateTimeOffs
         new() { ValueA = new DateTimeOffset(2010, 06, 16, 0, 0, 0, TimeSpan.Zero) },
         new() { ValueA = new DateTimeOffset(2010, 07, 01, 0, 0, 0, TimeSpan.Zero) },
         new() { ValueA = new DateTimeOffset(2011, 01, 01, 0, 0, 0, TimeSpan.Zero) },
-        new() { ValueA = new DateTimeOffset(2020, 01, 01, 0, 0, 0, TimeSpan.Zero) },
-    };
+        new() { ValueA = new DateTimeOffset(2020, 01, 01, 0, 0, 0, TimeSpan.Zero) }
+    ];
 
     // ReSharper disable RedundantExplicitArrayCreation
-    private static readonly object[] _testCases = {
+    private static readonly object[] _testCases =
+    [
         FilterTestCase.Create(1100, FilterOperator.Default, new DateTimeOffset?[] { new (2010, 01, 01, 0, 0, 0, TimeSpan.Zero) }, (DateTimeOffset? x) => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 01, 01, 0, 0, 1, TimeSpan.Zero)),
         FilterTestCase.Create(1101, FilterOperator.Default, new DateTimeOffset?[] { new (2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(2)) }, (DateTimeOffset? x) => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(2)) && x < new DateTimeOffset(2010, 01, 01, 0, 0, 1, TimeSpan.FromHours(2))),
         FilterTestCase.Create(1102, FilterOperator.Default, new DateTimeOffset?[] { new (2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(-2)) }, (DateTimeOffset? x) => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(-2)) && x < new DateTimeOffset(2010, 01, 01, 0, 0, 1, TimeSpan.FromHours(-2))),
@@ -105,7 +107,7 @@ public class FilterForDateTimeOffsetNullableByValueTests : TestBase<DateTimeOffs
 
         FilterTestCase.Create(2000, FilterOperator.IsNull, new DateTimeOffset?[] { default }, (DateTimeOffset? x) => x == null),
 
-        FilterTestCase.Create(2100, FilterOperator.NotNull, new DateTimeOffset?[] { default }, (DateTimeOffset? x) => x != null),
-    };
+        FilterTestCase.Create(2100, FilterOperator.NotNull, new DateTimeOffset?[] { default }, (DateTimeOffset? x) => x != null)
+    ];
     // ReSharper restore RedundantExplicitArrayCreation
 }

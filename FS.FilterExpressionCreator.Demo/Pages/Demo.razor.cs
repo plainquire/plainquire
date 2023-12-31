@@ -150,7 +150,7 @@ public class DemoPage : ComponentBase
                 .ToDictionary(x => x.Name.LowercaseFirstChar(), x => new StringValues(x.Value));
 
         public void SetByName(string propertyName, string? value)
-            => GetType().GetProperty(propertyName)?.SetMethod?.Invoke(this, new object?[] { value });
+            => GetType().GetProperty(propertyName)?.SetMethod?.Invoke(this, [value]);
 
         public void Clear()
         {

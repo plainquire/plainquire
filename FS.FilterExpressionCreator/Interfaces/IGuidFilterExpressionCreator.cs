@@ -7,6 +7,4 @@ namespace FS.FilterExpressionCreator.Interfaces;
 /// Implements the <see cref="IValueFilterExpressionCreator"/>
 /// </summary>
 /// <seealso cref="IValueFilterExpressionCreator"/>
-public interface IGuidFilterExpressionCreator : IValueFilterExpressionCreator
-{
-}
+public interface IGuidFilterExpressionCreator : IValueFilterExpressionCreator;

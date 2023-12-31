@@ -72,7 +72,7 @@ public class FilterSerializationTests
         {
             new () { ValueA = new DateTime(2020, 03, 14, 0 ,0 , 0, DateTimeKind.Utc )},
             new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc )},
-            new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc )},
+            new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc )}
         };
 
         var filteredItems = items.Where(netFilter1).ToList();
@@ -93,7 +93,7 @@ public class FilterSerializationTests
         {
             new () { ValueA = new DateTime(2020, 03, 14, 0 ,0 , 0, DateTimeKind.Utc )},
             new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc )},
-            new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc )},
+            new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc )}
         };
 
         var filteredItems = items.Where(netFilter1).ToList();
@@ -109,11 +109,11 @@ public class FilterSerializationTests
 
         var items = new TestModel<DateTime>[]
         {
-            new () { ValueA = new DateTime(2020, 03, 14, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedA" }, NestedList = new() { new () { Value= "NestedA" } } },
-            new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedA" }, NestedList = new() { new () { Value= "NestedA" } } },
-            new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedA" }, NestedList = new() { new () { Value= "NestedB" } } },
-            new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedB" }, NestedList = new() { new () { Value= "NestedB" } } },
-            new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedB" }, NestedList = new() { new () { Value= "NestedB" } } },
+            new () { ValueA = new DateTime(2020, 03, 14, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedA" }, NestedList = [new() { Value = "NestedA" }] },
+            new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedA" }, NestedList = [new() { Value = "NestedA" }] },
+            new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedA" }, NestedList = [new() { Value = "NestedB" }] },
+            new () { ValueA = new DateTime(2020, 03, 15, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedB" }, NestedList = [new() { Value = "NestedB" }] },
+            new () { ValueA = new DateTime(2020, 03, 16, 0 ,0 , 0, DateTimeKind.Utc ), NestedObject = new () { Value = "NestedB" }, NestedList = [new() { Value = "NestedB" }] }
         };
 
         var filteredItems = items.Where(netFilter).ToList();
@@ -127,86 +127,99 @@ public class FilterSerializationTests
         return (netFilter, newtonFilter);
     }
 
-    private const string FILTER_EMPTY = @"{
-        }";
+    private const string FILTER_EMPTY = """
+        {
+        }
+        """;
 
-    private const string FILTER_PROP_NULL = @"{
-	        ""PropertyFilters"": null
-        }";
+    private const string FILTER_PROP_NULL = """
+        {
+            "PropertyFilters": null
+        }
+        """;
 
-    private const string FILTER_PROP_EMPTY = @"{
-	        ""PropertyFilters"": []
-        }";
+    private const string FILTER_PROP_EMPTY = """
+        {
+            "PropertyFilters": []
+        }
+        """;
 
-    private const string FILTER_NESTED_NULL = @"{
-	        ""PropertyFilters"": [{
-		        ""PropertyName"": ""ValueA"",
-		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
-	        }],
-	        ""NestedFilters"": null
-        }";
+    private const string FILTER_NESTED_NULL = """
+        {
+            "PropertyFilters": [{
+                "PropertyName": "ValueA",
+                "ValueFilters": ["2020-03-15T00:00:00.0000000Z"]
+            }],
+            "NestedFilters": null
+        }
+        """;
 
-    private const string FILTER_NESTED_EMPTY = @"{
-	        ""PropertyFilters"": [{
-		        ""PropertyName"": ""ValueA"",
-		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
-	        }],
-	        ""NestedFilters"": []
-        }";
+    private const string FILTER_NESTED_EMPTY = """
+        {
+            "PropertyFilters": [{
+                "PropertyName": "ValueA",
+                "ValueFilters": ["2020-03-15T00:00:00.0000000Z"]
+            }],
+            "NestedFilters": []
+        }
+        """;
 
-    private const string FILTER_NESTED_PROP_NULL = @"{
-	        ""PropertyFilters"": [{
-		        ""PropertyName"": ""ValueA"",
-		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
-	        }],
-	        ""NestedFilters"": [{
-		        ""PropertyName"": ""NestedObject"",
-		        ""EntityFilter"":
-		        {
-			        ""PropertyFilters"": null
-		        }
-	        }]
-        }";
+    private const string FILTER_NESTED_PROP_NULL = """
+        {
+            "PropertyFilters": [{
+                "PropertyName": "ValueA",
+                "ValueFilters": ["2020-03-15T00:00:00.0000000Z"]
+            }],
+            "NestedFilters": [{
+                "PropertyName": "NestedObject",
+                "EntityFilter": {
+                    "PropertyFilters": null
+                }
+            }]
+        }
+        """;
 
-    private const string FILTER_NESTED_PROP_EMPTY = @"{
-	        ""PropertyFilters"": [{
-		        ""PropertyName"": ""ValueA"",
-		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
-	        }],
-	        ""NestedFilters"": [{
-		        ""PropertyName"": ""NestedObject"",
-		        ""EntityFilter"":
-		        {
-			        ""PropertyFilters"": []
-		        }
-	        }]
-        }";
+    private const string FILTER_NESTED_PROP_EMPTY = """
+        {
+            "PropertyFilters": [{
+                "PropertyName": "ValueA",
+                "ValueFilters": ["2020-03-15T00:00:00.0000000Z"]
+            }],
+            "NestedFilters": [{
+                "PropertyName": "NestedObject",
+                "EntityFilter": {
+                    "PropertyFilters": []
+                }
+            }]
+        }
+        """;
 
-    private const string FILTER_FULL = @"{
-	        ""PropertyFilters"": [{
-		        ""PropertyName"": ""ValueA"",
-		        ""ValueFilters"": [""2020-03-15T00:00:00.0000000Z""]
-	        }],
-	        ""NestedFilters"": [{
-		        ""PropertyName"": ""NestedObject"",
-		        ""EntityFilter"":
-		        {
-			        ""PropertyFilters"": [{
-				        ""PropertyName"": ""Value"",
-				        ""ValueFilters"": [""==NestedA""]
-			        }],
-			        ""NestedFilters"": []
-		        }
-	        }, {
-		        ""PropertyName"": ""NestedList"",
-		        ""EntityFilter"":
-		        {
-			        ""PropertyFilters"": [{
-				        ""PropertyName"": ""Value"",
-				        ""ValueFilters"": [""==NestedB""]
-			        }],
-			        ""NestedFilters"": []
-		        }
-	        }]
-        }";
+    private const string FILTER_FULL = """
+        {
+            "PropertyFilters": [{
+                "PropertyName": "ValueA",
+                "ValueFilters": ["2020-03-15T00:00:00.0000000Z"]
+            }],
+            "NestedFilters": [{
+                "PropertyName": "NestedObject",
+                "EntityFilter":
+            {
+                "PropertyFilters": [{
+                    "PropertyName": "Value",
+                    "ValueFilters": ["==NestedA"]
+                }],
+                "NestedFilters": []
+            }
+            }, {
+                "PropertyName": "NestedList",
+                "EntityFilter": {
+                    "PropertyFilters": [{
+                        "PropertyName": "Value",
+                        "ValueFilters": ["==NestedB"]
+                    }],
+                    "NestedFilters": []
+                }
+            }]
+        }
+        """;
 }

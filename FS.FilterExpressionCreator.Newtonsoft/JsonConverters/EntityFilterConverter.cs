@@ -34,15 +34,15 @@ public class EntityFilterConverter : JsonConverter
     {
         var entityFilter = (EntityFilter)Activator.CreateInstance(objectType);
         var entityFilterData = serializer.Deserialize<EntityFilterData>(reader) ?? new EntityFilterData();
-        entityFilter.PropertyFilters = entityFilterData.PropertyFilters ?? new List<PropertyFilter>();
-        entityFilter.NestedFilters = entityFilterData.NestedFilters ?? new List<NestedFilter>();
+        entityFilter.PropertyFilters = entityFilterData.PropertyFilters ?? [];
+        entityFilter.NestedFilters = entityFilterData.NestedFilters ?? [];
         return entityFilter;
     }
 
     private class EntityFilterData
     {
-        public List<PropertyFilter>? PropertyFilters { get; set; } = new();
+        public List<PropertyFilter>? PropertyFilters { get; set; } = [];
 
-        public List<NestedFilter>? NestedFilters { get; set; } = new();
+        public List<NestedFilter>? NestedFilters { get; set; } = [];
     }
 }

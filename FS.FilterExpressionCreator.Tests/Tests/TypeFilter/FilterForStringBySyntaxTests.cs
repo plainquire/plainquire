@@ -16,23 +16,25 @@ public class FilterForStringBySyntaxTests : TestBase<string>
     public void FilterForStringBySyntax_WorksAsExpected(FilterTestCase<string, string> testCase, TestModelFilterFunc<string> filterFunc)
         => testCase.Run(_testItems, filterFunc);
 
-    private static readonly TestModel<string>[] _testItems = {
+    private static readonly TestModel<string>[] _testItems =
+    [
         new() { ValueA = null },
         new() { ValueA = "" },
         new() { ValueA = "Hello" },
-        new() { ValueA = "HelloWorld" },
-    };
+        new() { ValueA = "HelloWorld" }
+    ];
 
     // ReSharper disable ReplaceWithStringIsNullOrEmpty
-    private static readonly FilterTestCase<string, string>[] _testCases = {
-        FilterTestCase.Create<string>(1101, "", x => x == "" || x == "Hello" || x == "HelloWorld"),
-        FilterTestCase.Create<string>(1102, "Hello", x => x == "Hello" || x == "HelloWorld"),
-        FilterTestCase.Create<string>(1103, "hello", x => x == "Hello" || x == "HelloWorld"),
+    private static readonly FilterTestCase<string, string>[] _testCases =
+    [
+        FilterTestCase.Create<string>(1101, "", x => x is "" or "Hello" or "HelloWorld"),
+        FilterTestCase.Create<string>(1102, "Hello", x => x is "Hello" or "HelloWorld"),
+        FilterTestCase.Create<string>(1103, "hello", x => x is "Hello" or "HelloWorld"),
         FilterTestCase.Create<string>(1104, "HelloWorld", x => x == "HelloWorld"),
 
-        FilterTestCase.Create<string>(1201, "~", x => x == "" || x == "Hello" || x == "HelloWorld"),
-        FilterTestCase.Create<string>(1202, "~Hello", x => x == "Hello" || x == "HelloWorld"),
-        FilterTestCase.Create<string>(1203, "~hello", x => x == "Hello" || x == "HelloWorld"),
+        FilterTestCase.Create<string>(1201, "~", x => x is "" or "Hello" or "HelloWorld"),
+        FilterTestCase.Create<string>(1202, "~Hello", x => x is "Hello" or "HelloWorld"),
+        FilterTestCase.Create<string>(1203, "~hello", x => x is "Hello" or "HelloWorld"),
         FilterTestCase.Create<string>(1204, "~HelloWorld", x => x == "HelloWorld"),
 
         FilterTestCase.Create<string>(1301, "=", x => x == ""),
@@ -46,8 +48,8 @@ public class FilterForStringBySyntaxTests : TestBase<string>
         FilterTestCase.Create<string>(1404, "==HelloWorld", x => x == "HelloWorld"),
 
         FilterTestCase.Create<string>(1501, "!", x => x == null),
-        FilterTestCase.Create<string>(1502, "!Hello", x => x == null || x == ""),
-        FilterTestCase.Create<string>(1503, "!hello", x => x == null || x == ""),
+        FilterTestCase.Create<string>(1502, "!Hello", x => x is null or ""),
+        FilterTestCase.Create<string>(1503, "!hello", x => x is null or ""),
         FilterTestCase.Create<string>(1504, "!HelloWorld", x => x != "HelloWorld"),
 
         FilterTestCase.Create<string>(1600, "<", new FilterExpressionCreationException("Filter operator 'LessThan' not allowed for property type 'System.String'")),
@@ -60,7 +62,7 @@ public class FilterForStringBySyntaxTests : TestBase<string>
 
         FilterTestCase.Create<string>(2000, "ISNULL", x => x == null),
 
-        FilterTestCase.Create<string>(2100, "NOTNULL", x => x != null),
-    };
+        FilterTestCase.Create<string>(2100, "NOTNULL", x => x != null)
+    ];
     // ReSharper restore ReplaceWithStringIsNullOrEmpty
 }

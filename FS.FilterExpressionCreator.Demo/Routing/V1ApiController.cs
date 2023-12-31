@@ -15,14 +15,14 @@ internal class V1ApiController : ControllerAttribute, IApiBehaviorMetadata, IRou
     public const string API_VERSION = "v1";
 
     /// <inheritdoc />
-    public string GroupName { get; } = API_VERSION;
+    public string GroupName => API_VERSION;
 
     /// <inheritdoc />
-    public string Template { get; } = $"{API_PREFIX}/{API_VERSION}/[controller]/[action]";
+    public string Template => $"{API_PREFIX}/{API_VERSION}/[controller]/[action]";
 
     /// <inheritdoc />
-    public int? Order { get; } = 0;
+    public int? Order => 0;
 
     /// <inheritdoc />
-    public string Name { get; } = "[controller]_[action]";
+    public string Name => "[controller]_[action]";
 }

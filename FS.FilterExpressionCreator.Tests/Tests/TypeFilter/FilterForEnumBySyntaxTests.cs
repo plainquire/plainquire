@@ -16,21 +16,23 @@ public class FilterForEnumBySyntaxTests : TestBase<TestEnum>
     public void FilterForEnumBySyntax_WorksAsExpected(FilterTestCase<TestEnum, TestEnum> testCase, TestModelFilterFunc<TestEnum> filterFunc)
         => testCase.Run(_testItems, filterFunc);
 
-    private static readonly TestModel<TestEnum>[] _testItems = {
+    private static readonly TestModel<TestEnum>[] _testItems =
+    [
         new() { ValueA = TestEnum.Negative },
         new() { ValueA = TestEnum.Neutral },
         new() { ValueA = TestEnum.Positive },
         new() { ValueA = TestEnum.Positive2 },
-        new() { ValueA = TestEnum.Positive4 },
-    };
+        new() { ValueA = TestEnum.Positive4 }
+    ];
 
-    private static readonly FilterTestCase<TestEnum, TestEnum>[] _testCases = {
+    private static readonly FilterTestCase<TestEnum, TestEnum>[] _testCases =
+    [
         FilterTestCase.Create<TestEnum>(1100, "null", _ => NONE),
         FilterTestCase.Create<TestEnum>(1101, "", _ => NONE),
         FilterTestCase.Create<TestEnum>(1102, "Negative", x => x == TestEnum.Negative),
         FilterTestCase.Create<TestEnum>(1103, "-10", _ => NONE),
         FilterTestCase.Create<TestEnum>(1104, "1", x => x == TestEnum.Positive),
-        FilterTestCase.Create<TestEnum>(1105, "Positive" , x => x == TestEnum.Positive),
+        FilterTestCase.Create<TestEnum>(1105, "Positive", x => x == TestEnum.Positive),
         FilterTestCase.Create<TestEnum>(1106, "positive", x => x == TestEnum.Positive),
 
         FilterTestCase.Create<TestEnum>(1200, "~null", _ => NONE),
@@ -38,15 +40,15 @@ public class FilterForEnumBySyntaxTests : TestBase<TestEnum>
         FilterTestCase.Create<TestEnum>(1202, "~Negative", x => x == TestEnum.Negative),
         FilterTestCase.Create<TestEnum>(1203, "~-10", _ => NONE),
         FilterTestCase.Create<TestEnum>(1204, "~1", x => x == TestEnum.Positive),
-        FilterTestCase.Create<TestEnum>(1205, "~Positive" , x => x == TestEnum.Positive || x == TestEnum.Positive2 || x == TestEnum.Positive4),
-        FilterTestCase.Create<TestEnum>(1206, "~positive", x => x == TestEnum.Positive || x == TestEnum.Positive2 || x == TestEnum.Positive4),
+        FilterTestCase.Create<TestEnum>(1205, "~Positive", x => x is TestEnum.Positive or TestEnum.Positive2 or TestEnum.Positive4),
+        FilterTestCase.Create<TestEnum>(1206, "~positive", x => x is TestEnum.Positive or TestEnum.Positive2 or TestEnum.Positive4),
 
         FilterTestCase.Create<TestEnum>(1300, "=null", _ => NONE),
         FilterTestCase.Create<TestEnum>(1301, "=", _ => NONE),
         FilterTestCase.Create<TestEnum>(1302, "=Negative", x => x == TestEnum.Negative),
         FilterTestCase.Create<TestEnum>(1303, "=-10", _ => NONE),
         FilterTestCase.Create<TestEnum>(1304, "=1", x => x == TestEnum.Positive),
-        FilterTestCase.Create<TestEnum>(1305, "=Positive" , x => x == TestEnum.Positive),
+        FilterTestCase.Create<TestEnum>(1305, "=Positive", x => x == TestEnum.Positive),
         FilterTestCase.Create<TestEnum>(1306, "=positive", x => x == TestEnum.Positive),
 
         FilterTestCase.Create<TestEnum>(1400, "==null", _ => NONE),
@@ -54,7 +56,7 @@ public class FilterForEnumBySyntaxTests : TestBase<TestEnum>
         FilterTestCase.Create<TestEnum>(1402, "==Negative", x => x == TestEnum.Negative),
         FilterTestCase.Create<TestEnum>(1403, "==-10", _ => NONE),
         FilterTestCase.Create<TestEnum>(1404, "==1", x => x == TestEnum.Positive),
-        FilterTestCase.Create<TestEnum>(1405, "==Positive" , x => x == TestEnum.Positive),
+        FilterTestCase.Create<TestEnum>(1405, "==Positive", x => x == TestEnum.Positive),
         FilterTestCase.Create<TestEnum>(1406, "==positive", _ => NONE),
 
         FilterTestCase.Create<TestEnum>(1500, "!null", _ => NONE),
@@ -62,7 +64,7 @@ public class FilterForEnumBySyntaxTests : TestBase<TestEnum>
         FilterTestCase.Create<TestEnum>(1502, "!Negative", x => x != TestEnum.Negative),
         FilterTestCase.Create<TestEnum>(1503, "!-10", _ => ALL),
         FilterTestCase.Create<TestEnum>(1504, "!1", x => x != TestEnum.Positive),
-        FilterTestCase.Create<TestEnum>(1505, "!Positive" , x => x != TestEnum.Positive),
+        FilterTestCase.Create<TestEnum>(1505, "!Positive", x => x != TestEnum.Positive),
         FilterTestCase.Create<TestEnum>(1506, "!positive", x => x != TestEnum.Positive),
 
         FilterTestCase.Create<TestEnum>(1600, "<null", _ => NONE),
@@ -70,7 +72,7 @@ public class FilterForEnumBySyntaxTests : TestBase<TestEnum>
         FilterTestCase.Create<TestEnum>(1602, "<Negative", x => x < TestEnum.Negative),
         FilterTestCase.Create<TestEnum>(1603, "<-10", _ => NONE),
         FilterTestCase.Create<TestEnum>(1604, "<1", x => x < TestEnum.Positive),
-        FilterTestCase.Create<TestEnum>(1605, "<Positive" , x => x < TestEnum.Positive),
+        FilterTestCase.Create<TestEnum>(1605, "<Positive", x => x < TestEnum.Positive),
         FilterTestCase.Create<TestEnum>(1606, "<positive", x => x < TestEnum.Positive),
 
         FilterTestCase.Create<TestEnum>(1700, "<=null", _ => NONE),
@@ -78,7 +80,7 @@ public class FilterForEnumBySyntaxTests : TestBase<TestEnum>
         FilterTestCase.Create<TestEnum>(1702, "<=Negative", x => x <= TestEnum.Negative),
         FilterTestCase.Create<TestEnum>(1703, "<=-10", _ => NONE),
         FilterTestCase.Create<TestEnum>(1704, "<=1", x => x <= TestEnum.Positive),
-        FilterTestCase.Create<TestEnum>(1705, "<=Positive" , x => x <= TestEnum.Positive),
+        FilterTestCase.Create<TestEnum>(1705, "<=Positive", x => x <= TestEnum.Positive),
         FilterTestCase.Create<TestEnum>(1706, "<=positive", x => x <= TestEnum.Positive),
 
         FilterTestCase.Create<TestEnum>(1800, ">null", _ => NONE),
@@ -86,7 +88,7 @@ public class FilterForEnumBySyntaxTests : TestBase<TestEnum>
         FilterTestCase.Create<TestEnum>(1802, ">Negative", x => x > TestEnum.Negative),
         FilterTestCase.Create<TestEnum>(1803, ">-10", _ => ALL),
         FilterTestCase.Create<TestEnum>(1804, ">1", x => x > TestEnum.Positive),
-        FilterTestCase.Create<TestEnum>(1805, ">Positive" , x => x > TestEnum.Positive),
+        FilterTestCase.Create<TestEnum>(1805, ">Positive", x => x > TestEnum.Positive),
         FilterTestCase.Create<TestEnum>(1806, ">positive", x => x > TestEnum.Positive),
 
         FilterTestCase.Create<TestEnum>(1900, ">=null", _ => NONE),
@@ -94,11 +96,11 @@ public class FilterForEnumBySyntaxTests : TestBase<TestEnum>
         FilterTestCase.Create<TestEnum>(1902, ">=Negative", x => x >= TestEnum.Negative),
         FilterTestCase.Create<TestEnum>(1903, ">=-10", _ => ALL),
         FilterTestCase.Create<TestEnum>(1904, ">=1", x => x >= TestEnum.Positive),
-        FilterTestCase.Create<TestEnum>(1905, ">=Positive" , x => x >= TestEnum.Positive),
+        FilterTestCase.Create<TestEnum>(1905, ">=Positive", x => x >= TestEnum.Positive),
         FilterTestCase.Create<TestEnum>(1906, ">=positive", x => x >= TestEnum.Positive),
 
         FilterTestCase.Create<TestEnum>(2000, "ISNULL", new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'FS.FilterExpressionCreator.Tests.Models.TestEnum'")),
 
-        FilterTestCase.Create<TestEnum>(2100, "NOTNULL", new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'FS.FilterExpressionCreator.Tests.Models.TestEnum'")),
-    };
+        FilterTestCase.Create<TestEnum>(2100, "NOTNULL", new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'FS.FilterExpressionCreator.Tests.Models.TestEnum'"))
+    ];
 }

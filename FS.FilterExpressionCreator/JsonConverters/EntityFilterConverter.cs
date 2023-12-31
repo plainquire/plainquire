@@ -63,10 +63,10 @@ public class EntityFilterConverter : JsonConverter<EntityFilter>
         where TEntityFilter : EntityFilter, new()
     {
         var entityFilterData = JsonSerializer.Deserialize<EntityFilterData>(ref reader, options) ?? new EntityFilterData();
-        return new TEntityFilter()
+        return new TEntityFilter
         {
-            PropertyFilters = entityFilterData.PropertyFilters ?? new List<PropertyFilter>(),
-            NestedFilters = entityFilterData.NestedFilters ?? new List<NestedFilter>()
+            PropertyFilters = entityFilterData.PropertyFilters ?? [],
+            NestedFilters = entityFilterData.NestedFilters ?? []
         };
     }
 
@@ -79,8 +79,8 @@ public class EntityFilterConverter : JsonConverter<EntityFilter>
 
     private class EntityFilterData
     {
-        public List<PropertyFilter> PropertyFilters { get; set; } = new List<PropertyFilter>();
+        public List<PropertyFilter>? PropertyFilters { get; set; } = [];
 
-        public List<NestedFilter> NestedFilters { get; set; } = new List<NestedFilter>();
+        public List<NestedFilter>? NestedFilters { get; set; } = [];
     }
 }

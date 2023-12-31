@@ -30,24 +30,26 @@ public class FilterForShortByValueTests : TestBase<short>
         }
     }
 
-    private static readonly TestModel<short>[] _testItems = {
+    private static readonly TestModel<short>[] _testItems =
+    [
         new() { ValueA = -9 },
         new() { ValueA = -5 },
         new() { ValueA = -0 },
         new() { ValueA = +5 },
-        new() { ValueA = +9 },
-    };
+        new() { ValueA = +9 }
+    ];
 
     // ReSharper disable RedundantExplicitArrayCreation
     // ReSharper disable CompareOfFloatsByEqualityOperator
-    private static readonly object[] _testCases = {
-        FilterTestCase.Create(1000, FilterOperator.EqualCaseInsensitive, new int[] { -9 }, (short x) => x == -9f),
+    private static readonly object[] _testCases =
+    [
+        FilterTestCase.Create(1000, FilterOperator.EqualCaseInsensitive, [-9], (short x) => x == -9f),
 
         FilterTestCase.Create(1100, FilterOperator.Default, new short[] { -5 }, (short x) => x == -5),
         FilterTestCase.Create(1101, FilterOperator.Default, new short[] { -10 }, (short _) => NONE),
         FilterTestCase.Create(1102, FilterOperator.Default, new short[] { +5 }, (short x) => x == +5),
 
-        FilterTestCase.Create(1200, FilterOperator.Contains, new short[] { +5 }, (short x) => x == +5 || x == -5),
+        FilterTestCase.Create(1200, FilterOperator.Contains, new short[] { +5 }, (short x) => x is +5 or -5),
         FilterTestCase.Create(1201, FilterOperator.Contains, new short[] { -5 }, (short x) => x == -5),
         FilterTestCase.Create(1202, FilterOperator.Contains, new short[] { +3 }, (short _) => NONE),
         FilterTestCase.Create(1203, FilterOperator.Contains, new short[] { +0 }, (short x) => x == 0),
@@ -82,8 +84,8 @@ public class FilterForShortByValueTests : TestBase<short>
 
         FilterTestCase.Create(2000, FilterOperator.IsNull, new short[] { default }, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.Int16'")),
 
-        FilterTestCase.Create(2100, FilterOperator.NotNull, new short[] { default }, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Int16'")),
-    };
+        FilterTestCase.Create(2100, FilterOperator.NotNull, new short[] { default }, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Int16'"))
+    ];
     // ReSharper restore CompareOfFloatsByEqualityOperator
     // ReSharper restore RedundantExplicitArrayCreation
 }

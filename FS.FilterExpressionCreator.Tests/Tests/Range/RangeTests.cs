@@ -273,7 +273,7 @@ public class RangeTests
                 Id = 6,
                 RangeA =  new Range<string>("10", "10"),
                 RangeB =  new Range<string>(default, "10")
-            },
+            }
         };
 
         using var _ = new AssertionScope();
@@ -302,7 +302,7 @@ public class RangeTests
                 Id = 3,
                 RangeA =  new Range<string>("10", "10"),
                 RangeB =  new Range<string>(default, "09")
-            },
+            }
         };
 
         using var _ = new AssertionScope();
@@ -410,16 +410,16 @@ public class RangeTests
         var containingRanges = new[] {
             new {
                 Id = 1,
-                Range =  new Range<string>(default, default),
+                Range =  new Range<string>(default, default)
             },
             new {
                 Id = 2,
-                Range =  new Range<string>("10", default),
+                Range =  new Range<string>("10", default)
             },
             new {
                 Id = 3,
-                Range =  new Range<string>(default, "10"),
-            },
+                Range =  new Range<string>(default, "10")
+            }
         };
 
         using var _ = new AssertionScope();
@@ -434,28 +434,28 @@ public class RangeTests
             new {
                 Id = 1,
                 Outer =  new Range<string>(default, default),
-                Inner =  new Range<string>("10", default),
+                Inner =  new Range<string>("10", default)
             },
             new {
                 Id = 2,
                 Outer =  new Range<string>(default, default),
-                Inner =  new Range<string>(default, "10"),
+                Inner =  new Range<string>(default, "10")
             },
             new {
                 Id = 3,
                 Outer =  new Range<string>(default, default),
-                Inner =  new Range<string>("10", "10"),
+                Inner =  new Range<string>("10", "10")
             },
             new {
                 Id = 4,
                 Outer =  new Range<string>("10", default),
-                Inner =  new Range<string>("11", default),
+                Inner =  new Range<string>("11", default)
             },
             new {
                 Id = 5,
                 Outer =  new Range<string>(default, "11"),
-                Inner =  new Range<string>(default, "10"),
-            },
+                Inner =  new Range<string>(default, "10")
+            }
         };
 
         using var _ = new AssertionScope();

@@ -7,6 +7,4 @@ namespace FS.FilterExpressionCreator.Abstractions.Attributes;
 /// </summary>
 /// <seealso cref="Attribute" />
 [AttributeUsage(AttributeTargets.Class)]
-public class EntityFilterSetAttribute : Attribute
-{
-}
+public class EntityFilterSetAttribute : Attribute;

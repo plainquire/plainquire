@@ -75,7 +75,7 @@ public static class EntityFilterExtensions
     /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
     public static EntityFilter<TEntity> Add<TEntity, TProperty, TValue>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, FilterOperator filterOperator, params TValue[]? values)
     {
-        var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
+        var isNullableFilterOperator = filterOperator is FilterOperator.IsNull or FilterOperator.NotNull;
         if ((values == null || values.Length == 0) && !isNullableFilterOperator)
             return entityFilter;
 
@@ -142,7 +142,7 @@ public static class EntityFilterExtensions
     /// <param name="values">The values to filter for. Multiple values are combined with conditional OR.</param>
     public static EntityFilter<TEntity> Replace<TEntity, TProperty, TValue>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, FilterOperator filterOperator, params TValue[]? values)
     {
-        var isNullableFilterOperator = filterOperator == FilterOperator.IsNull || filterOperator == FilterOperator.NotNull;
+        var isNullableFilterOperator = filterOperator is FilterOperator.IsNull or FilterOperator.NotNull;
         if ((values == null || values.Length == 0) && !isNullableFilterOperator)
             return entityFilter.Clear(property);
 

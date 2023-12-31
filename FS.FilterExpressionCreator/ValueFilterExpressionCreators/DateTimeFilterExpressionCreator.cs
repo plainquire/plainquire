@@ -29,7 +29,7 @@ public class DateTimeFilterExpressionCreator : DefaultFilterExpressionCreator, I
             FilterOperator.GreaterThan,
             FilterOperator.GreaterThanOrEqual,
             FilterOperator.IsNull,
-            FilterOperator.NotNull,
+            FilterOperator.NotNull
         };
 
     /// <inheritdoc />

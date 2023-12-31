@@ -30,7 +30,7 @@ public class EntityFilterParameterReplacer : IOperationFilter
     /// </summary>
     /// <param name="xmlDocumentationFilePaths">Paths to XML documentation files. Used to provide parameter descriptions.</param>
     public EntityFilterParameterReplacer(IEnumerable<string>? xmlDocumentationFilePaths)
-        => _docXmlReaders = xmlDocumentationFilePaths?.Select(x => new DocXmlReader(x)).ToList() ?? new List<DocXmlReader>();
+        => _docXmlReaders = xmlDocumentationFilePaths?.Select(x => new DocXmlReader(x)).ToList() ?? [];
 
     /// <summary>
     /// Replaces all parameters of type <see cref="EntityFilter{TEntity}"/> with their applicable filter properties.
@@ -91,7 +91,7 @@ public class EntityFilterParameterReplacer : IOperationFilter
                 Extensions = new Dictionary<string, IOpenApiExtension>
                 {
                     [ENTITY_EXTENSION_PREFIX + "property-type"] = new OpenApiString(property.PropertyType.GetUnderlyingType().Name)
-                },
+                }
             })
             .ToList();
     }
@@ -124,5 +124,5 @@ public class EntityFilterParameterReplacer : IOperationFilter
             Parameter = parameter;
             FilteredType = filteredType;
         }
-    };
+    }
 }

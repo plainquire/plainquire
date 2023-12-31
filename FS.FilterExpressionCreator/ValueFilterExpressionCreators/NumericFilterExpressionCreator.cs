@@ -15,7 +15,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class NumericFilterExpressionCreator : DefaultFilterExpressionCreator, INumericFilterExpressionCreator
 {
-    private static readonly List<Type> _primitiveNumberTypes = new List<Type> { typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal) };
+    private static readonly List<Type> _primitiveNumberTypes = [typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal)];
 
     /// <inheritdoc />
     public override ICollection<FilterOperator> SupportedFilterOperators
@@ -31,7 +31,7 @@ public class NumericFilterExpressionCreator : DefaultFilterExpressionCreator, IN
             FilterOperator.GreaterThan,
             FilterOperator.GreaterThanOrEqual,
             FilterOperator.IsNull,
-            FilterOperator.NotNull,
+            FilterOperator.NotNull
         };
 
     /// <inheritdoc />

@@ -18,14 +18,15 @@ public static class PropertyFilterExpressionCreator
     private static readonly IValueFilterExpressionCreator _defaultValueFilterExpressionCreator = new DefaultFilterExpressionCreator();
     private static readonly MethodInfo _createFilterMethod = typeof(PropertyFilterExpressionCreator).GetMethods(BindingFlags.Static | BindingFlags.Public).Single(x => x.Name == nameof(CreateFilter) && x.IsGenericMethod && x.GetGenericArguments().Length == 2);
 
-    private static readonly IValueFilterExpressionCreator[] _valueFilterExpressionCreators = {
+    private static readonly IValueFilterExpressionCreator[] _valueFilterExpressionCreators =
+    [
         new StringFilterExpressionCreator(),
         new GuidFilterExpressionCreator(),
         new DateTimeFilterExpressionCreator(),
         new BooleanFilterExpressionCreator(),
         new NumericFilterExpressionCreator(),
-        new EnumFilterExpressionCreator(),
-    };
+        new EnumFilterExpressionCreator()
+    ];
 
     /// <summary>
     /// Determines whether a property of type <paramref name="propertyType"/> can be filtered.
@@ -66,7 +67,7 @@ public static class PropertyFilterExpressionCreator
         try
         {
             var genericMethod = _createFilterMethod.MakeGenericMethod(typeof(TEntity), propertyType);
-            var propertyExpression = (Expression<Func<TEntity, bool>>?)genericMethod.Invoke(null, new object[] { propertySelector, valueFilters, configuration });
+            var propertyExpression = (Expression<Func<TEntity, bool>>?)genericMethod.Invoke(null, [propertySelector, valueFilters, configuration]);
             return propertyExpression;
         }
         catch (TargetInvocationException ex) when (ex.InnerException != null)

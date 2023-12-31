@@ -29,7 +29,7 @@ public class EnumFilterExpressionCreator : DefaultFilterExpressionCreator, IEnum
             FilterOperator.GreaterThan,
             FilterOperator.GreaterThanOrEqual,
             FilterOperator.IsNull,
-            FilterOperator.NotNull,
+            FilterOperator.NotNull
         };
 
     /// <inheritdoc />
