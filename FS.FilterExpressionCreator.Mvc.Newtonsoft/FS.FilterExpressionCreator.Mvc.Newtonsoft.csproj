@@ -4,12 +4,12 @@
   <Import Project="../Build/build_xml_documentation.props" />
 
   <ItemGroup>
-    <ProjectReference Include="..\FS.FilterExpressionCreator.Newtonsoft\FS.FilterExpressionCreator.Newtonsoft.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.25" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.25" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <ProjectReference Include="..\FS.FilterExpressionCreator.Newtonsoft\FS.FilterExpressionCreator.Newtonsoft.csproj" />
   </ItemGroup>
 
 </Project>

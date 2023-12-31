@@ -41,8 +41,8 @@ public abstract class TestBase
         return typeof(TestMethods)
             .GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
             .Select(method => method
-                        .MakeGenericMethod(type)
-                        .CreateDelegate(filterFuncType)
+                .MakeGenericMethod(type)
+                .CreateDelegate(filterFuncType)
             );
     }
 }

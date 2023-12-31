@@ -14,17 +14,11 @@ public static class TypeExtensions
     /// <summary>
     /// Returns the underlying type when type is <see cref="Nullable{T}"/>; otherwise the type is returned.
     /// </summary>
-    [return: NotNullIfNotNull("type")]
+    [return: NotNullIfNotNull(nameof(type))]
     public static Type? GetUnderlyingType(this Type? type)
         => type != null
             ? Nullable.GetUnderlyingType(type) ?? type
             : null;
-
-    ///// <summary>
-    ///// Returns the underlying type when type is <see cref="Nullable{T}"/>; otherwise the type is returned.
-    ///// </summary>
-    //public static Type GetUnderlyingType(this object obj)
-    //    => (obj?.GetType()).GetUnderlyingType();
 
     /// <summary>
     /// Determines whether the type implements <see cref="IsGenericIEnumerable(Type)"/>.

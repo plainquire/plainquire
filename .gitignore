@@ -295,11 +295,12 @@ __pycache__/
 *.xsd.cs
 
 # User added stuff
-/FS.FilterExpressionCreator/FS.FilterExpressionCreator.xml
+/Assets
 /FS.FilterExpressionCreator.Demo/FS.FilterExpressionCreator.Demo.config.Development.json
 /FS.FilterExpressionCreator.Demo/FS.FilterExpressionCreator.Demo.xml
 /FS.FilterExpressionCreator.Demo/Freelancer.sqlite
+/FS.FilterExpressionCreator.Demo/Freelancer.sqlite-*
 /FS.FilterExpressionCreator.Mvc/FS.FilterExpressionCreator.Mvc.xml
 /FS.FilterExpressionCreator.Newtonsoft/FS.FilterExpressionCreator.Newtonsoft.xml
 /FS.FilterExpressionCreator.Swashbuckle/FS.FilterExpressionCreator.Swashbuckle.xml
-/Assets
+/FS.FilterExpressionCreator/FS.FilterExpressionCreator.xml

@@ -4,11 +4,11 @@
   <Import Project="../Build/build_xml_documentation.props" />
 
   <ItemGroup>
-    <ProjectReference Include="..\FS.FilterExpressionCreator\FS.FilterExpressionCreator.csproj" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <ProjectReference Include="..\FS.FilterExpressionCreator\FS.FilterExpressionCreator.csproj" />
   </ItemGroup>
 
 </Project>
