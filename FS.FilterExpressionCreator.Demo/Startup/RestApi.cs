@@ -24,7 +24,7 @@ internal static class RestApi
             {
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
             })
-            .AddFilterExpressionsSupport()
+            .AddFilterExpressionSupport()
             .AddFilterExpressionsNewtonsoftSupport();
 
         return services;

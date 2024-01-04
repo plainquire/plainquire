@@ -1,5 +1,23 @@
 
 
+# 5.0.0
+
+## New Features
+
+...
+
+## Breaking Changes
+
+Obsolete methods removed from `EntityFilter.cs`
+
+`AddFilterExpressionsSupport` renamed to `AddFilterExpressionSupport`
+
+`FilterConfiguration` moved to namespace `FS.FilterExpressionCreator.Abstractions.Configurations`
+
+## Changes
+
+...
+
 # 4.5.0
 
 ## New Features

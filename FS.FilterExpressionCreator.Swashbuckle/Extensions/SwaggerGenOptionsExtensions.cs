@@ -17,7 +17,7 @@ public static class SwaggerGenOptionsExtensions
     /// </summary>
     /// <param name="options">The options.</param>
     /// <param name="xmlDocumentationFilePaths">Paths to XML documentation files. Used to provide parameter descriptions.</param>
-    public static SwaggerGenOptions AddFilterExpressionsSupport(this SwaggerGenOptions options, params string[] xmlDocumentationFilePaths)
+    public static SwaggerGenOptions AddFilterExpressionSupport(this SwaggerGenOptions options, params string[] xmlDocumentationFilePaths)
     {
         options.OperationFilter<EntityFilterParameterReplacer>(new List<string>(xmlDocumentationFilePaths));
         options.OperationFilter<EntityFilterSetParameterReplacer>(new List<string>(xmlDocumentationFilePaths));

@@ -372,8 +372,8 @@ using FS.FilterExpressionCreator.Mvc.Extensions;
 ```
 
 ```csharp
-// Register required stuff by calling 'AddFilterExpressionsSupport()' on IMvcBuilder instance
-services.AddControllers().AddFilterExpressionsSupport();
+// Register required stuff by calling 'AddFilterExpressionSupport()' on IMvcBuilder instance
+services.AddControllers().AddFilterExpressionSupport();
 ```
 
 ## Configure Model Binding
@@ -457,8 +457,8 @@ using FS.FilterExpressionCreator.Swashbuckle.Extensions;
 services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("V1", new OpenApiInfo { Title = $"API", Version = "V1" });
-    // Register required stuff by calling 'AddFilterExpressionsSupport()' on SwaggerGenOptions instance
-    options.AddFilterExpressionsSupport();
+    // Register required stuff by calling 'AddFilterExpressionSupport()' on SwaggerGenOptions instance
+    options.AddFilterExpressionSupport();
 });
 ```
 
@@ -473,7 +473,7 @@ services
     options.SwaggerDoc("V1", new OpenApiInfo { Title = $"API", Version = "V1" });
     // Register required stuff including XML documentatioin files
     var filterCreatorDoc = Path.Combine(AppContext.BaseDirectory, "FS.FilterExpressionCreator.xml");
-    options.AddFilterExpressionsSupport(filterCreatorDoc);
+    options.AddFilterExpressionSupport(filterCreatorDoc);
     options.IncludeXmlComments(filterCreatorDoc);
 });
 ```
@@ -490,8 +490,8 @@ CLI : dotnet add package Schick.FilterExpressionCreator.Mvc.Newtonsoft
 using FS.FilterExpressionCreator.Mvc.Newtonsoft;
 
 // Register support for Newtonsoft by calling 
-// 'AddFilterExpressionsNewtonsoftSupport()' on IMvcBuilder instance
-services.AddControllers().AddFilterExpressionsNewtonsoftSupport();
+// 'AddFilterExpressionNewtonsoftSupport()' on IMvcBuilder instance
+services.AddControllers().AddFilterExpressionNewtonsoftSupport();
 ```
 
 # Advanced Scenarios
