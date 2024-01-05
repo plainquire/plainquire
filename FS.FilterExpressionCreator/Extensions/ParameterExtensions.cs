@@ -43,6 +43,6 @@ public static class ParameterExtensions
     public static bool IsParameterVisible(this MemberInfo member)
     {
         var filterAttribute = member.GetCustomAttribute<FilterAttribute>();
-        return filterAttribute?.Visible != false;
+        return filterAttribute?.Filterable != false;
     }
 }

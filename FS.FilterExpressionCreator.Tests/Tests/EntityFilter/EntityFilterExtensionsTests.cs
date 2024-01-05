@@ -154,7 +154,7 @@ public class EntityFilterExtensionsTests
         [Filter(Name = "Surname")]
         public string? LastName { get; }
 
-        [Filter(Visible = false)]
+        [Filter(Filterable = false)]
         public string? Gender { get; }
 
         public DateTime? Birthday { get; }

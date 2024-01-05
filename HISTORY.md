@@ -10,6 +10,8 @@
 
 Obsolete methods removed from `EntityFilter.cs`
 
+`FilterAttribute.Visible` renamed to `FilterAttribute.Filterable`
+
 `AddFilterExpressionsSupport` renamed to `AddFilterExpressionSupport`
 
 `FilterConfiguration` moved to namespace `FS.FilterExpressionCreator.Abstractions.Configurations`

@@ -28,6 +28,6 @@ public class Project
     /// <summary>
     /// Identifier of the owning <see cref="Freelancer"/>.
     /// </summary>
-    [Filter(Visible = false)]
+    [Filter(Filterable = false)]
     public Guid FreelancerId { get; set; }
 }

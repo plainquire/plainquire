@@ -20,7 +20,7 @@ public class Freelancer
     /// <summary>
     /// The seed this freelancer belongs too.
     /// </summary>
-    [Filter(Visible = false)]
+    [Filter(Filterable = false)]
     public int Seed { get; set; }
 
     /// <summary>

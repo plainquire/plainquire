@@ -18,7 +18,7 @@ public class FilterAttribute : Attribute
     public string? Name { get; set; }
 
     /// <summary>
-    /// Set to <c>false</c> to hide this property from binding done via <see><cref>EntityFilter{TEntity}</cref></see> from MVC controllers
+    /// Set to <c>false</c> to disable filtering for this property.
     /// </summary>
-    public bool Visible { get; set; } = true;
+    public bool Filterable { get; set; } = true;
 }
