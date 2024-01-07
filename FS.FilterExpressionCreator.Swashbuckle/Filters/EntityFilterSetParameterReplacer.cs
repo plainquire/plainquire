@@ -28,8 +28,8 @@ public class EntityFilterSetParameterReplacer : EntityFilterParameterReplacer, I
             .Where(IsEntityFilterParameter)
             .Join(
                 operation.Parameters,
-                parameterDescription => parameterDescription.Name,
-                parameter => parameter.Name,
+                parameterDescription => new { parameterDescription.Name, SchemaReferenceId = GetSchemaReferenceId(parameterDescription, context) },
+                parameter => new { parameter.Name, SchemaReferenceId = parameter.Schema.Reference?.Id },
                 (description, parameter) => new { Parameter = parameter, description.Type }
             )
             .Select(x => new EntityFilterParameter(x.Parameter, x.Type.GetGenericArguments().First()))
@@ -37,4 +37,7 @@ public class EntityFilterSetParameterReplacer : EntityFilterParameterReplacer, I
 
     private static bool IsEntityFilterParameter(ApiParameterDescription description)
         => description.Type.IsGenericEntityFilter();
+
+    private static string? GetSchemaReferenceId(ApiParameterDescription parameter, OperationFilterContext context)
+        => context.SchemaGenerator.GenerateSchema(parameter.Type, context.SchemaRepository).Reference?.Id;
 }
