@@ -19,6 +19,7 @@ public class TestModel<TValue>
 
     public List<TestModelNested>? NestedList { get; set; }
 
+    [ExcludeFromCodeCoverage]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay
     {

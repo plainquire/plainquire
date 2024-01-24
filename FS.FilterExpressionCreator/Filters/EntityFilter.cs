@@ -229,6 +229,7 @@ public class EntityFilter<TEntity> : EntityFilter
     public override string ToString()
         => CreateFilter()?.ToString() ?? string.Empty;
 
+    [ExcludeFromCodeCoverage]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay => CreateFilter()?.ToString() ?? "<EMPTY>";
 }

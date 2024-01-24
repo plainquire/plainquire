@@ -167,6 +167,7 @@ public class ValueFilter
         return (filterOperator, filterValue);
     }
 
+    [ExcludeFromCodeCoverage]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string? DebuggerDisplay => ToString();
 }
