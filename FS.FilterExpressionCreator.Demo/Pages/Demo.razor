@@ -9,7 +9,8 @@
     </h6>
     <div class="card-body">
         <form class="row g-3" @onsubmit="@UpdateQuery" novalidate>
-            <div class="col-md-12">Predefined samples</div>
+            <!-- Predefined samples -->
+            <div class="col-md-12 semibold">Predefined samples</div>
             <div class="col-auto">
                 <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Older-than-40"))">Older than 40</button>
             </div>
@@ -20,58 +21,144 @@
                 <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Known-Age"))">Known Age</button>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Gender-Contains"))">Gender Contains 'male'</button>
+                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Gender-Contains"))">Gender contains 'male'</button>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Low-Experience"))">Low Experience</button>
+                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Address-Street"))">Street contains 'A'</button>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Project-Contains"))">Project Contains 'Z'</button>
+                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Project-Contains"))">Project contains 'Z'</button>
             </div>
+
+            <!-- Filter -->
             <div class="col-md-12 m-0">
                 <hr />
             </div>
+            <div class="col-md-12 m-0 semibold">Filter</div>
             <div class="col-md-3">
                 <label for="firstName" class="form-label">First Name</label>
-                <input id="firstName" class="form-control" @bind-Value="QueryModel.FirstName" @bind-Value:event="oninput" />
-                <div id="firstNameHelp" class="form-text">@(QueryModel.FirstName.HumanizeFilterSyntax<string>("'FirstName'"))</div>
+                <input id="firstName" class="form-control" @bind="QueryModel.Filter.FirstName" @bind:event="oninput" />
+                <div id="firstNameHelp" class="form-text">@(QueryModel.Filter.FirstName.HumanizeFilterSyntax<string>("'FirstName'"))</div>
             </div>
             <div class="col-md-3">
                 <label for="lastName" class="form-label">Last Name</label>
-                <input id="lastName" class="form-control" @bind-Value="QueryModel.LastName" @bind-Value:event="oninput" />
-                <div id="lastNameHelp" class="form-text">@(QueryModel.LastName.HumanizeFilterSyntax<string>("'LastName'"))</div>
+                <input id="lastName" class="form-control" @bind="QueryModel.Filter.LastName" @bind:event="oninput" />
+                <div id="lastNameHelp" class="form-text">@(QueryModel.Filter.LastName.HumanizeFilterSyntax<string>("'LastName'"))</div>
             </div>
             <div class="col-md-3">
                 <label for="gender" class="form-label">Gender</label>
-                <input id="gender" class="form-control" @bind-Value="QueryModel.Gender" @bind-Value:event="oninput" />
-                <div id="genderHelp" class="form-text">@(QueryModel.Gender.HumanizeFilterSyntax<Gender>("'Gender'"))</div>
+                <input id="gender" class="form-control" @bind="QueryModel.Filter.Gender" @bind:event="oninput" />
+                <div id="genderHelp" class="form-text">@(QueryModel.Filter.Gender.HumanizeFilterSyntax<Gender>("'Gender'"))</div>
             </div>
             <div class="col-md-3">
                 <label for="birthday" class="form-label">Birthday</label>
-                <input id="birthday" class="form-control" @bind-Value="QueryModel.Birthday" @bind-Value:event="oninput" />
-                <div id="birthdayHelp" class="form-text">@(QueryModel.Birthday.HumanizeFilterSyntax<DateTime>("'Birthday'"))</div>
+                <input id="birthday" class="form-control" @bind="QueryModel.Filter.Birthday" @bind:event="oninput" />
+                <div id="birthdayHelp" class="form-text">@(QueryModel.Filter.Birthday.HumanizeFilterSyntax<DateTime>("'Birthday'"))</div>
             </div>
             <div class="col-md-3">
                 <label for="hourlyRate" class="form-label">Hourly Rate</label>
-                <input id="hourlyRate" class="form-control" @bind-Value="QueryModel.HourlyRate" @bind-Value:event="oninput" />
-                <div id="hourlyRateHelp" class="form-text">@(QueryModel.HourlyRate.HumanizeFilterSyntax<double>("'HourlyRate'"))</div>
+                <input id="hourlyRate" class="form-control" @bind="QueryModel.Filter.HourlyRate" @bind:event="oninput" />
+                <div id="hourlyRateHelp" class="form-text">@(QueryModel.Filter.HourlyRate.HumanizeFilterSyntax<double>("'HourlyRate'"))</div>
             </div>
             <div class="col-md-3">
-                <label for="experience" class="form-label">Years of Experience</label>
-                <input id="experience" class="form-control" @bind-Value="QueryModel.YearsOfExperience" @bind-Value:event="oninput" />
-                <div id="experienceHelp" class="form-text">@(QueryModel.YearsOfExperience.HumanizeFilterSyntax<int>("'YearsOfExperience'"))</div>
+                <label for="experience" class="form-label">Street</label>
+                <input id="experience" class="form-control" @bind="QueryModel.Filter.AddressStreet" @bind:event="oninput" />
+                <div id="experienceHelp" class="form-text">@(QueryModel.Filter.AddressStreet.HumanizeFilterSyntax<string>("'AddressStreet'"))</div>
             </div>
             <div class="col-md-3">
                 <label for="project" class="form-label">Project</label>
-                <input id="project" class="form-control" @bind-Value="QueryModel.ProjectTitle" @bind-Value:event="oninput" />
-                <div id="projectHelp" class="form-text">@(QueryModel.ProjectTitle.HumanizeFilterSyntax<string>("'ProjectTitle'"))</div>
+                <input id="project" class="form-control" @bind="QueryModel.Filter.ProjectTitle" @bind:event="oninput" />
+                <div id="projectHelp" class="form-text">@(QueryModel.Filter.ProjectTitle.HumanizeFilterSyntax<string>("'ProjectTitle'"))</div>
             </div>
             <div class="col-md-3">
                 <label for="seed" class="form-label">Seed</label>
-                <input id="seed" type="number" class="form-control" @bind-Value="QueryModel.Seed" @bind-Value:event="oninput" />
+                <input id="seed" type="number" class="form-control" @bind="QueryModel.Seed" @bind:event="oninput" />
                 <div id="seedHelp" class="form-text">Using the same seed returns predictable result</div>
             </div>
-            <div class="col-12">
+
+            <!-- Sort by -->
+            <div class="col-md-12 m-0">
+                <hr />
+            </div>
+            <div class="col-md-12 m-0 semibold">Sort</div>
+            <div class="col-md-3">
+                <label for="sortOrder1" class="form-label">1st level</label>
+                <select id="sortOrder1" class="form-select" aria-label="1st level sorting" @bind="QueryModel.Sort[0]" @bind:after="@UpdateQuery">
+                    <option selected></option>
+                    <option value="lastName-asc">Last Name 🡑</option>
+                    <option value="lastName-desc">Last Name 🡓</option>
+                    <option value="lastName.length-asc">Length of Last Name 🡑</option>
+                    <option value="lastName.length-desc">Length of Last Name 🡓</option>
+                    <option value="gender-asc">Gender 🡑</option>
+                    <option value="gender-desc">Gender 🡓</option>
+                    <option value="birthday-asc">Birthday 🡑</option>
+                    <option value="birthday-desc">Birthday 🡓</option>
+                    <option value="hourlyRate-asc">Hourly Rate 🡑</option>
+                    <option value="hourlyRate-desc">Hourly Rate 🡓</option>
+                    <option value="addressStreet-asc">Street 🡑</option>
+                    <option value="addressStreet-desc">Street 🡓</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="sortOrder2" class="form-label">2nd level</label>
+                <select id="sortOrder2" class="form-select" aria-label="2nd level sorting" @bind="QueryModel.Sort[1]" @bind:after="@UpdateQuery">
+                    <option selected></option>
+                    <option value="lastName-asc">Last Name 🡑</option>
+                    <option value="lastName-desc">Last Name 🡓</option>
+                    <option value="lastName.length-asc">Length of Last Name 🡑</option>
+                    <option value="lastName.length-desc">Length of Last Name 🡓</option>
+                    <option value="gender-asc">Gender 🡑</option>
+                    <option value="gender-desc">Gender 🡓</option>
+                    <option value="birthday-asc">Birthday 🡑</option>
+                    <option value="birthday-desc">Birthday 🡓</option>
+                    <option value="hourlyRate-asc">Hourly Rate 🡑</option>
+                    <option value="hourlyRate-desc">Hourly Rate 🡓</option>
+                    <option value="addressStreet-asc">Street 🡑</option>
+                    <option value="addressStreet-desc">Street 🡓</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="sortOrder3" class="form-label">3rd level</label>
+                <select id="sortOrder3" class="form-select" aria-label="3rd level sorting" @bind="QueryModel.Sort[2]" @bind:after="@UpdateQuery">
+                    <option selected></option>
+                    <option value="lastName-asc">Last Name 🡑</option>
+                    <option value="lastName.length-asc">Length of Last Name 🡑</option>
+                    <option value="lastName.length-desc">Length of Last Name 🡓</option>
+                    <option value="lastName-desc">Last Name 🡓</option>
+                    <option value="gender-asc">Gender 🡑</option>
+                    <option value="gender-desc">Gender 🡓</option>
+                    <option value="birthday-asc">Birthday 🡑</option>
+                    <option value="birthday-desc">Birthday 🡓</option>
+                    <option value="hourlyRate-asc">Hourly Rate 🡑</option>
+                    <option value="hourlyRate-desc">Hourly Rate 🡓</option>
+                    <option value="addressStreet-asc">Street 🡑</option>
+                    <option value="addressStreet-desc">Street 🡓</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="sortOrder4" class="form-label">4th level</label>
+                <select id="sortOrder4" class="form-select" aria-label="4th level sorting" @bind="QueryModel.Sort[3]" @bind:after="@UpdateQuery">
+                    <option selected></option>
+                    <option value="lastName-asc">Last Name 🡑</option>
+                    <option value="lastName-desc">Last Name 🡓</option>
+                    <option value="lastName.length-asc">Length of Last Name 🡑</option>
+                    <option value="lastName.length-desc">Length of Last Name 🡓</option>
+                    <option value="gender-asc">Gender 🡑</option>
+                    <option value="gender-desc">Gender 🡓</option>
+                    <option value="birthday-asc">Birthday 🡑</option>
+                    <option value="birthday-desc">Birthday 🡓</option>
+                    <option value="hourlyRate-asc">Hourly Rate 🡑</option>
+                    <option value="hourlyRate-desc">Hourly Rate 🡓</option>
+                    <option value="addressStreet-asc">Street 🡑</option>
+                    <option value="addressStreet-desc">Street 🡓</option>
+                </select>
+            </div>
+
+            <!-- Action -->
+            <div class="col-md-12 m-0">
+                <hr />
+            </div>
+            <div class="col-12 m-0">
                 <button type="submit" class="btn btn-primary">Update</button>
                 <button type="button" class="btn btn-primary" @onclick="@ClearQuery">Clear</button>
                 <button type="button" class="btn btn-primary" @onclick="@ChangeSeed">Change Seed</button>
@@ -82,10 +169,21 @@
 
 <div class="card">
     <h6 class="card-header">
-        Query Result
+        @{
+            var resultDescription = (QueryResult.ErrorMessage != null)
+            ? "Error"
+            : QueryResult.Data != null ? QueryResult.FilteredCount + "/" + QueryResult.UnfilteredCount : "";
+        }
+        Query Result (@resultDescription)
     </h6>
     <ul class="list-group list-group-flush">
-        @if (QueryResult.Data == null)
+        @if (QueryResult.ErrorMessage != null)
+        {
+            <li class="list-group-item">
+                <p>@QueryResult.ErrorMessage</p>
+            </li>
+        }
+        else if (QueryResult.Data == null)
         {
             <li class="list-group-item">
                 <p>Loading</p>...
@@ -94,7 +192,6 @@
         else
         {
             <li class="list-group-item">
-                <h6>Data (@QueryResult.FilteredCount/@QueryResult.UnfilteredCount)</h6>
                 <SimpleTable Items="QueryResult.Data">
                     <HeaderTemplate>
                         <tr>
@@ -103,7 +200,7 @@
                             <th class="text-nowrap">Gender</th>
                             <th class="text-nowrap">Birthday</th>
                             <th class="text-nowrap">Hourly Rate</th>
-                            <th class="text-nowrap">Experience</th>
+                            <th class="text-nowrap">Street</th>
                             <th class="text-nowrap">Projects</th>
                         </tr>
                     </HeaderTemplate>
@@ -114,7 +211,7 @@
                             <td>@freelancer.Gender</td>
                             <td>@freelancer.Birthday?.ToString("d")</td>
                             <td>@freelancer.HourlyRate.ToString("c", NumberFormat)</td>
-                            <td>@freelancer.YearsOfExperience years</td>
+                            <td>@freelancer.Address.Street</td>
                             <td class="description">@string.Join(", ", freelancer.Projects.Select(x => x.Title))</td>
                         </tr>
                     </RowTemplate>

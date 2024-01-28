@@ -59,13 +59,16 @@ public class FreelancerController : Controller
 
         var freelancerFilter = filter.Freelancer;
         var projectFilter = filter.Project;
+        var addressFilter = filter.Address;
 
         freelancerFilter
             .ReplaceNested(x => x.Projects, projectFilter)
+            .ReplaceNested(x => x.Address, addressFilter)
             .Replace(x => x.Seed, seed);
 
         var freelancerOrderBy = orderBy.Freelancer;
-        freelancerOrderBy.AddNested(freelancer => freelancer.Address, orderBy.Address);
+        freelancerOrderBy
+            .AddNested(freelancer => freelancer.Address, orderBy.Address);
 
         var query = _dbContext
             .Set<Freelancer>()
@@ -122,7 +125,7 @@ public class FreelancerController : Controller
 
         var address = new Faker<Address>(locale)
             .StrictMode(true)
-            .RuleFor(x => x.Street, faker => faker.Address.StreetAddress())
+            .RuleFor(x => x.Street, faker => faker.Address.StreetName())
             .RuleFor(x => x.City, faker => faker.Address.City());
 
         var projects = new Faker<Project>()
@@ -148,7 +151,6 @@ public class FreelancerController : Controller
             .RuleFor(x => x.LastName, faker => faker.Name.LastName())
             .RuleFor(x => x.Birthday, faker => faker.Date.Between(today.AddYears(-maxAge), today.AddYears(-minAge)).Date.OrNull(faker, .25f))
             .RuleFor(x => x.HourlyRate, faker => Math.Round(faker.Random.Double(minHourlyRate, maxHourlyRate), 2))
-            .RuleFor(x => x.YearsOfExperience, (faker, freelancer) => faker.Random.Int(0, (today.Year - freelancer.Birthday?.Year ?? maxAge) - minAge))
             .RuleFor(x => x.Address, _ => address.Generate())
             .RuleFor(x => x.Projects, faker => projects.Take(faker.Random.Int(0, 5)).ToList())
             .FinishWith((_, freelancer) => freelancer.Projects.ForEach(x => x.FreelancerId = freelancer.Id))

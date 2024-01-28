@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FS.FilterExpressionCreator.Abstractions.Extensions;
 
 namespace FS.FilterExpressionCreator.Demo.Pages;
 
@@ -43,17 +44,17 @@ public class DemoPage : ComponentBase
         QueryModel.Clear();
 
         if (identifier == "Older-than-40")
-            QueryModel.Birthday = "<forty-years-ago";
+            QueryModel.Filter.Birthday = "<forty-years-ago";
         else if (identifier == "Unknown-Age")
-            QueryModel.Birthday = "ISNULL";
+            QueryModel.Filter.Birthday = "ISNULL";
         else if (identifier == "Known-Age")
-            QueryModel.Birthday = "NOTNULL";
+            QueryModel.Filter.Birthday = "NOTNULL";
         else if (identifier == "Gender-Contains")
-            QueryModel.Gender = "~male";
-        else if (identifier == "Low-Experience")
-            QueryModel.YearsOfExperience = "<2";
+            QueryModel.Filter.Gender = "~male";
+        else if (identifier == "Address-Street")
+            QueryModel.Filter.AddressStreet = "A";
         else if (identifier == "Project-Contains")
-            QueryModel.ProjectTitle = "Z";
+            QueryModel.Filter.ProjectTitle = "Z";
 
         await UpdateQuery();
     }
@@ -98,14 +99,27 @@ public class DemoPage : ComponentBase
 
     private async Task LoadData()
     {
-        var requestUri = $"{NavigationManager.BaseUri}api/v1/Freelancer/GetFreelancers";
-        requestUri = QueryHelpers.AddQueryString(requestUri, QueryModel.ToQuery());
-        using var response = await HttpClient.GetAsync(requestUri);
-        if (!response.IsSuccessStatusCode)
-            throw new InvalidOperationException("Unable to query database.");
+        try
+        {
+            var requestUri = $"{NavigationManager.BaseUri}api/v1/Freelancer/GetFreelancers";
+            requestUri = QueryHelpers.AddQueryString(requestUri, QueryModel.ToQuery());
 
-        var json = await response.Content.ReadAsStringAsync();
-        QueryResult = JsonConvert.DeserializeObject<FreelancerDto>(json) ?? new();
+            using var response = await HttpClient.GetAsync(requestUri);
+            if (!response.IsSuccessStatusCode)
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                QueryResult = new FreelancerDto() { ErrorMessage = message };
+                return;
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            QueryResult = JsonConvert.DeserializeObject<FreelancerDto>(json) ?? new();
+        }
+        catch (InvalidOperationException e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     private async Task<string?> FormatSql(string sql)
@@ -125,42 +139,68 @@ public class DemoPage : ComponentBase
 
     protected class FreelancerQueryModel
     {
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? Gender { get; set; }
-        public string? Birthday { get; set; }
-        public string? HourlyRate { get; set; }
-        public string? YearsOfExperience { get; set; }
-        public string? ProjectTitle { get; set; }
+        public FreelancerFilter Filter { get; set; } = new();
+
+        public string[] Sort { get; set; } = ["", "", "", ""];
+
         public string? Seed { get; set; }
 
         public static FreelancerQueryModel FromQuery(Dictionary<string, StringValues> queryParameters)
         {
             var result = new FreelancerQueryModel();
             foreach (var (key, value) in queryParameters)
-                result.SetByName(key, value);
+                result.SetFilterByName(key, value);
+
+            if (!queryParameters.TryGetValue("orderBy", out var orderBy))
+                return result;
+
+            var sort = orderBy
+                .SelectMany(value => value?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? [])
+                .Take(4)
+                .ToArray();
+
+            Array.Copy(sort, result.Sort, sort.Length);
+
             return result;
         }
 
         public Dictionary<string, StringValues> ToQuery()
-            => GetType()
+        {
+            var query = Filter
+                .GetType()
                 .GetProperties()
-                .Select(x => new { x.Name, Value = (string?)x.GetMethod?.Invoke(this, null) })
+                .Select(x => new { x.Name, Value = (string?)x.GetMethod?.Invoke(Filter, null) })
                 .Where(x => !string.IsNullOrEmpty(x.Value))
                 .ToDictionary(x => x.Name.LowercaseFirstChar(), x => new StringValues(x.Value));
 
-        public void SetByName(string propertyName, string? value)
-            => GetType().GetProperty(propertyName)?.SetMethod?.Invoke(this, [value]);
+            if (!string.IsNullOrEmpty(Seed))
+                query.Add("seed", new StringValues(Seed));
+
+            var sort = Sort.Where(x => !string.IsNullOrEmpty(x)).ToList();
+            if (sort.Count != 0)
+                query.Add("orderBy", string.Join(',', sort));
+
+            return query;
+        }
+
+        public void SetFilterByName(string propertyName, string? value)
+            => Filter.GetType().GetProperty(propertyName)?.SetMethod?.Invoke(Filter, [value]);
 
         public void Clear()
         {
-            FirstName = null;
-            LastName = null;
-            Gender = null;
-            Birthday = null;
-            HourlyRate = null;
-            YearsOfExperience = null;
-            ProjectTitle = null;
+            Filter = new FreelancerFilter();
+            Sort = ["", "", "", ""];
+        }
+
+        public class FreelancerFilter
+        {
+            public string? FirstName { get; set; }
+            public string? LastName { get; set; }
+            public string? Gender { get; set; }
+            public string? Birthday { get; set; }
+            public string? HourlyRate { get; set; }
+            public string? AddressStreet { get; set; }
+            public string? ProjectTitle { get; set; }
         }
     }
 

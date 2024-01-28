@@ -6,6 +6,10 @@
     overflow: hidden;
 }
 
+.semibold {
+    font-weight: 600;
+}
+
 .sql {
     white-space: pre-wrap;
 }

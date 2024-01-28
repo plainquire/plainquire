@@ -41,7 +41,8 @@ public static class ValueFilterExtensions
                     : $"'{filterValues[^1]}'";
 
                 return $"{valueName} {operatorName} {valueList}";
-            });
+            })
+            .ToList();
 
         return string.Join(" or ", filters);
     }

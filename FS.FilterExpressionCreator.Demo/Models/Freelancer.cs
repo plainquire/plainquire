@@ -49,11 +49,6 @@ public class Freelancer
     public double HourlyRate { get; set; }
 
     /// <summary>
-    /// Years of Experience.
-    /// </summary>
-    public int YearsOfExperience { get; set; }
-
-    /// <summary>
     /// Address.
     /// </summary>
     public Address Address { get; set; } = new();

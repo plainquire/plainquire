@@ -45,5 +45,10 @@
 
     <script src="_framework/blazor.server.js"></script>
     <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <script>
+        <!-- Prevent blazor from scrolling to top on navigation, see https://github.com/dotnet/aspnetcore/issues/40190#issuecomment-1203857906 -->
+        window.scrollTo = undefined;
+    </script>
 </body>
 </html>

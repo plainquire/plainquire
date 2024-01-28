@@ -14,6 +14,11 @@ public class FreelancerDto
     public List<Freelancer>? Data { get; set; }
 
     /// <summary>
+    /// Error message, if any
+    /// </summary>
+    public string? ErrorMessage = null;
+
+    /// <summary>
     /// Count of records return by query
     /// </summary>
     public int FilteredCount { get; set; }
