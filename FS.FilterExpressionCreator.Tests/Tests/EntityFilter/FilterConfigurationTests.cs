@@ -2,7 +2,6 @@
 using FS.FilterExpressionCreator.Abstractions.Configurations;
 using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Extensions;
-using FS.FilterExpressionCreator.Filters;
 using FS.FilterExpressionCreator.Tests.Attributes;
 using FS.FilterExpressionCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,19 +20,20 @@ public class FilterConfigurationTests : TestBase
     {
         var configuration = new FilterConfiguration();
 
-        configuration.Should().BeEquivalentTo(new FilterConfiguration
-        {
-            CultureInfo = CultureInfo.CurrentCulture,
-            BoolFalseStrings = ["NO", "0"],
-            BoolTrueStrings = ["YES", "1"]
-        });
+        configuration.Should()
+            .BeEquivalentTo(new FilterConfiguration
+            {
+                CultureInfo = CultureInfo.CurrentCulture,
+                BoolFalseStrings = ["NO", "0"],
+                BoolTrueStrings = ["YES", "1"],
+            });
     }
 
-    [DataTestMethod]
+    [DataTestMethod, DoNotParallelize]
     [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<DateTime>))]
     public void WhenDefaultConfigurationIsSet_ConfigurationIsUsed(EntityFilterFunc<TestModel<DateTime>> filterFunc)
     {
-        var filter = new EntityFilter<TestModel<DateTime>>()
+        var filter = new Filters.EntityFilter<TestModel<DateTime>>()
             .Replace(x => x.ValueA, FilterOperator.EqualCaseSensitive, "InvalidTimeTimeSyntax");
 
         var configuration = new FilterConfiguration { IgnoreParseExceptions = true };
@@ -41,5 +41,8 @@ public class FilterConfigurationTests : TestBase
         var filteredItems = () => filterFunc([], filter);
 
         filteredItems.Should().NotThrow();
+
+        // Cleanup
+        Filters.EntityFilter.DefaultConfiguration = new FilterConfiguration();
     }
 }
