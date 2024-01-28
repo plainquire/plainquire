@@ -46,7 +46,7 @@ public class InterceptorTests : TestBase
         filteredEntities.Should().BeEquivalentTo(new[] { testItems[1], testItems[2] });
     }
 
-    [DataTestMethod]
+    [DataTestMethod, DoNotParallelize]
     [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
     public void WhenDefaultFilterInterceptorIsUsed_ValuesAreFilteredAsExpected(EntityFilterFunc<TestModel<string>> filterFunc)
     {
@@ -68,6 +68,9 @@ public class InterceptorTests : TestBase
         var filteredEntities = filterFunc(testItems, filter);
 
         filteredEntities.Should().BeEquivalentTo(new[] { testItems[1], testItems[2] });
+
+        // Cleanup
+        Filters.EntityFilter.DefaultInterceptor = null;
     }
 
     public class FilterStringsCaseInsensitiveInterceptor : IPropertyFilterInterceptor
