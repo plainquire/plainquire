@@ -27,10 +27,11 @@ public class ValueFiltersFactory
             return Enumerable.Empty<string>();
 
         return Regex
-            .Split(filterSyntax, @"(?<!\\)[\|,]")
+            .Split(filterSyntax, @"(?<!\\)[\|,;]")
             .Select(element => element
                 .Replace(@"\|", @"|")
                 .Replace(@"\,", @",")
+                .Replace(@"\;", @";")
                 .Replace(@"\\", @"\")
             )
             .ToArray();

@@ -1,5 +1,3 @@
-
-
 # 5.0.0
 
 ## New Features
@@ -18,9 +16,11 @@ Obsolete methods removed from `EntityFilter.cs`
 
 `FilterConfiguration` moved to namespace `FS.FilterExpressionCreator.Abstractions.Configurations`
 
+`ValueFilterExtensions.Create(...)` renamed to `ValueFiltersFactory.Create(...)`
+
 ## Changes
 
-...
+Filter-syntax allows `;` as separator: `Joe;Eve` becomes the same as `Joe,Eve`, it filters for `Joe` or `Eve`
 
 # 4.5.0
 
