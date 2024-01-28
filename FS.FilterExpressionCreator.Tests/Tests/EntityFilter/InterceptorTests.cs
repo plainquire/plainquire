@@ -46,6 +46,30 @@ public class InterceptorTests : TestBase
         filteredEntities.Should().BeEquivalentTo(new[] { testItems[1], testItems[2] });
     }
 
+    [DataTestMethod]
+    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    public void WhenDefaultFilterInterceptorIsUsed_ValuesAreFilteredAsExpected(EntityFilterFunc<TestModel<string>> filterFunc)
+    {
+        var filter = new EntityFilter<TestModel<string>>()
+            .Replace(x => x.ValueA, FilterOperator.EqualCaseSensitive, "TestA")
+            .Replace(x => x.ValueB, FilterOperator.Contains, "TestB");
+
+        var testItems = new List<TestModel<string>>
+        {
+            new() { ValueA = "TestA", ValueB = "TestA" },
+            new() { ValueA = "TestA", ValueB = "TestB" },
+            // ReSharper disable once StringLiteralTypo
+            new() { ValueA = "TESTA", ValueB = "TestB" },
+            new() { ValueA = "TestB", ValueB = "TestB" }
+        };
+
+        var interceptor = new FilterStringsCaseInsensitiveInterceptor();
+        Filters.EntityFilter.DefaultInterceptor = interceptor;
+        var filteredEntities = filterFunc(testItems, filter);
+
+        filteredEntities.Should().BeEquivalentTo(new[] { testItems[1], testItems[2] });
+    }
+
     public class FilterStringsCaseInsensitiveInterceptor : IPropertyFilterInterceptor
     {
         public Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, Filters.ValueFilter[] filters, FilterConfiguration configuration)
