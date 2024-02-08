@@ -1,80 +1,42 @@
-# C# / VB / .NET LINQ Filter Expression Creator
+# Filter Expression Creator
 
-Dynamically creates lambda expressions to filter enumerable and database queries via `System.Linq.Enumerable.Where(...)`.
+Dynamically creates lambda expressions to filter enumerable and database queries via `System.Linq.Enumerable.Where(...)`
 
-# Demo #
+# Demo
 
-Demo: [https://filterexpressioncreator.schick-software.de/demo](https://filterexpressioncreator.schick-software.de/demo)
+Demo
+[https://filterexpressioncreator.schick-software.de/demo](https://filterexpressioncreator.schick-software.de/demo)
 
-API: https://filterexpressioncreator.schick-software.de/openapi/
+Swagger / OpenAPI
+https://filterexpressioncreator.schick-software.de/openapi/
 
 # Table of Content
-- [Getting Started](#getting-started)
-- [Creating Filters](#creating-filters)
-  - [Add or replace values](#add-or-replace-values)
-  - [Combine values with AND and OR](#combine-values-with-and-and-or)
-  - [Retrieve values and syntax](#retrieve-values-and-syntax)
-  - [Nested Filters](#nested-filters)
-  - [Filter Operators](#filter-operators)
-  - [Filter to `null`](#filter-to-null)
-  - [Filter Micro Syntax](#filter-micro-syntax)
-    - [Examples](#examples)
-    - [Date/Time](#date/time)
-    - [Enumerations](#enumerations)
+- [Filter Entities](#filter-entities)
+  - [Quick Start](#quick-start)
+  - [REST / MVC](#rest-mvc)
+  - [Swagger / OpenAPI](#swagger-openapi)
+  - [Filter Operators / Syntax](#filter-operators-syntax)
   - [Configuration](#configuration)
   - [Interception](#interception)
   - [Default Configuration and Interception](#default-configuration-and-interception)
-- [Using With MVC Controllers](#using-with-mvc-controllers)
-  - [Model Binding](#model-binding)
-  - [Filter Sets](#filter-sets)
-  - [Register Model Binders](#register-model-binders)
-  - [Configure Model Binding](#configure-model-binding)
-  - [Nested Objects/Lists](#nested-objects/lists)
-  - [Submit filter using HTTP query parameters](#submit-filter-using-http-query-parameters)
-  - [Retrieve HTTP query parameters from filter](#Retrieve-HTTP-query-parameters-from-filter)
-- [Support for OpenAPI / Swashbuckle.AspNetCore](#support-for-openapi-/-swashbuckleaspnetcore)
-  - [Register OpenAPI Support](#register-openapi-support)
-  - [Register XML Documentation](#register-xml-documentation)
-- [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
-- [Advanced Scenarios](#advanced-scenarios)
-  - [Deep Copy Filters](#deep-copy-filters)
-  - [Cast Filters](#cast-filters)
-  - [Serialize Filters](#serialize-filters)
-  - [Combine Filter Expressions](#combine-filter-expressions)
+  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
+  - [Advanced Scenarios](#advanced-scenarios)
+- [Sort Entities](#sort-entities)
 
-# Getting Started
+# Filter Entities
 
-1. Install the standard NuGet package into your ASP.NET Core application
+## Quick Start
+
+Install the NuGet packages:
 ```
 Package Manager : Install-Package Schick.FilterExpressionCreator
 CLI : dotnet add package Schick.FilterExpressionCreator
 ```
-2. Create a new filter
+Create a filter:
  ```csharp
- using FS.FilterExpressionCreator.Enums;
- using FS.FilterExpressionCreator.Extensions;
- using FS.FilterExpressionCreator.Filters;
- 
- public class Order
- {
-     public int Number { get; set; }
-     public string Customer { get; set; }
- }
- 
- var filter = new EntityFilter<Order>()
-     .Add(x => x.Number, FilterOperator.GreaterThan, 200)
-     .Add(x => x.Customer, "Joe");
- 
- // Show filter
- System.Console.WriteLine(filter);
- // x => (((x.Customer != null) AndAlso x.Customer.ToUpper().Contains("JOE")) AndAlso (x.Number > 200))
- ```
-3. Start filtering
-```csharp
 using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
-using System.Linq;
 
 var orders = new[] {
     new Order { Customer = "Joe Miller", Number = 100 },
@@ -82,130 +44,171 @@ var orders = new[] {
     new Order { Customer = "Joe Smith", Number = 300 },
 };
 
-// Using IEnumerable<>
+// Create filter
+var filter = new EntityFilter<Order>()
+    .Add(x => x.Customer, "Joe")
+    .Add(x => x.Number, FilterOperator.GreaterThan, 250);
+
+// Print filter
+Console.WriteLine(filter);
+// Output: x => (((x.Customer != null) AndAlso x.Customer.ToUpper().Contains("JOE")) AndAlso (x.Number > 250))
+
+// Use filter with LINQ
 var filteredOrders = orders.Where(filter).ToList();
-// filteredOrders equals
-// new[] { new Order { Customer = "Joe Smith", Number = 300 } };
-
-// Or using queryables (e.g. Entity Framework)
+// Or queryables (e.g. Entity Framework)
 var filteredOrders = dbContext.Orders.Where(filter).ToList();
-```
+// Output: new[] { new Order { Customer = "Joe Smith", Number = 300 } };
 
-# Creating Filters
-
-## Add or replace values
-
-Filters can be added/replaced using operator/value(s) pairs
-
-```csharp
-// Operator/Value(s): Customer contains 'Joe' or 'Doe'
-filter.Add(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
-
-// Operator/Value(s): Customer contains 'Joe' or equals 'Doe'
-filter.Add(x => x.Customer, ValueFilter.Create(
-    FilterOperator.EqualCaseInsensitive, "Joe"), 
-    ValueFilter.Create(FilterOperator.EqualCaseInsensitive, "Doe")
-);
-```
-
-or via [filter micro syntax](#filter-micro-syntax)
-
-```csharp
-// Filter micro syntax: Customer contains 'Joe' or 'Doe'.
-filter.Add(x => x.Customer, "~Joe,~Doe");
-
-// Filter micro syntax: Customer contains 'Joe' or equals 'Doe'
-filter.Add(x => x.Customer, "~Joe,=Doe");
-```
-
-## Combine values with AND and OR
-
-```csharp
-// AND: Customer contains 'Joe' and 'Doe'.
-// Multiple calls to Add/Replace are combined using conditional `AND`.
-filter.Add(x => x.Customer, "~Joe");
-filter.Add(x => x.Customer, "~Doe");
-
-// OR: Customer contains 'Joe' or 'Doe'.
-// Multiple values given to one call of Add/Replace are combined using conditional `OR`.
-filter.Add(x => x.Customer, "~Joe,~Doe");
-```
-
-## Retrieve values and syntax
-```csharp
-// With values from above, filterSytax contains "~Joe,~Doe"
-filter.Add(x => x.Customer, "~Joe,~Doe");
-string filterSytax = filter.GetPropertyFilterSyntax(x => x.Customer);
-
-// Retrive objects describing the filter values
-ValueFilter[] filterValues = filter.GetPropertyFilterValues(x => x.Customer);
-```
-```json
-// filterValues equals to
-[{
-  "Operator": "GreaterThanOrEqual",
-  "Value": "2000",
-  "IsEmpty": false
-}, {
-  "Operator": "LessThan",
-  "Value": "2000",
-  "IsEmpty": false
-}]
-```
-
-## Nested Filters
-
-Filtering nested objects/lists is supported.
-
-### Nested Objects
-
-Nested objects are filtered directly
-
-```csharp
-using FS.FilterExpressionCreator.Enums;
-using FS.FilterExpressionCreator.Extensions;
-using FS.FilterExpressionCreator.Filters;
-using System.Collections.Generic;
-
+[FilterEntity]
 public class Order
 {
     public int Number { get; set; }
     public string Customer { get; set; }
-    
-    public Address Address { get; set; }
-    public List<OrderItem> Items { get; set; }
 }
+ ```
 
-public record Address(string Street, string City) { }
-public record OrderItem(int Position, string Article) { }
-
-var addressFilter = new EntityFilter<Address>()
-    .Add(x => x.City, "==Berlin");
-
-var filter = new EntityFilter<Order>()
-    .AddNested(x => x.Address, addressFilter);
-
-// Print
-System.Console.WriteLine(filter);
-// x => ((x.Address != null) AndAlso (x.Address.City == "Berlin"))
-```
-### Nested Lists
-
-Nested lists are filtered using `IEnumerable<T>.Any()`
+Or bind filter from query-parameters:
 
 ```csharp
-var itemFilter = new EntityFilter<OrderItem>()
-    .Add(x => x.Article, "==Laptop");
+using FS.FilterExpressionCreator.Filters;
 
-var filter = new EntityFilter<Order>()
-    .AddNested(x => x.Items, itemFilter);
-
-// Print
-System.Console.WriteLine(filter);
-// x => ((x.Items != null) AndAlso x.Items.Any(x => (x.Article == "Laptop")))
+[HttpGet]
+public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order)
+{
+    return dbContext.Orders.Where(filter).ToList();
+}
 ```
 
-## Filter Operators
+## REST / MVC
+
+Model binding for MVC controllers is supported.
+
+To filter an entity via model binding, the entity must be marked with `FilterEntityAttribute`
+
+### Register Model Binders
+
+```
+Package Manager : Install-Package Schick.FilterExpressionCreator.Mvc
+CLI : dotnet add package Schick.FilterExpressionCreator.Mvc
+```
+
+```csharp
+using FS.FilterExpressionCreator.Mvc.Extensions;
+
+// Register required stuff by calling 'AddFilterExpressionSupport()' on IMvcBuilder instance
+services.AddControllers().AddFilterExpressionSupport();
+```
+
+### Map HTTP query parameters to `EntityFilter`
+
+With model binding enabled, REST requests can be filtered using query parameters:
+
+```csharp
+using FS.FilterExpressionCreator.Filters;
+
+var getOrdersUrl = "/GetOrders?customer==Joe&number=>4711"
+
+[HttpGet]
+public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> filter)
+{
+    Console.WriteLine(filter);
+    // Output:
+    // x => (
+    //   ((x.Customer != null) AndAlso (x.Customer.ToUpper() == "JOE"))
+    //   AndAlso (x.Number > 4711)
+    // )
+    
+    var queryParams = filter.ToQueryParams();
+    // Output: customer==Joe&number=>4711
+}
+```
+
+### Configure Model Binding
+
+By default parameters for properties of filtered entity are named `{Entity}{Property}`.
+By default all public non-complex properties (`string`, `int`, `DateTime`, ...) are recognized.
+Parameters can be renamed or removed using  `FilterAttribute` and `FilterEntityAttribute`.
+
+For the code below `Number` is not mapped anymore and `Customer` becomes `CustomerName`:
+
+```csharp
+using FS.FilterExpressionCreator.Abstractions.Attributes;
+
+// Remove prefix, e.g. property 'Number' is mapped from 'number', not 'orderNumber'
+[FilterEntity(Prefix = "")]
+public class Order
+{
+     // 'Number' is removed from filter and will be ignored
+    [Filter(Filterable = false)]
+    public int Number { get; set; }
+
+    // 'Customer' is mapped from query-parameter 'customerName'
+    [Filter(Name = "CustomerName")]
+    public string Customer { get; set; }
+}
+```
+### Filter Sets
+
+Multiple entity filters can be combined to a set of filters using the `EntityFilterSetAttribute`.
+
+You can write:
+
+```csharp
+using FS.FilterExpressionCreator.Filters;
+using FS.FilterExpressionCreator.Abstractions.Attributes;
+
+[HttpGet]
+// Use
+public Task<List<Order>> GetOrders([FromQuery] OrderFilterSet filterSet)
+{ 
+    var order = filterSet.Order;
+    var orderItem = filterSet.OrderItem;
+}
+
+// Instead of
+public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order, EntityFilter<OrderItem> orderItem) { ... }
+
+[EntityFilterSet]
+public class OrderFilterSet
+{
+	public EntityFilter<Order> Order { get; set; }
+	public EntityFilter<OrderItem> OrderItem { get; set; }
+}
+```
+## Swagger / OpenAPI
+### Register OpenAPI Support
+Swagger / OpenAPI is supported when using [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
+``` 
+Package Manager : Install-Package Schick.FilterExpressionCreator.Swashbuckle
+CLI : dotnet add package Schick.FilterExpressionCreator.Swashbuckle
+```
+
+```csharp
+using FS.FilterExpressionCreator.Swashbuckle.Extensions;
+
+services.AddSwaggerGen(options =>
+{    
+    // Register filters used to modify swagger.json
+    options.AddFilterExpressionSupport();
+});
+```
+
+### Register XML Documentation
+
+To get descriptions for generated parameters from XML documentation, paths to documentation files can be provided:
+
+```csharp
+services.AddSwaggerGen(options =>
+{
+    var filterCreatorDoc = Path.Combine(AppContext.BaseDirectory, "FS.FilterExpressionCreator.xml");
+    options.AddFilterExpressionSupport(filterCreatorDoc);
+    options.IncludeXmlComments(filterCreatorDoc);
+});
+```
+
+## Filter Operators / Syntax
+
+The filter micro syntax consists of a comma separated list of an operator shortcut and a value (e.g. `~Joe,=Doe`). When a value contains a comma itself, it must be escaped by a backslash.
 
 | Operator             | Micro Syntax | Description                                                  |
 | -------------------- | ------------ | ------------------------------------------------------------ |
@@ -221,58 +224,213 @@ System.Console.WriteLine(filter);
 | IsNull               | ISNULL       | Hits when the filtered property is `null`                    |
 | NotNull              | NOTNULL      | Hits when the filtered property is not `null`                |
 
-## Filter to `null`
+### Add/Replace filter using logical OR
 
-To filter to `== null` / `!= null` special filter operators exists
+Multiple values given to one call are combined using conditional `OR`.
+
+Customer contains `Joe` || `Doe`:
 
 ```csharp
-// Filtering for values are NULL
-filter.Add(x => x.Customer, FilterOperator.IsNull);
+var filter = new EntityFilter<Order>();
 
-// Filtering for values are NOT NULL
+// via operator
+filter.Add(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
+filter.Replace(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
+
+// via syntax
+filter.Add(x => x.Customer, "~Joe,~Doe");
+filter.Replace(x => x.Customer, "~Joe,~Doe");
+
+// via query parameter
+var getOrdersUrl = "/GetOrders?customer=~Joe,~Doe"
+```
+
+### Add/Replace filter using logical AND
+
+Multiple calls are combined using conditional `AND`. 
+
+Customer contains `Joe` && `Doe`:
+
+```csharp
+var filter = new EntityFilter<Order>();
+    
+// via operator
+filter
+    .Add(x => x.Customer, FilterOperator.Contains, "Joe")
+    .Add(x => x.Customer, FilterOperator.Contains, "Doe");
+
+// via syntax
+filter
+    .Add(x => x.Customer, "~Joe")
+    .Add(x => x.Customer, "~Doe");
+
+// via query parameter
+var getOrdersUrl = "/GetOrders?customer=~Joe&customer=~Doe"
+```
+
+### Filter to `== null` / `!= null`
+
+```csharp
+// For 'Customer is null'
+filter.Add(x => x.Customer, FilterOperator.IsNull);
+// Output: x => (x.Customer == null)
+
+// For 'Customer is not null'
+filter.Add(x => x.Customer, FilterOperator.NotNull);
+// Output: x => (x.Customer != null)
+
+// via query parameter
+var getOrdersUrl = "/GetOrders?customer=ISNULL"
+var getOrdersUrl = "/GetOrders?customer=NOTNULL"
+```
+
+While filtered for `== null` / `!= null`, (accidently) given values are ignored:
+
+```csharp
 filter.Add(x => x.Customer, FilterOperator.NotNull, "values", "are", "ignored");
 ```
 
-While filtering for `== null` / `!= null`, given values are ignored.
+### Filter to Date/Time
 
-## Filter Micro Syntax
+Date/Time values can be given in the form of a fault-tolerant [round-trip date/time pattern](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings#Roundtrip)
 
-The filter syntax consists of an operator shortcut (see [filter operators](#filter-operators) above) and a list of comma separated values. When a value contains a comma itself, it must be escaped by a backslash. The backslash itself is escaped by another backslash.
+```csharp
+// Date
+filter.Add(x => x.Created, ">2020/01/01");
+// Output: x => (x.Created > 01.01.2020 00:00:00)
 
-### Examples
+// Date/Time
+filter.Add(x => x.Created, ">2020-01-01-12-30");
+// Output: x => (x.Created > 01.01.2020 12:30:00)
+    
+// Partial values are supported too
+filter.Add(x => x.Created, "2020-01");
+// Output: x => ((x.Created >= 01.01.2020 00:00:00) AndAlso (x.Created < 01.02.2020 00:00:00))
+```
 
-| Syntax         | Description                                                  |
-| -------------- | ------------------------------------------------------------ |
-| Joe            | For `string` filtered value contains 'Joe', for `Enum` filtered value is 'Joe' |
-| ~Joe           | Filtered value contains 'Joe', even for `Enum`               |
-| ~1,2           | Filtered value contains 1 or 2                               |
-| =1\\,2         | Filtered value equals '1,2'                                  |
-| <4,>10         | Filtered value is less than 4 or greater than 10             |
-| ~Joe<br />~Doe | Filtered value contains Joe and Doe                          |
-| ISNULL         | Filtered value is `null`                                     |
-| >one-week-ago  | For `DateTime` filtered value is greater than one week ago, for others types see above |
-| 2020           | For `DateTime` filtered value is between 01/01/2020 and 12/31/2020, for others types see above |
-| 2020-01        | For `DateTime` filtered value is between 01/01/2020 and 1/31/2020, for others types see above |
+### Date/Time with Natural Language
 
-### Date/Time
+Thanks to [nChronic.Core](https://github.com/robbell/nChronic.Core) natural language for date/time is supported. 
 
-Date/Time values can be given as a representation in the form of a fault-tolerant [round-trip date/time pattern](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings#Roundtrip)
+```csharp
+// This
+filter.Add(x => x.Created, ">yesterday");
 
-`2020/01/01` works as well as `2020-01-01-12-30`
+// works as well as
+filter.Add(x => x.Created, ">3-months-ago-saturday-at-5-pm");
+```
 
-or thanks to [nChronic.Core](https://github.com/robbell/nChronic.Core) as natural language date string. More details can be found here: [https://github.com/mojombo/chronic](https://github.com/mojombo/chronic#simple)
+Details can be found here: [https://github.com/mojombo/chronic](https://github.com/mojombo/chronic#simple)
 
-`tomorrow` works as well as `3-months-ago-saturday-at-5-pm`
+### Enum
 
-Partial date strings are supported too
+`Enum` values can be filtered by it's name as well as by it's numeric representation.
 
-`2020-01` filters date between `2020-01-01` and `2020-01-31`.
+```csharp
+// Equals by name
+filter.Add(x => x.Gender, "=divers");
+// Output: x => (x.Gender == Divers)
 
-### Enumerations
+// Equals by numeric value
+filter.Add(x => x.Gender, "=1");
+// Output: x => (Convert(x.Gender, Int64) == 1)
 
-`Enum` values can be filtered by it's numeric representation as well as by it's name.
+// Contains, value is expanded
+filter.Add(x => x.Gender, "~male");
+// Output: x => ((x.Gender == Male) OrElse (x.Gender == Female))
 
-When filtering using `Contains` the filter values are expanded ("~male" filters for `male` as well as `female`).
+enum Gender { Divers, Male, Female }
+```
+
+### Numbers
+
+Filter for numbers support `contains` operator but may be less performant.
+
+```csharp
+// Equals
+filter.Add(x => x.Number, "1");
+// Output: x => (x.Number == 1)
+
+// Contains
+filter.Add(x => x.Number, "~1");
+// Output: x => x.Number.ToString().ToUpper().Contains("1")
+```
+
+### Nested Filters
+
+Nested objects are filtered directly (`x => x.Address.City == "Berlin"`)
+
+Nested lists are filtered using `.Any()` (`x => x.Items.Any(item => (item.Article == "Laptop"))`)
+
+```csharp
+// Create filters
+var addressFilter = new EntityFilter<Address>()
+    .Add(x => x.City, "==Berlin");
+
+var itemFilter = new EntityFilter<OrderItem>()
+    .Add(x => x.Article, "==Laptop");
+
+var orderFilter = new EntityFilter<Order>()
+    .AddNested(x => x.Address, addressFilter)
+    .AddNested(x => x.Items, itemFilter);
+
+// Print filter
+Console.WriteLine(orderFilter);
+// Output:
+// x => ((x.Address != null) AndAlso (x.Address.City == "Berlin"))
+// x => ((x.Items != null) AndAlso x.Items.Any(x => (x.Article == "Laptop")))
+
+public class Order
+{
+    public int Number { get; set; }
+    public string Customer { get; set; }
+    
+    public Address Address { get; set; }
+    public List<OrderItem> Items { get; set; }
+}
+
+public record Address(string Street, string City);
+public record OrderItem(int Position, string Article);
+```
+
+### Retrieve Syntax and Filter Values
+
+```csharp
+var filter = new EntityFilter<Order>()
+    .Add(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
+
+// Retrive filter syntax
+string filterSytax = filter.GetPropertyFilterSyntax(x => x.Customer);
+// Output: ~Joe,~Doe
+
+// Retrive filter values
+ValueFilter[] filterValues = filter.GetPropertyFilterValues(x => x.Customer);
+// Output:
+// [{
+//   "Operator": "Contains",
+//   "Value": "Joe",
+//   "IsEmpty": false
+// }, {
+//   "Operator": "Contains",
+//   "Value": "Doe",
+//   "IsEmpty": false
+// }]
+```
+
+### Syntax Examples
+
+| Syntax        | Description                                                  |
+| ------------- | ------------------------------------------------------------ |
+| Joe           | For `string` filtered value contains 'Joe', for `Enum` filtered value is 'Joe' |
+| ~Joe          | Filtered value contains 'Joe', even for `Enum`               |
+| ~1,~2         | Filtered value contains `1` or `2`                           |
+| =1\\,2        | Filtered value equals `1,2`                                  |
+| ~Joe,=Doe     | Filtered value contains `Joe` or equals `Doe`                |
+| <4,>10        | Filtered value is less than 4 or greater than 10             |
+| ISNULL        | Filtered value is `null`                                     |
+| >one-week-ago | For `DateTime` filtered value is greater than one week ago   |
+| 2020          | For `DateTime` filtered value is between 01/01/2020 and 12/31/2020 |
+| 2020-01       | For `DateTime` filtered value is between 01/01/2020 and 1/31/2020 |
 
 ## Configuration
 
@@ -283,8 +441,10 @@ using FS.FilterExpressionCreator.Models;
 
 // Parse filter values using german locale (e.g. "5,5" => 5.5f).
 var configuration = new FilterConfiguration { CultureInfo = new CultureInfo("de-DE") };
+
 // Explicit filter conversion
 var filterExpression = filter.CreateFilter(configuration);
+
 // Filter IEnumerable<T> by compiling filter expression
 var filteredOrders = orders.Where(filterExpression.Compile()).ToList();
 ```
@@ -297,195 +457,26 @@ An example can be found in the test code [InterceptorTests](https://github.com/f
 
 ## Default Configuration and Interception
 
-The class `EntityFilter` has static properties to provide a system-wide configuration and/or interceptors
+`EntityFilter` has static properties to provide a system-wide configuration and/or interceptors
 
 ```c#
-/// <summary>
-/// Gets or sets the default configuration. Can be used to set a system-wide configuration.
-/// </summary>
-public static FilterConfiguration DefaultConfiguration { get; set; } = new FilterConfiguration();
-
-/// <summary>
-/// Gets or sets the default interceptor. Can be used to set a system-wide interceptor.
-/// </summary>
-public static IPropertyFilterInterceptor DefaultInterceptor { get; set; }
-```
-
-# Using With MVC Controllers
-
-## Model Binding
-
-Model binding for MVC controllers is supported
-
-```csharp
-using FS.FilterExpressionCreator.Filters;
-
-[HttpGet]
-public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order, ...) { }
-```
-
-The above usage maps the query parameters `OrderNumber` and `OrderCustomer` to the filter parameter  `order`.
-
-## Filter Sets
-
-Multiple entity filters can be combined to a set of filters using the `EntityFilterSetAttribute`.
-
-Instead of
-
-```csharp
-using FS.FilterExpressionCreator.Filters;
-
-[HttpGet]
-public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order, EntityFilter<OrderItem> orderItem, ...) { }
-```
-
-you can write
-
-```csharp
-using FS.FilterExpressionCreator.Filters;
-using FS.FilterExpressionCreator.Abstractions.Attributes;
-
-[HttpGet]
-public Task<List<Order>> GetOrders([FromQuery] OrderFilter filter, ...)
-{ 
-    var order = filter.Order;
-    var orderItem = filter.OrderItem;
-}
-
-[EntityFilterSet]
-public class OrderFilter
+public class EntityFilter
 {
-	public EntityFilter<Order> Order { get; set; }
-	public EntityFilter<OrderItem> OrderItem { get; set; }
+	public static FilterConfiguration DefaultConfiguration { get; set; } = new FilterConfiguration();
+
+	public static IPropertyFilterInterceptor? DefaultInterceptor { get; set; }
 }
 ```
 
-## Register Model Binders
+## Support for Newtonsoft.Json
 
-```
-Package Manager : Install-Package Schick.FilterExpressionCreator.Mvc
-CLI : dotnet add package Schick.FilterExpressionCreator.Mvc
-```
-
-```csharp
-using FS.FilterExpressionCreator.Mvc.Extensions;
-```
-
-```csharp
-// Register required stuff by calling 'AddFilterExpressionSupport()' on IMvcBuilder instance
-services.AddControllers().AddFilterExpressionSupport();
-```
-
-## Configure Model Binding
-
-By default parameters for properties of filtered entity are named \<`Entity`\>\<`Property`\>.
-
-By default all public non-complex properties (`string`, `int`, `DateTime`, ...) are recognized.
-
-Parameters can be renamed or hidden using  `FilterAttribute` and `FilterEntityAttribute`. For the code below `OrderNumber` is not mapped anymore and `OrderCustomer` becomes `CustomerName`
-
-```csharp
-using FS.FilterExpressionCreator.Abstractions.Attributes;
-
-[FilterEntity(Prefix = "")]
-public class Order
-{
-    [Filter(Visible = false)]
-    public int Number { get; set; }
-
-    [Filter(Name = "CustomerName")]
-    public string Customer { get; set; }
-}
-```
-
-## Nested Objects/Lists
-
-Nested objects and lists are not implicit recognized as parameters. But you can simply combine them
-
-```csharp
-[HttpGet]
-public Task<List<Order>> GetOrders(
-    [FromQuery] EntityFilter<Order> order, 
-    [FromQuery] EntityFilter<Address> address
-)
-{
-    var filter = order.AddNested(x => x.Address, address);
-    // ...
-}
-```
-
-## Submit filter using HTTP query parameters
-
-With model binding from above enabled, REST requests can be filtered using query parameters
-
-```
-https://application/GetOrders?number=>4711&customerName=Joe
-```
-
-## Retrieve HTTP query parameters from filter
-
-Use the extension method `ToQueryParams()` to convert an `EntityFilter<TEntity>` back to it's HTTP query parameters
-
-```csharp
-var filter = new EntityFilter<Order>()
-    .Add(x => x.Number, FilterOperator.GreaterThan, 4711)
-    .Add(x => x.Customer, "Joe");
-
-var queryParams = filter.ToQueryParams();
-
-// Print query parameters
-System.Console.WriteLine(filter);
-// number=>4711&customerName=Joe
-```
-
-# Support for OpenAPI / Swashbuckle.AspNetCore
-
-Support for OpenAPI (formerly swagger) provided by Swashbuckle.AspNetCore is available.
-
-## Register OpenAPI Support
-
-``` 
-Package Manager : Install-Package Schick.FilterExpressionCreator.Swashbuckle
-CLI : dotnet add package Schick.FilterExpressionCreator.Swashbuckle
-```
-
-```csharp
-using FS.FilterExpressionCreator.Swashbuckle.Extensions;
-```
-
-```csharp
-services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("V1", new OpenApiInfo { Title = $"API", Version = "V1" });
-    // Register required stuff by calling 'AddFilterExpressionSupport()' on SwaggerGenOptions instance
-    options.AddFilterExpressionSupport();
-});
-```
-
-## Register XML Documentation
-
-To get descriptions for generated parameters from XML documentation, paths to documentation files can be provided
-
-```csharp
-services
-.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("V1", new OpenApiInfo { Title = $"API", Version = "V1" });
-    // Register required stuff including XML documentatioin files
-    var filterCreatorDoc = Path.Combine(AppContext.BaseDirectory, "FS.FilterExpressionCreator.xml");
-    options.AddFilterExpressionSupport(filterCreatorDoc);
-    options.IncludeXmlComments(filterCreatorDoc);
-});
-```
-
-# Support for Newtonsoft.Json
-
-By default `System.Text.Json` is used to serialize/convert Filter Expression Creator specific stuff. If you like to use Newtonsoft.Json instead you must register it
+By default `System.Text.Json` is used to serialize/convert Filter Expression Creator specific stuff. If you like to use Newtonsoft.Json you must register it:
 
 ```
 Package Manager : Install-Package Schick.FilterExpressionCreator.Mvc.Newtonsoft
 CLI : dotnet add package Schick.FilterExpressionCreator.Mvc.Newtonsoft
 ```
+
 ```csharp
 using FS.FilterExpressionCreator.Mvc.Newtonsoft;
 
@@ -494,9 +485,9 @@ using FS.FilterExpressionCreator.Mvc.Newtonsoft;
 services.AddControllers().AddFilterExpressionNewtonsoftSupport();
 ```
 
-# Advanced Scenarios
+## Advanced Scenarios
 
-## Deep Copy Filters
+### Deep Copy
 
 The `EntityFilter<T>` class supports deep cloning by calling the `Clone()` method
 
@@ -504,7 +495,7 @@ The `EntityFilter<T>` class supports deep cloning by calling the `Clone()` metho
 var copy = filter.Clone();
 ```
 
-## Cast Filters
+### Cast Filters
 
 Filters can be cast between entities, e.g. to convert them between DTOs and database models.
 
@@ -515,18 +506,18 @@ var dtoFilter = new EntityFilter<OrderDto>().Add(...);
 var orderFilter = dtoFilter.Cast<Order>();
 ```
 
-## Serialize Filters
+### Serialize Filters
 
-### Using `System.Text.Json`
+#### Using `System.Text.Json`
 
 Objects of type `EntityFilter<T>` can be serialized via `System.Text.Json.JsonSerializer` without further requirements
 
 ```csharp
 var json = JsonSerializer.Serialize(filter);
-filter = JsonSerializer.Deserialize<EntityFilter<EntityFilter<Order>>>(json);
+filter = JsonSerializer.Deserialize<EntityFilter<Order>>(json);
 ```
 
-### Using `Newtonsoft.Json`
+#### Using `Newtonsoft.Json`
 
 When using `Newtonsoft.Json` additional converters are required
 
@@ -534,6 +525,7 @@ When using `Newtonsoft.Json` additional converters are required
 Package Manager : Install-Package Schick.FilterExpressionCreator.Newtonsoft
 CLI : dotnet add package Schick.FilterExpressionCreator.Newtonsoft
 ```
+
 ```csharp
 using FS.FilterExpressionCreator.Newtonsoft.Extensions;
 
@@ -541,7 +533,7 @@ var json = JsonConvert.SerializeObject(filter, JsonConverterExtensions.Newtonsof
 filter = JsonConvert.DeserializeObject<EntityFilter<Order>>(json, JsonConverterExtensions.NewtonsoftConverters);
 ```
 
-## Combine Filter Expressions
+### Combine Filter Expressions
 
 To add custom checks to a filter either call `.Where(...)` again
 
@@ -552,6 +544,7 @@ var filteredOrders = orders
 ```
 
 or where this isn't possible combine filters with `CombineWithConditionalAnd`
+
 ```csharp
 using FS.FilterExpressionCreator.Abstractions.Extensions;
 
