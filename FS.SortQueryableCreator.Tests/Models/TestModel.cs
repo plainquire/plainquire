@@ -9,13 +9,13 @@ namespace FS.SortQueryableCreator.Tests.Models;
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class TestModel<TValue> : IComparable
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 
-    public TValue? Value { get; set; }
+    public TValue? Value { get; init; }
 
-    public TValue? Value2 { get; set; }
+    public TValue? Value2 { get; init; }
 
-    public TestModelNested<TValue>? NestedObject { get; set; }
+    public TestModelNested<TValue>? NestedObject { get; init; }
 
     [ExcludeFromCodeCoverage]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

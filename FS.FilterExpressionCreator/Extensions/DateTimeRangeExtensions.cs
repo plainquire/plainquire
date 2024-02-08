@@ -1,6 +1,7 @@
 ﻿using Chronic.Core;
 using FS.FilterExpressionCreator.Abstractions.Models;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -9,6 +10,7 @@ namespace FS.FilterExpressionCreator.Extensions;
 /// <summary>
 /// Extension methods for <see cref="DateTime"/>.
 /// </summary>
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Provided as library, can be used from outside")]
 public static class DateTimeRangeExtensions
 {
     /// <summary>

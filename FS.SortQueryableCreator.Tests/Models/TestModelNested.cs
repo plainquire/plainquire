@@ -3,13 +3,12 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace FS.SortQueryableCreator.Tests.Models;
 
-[SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
 [ExcludeFromCodeCoverage]
+[SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
+[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global", Justification = "Required by EF")]
 public class TestModelNested<TValue>
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 
-    public Guid ParentId { get; set; }
-
-    public required TValue? Value { get; set; }
+    public required TValue? Value { get; init; }
 }

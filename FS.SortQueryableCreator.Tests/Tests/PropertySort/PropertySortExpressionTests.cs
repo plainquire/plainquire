@@ -14,6 +14,7 @@ namespace FS.SortQueryableCreator.Tests.Tests.PropertySort;
 [TestClass, ExcludeFromCodeCoverage]
 public class PropertySortExpressionTests
 {
+    [SuppressMessage("ReSharper", "StringLiteralTypo")]
     private readonly TestModel<string>[] _testItems =
     [
         new TestModel<string> { Value = "Sorting", NestedObject = new TestModelNested<string> { Value = "Sorting" } },

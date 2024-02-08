@@ -8,12 +8,12 @@ namespace FS.FilterExpressionCreator.Tests.Models;
 [ExcludeFromCodeCoverage]
 public class FilterTestCase<TFilterValue, TModelValue> : FilterTestCase
 {
-    public FilterOperator FilterOperator { get; set; }
-    public TFilterValue[]? FilterValues { get; set; }
-    public string? FilterSyntax { get; set; }
-    public Exception? ExpectedException { get; set; }
-    public Func<TModelValue?, bool>? ExpectedTestItemsExpression { get; set; }
-    public FilterConfiguration? Configuration { get; set; }
+    public FilterOperator FilterOperator { get; private init; }
+    public TFilterValue[]? FilterValues { get; private init; }
+    public string? FilterSyntax { get; private init; }
+    public Exception? ExpectedException { get; private init; }
+    public Func<TModelValue?, bool>? ExpectedTestItemsExpression { get; private init; }
+    public FilterConfiguration? Configuration { get; }
 
     private FilterTestCase(int id, FilterConfiguration? configuration)
         : base(id)
@@ -55,7 +55,7 @@ public class FilterTestCase<TFilterValue, TModelValue> : FilterTestCase
 [ExcludeFromCodeCoverage]
 public class FilterTestCase
 {
-    public int Id { get; set; }
+    public int Id { get; }
 
     protected FilterTestCase(int id)
         => Id = id;

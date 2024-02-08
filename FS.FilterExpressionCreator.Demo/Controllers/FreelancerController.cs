@@ -6,6 +6,7 @@ using FS.FilterExpressionCreator.Demo.Models;
 using FS.FilterExpressionCreator.Demo.Models.FilterSets;
 using FS.FilterExpressionCreator.Demo.Routing;
 using FS.FilterExpressionCreator.Extensions;
+using FS.SortQueryableCreator.Extensions;
 using LinqToDB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,6 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using FS.SortQueryableCreator.Extensions;
 using Address = FS.FilterExpressionCreator.Demo.Models.Address;
 
 namespace FS.FilterExpressionCreator.Demo.Controllers;

@@ -1,5 +1,6 @@
 ﻿using FS.FilterExpressionCreator.Abstractions.Models;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Range = FS.FilterExpressionCreator.Abstractions.Models.Range;
 
 namespace FS.FilterExpressionCreator.Abstractions.Extensions;
@@ -7,6 +8,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions;
 /// <summary>
 /// Extension methods for <see cref="Range"/>.
 /// </summary>
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Class has library style and can be shared between projects")]
 public static class RangeExtensions
 {
     /// <summary>

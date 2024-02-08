@@ -53,9 +53,9 @@ public class FilterForDateTimeByValueTests : TestBase<DateTime>
     // ReSharper disable RedundantExplicitArrayCreation
     private static readonly object[] _testCases =
     [
-        FilterTestCase.Create(1100, FilterOperator.Default, new DateTime[] { new (2010, 01, 01) }, (DateTime x) => x >= new DateTime(2010, 01, 01) && x < new DateTime(2010, 01, 01, 0, 0, 1)),
-        FilterTestCase.Create(1101, FilterOperator.Default, new DateTime[] { new (2100, 01, 01) }, (DateTime _) => NONE),
-        FilterTestCase.Create(1102, FilterOperator.Default, new Range<DateTimeOffset>[] { new (new DateTime(2010, 06, 01), new DateTime(2010, 06, 15, 12, 31, 00)) }, (DateTime x) => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 15, 12, 31, 01)),
+        FilterTestCase.Create(1100, FilterOperator.Default, new DateTime[] { new(2010, 01, 01) }, (DateTime x) => x >= new DateTime(2010, 01, 01) && x < new DateTime(2010, 01, 01, 0, 0, 1)),
+        FilterTestCase.Create(1101, FilterOperator.Default, new DateTime[] { new(2100, 01, 01) }, (DateTime _) => NONE),
+        FilterTestCase.Create(1102, FilterOperator.Default, new Range<DateTimeOffset>[] { new(new DateTime(2010, 06, 01), new DateTime(2010, 06, 15, 12, 31, 00)) }, (DateTime x) => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 15, 12, 31, 01)),
 
         FilterTestCase.Create(1200, FilterOperator.Contains, new DateTime[] { new(2010, 01, 01) }, (DateTime x) => x >= new DateTime(2010, 01, 01) && x < new DateTime(2010, 01, 01, 0, 0, 1)),
         FilterTestCase.Create(1201, FilterOperator.Contains, new DateTime[] { new(2100, 01, 01) }, (DateTime _) => NONE),

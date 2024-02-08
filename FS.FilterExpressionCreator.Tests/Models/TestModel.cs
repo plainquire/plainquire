@@ -9,15 +9,15 @@ namespace FS.FilterExpressionCreator.Tests.Models;
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class TestModel<TValue>
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 
-    public TValue? ValueA { get; set; }
+    public TValue? ValueA { get; init; }
 
-    public TValue? ValueB { get; set; }
+    public TValue? ValueB { get; init; }
 
-    public TestModelNested? NestedObject { get; set; }
+    public TestModelNested? NestedObject { get; init; }
 
-    public List<TestModelNested>? NestedList { get; set; }
+    public List<TestModelNested>? NestedList { get; init; }
 
     [ExcludeFromCodeCoverage]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

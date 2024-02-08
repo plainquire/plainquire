@@ -27,7 +27,7 @@ internal static class Program
         await host.RunAsync();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args)
+    private static IHostBuilder CreateHostBuilder(string[] args)
         => CreateHostBuilderInternal(args, builder => builder.AddConfigurationFromEnvironment(args));
 
     private static void AddConfigurationFromEnvironment(this IConfigurationBuilder configurationBuilder, string[] commandLineArgs)

@@ -1,5 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using FS.SortQueryableCreator.Sorts;
+﻿using FS.SortQueryableCreator.Sorts;
+using System.Text.RegularExpressions;
 
 namespace FS.SortQueryableCreator.Extensions;
 

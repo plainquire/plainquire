@@ -8,22 +8,24 @@ namespace FS.FilterExpressionCreator.Demo.Models;
 /// Project.
 /// </summary>
 [SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by EF")]
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Created by reflection")]
 public class Project
 {
     /// <summary>
     /// Unique identifier.
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     /// <summary>
     /// Project title
     /// </summary>
-    public required string Title { get; set; }
+    public required string Title { get; init; }
 
     /// <summary>
     /// Description of the project.
     /// </summary>
-    public string? Description { get; set; }
+    public string? Description { get; init; }
 
     /// <summary>
     /// Identifier of the owning <see cref="Freelancer"/>.

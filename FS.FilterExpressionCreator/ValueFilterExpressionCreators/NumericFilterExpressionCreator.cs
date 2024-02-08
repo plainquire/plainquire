@@ -13,6 +13,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators;
 
 /// <inheritdoc cref="INumericFilterExpressionCreator"/>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
 public class NumericFilterExpressionCreator : DefaultFilterExpressionCreator, INumericFilterExpressionCreator
 {
     private static readonly List<Type> _primitiveNumberTypes = [typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal)];

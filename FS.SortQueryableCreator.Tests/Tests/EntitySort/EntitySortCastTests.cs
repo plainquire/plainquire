@@ -7,6 +7,8 @@ using System.Diagnostics.CodeAnalysis;
 namespace FS.SortQueryableCreator.Tests.Tests.EntitySort;
 
 [TestClass, ExcludeFromCodeCoverage]
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
+[SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntitySortCastTests
 {
     [TestMethod]
@@ -32,11 +34,11 @@ public class EntitySortCastTests
         castSort._propertySorts.Should().Contain(x => x.PropertyPath == "Address.Country.Name");
     }
 
-    public record PersonModel(string Name, AddressModel Address);
-    public record AddressModel(string Street, CountryModel Country);
-    public record CountryModel(string Name);
+    private record PersonModel(string Name, AddressModel Address);
+    private record AddressModel(string Street, CountryModel Country);
+    private record CountryModel(string Name);
 
-    public record PersonDto(string Name, string NameDtoOnly, AddressDto Address, AddressDto AddressDtoOnly);
-    public record AddressDto(string Street, string StreetDtoOnly, CountryDto Country);
-    public record CountryDto(string Name, string NameDtoOnly);
+    private record PersonDto(string Name, string NameDtoOnly, AddressDto Address, AddressDto AddressDtoOnly);
+    private record AddressDto(string Street, string StreetDtoOnly, CountryDto Country);
+    private record CountryDto(string Name, string NameDtoOnly);
 }

@@ -11,7 +11,7 @@ namespace FS.FilterExpressionCreator.Demo.Routing;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 internal class V1ApiController : ControllerAttribute, IApiBehaviorMetadata, IRouteTemplateProvider, IApiDescriptionGroupNameProvider
 {
-    public const string API_PREFIX = "api";
+    private const string API_PREFIX = "api";
     public const string API_VERSION = "v1";
 
     /// <inheritdoc />

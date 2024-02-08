@@ -3,6 +3,7 @@ using FS.SortQueryableCreator.Interfaces;
 using FS.SortQueryableCreator.Sorts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -12,6 +13,7 @@ namespace FS.SortQueryableCreator.Extensions;
 /// <summary>
 /// Extension methods for <see cref="IQueryable{TEntity}"/>
 /// </summary>
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
 public static class QueryableExtensions
 {
     ///<inheritdoc cref="OrderBy{TEntity}(IQueryable{TEntity}, EntitySort{TEntity}, SortConfiguration?, IPropertySortQueryableInterceptor?)"/>

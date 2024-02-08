@@ -18,27 +18,29 @@ using System.Linq;
 namespace FS.SortQueryableCreator.Tests.Tests.ModelBinder;
 
 [TestClass, ExcludeFromCodeCoverage]
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
+[SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntitySortModelBinderTests
 {
     [FilterEntity(Prefix = "", SortByParameter = "sortBy")]
-    public record PersonWithSortBy(
+    private record PersonWithSortBy(
         [property: Filter(Name = "Fullname")] string Name,
         [property: Filter] DateTime? Birthday,
         [property: Filter(Sortable = true)] Address Address
     );
 
     [FilterEntity(Prefix = "")]
-    public record PersonWithOrderBy(
+    private record PersonWithOrderBy(
         [property: Filter(Name = "Fullname")] string Name,
         [property: Filter] DateTime? Birthday,
         [property: Filter] Address Address
     );
 
     [FilterEntity]
-    public record Address(string Street, Country Country);
+    private record Address(string Street, Country Country);
 
     [FilterEntity]
-    public record Country(string Name);
+    private record Country(string Name);
 
     [TestMethod]
     public void WhenQueryParametersAreParsed_EntitySortMatchesGivenParameters()
@@ -68,7 +70,7 @@ public class EntitySortModelBinderTests
             .OrderBy(propertySort => propertySort.Position)
             .Select(propertySort => new { propertySort.PropertyPath, propertySort.Direction })
             .Should()
-            .ContainInOrder( 
+            .ContainInOrder(
                 new { PropertyPath = "Name", Direction = SortDirection.Ascending },
                 new { PropertyPath = "Birthday", Direction = SortDirection.Descending },
                 new { PropertyPath = "Address.Street.length", Direction = SortDirection.Descending }

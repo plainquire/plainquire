@@ -9,11 +9,11 @@ namespace FS.SortQueryableCreator.Tests.Models;
 [ExcludeFromCodeCoverage]
 public class SortTestcase<TModel> : SortTestcase
 {
-    public required Expression<Func<TModel, object?>> PropertySelector { get; set; }
+    public required Expression<Func<TModel, object?>> PropertySelector { get; init; }
 
-    public required Func<IQueryable<TModel>, IOrderedQueryable<TModel>> ExpectedSortFunc { get; set; }
+    public required Func<IQueryable<TModel>, IOrderedQueryable<TModel>> ExpectedSortFunc { get; init; }
 
-    public required SortDirection SortDirection { get; set; }
+    public required SortDirection SortDirection { get; init; }
 
     public static SortTestcase<TModel> Create(string? syntax = null, Expression<Func<TModel, object?>>? propertySelector = null, SortDirection? sortDirection = SortDirection.Ascending, Func<IQueryable<TModel>, IOrderedQueryable<TModel>>? expectedSortFunc = null)
         => new()
@@ -28,5 +28,5 @@ public class SortTestcase<TModel> : SortTestcase
 [ExcludeFromCodeCoverage]
 public abstract class SortTestcase
 {
-    public required string Syntax { get; set; }
+    public required string Syntax { get; init; }
 }

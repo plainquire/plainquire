@@ -31,12 +31,12 @@ public static class SortDirectionModifiers
     /// <summary>
     /// The default postfix for ascending sort order.
     /// </summary>
-    public static string DefaultAscendingPostfix = AscendingPostfixes[0];
+    public static readonly string DefaultAscendingPostfix = AscendingPostfixes[0];
 
     /// <summary>
     /// The default postfix for descending sort order.
     /// </summary>
-    public static string DefaultDescendingPostfix = DescendingPostfixes[0];
+    public static readonly string DefaultDescendingPostfix = DescendingPostfixes[0];
 
     /// <summary>
     /// Regex of allowed prefixes to define sort direction.   

@@ -1,6 +1,7 @@
 ﻿using FS.FilterExpressionCreator.Abstractions.ExpressionVisitors;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -10,6 +11,7 @@ namespace FS.FilterExpressionCreator.Abstractions.Extensions;
 /// <summary>
 /// Extension methods for <see cref="Expression"/>.
 /// </summary>
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Provided as library, can be used from outside")]
 public static class ExpressionExtensions
 {
     private static readonly ConstantExpression _emptyString = Expression.Constant(string.Empty, typeof(string));
@@ -186,7 +188,4 @@ public static class ExpressionExtensions
             return finalExpr;
         });
     }
-
-    private static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T?> enumerable) where T : class
-        => enumerable.OfType<T>();
 }

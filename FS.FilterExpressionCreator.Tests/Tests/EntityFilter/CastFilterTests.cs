@@ -68,13 +68,14 @@ public class CastFilterTests : TestBase
         public DateTime? Created { get; init; }
     }
 
-    // ReSharper disable UnassignedGetOnlyAutoProperty
-    public class Model
+    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
+    [SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty", Justification = "Accessed by reflection")]
+    [SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "Accessed by reflection")]
+    private class Model
     {
         public Guid Id { get; set; }
         public string? Name { get; }
         public int Age { get; }
         public DateTime Created { get; }
     }
-    // ReSharper restore UnassignedGetOnlyAutoProperty
 }

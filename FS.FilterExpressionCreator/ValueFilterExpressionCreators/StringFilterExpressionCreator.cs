@@ -12,6 +12,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators;
 
 /// <inheritdoc cref="IStringFilterExpressionCreator"/>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
 public class StringFilterExpressionCreator : DefaultFilterExpressionCreator, IStringFilterExpressionCreator
 {
     /// <inheritdoc />

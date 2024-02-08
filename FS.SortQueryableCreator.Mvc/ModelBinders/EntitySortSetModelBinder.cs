@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using FS.SortQueryableCreator.Sorts;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using FS.SortQueryableCreator.Sorts;
 
 namespace FS.SortQueryableCreator.Mvc.ModelBinders;
 

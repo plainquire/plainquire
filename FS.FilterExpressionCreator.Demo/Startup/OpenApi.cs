@@ -14,8 +14,8 @@ namespace FS.FilterExpressionCreator.Demo.Startup;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal static class OpenApi
 {
-    public const string OPEN_API_UI_ROUTE = "openapi/";
-    public const string OPEN_API_SPEC = "openapi.json";
+    private const string OPEN_API_UI_ROUTE = "openapi/";
+    private const string OPEN_API_SPEC = "openapi.json";
 
     internal static IApplicationBuilder RegisterOpenApiRoutes(this IApplicationBuilder applicationBuilder)
         => applicationBuilder

@@ -73,7 +73,7 @@ public class InterceptorTests
             .Add(x => x.NestedObject, SortDirection.Ascending);
 
         SortQueryableCreator.Sorts.EntitySort.DefaultInterceptor = new NestedModelByValueInterceptor();
-        var sortedItems = sortFunc(testItems, entitySort, null);
+        var sortedItems = sortFunc(testItems, entitySort);
         sortedItems.Should().ContainInOrder(testItems[1], testItems[0], testItems[3], testItems[2]);
     }
 

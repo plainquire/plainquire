@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -19,6 +20,7 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters;
 /// Implements <see cref="IOperationFilter" />
 /// </summary>
 /// <seealso cref="IOperationFilter" />
+[SuppressMessage("ReSharper", "MemberCanBeProtected.Global", Justification = "Instantiated via reflection.")]
 public class EntityFilterParameterReplacer : IOperationFilter
 {
     private const string ENTITY_EXTENSION_PREFIX = "x-entity-filter-";

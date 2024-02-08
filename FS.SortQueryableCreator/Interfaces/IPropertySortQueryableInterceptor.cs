@@ -1,5 +1,6 @@
 ﻿using FS.SortQueryableCreator.Abstractions.Configurations;
 using FS.SortQueryableCreator.Sorts;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace FS.SortQueryableCreator.Interfaces;
@@ -18,6 +19,7 @@ public interface IPropertySortQueryableInterceptor
     /// <param name="sort">The sort order.</param>
     /// <param name="configuration">The active sort order configuration</param>
     /// <returns>An <see cref="IOrderedEnumerable{TEntity}"/> with applied sort order or <c>null</c> to use the default sort order.</returns>
+    [SuppressMessage("ReSharper", "ParameterTypeCanBeEnumerable.Global", Justification = "Required for functionallity.")]
     public IOrderedQueryable<TEntity>? OrderBy<TEntity>(IQueryable<TEntity> source, PropertySort sort, SortConfiguration? configuration = null);
 
     /// <summary>
@@ -28,5 +30,6 @@ public interface IPropertySortQueryableInterceptor
     /// <param name="sort">The sort order.</param>
     /// <param name="configuration">The active sort order configuration</param>
     /// <returns>An <see cref="IOrderedEnumerable{TEntity}"/> with applied sort order or <c>null</c> to use the default sort order.</returns>
+    [SuppressMessage("ReSharper", "ParameterTypeCanBeEnumerable.Global", Justification = "Required for functionallity.")]
     public IOrderedQueryable<TEntity>? ThenBy<TEntity>(IOrderedQueryable<TEntity> source, PropertySort sort, SortConfiguration? configuration = null);
 }

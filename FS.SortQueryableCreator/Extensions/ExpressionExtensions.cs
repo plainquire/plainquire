@@ -1,7 +1,7 @@
-﻿using System;
+﻿using FS.SortQueryableCreator.Sorts;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using FS.SortQueryableCreator.Sorts;
 
 namespace FS.SortQueryableCreator.Extensions;
 
@@ -43,7 +43,7 @@ internal static class ExpressionExtensions
         return string.Join('.', properties);
     }
 
-    public static Expression UnboxBody<TEntity, TProperty>(this Expression<Func<TEntity, TProperty>> property)
+    private static Expression UnboxBody<TEntity, TProperty>(this Expression<Func<TEntity, TProperty>> property)
     {
         if (property.Body is UnaryExpression { NodeType: ExpressionType.Convert } convert)
             return convert.Operand;

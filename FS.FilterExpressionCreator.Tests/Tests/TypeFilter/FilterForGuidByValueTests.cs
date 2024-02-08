@@ -46,9 +46,9 @@ public class FilterForGuidByValueTests : TestBase<Guid>
 
         FilterTestCase.Create(1900, FilterOperator.GreaterThanOrEqual, [Guid.Empty], new FilterExpressionCreationException("Filter operator 'GreaterThanOrEqual' not allowed for property type 'System.Guid'")),
 
-        FilterTestCase.Create(2000, FilterOperator.IsNull,  new Guid[] { default }, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.Guid'")),
+        FilterTestCase.Create(2000, FilterOperator.IsNull, new Guid[] { default }, new FilterExpressionCreationException("Filter operator 'IsNull' not allowed for property type 'System.Guid'")),
 
-        FilterTestCase.Create(2100, FilterOperator.NotNull,  new Guid[] { default }, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Guid'"))
+        FilterTestCase.Create(2100, FilterOperator.NotNull, new Guid[] { default }, new FilterExpressionCreationException("Filter operator 'NotNull' not allowed for property type 'System.Guid'"))
     ];
     // ReSharper restore RedundantExplicitArrayCreation
 }

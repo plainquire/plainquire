@@ -1,8 +1,8 @@
-﻿using System;
+﻿using FS.SortQueryableCreator.Enums;
+using System;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using FS.SortQueryableCreator.Enums;
 
 namespace FS.SortQueryableCreator.Sorts;
 

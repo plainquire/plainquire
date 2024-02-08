@@ -33,8 +33,7 @@ public class TestDbContext<TValue> : DbContext
             .Entity<TestModel<TValue>>()
             .HasOne(x => x.NestedObject)
             .WithOne()
-            .HasPrincipalKey<TestModel<TValue>>(x => x.Id)
-            .HasForeignKey<TestModelNested<TValue>>(x => x.ParentId);
+            .HasPrincipalKey<TestModel<TValue>>(x => x.Id);
     }
 
     public override void Dispose()

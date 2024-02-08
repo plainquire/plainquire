@@ -1,5 +1,6 @@
 ﻿using FS.FilterExpressionCreator.Abstractions.Attributes;
 using FS.FilterExpressionCreator.Filters;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Demo.Models.FilterSets;
 
@@ -7,6 +8,7 @@ namespace FS.FilterExpressionCreator.Demo.Models.FilterSets;
 /// Common filter set for <see cref="Freelancer"/> and <see cref="Project"/>
 /// </summary>
 [EntityFilterSet]
+[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global", Justification = "Required by ModelBinders")]
 public class FreelancerFilterSet
 {
     /// <summary>

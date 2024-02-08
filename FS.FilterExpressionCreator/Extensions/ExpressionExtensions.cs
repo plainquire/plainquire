@@ -25,7 +25,7 @@ internal static class ExpressionExtensions
         return memberExpression.Member.Name;
     }
 
-    public static Expression UnboxBody<TEntity, TProperty>(this Expression<Func<TEntity, TProperty>> property)
+    private static Expression UnboxBody<TEntity, TProperty>(this Expression<Func<TEntity, TProperty>> property)
     {
         if (property.Body is UnaryExpression { NodeType: ExpressionType.Convert } convert)
             return convert.Operand;

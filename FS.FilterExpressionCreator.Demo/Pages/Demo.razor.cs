@@ -11,7 +11,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FS.FilterExpressionCreator.Abstractions.Extensions;
 
 namespace FS.FilterExpressionCreator.Demo.Pages;
 
@@ -24,7 +23,7 @@ public class DemoPage : ComponentBase
 
     protected FreelancerQueryModel QueryModel = new();
     protected FreelancerDto QueryResult = new();
-    protected NumberFormatInfo NumberFormat;
+    protected readonly NumberFormatInfo NumberFormat;
 
     public DemoPage()
     {
@@ -108,7 +107,7 @@ public class DemoPage : ComponentBase
             if (!response.IsSuccessStatusCode)
             {
                 var message = await response.Content.ReadAsStringAsync();
-                QueryResult = new FreelancerDto() { ErrorMessage = message };
+                QueryResult = new FreelancerDto { ErrorMessage = message };
                 return;
             }
 
@@ -139,9 +138,9 @@ public class DemoPage : ComponentBase
 
     protected class FreelancerQueryModel
     {
-        public FreelancerFilter Filter { get; set; } = new();
+        public FreelancerFilter Filter { get; private set; } = new();
 
-        public string[] Sort { get; set; } = ["", "", "", ""];
+        public string[] Sort { get; private set; } = ["", "", "", ""];
 
         public string? Seed { get; set; }
 
@@ -183,7 +182,7 @@ public class DemoPage : ComponentBase
             return query;
         }
 
-        public void SetFilterByName(string propertyName, string? value)
+        private void SetFilterByName(string propertyName, string? value)
             => Filter.GetType().GetProperty(propertyName)?.SetMethod?.Invoke(Filter, [value]);
 
         public void Clear()

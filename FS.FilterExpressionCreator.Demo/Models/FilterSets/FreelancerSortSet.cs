@@ -1,5 +1,6 @@
 ﻿using FS.FilterExpressionCreator.Abstractions.Attributes;
 using FS.SortQueryableCreator.Sorts;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Demo.Models.FilterSets;
 
@@ -7,6 +8,7 @@ namespace FS.FilterExpressionCreator.Demo.Models.FilterSets;
 /// Common sort order set for <see cref="Freelancer"/> and <see cref="Address"/>
 /// </summary>
 [EntitySortSet]
+[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global", Justification = "Required by ModelBinders")]
 public class FreelancerSortSet
 {
     /// <summary>

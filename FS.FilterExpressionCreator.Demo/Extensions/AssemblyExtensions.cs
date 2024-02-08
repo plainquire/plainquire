@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -8,6 +9,8 @@ namespace FS.FilterExpressionCreator.Demo.Extensions;
 /// <summary>
 /// Extensions methods for type <see cref="Assembly"></see>
 /// </summary>
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Class has library style and can be shared between projects")]
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Class has library style and can be shared between projects")]
 public static class AssemblyExtensions
 {
     #region Path

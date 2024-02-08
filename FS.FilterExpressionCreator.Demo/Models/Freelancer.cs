@@ -8,53 +8,53 @@ namespace FS.FilterExpressionCreator.Demo.Models;
 /// <summary>
 /// Freelancer.
 /// </summary>
-[SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
 [FilterEntity(Prefix = "")]
+[SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
 public class Freelancer
 {
     /// <summary>
     /// Unique identifier.
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     /// <summary>
     /// The seed this freelancer belongs too.
     /// </summary>
     [Filter(Filterable = false, Sortable = false)]
-    public int Seed { get; set; }
+    public int Seed { get; init; }
 
     /// <summary>
     /// First name.
     /// </summary>
-    public required string FirstName { get; set; }
+    public required string FirstName { get; init; }
 
     /// <summary>
     /// Last name.
     /// </summary>
-    public required string LastName { get; set; }
+    public required string LastName { get; init; }
 
     /// <summary>
     /// Gender.
     /// </summary>
-    public Gender? Gender { get; set; }
+    public Gender? Gender { get; init; }
 
     /// <summary>
     /// Birthday.
     /// </summary>
-    public DateTime? Birthday { get; set; }
+    public DateTime? Birthday { get; init; }
 
     /// <summary>
     /// Hourly rate.
     /// </summary>
-    public double HourlyRate { get; set; }
+    public double HourlyRate { get; init; }
 
     /// <summary>
     /// Address.
     /// </summary>
-    public Address Address { get; set; } = new();
+    public Address Address { get; init; } = new();
 
     /// <summary>
     /// The projects done.
     /// </summary>
-    public List<Project> Projects { get; set; } = [];
+    public List<Project> Projects { get; init; } = [];
 }

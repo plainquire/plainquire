@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace FS.FilterExpressionCreator.Swashbuckle.Filters;
@@ -13,6 +14,7 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters;
 /// Implements <see cref="IOperationFilter" />
 /// </summary>
 /// <seealso cref="IOperationFilter" />
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Instantiated via reflection.")]
 public class EntityFilterSetParameterReplacer : EntityFilterParameterReplacer, IOperationFilter
 {
     /// <inheritdoc />

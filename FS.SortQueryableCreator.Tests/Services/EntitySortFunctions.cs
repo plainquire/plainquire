@@ -34,24 +34,24 @@ public static class EntitySortFunctions
             .MakeGenericMethod(entityType)
             .Invoke(null, [])!;
 
-    public static List<TEntity> SortDirectByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> SortDirectByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
         => testItems.OrderBy(sort, configuration, interceptor).ToList();
 
-    public static List<TEntity> SortNetCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> SortNetCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
         => testItems.OrderBy(sort.Clone(), configuration, interceptor).ToList();
 
-    public static List<TEntity> SortNewtonCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> SortNewtonCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
         => testItems.OrderBy(sort.NewtonsoftClone(), configuration, interceptor).ToList();
 
-    public static List<TEntity> SortDirectByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> SortDirectByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
         where TEntity : class
         => testItems.OrderByEF(sort, configuration, interceptor);
 
-    public static List<TEntity> SortNetCloneByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> SortNetCloneByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
         where TEntity : class
         => testItems.OrderByEF(sort.Clone(), configuration, interceptor);
 
-    public static List<TEntity> SortNewtonCloneByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> SortNewtonCloneByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
         where TEntity : class
         => testItems.OrderByEF(sort.NewtonsoftClone(), configuration, interceptor);
 

@@ -12,7 +12,7 @@ public static class JsonConverterExtensions
     /// <summary>
     /// List of Newtonsoft JSON converters required to serialize/deserialize filter expression related classes.
     /// </summary>
-    public static JsonConverter[] NewtonsoftConverters =
+    public static readonly JsonConverter[] NewtonsoftConverters =
     [
         new EntitySortConverter(),
         new PropertySortConverter()

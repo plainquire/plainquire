@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace FS.FilterExpressionCreator.Filters;
@@ -9,7 +7,7 @@ namespace FS.FilterExpressionCreator.Filters;
 /// <summary>
 /// Factory to create <see cref="ValueFilter"/> for all values from filterSyntax.
 /// </summary>
-public class ValueFiltersFactory
+public static class ValueFiltersFactory
 {
     /// <summary>
     /// Create <see cref="ValueFilter"/> from filterSyntax.

@@ -1,8 +1,11 @@
-﻿namespace FS.FilterExpressionCreator.Demo.Models;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace FS.FilterExpressionCreator.Demo.Models;
 
 /// <summary>
 /// Gender enum
 /// </summary>
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Accessed by reflection")]
 public enum Gender
 {
     /// <summary>

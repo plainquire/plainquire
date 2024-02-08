@@ -61,7 +61,7 @@ public static class TestMethods
         return JsonConvert.DeserializeObject<EntityFilter<TEntity>>(json, serializerSettings)!;
     }
 
-    private static List<TEntity> FilterByEF<TEntity>(this ICollection<TEntity> testItems, Expression<Func<TEntity, bool>> predicate)
+    private static List<TEntity> FilterByEF<TEntity>(this IEnumerable<TEntity> testItems, Expression<Func<TEntity, bool>> predicate)
         where TEntity : class
     {
         using var dbContext = new TestDbContext<TEntity>();

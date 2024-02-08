@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using FS.SortQueryableCreator.Extensions;
-using FS.SortQueryableCreator.Sorts;
 using FS.SortQueryableCreator.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;

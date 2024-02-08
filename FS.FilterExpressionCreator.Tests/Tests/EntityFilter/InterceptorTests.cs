@@ -73,7 +73,7 @@ public class InterceptorTests : TestBase
         Filters.EntityFilter.DefaultInterceptor = null;
     }
 
-    public class FilterStringsCaseInsensitiveInterceptor : IPropertyFilterInterceptor
+    private class FilterStringsCaseInsensitiveInterceptor : IPropertyFilterInterceptor
     {
         public Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, Filters.ValueFilter[] filters, FilterConfiguration configuration)
         {

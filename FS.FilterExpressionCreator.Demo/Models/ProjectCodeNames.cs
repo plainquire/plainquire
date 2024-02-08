@@ -1408,7 +1408,7 @@ public static class ProjectCodeNames
     /// <summary>
     /// Project code names
     /// </summary>
-    public static List<string> CodeNames = _codeNames.Select(x => x.CodeName).ToList();
+    public static readonly List<string> CodeNames = _codeNames.Select(x => x.CodeName).ToList();
 
     /// <summary>
     /// Gets the description for a code name.
