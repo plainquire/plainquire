@@ -1,3 +1,9 @@
+# 4.6.1
+
+## Fixes
+
+Version 4.6.0 is broken because the tag was created on an incorrect commit.
+
 # 4.6.0
 
 ## New Features
