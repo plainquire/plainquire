@@ -2,6 +2,7 @@
 using FS.FilterExpressionCreator.Swashbuckle.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 
 namespace FS.FilterExpressionCreator.Swashbuckle.Extensions;
@@ -23,4 +24,9 @@ public static class SwaggerGenOptionsExtensions
         options.OperationFilter<EntityFilterSetParameterReplacer>(new List<string>(xmlDocumentationFilePaths));
         return options;
     }
+
+    /// <inheritdoc cref="AddFilterExpressionSupport(SwaggerGenOptions, string[])" />
+    [Obsolete("Use AddFilterExpressionSupport(SwaggerGenOptions, string[]) instead.")]
+    public static SwaggerGenOptions AddFilterExpressionsSupport(this SwaggerGenOptions options, params string[] xmlDocumentationFilePaths)
+        => AddFilterExpressionSupport(options, xmlDocumentationFilePaths);
 }

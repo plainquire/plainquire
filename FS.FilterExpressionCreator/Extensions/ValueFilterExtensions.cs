@@ -13,6 +13,11 @@ namespace FS.FilterExpressionCreator.Extensions;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public static class ValueFilterExtensions
 {
+    /// <inheritdoc cref="ValueFiltersFactory.Create"/>
+    [Obsolete("Use ValueFiltersFactory.Create instead")]
+    public static ValueFilter[] Create(string filterSyntax)
+        => ValueFiltersFactory.Create(filterSyntax);
+
     /// <summary>
     /// Humanizes the filter syntax.
     /// </summary>

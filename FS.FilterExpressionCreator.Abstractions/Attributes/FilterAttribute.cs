@@ -22,6 +22,10 @@ public class FilterAttribute : Attribute
     /// </summary>
     public bool Filterable { get; set; } = true;
 
+    /// <inheritdoc cref="Filterable" />
+    [Obsolete("Use Filterable instead.")]
+    public bool Visible { get => Filterable; set => Filterable = value; }
+
     /// <summary>
     /// Set to <c>false</c> to disable sorting for this property.
     /// </summary>

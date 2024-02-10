@@ -1,6 +1,7 @@
 ﻿using FS.FilterExpressionCreator.Mvc.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace FS.FilterExpressionCreator.Mvc.Extensions;
 
@@ -24,4 +25,9 @@ public static class MvcBuilderExtensions
 
         return mvcBuilder;
     }
+
+    /// <inheritdoc cref="AddFilterExpressionSupport(IMvcBuilder)" />
+    [Obsolete("Use AddFilterExpressionSupport(IMvcBuilder) instead.")]
+    public static IMvcBuilder AddFilterExpressionsSupport(this IMvcBuilder mvcBuilder)
+        => AddFilterExpressionSupport(mvcBuilder);
 }
