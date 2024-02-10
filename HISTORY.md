@@ -1,22 +1,8 @@
-# 5.0.0
+# 4.6.0
 
 ## New Features
 
-...
-
-## Breaking Changes
-
-Obsolete methods removed from `EntityFilter.cs`
-
-`FilterAttribute.Visible` renamed to `FilterAttribute.Filterable`
-
-`AddFilterExpressionsSupport` renamed to `AddFilterExpressionSupport`
-
-`AddFilterExpressionsNewtonsoftSupport` renamed to `AddFilterExpressionNewtonsoftSupport`
-
-`FilterConfiguration` moved to namespace `FS.FilterExpressionCreator.Abstractions.Configurations`
-
-`ValueFilterExtensions.Create(...)` renamed to `ValueFiltersFactory.Create(...)`
+Support for ordering added (Packages `Schick.SortQueryableCreator.*`)
 
 ## Changes
 
