@@ -4,6 +4,7 @@
   <Import Project="../Build/build_xml_documentation.props" />
   
   <ItemGroup>
+    <PackageReference Include="Plainquire.Sort" Version="5.0.0" />
     <PackageReference Include="System.Text.Json" Version="6.0.9" />
   </ItemGroup>
   

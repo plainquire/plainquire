@@ -8,6 +8,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Plainquire.Sort.Mvc" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FS.FilterExpressionCreator.Abstractions\FS.FilterExpressionCreator.Abstractions.csproj" />
     <ProjectReference Include="..\FS.SortQueryableCreator\FS.SortQueryableCreator.csproj" />
   </ItemGroup>

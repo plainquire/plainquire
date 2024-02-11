@@ -2,5 +2,9 @@
   <Import Project="../Build/build_standard.props" />
   <Import Project="../Build/build_version.props" />
   <Import Project="../Build/build_xml_documentation.props" />
+  
+  <ItemGroup>
+    <PackageReference Include="Plainquire.Sort.Abstractions" Version="5.0.0" />
+  </ItemGroup>
 
 </Project>
