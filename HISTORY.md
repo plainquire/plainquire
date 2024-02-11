@@ -14,9 +14,11 @@ Obsolete methods removed from `EntityFilter.cs`
 
 `AddFilterExpressionsNewtonsoftSupport` renamed to `AddFilterExpressionNewtonsoftSupport`
 
-`FilterConfiguration` moved to namespace `FS.FilterExpressionCreator.Abstractions.Configurations`
+`FilterConfiguration` moved to namespace `Schick.Plainquire.Filter.Abstractions.Configurations`
 
 `ValueFilterExtensions.Create(...)` renamed to `ValueFiltersFactory.Create(...)`
+
+`*FilterExpressionCreator*` classes and namespaces renamed to `*FilterExpression*`
 
 # 4.6.1
 
@@ -100,7 +102,7 @@ Creation of union added to `Range<TType>` extension methods
 
 ## Changes
 
-Abstractions, extensions and attributes moved to NuGet package `FS.FilterExpressionCreator.Abstractions`
+Abstractions, extensions and attributes moved to NuGet package `Schick.Plainquire.Filter.Abstractions`
 
 # 3.0.0
 

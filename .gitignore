@@ -296,11 +296,11 @@ __pycache__/
 
 # User added stuff
 /Assets
-/FS.FilterExpressionCreator.Demo/FS.FilterExpressionCreator.Demo.config.Development.json
-/FS.FilterExpressionCreator.Demo/FS.FilterExpressionCreator.Demo.xml
-/FS.FilterExpressionCreator.Demo/Freelancer.sqlite
-/FS.FilterExpressionCreator.Demo/Freelancer.sqlite-*
-/FS.FilterExpressionCreator.Mvc/FS.FilterExpressionCreator.Mvc.xml
-/FS.FilterExpressionCreator.Newtonsoft/FS.FilterExpressionCreator.Newtonsoft.xml
-/FS.FilterExpressionCreator.Swashbuckle/FS.FilterExpressionCreator.Swashbuckle.xml
-/FS.FilterExpressionCreator/FS.FilterExpressionCreator.xml
+/Schick.Plainquire.Filter.Demo/Schick.Plainquire.Filter.Demo.config.Development.json
+/Schick.Plainquire.Filter.Demo/Schick.Plainquire.Filter.Demo.xml
+/Schick.Plainquire.Filter.Demo/Freelancer.sqlite
+/Schick.Plainquire.Filter.Demo/Freelancer.sqlite-*
+/Schick.Plainquire.Filter.Mvc/Schick.Plainquire.Filter.Mvc.xml
+/Schick.Plainquire.Filter.Newtonsoft/Schick.Plainquire.Filter.Newtonsoft.xml
+/Schick.Plainquire.Filter.Swashbuckle/Schick.Plainquire.Filter.Swashbuckle.xml
+/Schick.Plainquire.Filter/Schick.Plainquire.Filter.xml

@@ -1,0 +1,127 @@
+﻿using FluentAssertions;
+using Schick.Plainquire.Sort.Sorts;
+using Schick.Plainquire.Sort.Tests.Models;
+using Schick.Plainquire.Sort.Tests.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+
+namespace Schick.Plainquire.Sort.Tests.Tests.PropertySort;
+
+[TestClass, ExcludeFromCodeCoverage]
+public class PropertySortSyntaxTests
+{
+    [SuppressMessage("ReSharper", "StringLiteralTypo")]
+    private readonly TestModel<string>[] _testItems =
+    [
+        new TestModel<string> { Value = "Sorting", NestedObject = new TestModelNested<string> { Value = "Sorting" } },
+        new TestModel<string> { Value = "Třídění", NestedObject = new TestModelNested<string> { Value = "Třídění" } },
+        new TestModel<string> { Value = "Razvrščanje", NestedObject = new TestModelNested<string> { Value = "Razvrščanje" } },
+        new TestModel<string> { Value = "Sortierung", NestedObject = new TestModelNested<string> { Value = "Sortierung" } },
+        new TestModel<string> { Value = "100", NestedObject = new TestModelNested<string> { Value = "100" } },
+        new TestModel<string> { Value = "10", NestedObject = new TestModelNested<string> { Value = "10" } },
+        new TestModel<string> { Value = "20", NestedObject = new TestModelNested<string> { Value = "20" } },
+        new TestModel<string> { Value = "ソート", NestedObject = new TestModelNested<string> { Value = "ソート" } },
+        new TestModel<string> { Value = "정렬", NestedObject = new TestModelNested<string> { Value = "정렬" } },
+        new TestModel<string> { Value = "分类", NestedObject = new TestModelNested<string> { Value = "分类" } },
+        new TestModel<string> { Value = "Über", NestedObject = new TestModelNested<string> { Value = "Über" } },
+        new TestModel<string> { Value = "Unter", NestedObject = new TestModelNested<string> { Value = "Unter" } },
+    ];
+
+    private static readonly SortTestcase<TestModel<string>>[] _ownPropertyTestCases = CreateOwnPropertyTestcases<string>();
+    private static readonly SortTestcase<TestModel<string>>[] _navigationPropertyTestCases = CreateNavigationPropertyTestcases<string>();
+
+    [DataTestMethod]
+    [SortTestCaseDataSource(nameof(_ownPropertyTestCases))]
+    public void WhenPropertySortIsCreatedByOwnPropertySyntax_EntitiesSortedAsExpected(SortTestcase<TestModel<string>> testCase, EntitySortFunction<TestModel<string>> sortFunc)
+    {
+        var expectedTestItems = testCase.ExpectedSortFunc(_testItems.AsQueryable()).ToList();
+
+        var entitySort = new EntitySort<TestModel<string>>()
+            .Add(testCase.Syntax);
+
+        var sortedTestItems = sortFunc(_testItems, entitySort);
+
+        sortedTestItems.Should().Equal(expectedTestItems);
+    }
+
+    [DataTestMethod]
+    [SortTestCaseDataSource(nameof(_navigationPropertyTestCases))]
+    public void WhenPropertySortIsCreatedByNavigationPropertySyntax_EntitiesSortedAsExpected(SortTestcase<TestModel<string>> testCase, EntitySortFunction<TestModel<string>> sortFunc)
+    {
+        var expectedTestItems = testCase.ExpectedSortFunc(_testItems.AsQueryable()).ToList();
+
+        var entitySort = new EntitySort<TestModel<string>>()
+            .Add(testCase.Syntax);
+
+        var sortedTestItems = sortFunc(_testItems, entitySort);
+
+        sortedTestItems.Should().Equal(expectedTestItems);
+    }
+
+    private static SortTestcase<TestModel<TValue>>[] CreateOwnPropertyTestcases<TValue>()
+    {
+        var ascendingPrefixTestcases = SortDirectionModifiers.AscendingPrefixes
+            .Select(selector: ascPrefix => SortTestcase<TestModel<TValue>>.Create(
+                syntax: $"{ascPrefix}Value",
+                expectedSortFunc: query => query.OrderBy(keySelector: model => model.Value)
+            ));
+
+        var descendingPrefixTestcases = SortDirectionModifiers.DescendingPrefixes
+            .Select(selector: descPrefix => SortTestcase<TestModel<TValue>>.Create(
+                syntax: $"{descPrefix}Value",
+                expectedSortFunc: query => query.OrderByDescending(keySelector: model => model.Value)
+            ));
+
+        var ascendingPostfixTestcases = SortDirectionModifiers.AscendingPostfixes
+            .Select(selector: ascPostfix => SortTestcase<TestModel<TValue>>.Create(
+                syntax: $"Value{ascPostfix}",
+                expectedSortFunc: query => query.OrderBy(keySelector: model => model.Value)
+            ));
+
+        var descendingPostfixTestcases = SortDirectionModifiers.DescendingPostfixes
+            .Select(selector: descPostfix => SortTestcase<TestModel<TValue>>.Create(
+                syntax: $"Value{descPostfix}",
+                expectedSortFunc: query => query.OrderByDescending(keySelector: model => model.Value)
+            ));
+
+        return ascendingPrefixTestcases
+            .Concat(descendingPrefixTestcases)
+            .Concat(ascendingPostfixTestcases)
+            .Concat(descendingPostfixTestcases)
+            .ToArray();
+    }
+
+    private static SortTestcase<TestModel<TValue>>[] CreateNavigationPropertyTestcases<TValue>()
+    {
+        var ascendingPrefixTestcases = SortDirectionModifiers.AscendingPrefixes
+            .Select(selector: ascPrefix => SortTestcase<TestModel<TValue>>.Create(
+                syntax: $"{ascPrefix}NestedObject.Value",
+                expectedSortFunc: query => query.OrderBy(keySelector: model => model.NestedObject!.Value)
+            ));
+
+        var descendingPrefixTestcases = SortDirectionModifiers.DescendingPrefixes
+            .Select(selector: descPrefix => SortTestcase<TestModel<TValue>>.Create(
+                syntax: $"{descPrefix}NestedObject.Value",
+                expectedSortFunc: query => query.OrderByDescending(keySelector: model => model.NestedObject!.Value)
+            ));
+
+        var ascendingPostfixTestcases = SortDirectionModifiers.AscendingPostfixes
+            .Select(selector: ascPostfix => SortTestcase<TestModel<TValue>>.Create(
+                syntax: $"NestedObject.Value{ascPostfix}",
+                expectedSortFunc: query => query.OrderBy(keySelector: model => model.NestedObject!.Value)
+            ));
+
+        var descendingPostfixTestcases = SortDirectionModifiers.DescendingPostfixes
+            .Select(selector: descPostfix => SortTestcase<TestModel<TValue>>.Create(
+                syntax: $"NestedObject.Value{descPostfix}",
+                expectedSortFunc: query => query.OrderByDescending(keySelector: model => model.NestedObject!.Value)
+            ));
+
+        return ascendingPrefixTestcases
+            .Concat(descendingPrefixTestcases)
+            .Concat(ascendingPostfixTestcases)
+            .Concat(descendingPostfixTestcases)
+            .ToArray();
+    }
+}

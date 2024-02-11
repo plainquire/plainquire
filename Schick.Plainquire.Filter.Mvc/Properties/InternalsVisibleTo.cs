@@ -1,0 +1,1 @@
+﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Schick.Plainquire.Filter.Swashbuckle")]

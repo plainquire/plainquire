@@ -1,0 +1,5 @@
+﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Schick.Plainquire.Demo")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Schick.Plainquire.Filter.Mvc")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Schick.Plainquire.Filter.Newtonsoft")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Schick.Plainquire.Filter.Swashbuckle")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Schick.Plainquire.Filter.Tests")]
