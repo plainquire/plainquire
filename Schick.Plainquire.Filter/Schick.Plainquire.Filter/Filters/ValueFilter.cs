@@ -12,7 +12,6 @@ namespace Schick.Plainquire.Filter.Filters;
 /// <summary>
 /// Defines a single filter.
 /// </summary>
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [JsonConverter(typeof(ValueFilterConverter))]
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class ValueFilter

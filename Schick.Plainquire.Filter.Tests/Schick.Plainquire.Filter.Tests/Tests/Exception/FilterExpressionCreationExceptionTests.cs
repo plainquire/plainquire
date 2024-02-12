@@ -10,7 +10,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Schick.Plainquire.Filter.Tests.Tests.Exception;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
 public class FilterExpressionCreationExceptionTests
 {

@@ -6,12 +6,10 @@ using Schick.Plainquire.Demo.Routing;
 using Schick.Plainquire.Filter.Swashbuckle.Extensions;
 using Schick.Plainquire.Sort.Swashbuckle.Extensions;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace Schick.Plainquire.Demo.Startup;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 internal static class OpenApi
 {
     private const string OPEN_API_UI_ROUTE = "openapi/";

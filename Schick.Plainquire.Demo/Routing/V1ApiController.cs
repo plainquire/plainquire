@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Schick.Plainquire.Demo.Routing;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 internal class V1ApiController : ControllerAttribute, IApiBehaviorMetadata, IRouteTemplateProvider, IApiDescriptionGroupNameProvider
 {

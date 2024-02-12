@@ -3,7 +3,6 @@ using Schick.Plainquire.Filter.Extensions;
 using Schick.Plainquire.Filter.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -14,7 +13,6 @@ namespace Schick.Plainquire.Filter.Mvc.ModelBinders;
 /// Implements <see cref="IModelBinder" />
 /// </summary>
 /// <seealso cref="IModelBinder" />
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 public class EntityFilterModelBinder : IModelBinder
 {
     /// <inheritdoc />

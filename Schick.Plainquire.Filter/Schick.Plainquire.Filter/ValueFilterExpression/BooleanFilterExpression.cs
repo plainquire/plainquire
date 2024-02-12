@@ -4,14 +4,12 @@ using Schick.Plainquire.Filter.Extensions;
 using Schick.Plainquire.Filter.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace Schick.Plainquire.Filter.ValueFilterExpression;
 
 /// <inheritdoc cref="IBooleanFilterExpression"/>
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 public class BooleanFilterExpression : DefaultFilterExpression, IBooleanFilterExpression
 {
     /// <inheritdoc />

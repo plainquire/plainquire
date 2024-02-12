@@ -19,7 +19,6 @@ namespace Schick.Plainquire.Sort.Mvc.ModelBinders;
 /// Implements <see cref="IModelBinder" />
 /// </summary>
 /// <seealso cref="IModelBinder" />
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 public class EntitySortModelBinder : IModelBinder
 {
     /// <inheritdoc />

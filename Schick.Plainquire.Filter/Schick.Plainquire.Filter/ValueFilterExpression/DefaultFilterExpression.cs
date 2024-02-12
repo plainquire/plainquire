@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 namespace Schick.Plainquire.Filter.ValueFilterExpression;
 
 /// <inheritdoc />
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
 [SuppressMessage("ReSharper", "MemberCanBeProtected.Global", Justification = "Provided as library, can be used from outside")]
 public class DefaultFilterExpression : IValueFilterExpression

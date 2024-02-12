@@ -12,7 +12,6 @@ using FilterConfiguration = Schick.Plainquire.Filter.Abstractions.Configurations
 namespace Schick.Plainquire.Filter.ValueFilterExpression;
 
 /// <inheritdoc cref="IDateTimeFilterExpression"/>
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
 public class DateTimeFilterExpression : DefaultFilterExpression, IDateTimeFilterExpression
 {

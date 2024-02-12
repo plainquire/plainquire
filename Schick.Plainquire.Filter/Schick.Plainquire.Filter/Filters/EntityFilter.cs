@@ -19,7 +19,6 @@ namespace Schick.Plainquire.Filter.Filters;
 /// Hub to create filter expressions for <typeparamref name="TEntity"/> with fluent API.
 /// </summary>
 /// <typeparam name="TEntity">The entity type to be filtered.</typeparam>
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [JsonConverter(typeof(EntityFilterConverterFactory))]
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class EntityFilter<TEntity> : EntityFilter
@@ -233,7 +232,6 @@ public class EntityFilter<TEntity> : EntityFilter
 }
 
 /// <inheritdoc cref="EntityFilter{TEntity}" />
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [JsonConverter(typeof(EntityFilterConverter))]
 public class EntityFilter
 {

@@ -2,7 +2,6 @@
 using Schick.Plainquire.Filter.Filters;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Schick.Plainquire.Filter.Extensions;
@@ -10,7 +9,6 @@ namespace Schick.Plainquire.Filter.Extensions;
 /// <summary>
 /// Extension methods for <see cref="ValueFilter"/>.
 /// </summary>
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 public static class ValueFilterExtensions
 {
     /// <summary>

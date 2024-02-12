@@ -9,7 +9,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Schick.Plainquire.Filter.Tests.Tests.TypeFilter;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
 public class FilterForDateTimeOffsetNullableByValueTests
 {

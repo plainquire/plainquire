@@ -18,7 +18,6 @@ using System.Reflection;
 
 namespace Schick.Plainquire.Filter.Tests.Tests.EntityFilter;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
 public class InterceptorTests
 {

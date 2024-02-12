@@ -11,7 +11,6 @@ using System.Linq;
 
 namespace Schick.Plainquire.Filter.Tests.Extensions;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [ExcludeFromCodeCoverage]
 public static class FilterTestCaseExtensions
 {

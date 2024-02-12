@@ -1,7 +1,6 @@
 ﻿using Schick.Plainquire.Filter.Filters;
 using Newtonsoft.Json;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Schick.Plainquire.Filter.Newtonsoft.JsonConverters;
 
@@ -10,7 +9,6 @@ namespace Schick.Plainquire.Filter.Newtonsoft.JsonConverters;
 /// Implements <see cref="JsonConverter{T}" />
 /// </summary>
 /// <seealso cref="JsonConverter{T}" />
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 public class ValueFilterConverter : JsonConverter<ValueFilter>
 {
     /// <inheritdoc />
