@@ -51,7 +51,7 @@ public static class DateTimeRangeExtensions
     /// <param name="value">The string to convert.</param>
     /// <param name="now">Value used for 'now' when parsing relative date/time values (e.g. one-week-ago).</param>
     /// <param name="cultureInfo">The culture to use when parsing.</param>
-    public static Range<DateTimeOffset> ConvertStringToDateTimeRange(this string value, DateTimeOffset now, CultureInfo? cultureInfo = null)
+    public static Range<DateTimeOffset> ConvertStringToDateTimeRange(this string? value, DateTimeOffset now, CultureInfo? cultureInfo = null)
     {
         if (TryConvertStringToDateTimeRange(value, now, out var dateTimeRange, cultureInfo))
             return dateTimeRange;
