@@ -14,6 +14,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators;
 /// <inheritdoc cref="IDateTimeFilterExpressionCreator"/>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
+[Obsolete("Use 'Plainquire.Filter.ValueFilterExpression.DateTimeFilterExpression' instead.")]
 public class DateTimeFilterExpressionCreator : DefaultFilterExpressionCreator, IDateTimeFilterExpressionCreator
 {
     /// <inheritdoc />

@@ -12,6 +12,7 @@ namespace FS.FilterExpressionCreator.Newtonsoft.JsonConverters;
 /// Implements <see cref="JsonConverter" />
 /// </summary>
 /// <seealso cref="JsonConverter" />
+[Obsolete("Use 'Plainquire.Filter.Newtonsoft.JsonConverters.EntityFilterConverter' instead.")]
 public class EntityFilterConverter : JsonConverter
 {
     /// <inheritdoc />

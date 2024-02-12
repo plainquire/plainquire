@@ -3,6 +3,7 @@ using FS.FilterExpressionCreator.Filters;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters;
 /// </summary>
 /// <seealso cref="IOperationFilter" />
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Instantiated via reflection.")]
+[Obsolete("Use 'Plainquire.Filter.Swashbuckle.Filters.EntityFilterSetParameterReplacer' instead.")]
 public class EntityFilterSetParameterReplacer : EntityFilterParameterReplacer, IOperationFilter
 {
     /// <inheritdoc />

@@ -11,6 +11,7 @@ namespace FS.FilterExpressionCreator.Newtonsoft.JsonConverters;
 /// </summary>
 /// <seealso cref="JsonConverter{T}" />
 [SuppressMessage("ReSharper", "InconsistentNaming")]
+[Obsolete("Not needed anymore.")]
 public class ValueFilterConverter : JsonConverter<ValueFilter>
 {
     /// <inheritdoc />

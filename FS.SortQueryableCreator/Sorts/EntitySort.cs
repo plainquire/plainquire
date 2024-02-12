@@ -86,6 +86,7 @@ public class EntitySort<TEntity> : EntitySort
     /// </summary>
     /// <typeparam name="TProperty">The type of the property to remove sorting from.</typeparam>
     /// <param name="property">The property to remove the sort order for.</param>
+    [Obsolete("Use 'Plainquire.Sort.EntitySort<TEntity>.Remove<TProperty>' instead.")]
     public EntitySort<TEntity> Clear<TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         ClearInternal(property);
@@ -106,6 +107,7 @@ public class EntitySort<TEntity> : EntitySort
     /// </summary>
     /// <typeparam name="TProperty"></typeparam>
     /// <param name="property"></param>
+    [Obsolete("Use 'Plainquire.Sort.EntitySort<TEntity>.RemoveNested<TEntity, TProperty?>>' instead.")]
     public EntitySort<TEntity> ClearNested<TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         ClearNestedInternal(property);

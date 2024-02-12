@@ -12,6 +12,7 @@ namespace FS.FilterExpressionCreator.JsonConverters;
 /// Implements <see cref="JsonConverterFactory" />
 /// </summary>
 /// <seealso cref="JsonConverterFactory" />
+[Obsolete("Use 'Plainquire.Filter.JsonConverters.EntityFilterConverterFactory' instead.")]
 public class EntityFilterConverterFactory : JsonConverterFactory
 {
     /// <inheritdoc />
@@ -33,6 +34,7 @@ public class EntityFilterConverterFactory : JsonConverterFactory
 /// </summary>
 /// <typeparam name="TEntity">The type of the entity to filter for.</typeparam>
 /// <seealso cref="JsonConverter{T}" />
+[Obsolete("Use 'Plainquire.Filter.JsonConverters.EntityFilterConverter<TEntity>' instead.")]
 public class EntityFilterConverter<TEntity> : JsonConverter<EntityFilter<TEntity>>
 {
     /// <inheritdoc />
@@ -49,6 +51,7 @@ public class EntityFilterConverter<TEntity> : JsonConverter<EntityFilter<TEntity
 /// Implements <see cref="JsonConverter{T}" />
 /// </summary>
 /// <seealso cref="JsonConverter{T}" />
+[Obsolete("Use 'Plainquire.Filter.JsonConverters.EntityFilterConverter' instead.")]
 public class EntityFilterConverter : JsonConverter<EntityFilter>
 {
     /// <inheritdoc />

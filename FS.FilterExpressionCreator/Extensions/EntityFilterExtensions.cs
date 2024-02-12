@@ -15,6 +15,7 @@ namespace FS.FilterExpressionCreator.Extensions;
 /// Extension methods for <see cref="EntityFilter{TEntity}"/>
 /// </summary>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
+[Obsolete("Use 'Plainquire.Filter' instead.")]
 public static class EntityFilterExtensions
 {
     /// <summary>

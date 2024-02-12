@@ -23,9 +23,14 @@ namespace FS.FilterExpressionCreator.Filters;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [JsonConverter(typeof(EntityFilterConverterFactory))]
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
+[Obsolete("Use 'Plainquire.Filter.EntityFilter' instead.")]
 public class EntityFilter<TEntity> : EntityFilter
 {
-    /// <inheritdoc cref="GetPropertyFilterSyntax{TProperty}(Expression{Func{TEntity, TProperty}})" />
+    /// <summary>
+    /// Gets the filter syntax for the given <paramref name="property"/>.
+    /// </summary>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
+    /// <param name="property">The property to get the filter for.</param>
     [Obsolete("Use " + nameof(GetPropertyFilterSyntax) + " instead.")]
     public string? GetPropertyFilter<TProperty>(Expression<Func<TEntity, TProperty?>> property)
         => GetPropertyFilterSyntax(property);
@@ -35,6 +40,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// </summary>
     /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to get the filter for.</param>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.GetPropertyFilterSyntax<TProperty>' instead.")]
     public string? GetPropertyFilterSyntax<TProperty>(Expression<Func<TEntity, TProperty?>> property)
         => GetPropertyFilterSyntaxInternal(property);
 
@@ -43,6 +49,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// </summary>
     /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to get the filter for.</param>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.GetPropertyFilterValues<TProperty>' instead.")]
     public ValueFilter[]? GetPropertyFilterValues<TProperty>(Expression<Func<TEntity, TProperty?>> property)
         => GetPropertyFilterValuesInternal(property);
 
@@ -51,6 +58,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// </summary>
     /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to get the filter for.</param>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.GetNestedFilter<TProperty>' instead.")]
     public EntityFilter<TProperty>? GetNestedFilter<TProperty>(Expression<Func<TEntity, TProperty?>> property)
         => GetNestedFilterInternal(property);
 
@@ -60,6 +68,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <typeparam name="TList">The type of the list of <typeparamref name="TProperty"/>.</typeparam>
     /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to get the filter for.</param>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.GetNestedFilter<TList, TProperty>' instead.")]
     public EntityFilter<TProperty>? GetNestedFilter<TList, TProperty>(Expression<Func<TEntity, TList?>> property)
         where TList : IEnumerable<TProperty>
         => GetNestedFilterInternal<TEntity, TList, TProperty>(property);
@@ -70,6 +79,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to filter.</param>
     /// <param name="filters">The filters to use.</param>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.Add<TProperty>' instead.")]
     public EntityFilter<TEntity> Add<TProperty>(Expression<Func<TEntity, TProperty?>> property, params ValueFilter[]? filters)
     {
         AddInternal(property, filters);
@@ -82,6 +92,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to filter.</param>
     /// <param name="nestedFilter">The nested class filter.</param>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.AddNested<TProperty>' instead.")]
     public EntityFilter<TEntity> AddNested<TProperty>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TProperty>? nestedFilter)
     {
         if (nestedFilter == null)
@@ -103,6 +114,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <typeparam name="TNested">The nested entity type to be filtered.</typeparam>
     /// <param name="property">The property to filter. Must implement <see cref="IEnumerable{T}"/>.</param>
     /// <param name="nestedFilter">The nested class filter.</param>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.AddNested<TProperty, TNested>' instead.")]
     public EntityFilter<TEntity> AddNested<TProperty, TNested>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TNested>? nestedFilter)
         where TProperty : IEnumerable<TNested>
     {
@@ -125,6 +137,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to filter.</param>
     /// <param name="filters">The filters to use.</param>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.Replace<TProperty>' instead.")]
     public EntityFilter<TEntity> Replace<TProperty>(Expression<Func<TEntity, TProperty?>> property, params ValueFilter[]? filters)
     {
         ReplaceInternal(property, filters);
@@ -137,6 +150,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to filter.</param>
     /// <param name="nestedFilter">The nested class filter.</param>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.ReplaceNested<TProperty>' instead.")]
     public EntityFilter<TEntity> ReplaceNested<TProperty>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TProperty>? nestedFilter)
     {
         if (nestedFilter == null)
@@ -158,6 +172,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <typeparam name="TNested">The nested entity type to be filtered.</typeparam>
     /// <param name="property">The property to filter. Must implement <see cref="IEnumerable{T}"/>.</param>
     /// <param name="nestedFilter">The nested class filter.</param>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.ReplaceNested<TProperty, TNested>' instead.")]
     public EntityFilter<TEntity> ReplaceNested<TProperty, TNested>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TNested>? nestedFilter)
         where TProperty : IEnumerable<TNested>
     {
@@ -179,6 +194,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// </summary>
     /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to remove all filters for.</param>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.Remove<TProperty>' instead.")]
     public EntityFilter<TEntity> Clear<TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         ClearInternal(property);
@@ -188,6 +204,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <summary>
     /// Removes all filters of all properties.
     /// </summary>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.Clear' instead.")]
     public EntityFilter<TEntity> Clear()
     {
         ClearInternal();
@@ -197,6 +214,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <summary>
     /// Creates a deep clone of this filter.
     /// </summary>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.Clone' instead.")]
     public EntityFilter<TEntity> Clone()
         => JsonSerializer.Deserialize<EntityFilter<TEntity>>(JsonSerializer.Serialize(this))!;
 
@@ -205,6 +223,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// Filtered properties are matched by type (check if assignable) and name (case-sensitive).
     /// </summary>
     /// <typeparam name="TDestination">The type of the destination entity to filter.</typeparam>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.Cast<TDestination>' instead.")]
     public EntityFilter<TDestination> Cast<TDestination>()
     {
         var castFilter = JsonSerializer.Deserialize<EntityFilter<TDestination>>(JsonSerializer.Serialize(this))!;
@@ -234,6 +253,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// </summary>
     /// <param name="configuration">Filter configuration.</param>
     /// <param name="interceptor">An interceptor to manipulate the generated filters.</param>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter<TEntity>.CreateFilter' instead.")]
     public Expression<Func<TEntity, bool>>? CreateFilter(FilterConfiguration? configuration = null, IPropertyFilterInterceptor? interceptor = null)
         => CreateFilter<TEntity>(configuration, interceptor);
 
@@ -263,6 +283,7 @@ public class EntityFilter<TEntity> : EntityFilter
 /// <inheritdoc cref="EntityFilter{TEntity}" />
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [JsonConverter(typeof(EntityFilterConverter))]
+[Obsolete("Use 'Plainquire.Filter.EntityFilter' instead.")]
 public class EntityFilter
 {
     private static readonly MethodInfo _createFilterMethod = typeof(EntityFilter).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic).Single(x => x.Name == nameof(CreateFilter));
@@ -273,16 +294,19 @@ public class EntityFilter
     /// <summary>
     /// Gets or sets the default configuration. Can be used to set a system-wide configuration.
     /// </summary>
+    [Obsolete("Use 'Plainquire.Filter.Abstractions.FilterConfiguration.Default' instead.")]
     public static FilterConfiguration DefaultConfiguration { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the default interceptor. Can be used to set a system-wide interceptor.
     /// </summary>
+    [Obsolete("Use 'Plainquire.Filter.IFilterInterceptor.Default' instead.")]
     public static IPropertyFilterInterceptor? DefaultInterceptor { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EntityFilter"/> class.
     /// </summary>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter' instead.")]
     public EntityFilter()
     {
         PropertyFilters = [];
@@ -292,6 +316,7 @@ public class EntityFilter
     /// <summary>
     /// Indicates whether this filter is empty.
     /// </summary>
+    [Obsolete("Use 'Plainquire.Filter.EntityFilter.IsEmpty' instead.")]
     public bool IsEmpty() => !PropertyFilters.Any() && !NestedFilters.Any();
 
     /// <summary>

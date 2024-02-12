@@ -8,6 +8,7 @@ namespace FS.FilterExpressionCreator.Mvc.ModelBinders;
 /// <summary>
 /// Model binding provider for <see cref="EntityFilterModelBinder"/>
 /// </summary>
+[Obsolete("Use 'Plainquire.Filter.Mvc.ModelBinders.EntityFilterModelBinderProvider' instead.")]
 public class EntityFilterModelBinderProvider : IModelBinderProvider
 {
     /// <inheritdoc />

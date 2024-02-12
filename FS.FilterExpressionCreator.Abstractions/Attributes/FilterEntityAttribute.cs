@@ -25,5 +25,6 @@ public class FilterEntityAttribute : Attribute
     /// <summary>
     /// The name of the query parameter used to sort the entities.
     /// </summary>
+    [Obsolete("Parameter name is taken from action parameter (e.g. GetOrders(EntitySort<Order> orderBy, ...) or FromQuery-attribute ([FromQuery(Name = \"customName\")]).")]
     public string SortByParameter { get; set; } = DEFAULT_SORT_BY_PARAMETER_NAME;
 }

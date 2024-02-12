@@ -13,6 +13,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators;
 
 /// <inheritdoc cref="IEnumFilterExpressionCreator"/>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
+[Obsolete("Use 'Plainquire.Filter.ValueFilterExpression.EnumFilterExpression' instead.")]
 public class EnumFilterExpressionCreator : DefaultFilterExpressionCreator, IEnumFilterExpressionCreator
 {
     /// <inheritdoc />

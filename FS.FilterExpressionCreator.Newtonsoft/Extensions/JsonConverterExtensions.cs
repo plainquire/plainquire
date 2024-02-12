@@ -8,6 +8,7 @@ namespace FS.FilterExpressionCreator.Newtonsoft.Extensions;
 /// <summary>
 /// Extension methods for <see cref="JsonConverter"/>.
 /// </summary>
+[Obsolete("Use 'Plainquire.Filter.Newtonsoft.JsonConverterExtensions' instead.")]
 public static class JsonConverterExtensions
 {
     /// <summary>
@@ -31,7 +32,7 @@ public static class JsonConverterExtensions
     }
 
     /// <inheritdoc cref="AddFilterExpressionNewtonsoftSupport(IList{JsonConverter})" />
-    [Obsolete("Use AddFilterExpressionNewtonsoftSupport(IList{JsonConverter}) instead.")]
+    [Obsolete("Use Plainquire.Filter.Newtonsoft.JsonConverterExtensions.AddFilterNewtonsoftSupport instead.")]
     public static void AddFilterExpressionsNewtonsoftSupport(this IList<JsonConverter> converters)
         => AddFilterExpressionNewtonsoftSupport(converters);
 }

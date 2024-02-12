@@ -16,6 +16,7 @@ public class FilterConfiguration
     /// <summary>
     /// A delegate returning the value for 'now' when parsing relative date/time values (e.g. one-week-ago). Defaults to <see cref="DateTimeOffset.Now"/>.
     /// </summary>
+    [Obsolete("Use 'Plainquire.Filter.IFilterInterceptor.Now' instead.")]
     public Func<DateTimeOffset> Now { get; set; } = () => DateTimeOffset.Now;
 
     // TODO: Think about to handle "Unable to parse given filter value"        
@@ -27,10 +28,12 @@ public class FilterConfiguration
     /// <summary>
     /// Strings that should be handled as boolean <c>false</c>
     /// </summary>
+    [Obsolete("Use 'Plainquire.Filter.Abstractions.FilterConfiguration.BooleanMap' instead.")]
     public string[] BoolFalseStrings = ["NO", "0"];
 
     /// <summary>
     /// Strings that should be handled as boolean <c>true</c>
     /// </summary>
+    [Obsolete("Use 'Plainquire.Filter.Abstractions.FilterConfiguration.BooleanMap' instead.")]
     public string[] BoolTrueStrings = ["YES", "1"];
 }

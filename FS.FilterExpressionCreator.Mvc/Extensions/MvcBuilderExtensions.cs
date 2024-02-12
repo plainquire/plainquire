@@ -8,6 +8,7 @@ namespace FS.FilterExpressionCreator.Mvc.Extensions;
 /// <summary>
 /// Extensions to register entity filter extensions to MVC
 /// </summary>
+[Obsolete("Use 'Plainquire.Filter.Mvc.MvcBuilderExtensions' instead.")]
 public static class MvcBuilderExtensions
 {
     /// <summary>
@@ -27,7 +28,7 @@ public static class MvcBuilderExtensions
     }
 
     /// <inheritdoc cref="AddFilterExpressionSupport(IMvcBuilder)" />
-    [Obsolete("Use AddFilterExpressionSupport(IMvcBuilder) instead.")]
+    [Obsolete("Use Plainquire.Filter.Mvc.MvcBuilderExtensions.AddFilterSupport instead.")]
     public static IMvcBuilder AddFilterExpressionsSupport(this IMvcBuilder mvcBuilder)
         => AddFilterExpressionSupport(mvcBuilder);
 }

@@ -12,6 +12,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators;
 
 /// <inheritdoc cref="IBooleanFilterExpressionCreator"/>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
+[Obsolete("Use 'Plainquire.Filter.ValueFilterExpression.BooleanFilterExpression' instead.")]
 public class BooleanFilterExpressionCreator : DefaultFilterExpressionCreator, IBooleanFilterExpressionCreator
 {
     /// <inheritdoc />

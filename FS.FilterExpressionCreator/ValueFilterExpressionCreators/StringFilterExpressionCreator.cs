@@ -13,6 +13,7 @@ namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators;
 /// <inheritdoc cref="IStringFilterExpressionCreator"/>
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
+[Obsolete("Use 'Plainquire.Filter.ValueFilterExpression.StringFilterExpression' instead.")]
 public class StringFilterExpressionCreator : DefaultFilterExpressionCreator, IStringFilterExpressionCreator
 {
     /// <inheritdoc />

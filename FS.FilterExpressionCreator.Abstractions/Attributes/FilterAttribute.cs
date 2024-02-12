@@ -23,7 +23,7 @@ public class FilterAttribute : Attribute
     public bool Filterable { get; set; } = true;
 
     /// <inheritdoc cref="Filterable" />
-    [Obsolete("Use Filterable instead.")]
+    [Obsolete($"Use {nameof(Filterable)} instead.")]
     public bool Visible { get => Filterable; set => Filterable = value; }
 
     /// <summary>

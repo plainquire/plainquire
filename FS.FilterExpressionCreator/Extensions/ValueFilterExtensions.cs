@@ -14,7 +14,7 @@ namespace FS.FilterExpressionCreator.Extensions;
 public static class ValueFilterExtensions
 {
     /// <inheritdoc cref="ValueFiltersFactory.Create"/>
-    [Obsolete("Use ValueFiltersFactory.Create instead")]
+    [Obsolete("Use Plainquire.Filter.ValueFiltersFactory.Create instead")]
     public static ValueFilter[] Create(string filterSyntax)
         => ValueFiltersFactory.Create(filterSyntax);
 

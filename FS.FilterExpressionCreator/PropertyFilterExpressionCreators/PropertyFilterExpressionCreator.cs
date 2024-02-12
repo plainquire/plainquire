@@ -13,6 +13,7 @@ namespace FS.FilterExpressionCreator.PropertyFilterExpressionCreators;
 /// <summary>
 /// Converter to create lambda filter expressions for a given property and a <see cref="ValueFilter"/>.
 /// </summary>
+[Obsolete("Use 'Plainquire.Filter.PropertyFilterExpression.PropertyFilterExpression' instead.")]
 public static class PropertyFilterExpressionCreator
 {
     private static readonly IValueFilterExpressionCreator _defaultValueFilterExpressionCreator = new DefaultFilterExpressionCreator();

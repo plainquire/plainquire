@@ -21,6 +21,7 @@ namespace FS.FilterExpressionCreator.Swashbuckle.Filters;
 /// </summary>
 /// <seealso cref="IOperationFilter" />
 [SuppressMessage("ReSharper", "MemberCanBeProtected.Global", Justification = "Instantiated via reflection.")]
+[Obsolete("Use 'Plainquire.Filter.Swashbuckle.Filters.EntityFilterParameterReplacer' instead.")]
 public class EntityFilterParameterReplacer : IOperationFilter
 {
     private const string ENTITY_EXTENSION_PREFIX = "x-entity-filter-";

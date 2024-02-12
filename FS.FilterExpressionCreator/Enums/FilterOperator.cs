@@ -1,10 +1,12 @@
 ﻿using FS.FilterExpressionCreator.Filters;
+using System;
 
 namespace FS.FilterExpressionCreator.Enums;
 
 /// <summary>
 /// Operators used by <see cref="ValueFilter"/>
 /// </summary>
+[Obsolete("Use 'Plainquire.Filter.Abstractions.FilterOperator' instead.")]
 public enum FilterOperator
 {
     /// <summary>

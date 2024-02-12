@@ -15,6 +15,7 @@ namespace FS.FilterExpressionCreator.Mvc.ModelBinders;
 /// </summary>
 /// <seealso cref="IModelBinder" />
 [SuppressMessage("ReSharper", "InconsistentNaming")]
+[Obsolete("Use 'Plainquire.Filter.Mvc.ModelBinders.EntityFilterModelBinder' instead.")]
 public class EntityFilterModelBinder : IModelBinder
 {
     /// <inheritdoc />

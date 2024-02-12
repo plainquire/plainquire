@@ -8,6 +8,7 @@ namespace FS.FilterExpressionCreator.Mvc.Newtonsoft.Extensions;
 /// <summary>
 /// Extensions to register entity filter extensions to MVC
 /// </summary>
+[Obsolete("Use 'Plainquire.Filter.Mvc.Newtonsoft.MvcBuilderExtensions' instead.")]
 public static class MvcBuilderExtensions
 {
     /// <summary>
@@ -26,7 +27,7 @@ public static class MvcBuilderExtensions
     }
 
     /// <inheritdoc cref="AddFilterExpressionNewtonsoftSupport(IMvcBuilder)" />
-    [Obsolete("Use AddFilterExpressionNewtonsoftSupport(IMvcBuilder) instead.")]
+    [Obsolete("Use Plainquire.Filter.Mvc.Newtonsoft.MvcBuilderExtensions.AddFilterNewtonsoftSupport instead.")]
     public static IMvcBuilder AddFilterExpressionsNewtonsoftSupport(this IMvcBuilder mvcBuilder)
         => AddFilterExpressionNewtonsoftSupport(mvcBuilder);
 }

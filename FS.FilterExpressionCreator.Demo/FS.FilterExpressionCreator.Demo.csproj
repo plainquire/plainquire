@@ -8,6 +8,11 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- 'member' is obsolete: 'text' -->
+    <NoWarn>CS0618</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Bogus" Version="35.4.0" />
     <PackageReference Include="linq2db.EntityFrameworkCore" Version="8.0.0" />
