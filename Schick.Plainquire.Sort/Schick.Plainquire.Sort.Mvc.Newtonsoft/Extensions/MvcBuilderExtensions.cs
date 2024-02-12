@@ -1,6 +1,6 @@
-﻿using Schick.Plainquire.Sort.Newtonsoft.Extensions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Schick.Plainquire.Sort.Newtonsoft.Extensions;
 
 namespace Schick.Plainquire.Sort.Mvc.Newtonsoft.Extensions;
 

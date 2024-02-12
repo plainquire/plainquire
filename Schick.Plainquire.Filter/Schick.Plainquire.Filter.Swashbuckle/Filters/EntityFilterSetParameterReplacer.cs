@@ -1,7 +1,7 @@
-﻿using Schick.Plainquire.Filter.Extensions;
-using Schick.Plainquire.Filter.Filters;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
+using Schick.Plainquire.Filter.Extensions;
+using Schick.Plainquire.Filter.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

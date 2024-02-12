@@ -1,10 +1,10 @@
-﻿using Schick.Plainquire.Sort.Abstractions.Configurations;
+﻿using Newtonsoft.Json;
+using Schick.Plainquire.Sort.Abstractions.Configurations;
 using Schick.Plainquire.Sort.Extensions;
 using Schick.Plainquire.Sort.Interfaces;
 using Schick.Plainquire.Sort.Newtonsoft.Extensions;
 using Schick.Plainquire.Sort.Sorts;
 using Schick.Plainquire.Sort.Tests.Models;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

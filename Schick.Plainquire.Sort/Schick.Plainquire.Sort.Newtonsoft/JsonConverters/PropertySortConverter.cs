@@ -1,7 +1,7 @@
-﻿using Schick.Plainquire.Sort.Enums;
-using Schick.Plainquire.Sort.Sorts;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Schick.Plainquire.Sort.Enums;
+using Schick.Plainquire.Sort.Sorts;
 using System;
 
 namespace Schick.Plainquire.Sort.Newtonsoft.JsonConverters;

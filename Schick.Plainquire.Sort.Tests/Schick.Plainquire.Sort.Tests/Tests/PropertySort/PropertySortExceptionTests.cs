@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schick.Plainquire.Sort.Sorts;
 using Schick.Plainquire.Sort.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Schick.Plainquire.Sort.Tests.Tests.Exception;
+namespace Schick.Plainquire.Sort.Tests.Tests.PropertySort;
 
 [TestClass, ExcludeFromCodeCoverage]
 public class PropertySortExceptionTests

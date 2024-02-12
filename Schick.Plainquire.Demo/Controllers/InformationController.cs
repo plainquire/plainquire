@@ -1,8 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Schick.Plainquire.Demo.Extensions;
 using Schick.Plainquire.Demo.Routing;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Schick.Plainquire.Demo.Controllers;
 

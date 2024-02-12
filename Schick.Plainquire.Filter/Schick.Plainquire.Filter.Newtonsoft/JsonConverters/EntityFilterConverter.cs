@@ -1,6 +1,6 @@
-﻿using Schick.Plainquire.Filter.Extensions;
+﻿using Newtonsoft.Json;
+using Schick.Plainquire.Filter.Extensions;
 using Schick.Plainquire.Filter.Filters;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

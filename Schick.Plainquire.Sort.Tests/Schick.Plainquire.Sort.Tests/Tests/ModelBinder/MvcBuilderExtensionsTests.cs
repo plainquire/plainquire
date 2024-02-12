@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Schick.Plainquire.Sort.Mvc.Extensions;
-using Schick.Plainquire.Sort.Mvc.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Sort.Mvc.Extensions;
+using Schick.Plainquire.Sort.Mvc.ModelBinders;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;

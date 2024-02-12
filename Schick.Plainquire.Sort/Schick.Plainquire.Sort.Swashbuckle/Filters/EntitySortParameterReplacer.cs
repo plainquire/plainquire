@@ -1,10 +1,10 @@
-﻿using Schick.Plainquire.Filter.Abstractions.Attributes;
-using Schick.Plainquire.Sort.Extensions;
-using Schick.Plainquire.Sort.Sorts;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
+using Schick.Plainquire.Filter.Abstractions.Attributes;
+using Schick.Plainquire.Sort.Extensions;
+using Schick.Plainquire.Sort.Sorts;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;

@@ -75,6 +75,9 @@ public class InterceptorTests
         Sorts.EntitySort.DefaultInterceptor = new NestedModelByValueInterceptor();
         var sortedItems = sortFunc(testItems, entitySort);
         sortedItems.Should().ContainInOrder(testItems[1], testItems[0], testItems[3], testItems[2]);
+
+        // Cleanup
+        Sorts.EntitySort.DefaultInterceptor = null;
     }
 
     private class NestedModelByValueInterceptor : ISortInterceptor

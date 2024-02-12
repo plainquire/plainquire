@@ -1,11 +1,11 @@
-﻿using Schick.Plainquire.Filter.Abstractions.Attributes;
-using Schick.Plainquire.Filter.Extensions;
-using Schick.Plainquire.Filter.Filters;
-using LoxSmoke.DocXml;
+﻿using LoxSmoke.DocXml;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
+using Schick.Plainquire.Filter.Abstractions.Attributes;
+using Schick.Plainquire.Filter.Extensions;
+using Schick.Plainquire.Filter.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,5 @@
-﻿using Schick.Plainquire.Filter.Filters;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Schick.Plainquire.Filter.Filters;
 using System;
 
 namespace Schick.Plainquire.Filter.Newtonsoft.JsonConverters;

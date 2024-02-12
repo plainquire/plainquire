@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schick.Plainquire.Sort.Enums;
 using Schick.Plainquire.Sort.Sorts;
 using Schick.Plainquire.Sort.Tests.Models;
 using Schick.Plainquire.Sort.Tests.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;

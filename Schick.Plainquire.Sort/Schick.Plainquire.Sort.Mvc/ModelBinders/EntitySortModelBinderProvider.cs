@@ -1,6 +1,6 @@
-﻿using Schick.Plainquire.Sort.Extensions;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Schick.Plainquire.Sort.Extensions;
 using System;
 using System.Diagnostics.CodeAnalysis;
 

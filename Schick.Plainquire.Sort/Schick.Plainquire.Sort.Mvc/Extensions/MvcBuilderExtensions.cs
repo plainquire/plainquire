@@ -1,6 +1,6 @@
-﻿using Schick.Plainquire.Sort.Mvc.ModelBinders;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Schick.Plainquire.Sort.Mvc.ModelBinders;
 
 namespace Schick.Plainquire.Sort.Mvc.Extensions;
 

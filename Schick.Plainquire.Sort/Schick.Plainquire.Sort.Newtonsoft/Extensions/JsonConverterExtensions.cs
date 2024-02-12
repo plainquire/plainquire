@@ -1,5 +1,5 @@
-﻿using Schick.Plainquire.Sort.Newtonsoft.JsonConverters;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Schick.Plainquire.Sort.Newtonsoft.JsonConverters;
 using System.Collections.Generic;
 
 namespace Schick.Plainquire.Sort.Newtonsoft.Extensions;

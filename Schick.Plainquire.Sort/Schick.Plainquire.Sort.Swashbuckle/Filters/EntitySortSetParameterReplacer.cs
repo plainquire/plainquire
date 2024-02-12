@@ -1,9 +1,10 @@
-﻿using Schick.Plainquire.Sort.Extensions;
-using Schick.Plainquire.Sort.Sorts;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
+using Schick.Plainquire.Sort.Extensions;
+using Schick.Plainquire.Sort.Sorts;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Schick.Plainquire.Sort.Swashbuckle.Filters;
@@ -13,6 +14,7 @@ namespace Schick.Plainquire.Sort.Swashbuckle.Filters;
 /// Implements <see cref="IOperationFilter" />
 /// </summary>
 /// <seealso cref="EntitySort" />
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Created by reflection")]
 public class EntitySortSetParameterReplacer : EntitySortParameterReplacer, IOperationFilter
 {
     /// <inheritdoc />

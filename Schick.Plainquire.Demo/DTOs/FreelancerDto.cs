@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Schick.Plainquire.Demo.Models;
+﻿using Schick.Plainquire.Demo.Models;
+using System.Collections.Generic;
 
 namespace Schick.Plainquire.Demo.DTOs;
 

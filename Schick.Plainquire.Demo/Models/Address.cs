@@ -1,5 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Schick.Plainquire.Filter.Abstractions.Attributes;
+﻿using Schick.Plainquire.Filter.Abstractions.Attributes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Schick.Plainquire.Demo.Models;
 

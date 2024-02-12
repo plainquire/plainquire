@@ -113,16 +113,16 @@ public class EntitySort<TEntity> : EntitySort
     }
 
     /// <summary>
-    /// Creates a deep clone of this filter.
+    /// Creates a deep clone of this sort.
     /// </summary>
     public EntitySort<TEntity> Clone()
         => JsonSerializer.Deserialize<EntitySort<TEntity>>(JsonSerializer.Serialize(this))!;
 
     /// <summary>
-    /// Casts this filter to a different entity type (by creating a deep clone).
-    /// Filtered properties are matched by type (check if assignable) and name (case-sensitive).
+    /// Casts this sort to a different entity type (by creating a deep clone).
+    /// Sorted properties are matched by type (check if assignable) and name (case-sensitive).
     /// </summary>
-    /// <typeparam name="TDestination">The type of the destination entity to filter.</typeparam>
+    /// <typeparam name="TDestination">The type of the destination entity to sort.</typeparam>
     public EntitySort<TDestination> Cast<TDestination>()
         => (EntitySort<TDestination>)CastInternal(this, typeof(TEntity), typeof(TDestination));
 }

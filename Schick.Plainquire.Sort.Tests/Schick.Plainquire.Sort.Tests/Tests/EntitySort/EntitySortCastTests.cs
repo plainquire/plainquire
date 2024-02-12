@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Schick.Plainquire.Sort.Sorts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Sort.Sorts;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Schick.Plainquire.Sort.Tests.Tests.EntitySort;

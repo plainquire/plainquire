@@ -1,6 +1,6 @@
-﻿using Schick.Plainquire.Sort.Extensions;
+﻿using Newtonsoft.Json;
+using Schick.Plainquire.Sort.Extensions;
 using Schick.Plainquire.Sort.Sorts;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

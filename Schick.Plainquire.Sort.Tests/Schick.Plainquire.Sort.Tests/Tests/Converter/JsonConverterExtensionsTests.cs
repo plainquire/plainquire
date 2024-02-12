@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Schick.Plainquire.Sort.Newtonsoft.Extensions;
-using Schick.Plainquire.Sort.Newtonsoft.JsonConverters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using Schick.Plainquire.Sort.Newtonsoft.Extensions;
+using Schick.Plainquire.Sort.Newtonsoft.JsonConverters;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 

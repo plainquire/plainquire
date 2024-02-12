@@ -1,6 +1,6 @@
-﻿using Schick.Plainquire.Sort.Sorts;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Schick.Plainquire.Sort.Sorts;
 using Schick.Plainquire.Sort.Swashbuckle.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Schick.Plainquire.Sort.Swashbuckle.Extensions;

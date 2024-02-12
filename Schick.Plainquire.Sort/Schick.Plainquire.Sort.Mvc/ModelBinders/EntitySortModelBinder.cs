@@ -1,9 +1,9 @@
-﻿using Schick.Plainquire.Filter.Abstractions.Attributes;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Schick.Plainquire.Filter.Abstractions.Attributes;
 using Schick.Plainquire.Filter.Abstractions.Extensions;
 using Schick.Plainquire.Sort.Extensions;
 using Schick.Plainquire.Sort.Mvc.Extensions;
 using Schick.Plainquire.Sort.Sorts;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -67,11 +67,11 @@ public class EntitySortModelBinder : IModelBinder
             .ToList();
 
         var entitySortType = typeof(EntitySort<>).MakeGenericType(sortedType);
-        var entityEntitySort = (EntitySort)Activator.CreateInstance(entitySortType)!;
+        var entitySort = (EntitySort)Activator.CreateInstance(entitySortType)!;
         foreach (var propertySort in propertySorts)
-            entityEntitySort._propertySorts.Add(propertySort);
+            entitySort._propertySorts.Add(propertySort);
 
-        return entityEntitySort;
+        return entitySort;
     }
 
     private static string? MapToPropertyPath(string parameter, IReadOnlyCollection<PropertyNameToParameterMap> sortableProperties)

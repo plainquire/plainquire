@@ -1,6 +1,6 @@
-﻿using Schick.Plainquire.Filter.Extensions;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Schick.Plainquire.Filter.Extensions;
 using System;
 
 namespace Schick.Plainquire.Filter.Mvc.ModelBinders;
