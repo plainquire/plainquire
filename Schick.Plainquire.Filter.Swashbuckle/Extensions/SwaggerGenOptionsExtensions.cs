@@ -1,8 +1,7 @@
-﻿using Schick.Plainquire.Filter.Filters;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Schick.Plainquire.Filter.Filters;
 using Schick.Plainquire.Filter.Swashbuckle.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Collections.Generic;
 
 namespace Schick.Plainquire.Filter.Swashbuckle.Extensions;
@@ -24,9 +23,4 @@ public static class SwaggerGenOptionsExtensions
         options.OperationFilter<EntityFilterSetParameterReplacer>(new List<string>(xmlDocumentationFilePaths));
         return options;
     }
-
-    /// <inheritdoc cref="AddFilterExpressionSupport(SwaggerGenOptions, string[])" />
-    [Obsolete("Use AddFilterExpressionSupport(SwaggerGenOptions, string[]) instead.")]
-    public static SwaggerGenOptions AddFilterExpressionsSupport(this SwaggerGenOptions options, params string[] xmlDocumentationFilePaths)
-        => AddFilterExpressionSupport(options, xmlDocumentationFilePaths);
 }

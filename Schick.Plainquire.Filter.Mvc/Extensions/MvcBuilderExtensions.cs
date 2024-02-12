@@ -1,7 +1,6 @@
-﻿using Schick.Plainquire.Filter.Mvc.ModelBinders;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using Schick.Plainquire.Filter.Mvc.ModelBinders;
 
 namespace Schick.Plainquire.Filter.Mvc.Extensions;
 
@@ -25,9 +24,4 @@ public static class MvcBuilderExtensions
 
         return mvcBuilder;
     }
-
-    /// <inheritdoc cref="AddFilterExpressionSupport(IMvcBuilder)" />
-    [Obsolete("Use AddFilterExpressionSupport(IMvcBuilder) instead.")]
-    public static IMvcBuilder AddFilterExpressionsSupport(this IMvcBuilder mvcBuilder)
-        => AddFilterExpressionSupport(mvcBuilder);
 }

@@ -1,6 +1,5 @@
-﻿using Schick.Plainquire.Filter.Newtonsoft.JsonConverters;
-using Newtonsoft.Json;
-using System;
+﻿using Newtonsoft.Json;
+using Schick.Plainquire.Filter.Newtonsoft.JsonConverters;
 using System.Collections.Generic;
 
 namespace Schick.Plainquire.Filter.Newtonsoft.Extensions;
@@ -29,9 +28,4 @@ public static class JsonConverterExtensions
         foreach (var converter in NewtonsoftConverters)
             converters.Add(converter);
     }
-
-    /// <inheritdoc cref="AddFilterExpressionNewtonsoftSupport(IList{JsonConverter})" />
-    [Obsolete("Use AddFilterExpressionNewtonsoftSupport(IList{JsonConverter}) instead.")]
-    public static void AddFilterExpressionsNewtonsoftSupport(this IList<JsonConverter> converters)
-        => AddFilterExpressionNewtonsoftSupport(converters);
 }

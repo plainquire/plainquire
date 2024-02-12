@@ -1,7 +1,6 @@
-﻿using Schick.Plainquire.Filter.Newtonsoft.Extensions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using Schick.Plainquire.Filter.Newtonsoft.Extensions;
 
 namespace Schick.Plainquire.Filter.Mvc.Newtonsoft.Extensions;
 
@@ -24,9 +23,4 @@ public static class MvcBuilderExtensions
 
         return mvcBuilder;
     }
-
-    /// <inheritdoc cref="AddFilterExpressionNewtonsoftSupport(IMvcBuilder)" />
-    [Obsolete("Use AddFilterExpressionNewtonsoftSupport(IMvcBuilder) instead.")]
-    public static IMvcBuilder AddFilterExpressionsNewtonsoftSupport(this IMvcBuilder mvcBuilder)
-        => AddFilterExpressionNewtonsoftSupport(mvcBuilder);
 }
