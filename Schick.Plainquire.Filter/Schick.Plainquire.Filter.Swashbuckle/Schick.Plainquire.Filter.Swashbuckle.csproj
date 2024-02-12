@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../Build/build_core.props" />
-  <Import Project="../Build/build_version.props" />
-  <Import Project="../Build/build_xml_documentation.props" />
+  <Import Project="../../Build/build_core.props" />
+  <Import Project="../../Build/build_version.props" />
+  <Import Project="../../Build/build_xml_documentation.props" />
 
   <ItemGroup>
     <PackageReference Include="LoxSmoke.DocXml" Version="3.6.0" />

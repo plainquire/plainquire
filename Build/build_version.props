@@ -27,9 +27,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
-    <None Include="..\README.md" Pack="true" PackagePath="README.md" />
-    <None Include="..\Schick.Plainquire.png" Pack="true" PackagePath="Schick.Plainquire.png"/>
+    <None Include="..\..\LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="README.md" />
+    <None Include="..\..\Schick.Plainquire.png" Pack="true" PackagePath="Schick.Plainquire.png"/>
   </ItemGroup>
 
 </Project>

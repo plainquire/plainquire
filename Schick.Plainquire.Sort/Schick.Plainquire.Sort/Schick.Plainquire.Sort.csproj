@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../Build/build_standard.props" />
+  <Import Project="../../Build/build_version.props" />
+  <Import Project="../../Build/build_xml_documentation.props" />
+  
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="6.0.9" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Schick.Plainquire.Filter\Schick.Plainquire.Filter.Abstractions\Schick.Plainquire.Filter.Abstractions.csproj" />
+    <ProjectReference Include="..\Schick.Plainquire.Sort.Abstractions\Schick.Plainquire.Sort.Abstractions.csproj" />
+  </ItemGroup>
+</Project>

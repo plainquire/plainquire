@@ -296,10 +296,10 @@ __pycache__/
 
 # User added stuff
 /Assets
+/Schick.Plainquire.Demo/Freelancer.sqlite
+/Schick.Plainquire.Demo/Freelancer.sqlite-*
 /Schick.Plainquire.Filter.Demo/Schick.Plainquire.Filter.Demo.config.Development.json
 /Schick.Plainquire.Filter.Demo/Schick.Plainquire.Filter.Demo.xml
-/Schick.Plainquire.Filter.Demo/Freelancer.sqlite
-/Schick.Plainquire.Filter.Demo/Freelancer.sqlite-*
 /Schick.Plainquire.Filter.Mvc/Schick.Plainquire.Filter.Mvc.xml
 /Schick.Plainquire.Filter.Newtonsoft/Schick.Plainquire.Filter.Newtonsoft.xml
 /Schick.Plainquire.Filter.Swashbuckle/Schick.Plainquire.Filter.Swashbuckle.xml

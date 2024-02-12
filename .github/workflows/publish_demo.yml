@@ -43,7 +43,7 @@ jobs:
       run: |
         VERSION=`echo ${GITHUB_REF} | perl -pe 's/^refs\/tags\/(.*)$/\1/'`
         FILE_VERSION=`echo ${GITHUB_REF} | perl -pe 's/^refs\/tags\/(\d+(?:\.\d+)*)(.*)$/\1/'`
-        dotnet publish Schick.Plainquire.Filter.Demo --configuration Release --output dotnetcorewebapp -p:Version=$VERSION -p:FileVersion=$FILE_VERSION
+        dotnet publish Schick.Plainquire.Demo --configuration Release --output dotnetcorewebapp -p:Version=$VERSION -p:FileVersion=$FILE_VERSION
     - name: Deploy to Azure
       uses: azure/webapps-deploy@v2
       env:

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../Build/build_tests.props" />
+  <Import Project="../../Build/build_version.props" />
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Schick.Plainquire.Sort\Schick.Plainquire.Sort.Abstractions\Schick.Plainquire.Sort.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Schick.Plainquire.Sort\Schick.Plainquire.Sort.Mvc.Newtonsoft\Schick.Plainquire.Sort.Mvc.Newtonsoft.csproj" />
+    <ProjectReference Include="..\..\Schick.Plainquire.Sort\Schick.Plainquire.Sort.Mvc\Schick.Plainquire.Sort.Mvc.csproj" />
+    <ProjectReference Include="..\..\Schick.Plainquire.Sort\Schick.Plainquire.Sort.Newtonsoft\Schick.Plainquire.Sort.Newtonsoft.csproj" />
+    <ProjectReference Include="..\..\Schick.Plainquire.Sort\Schick.Plainquire.Sort\Schick.Plainquire.Sort.csproj" />
+  </ItemGroup>
+
+</Project>
