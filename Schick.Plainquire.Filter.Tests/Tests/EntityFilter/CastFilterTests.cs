@@ -1,9 +1,8 @@
 ﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schick.Plainquire.Filter.Extensions;
 using Schick.Plainquire.Filter.Filters;
-using Schick.Plainquire.Filter.Tests.Attributes;
-using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -11,7 +10,7 @@ namespace Schick.Plainquire.Filter.Tests.Tests.EntityFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class CastFilterTests : TestBase
+public class CastFilterTests
 {
     [TestMethod]
     public void WhenEntityFilterIsCast_ThenPropertiesNotExistsOrAreNotAssignableAreRemoved()
@@ -39,7 +38,7 @@ public class CastFilterTests : TestBase
     }
 
     [DataTestMethod]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(ModelDto))]
+    [FilterFuncDataSource<ModelDto>]
     public void WhenEntityFilterIsCast_ThenCastFilterCanBeCreatedAndMatches(EntityFilterFunc<ModelDto> filterFunc)
     {
         var modelFilter = new EntityFilter<Model>()

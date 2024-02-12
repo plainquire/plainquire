@@ -1,8 +1,8 @@
-﻿using Schick.Plainquire.Filter.Exceptions;
-using Schick.Plainquire.Filter.Tests.Attributes;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Exceptions;
 using Schick.Plainquire.Filter.Tests.Extensions;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -10,11 +10,11 @@ namespace Schick.Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class FilterForGuidBySyntaxTests : TestBase<Guid>
+public class FilterForGuidBySyntaxTests
 {
     [DataTestMethod]
-    [FilterTestDataSource(nameof(_testCases), nameof(TestModelFilterFunctions))]
-    public void FilterForGuidBySyntax_WorksAsExpected(FilterTestCase<Guid, Guid> testCase, TestModelFilterFunc<Guid> filterFunc)
+    [FilterTestDataSource(nameof(_testCases))]
+    public void FilterForGuidBySyntax_WorksAsExpected(FilterTestCase<Guid, Guid> testCase, EntityFilterFunc<TestModel<Guid>> filterFunc)
         => testCase.Run(_testItems, filterFunc);
 
     private static readonly TestModel<Guid>[] _testItems =

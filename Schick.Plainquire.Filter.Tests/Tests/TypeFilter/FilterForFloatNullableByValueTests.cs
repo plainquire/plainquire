@@ -1,8 +1,8 @@
-﻿using Schick.Plainquire.Filter.Enums;
-using Schick.Plainquire.Filter.Tests.Attributes;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Enums;
 using Schick.Plainquire.Filter.Tests.Extensions;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -10,11 +10,11 @@ namespace Schick.Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class FilterForFloatNullableByValueTests : TestBase<float?>
+public class FilterForFloatNullableByValueTests
 {
     [DataTestMethod]
-    [FilterTestDataSource(nameof(_testCases), nameof(TestModelFilterFunctions))]
-    public void FilterForFloatNullableByValue_WorksAsExpected(object testCase, TestModelFilterFunc<float?> filterFunc)
+    [FilterTestDataSource(nameof(_testCases))]
+    public void FilterForFloatNullableByValue_WorksAsExpected(object testCase, EntityFilterFunc<TestModel<float?>> filterFunc)
     {
         switch (testCase)
         {
@@ -46,32 +46,32 @@ public class FilterForFloatNullableByValueTests : TestBase<float?>
         FilterTestCase.Create(1000, FilterOperator.EqualCaseInsensitive, new int?[] { -9 }, (float? x) => x == -9f),
 
         FilterTestCase.Create(1100, FilterOperator.Default, new float?[] { -5.5f }, (float? x) => x == -5.5f),
-        FilterTestCase.Create(1101, FilterOperator.Default, new float?[] { -10 }, (float? _) => NONE),
+        FilterTestCase.Create(1101, FilterOperator.Default, new float?[] { -10 }, (float? _) => TestItems.NONE),
         FilterTestCase.Create(1102, FilterOperator.Default, new float?[] { +5.5f }, (float? x) => x == +5.5f),
 
         FilterTestCase.Create(1200, FilterOperator.Contains, new float?[] { +5f }, (float? x) => x is +5.5f or -5.5f),
         FilterTestCase.Create(1201, FilterOperator.Contains, new float?[] { -5f }, (float? x) => x == -5.5f),
-        FilterTestCase.Create(1202, FilterOperator.Contains, new float?[] { +3f }, (float? _) => NONE),
+        FilterTestCase.Create(1202, FilterOperator.Contains, new float?[] { +3f }, (float? _) => TestItems.NONE),
         FilterTestCase.Create(1203, FilterOperator.Contains, new float?[] { +0f }, (float? x) => x == 0),
 
         FilterTestCase.Create(1300, FilterOperator.EqualCaseInsensitive, new float?[] { -5.5f }, (float? x) => x == -5.5f),
-        FilterTestCase.Create(1301, FilterOperator.EqualCaseInsensitive, new float?[] { -10 }, (float? _) => NONE),
+        FilterTestCase.Create(1301, FilterOperator.EqualCaseInsensitive, new float?[] { -10 }, (float? _) => TestItems.NONE),
         FilterTestCase.Create(1302, FilterOperator.EqualCaseInsensitive, new float?[] { +5.5f }, (float? x) => x == +5.5f),
 
         FilterTestCase.Create(1400, FilterOperator.EqualCaseSensitive, new float?[] { -5.5f }, (float? x) => x == -5.5f),
-        FilterTestCase.Create(1401, FilterOperator.EqualCaseSensitive, new float?[] { -10 }, (float? _) => NONE),
+        FilterTestCase.Create(1401, FilterOperator.EqualCaseSensitive, new float?[] { -10 }, (float? _) => TestItems.NONE),
         FilterTestCase.Create(1402, FilterOperator.EqualCaseSensitive, new float?[] { +5.5f }, (float? x) => x == +5.5f),
 
         FilterTestCase.Create(1500, FilterOperator.NotEqual, new float?[] { -5.5f }, (float? x) => x != -5.5f),
-        FilterTestCase.Create(1501, FilterOperator.NotEqual, new float?[] { -10 }, (float? _) => ALL),
+        FilterTestCase.Create(1501, FilterOperator.NotEqual, new float?[] { -10 }, (float? _) => TestItems.ALL),
         FilterTestCase.Create(1502, FilterOperator.NotEqual, new float?[] { +5.5f }, (float? x) => x != +5.5f),
 
         FilterTestCase.Create(1600, FilterOperator.LessThan, new float?[] { -5.5f }, (float? x) => x < -5.5f),
-        FilterTestCase.Create(1601, FilterOperator.LessThan, new float?[] { -10 }, (float? _) => NONE),
+        FilterTestCase.Create(1601, FilterOperator.LessThan, new float?[] { -10 }, (float? _) => TestItems.NONE),
         FilterTestCase.Create(1602, FilterOperator.LessThan, new float?[] { +5.5f }, (float? x) => x < +5.5f),
 
         FilterTestCase.Create(1700, FilterOperator.LessThanOrEqual, new float?[] { -5.5f }, (float? x) => x <= -5.5f),
-        FilterTestCase.Create(1701, FilterOperator.LessThanOrEqual, new float?[] { -10 }, (float? _) => NONE),
+        FilterTestCase.Create(1701, FilterOperator.LessThanOrEqual, new float?[] { -10 }, (float? _) => TestItems.NONE),
         FilterTestCase.Create(1702, FilterOperator.LessThanOrEqual, new float?[] { +5.5f }, (float? x) => x <= +5.5f),
 
         FilterTestCase.Create(1800, FilterOperator.GreaterThan, new float?[] { -5.5f }, (float? x) => x > -5.5f),

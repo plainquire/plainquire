@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Schick.Plainquire.Filter.Filters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Filters;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Schick.Plainquire.Filter.Tests.Tests.ValueFilter;

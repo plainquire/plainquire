@@ -1,9 +1,9 @@
-﻿using Schick.Plainquire.Filter.Abstractions.Configurations;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Abstractions.Configurations;
 using Schick.Plainquire.Filter.Exceptions;
-using Schick.Plainquire.Filter.Tests.Attributes;
 using Schick.Plainquire.Filter.Tests.Extensions;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -11,11 +11,11 @@ namespace Schick.Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class FilterForDateTimeOffsetBySyntaxTests : TestBase<DateTimeOffset>
+public class FilterForDateTimeOffsetBySyntaxTests
 {
     [DataTestMethod]
-    [FilterTestDataSource(nameof(_testCases), nameof(TestModelFilterFunctions))]
-    public void FilterForDateTimeBySyntax_WorksAsExpected(FilterTestCase<DateTimeOffset, DateTimeOffset> testCase, TestModelFilterFunc<DateTimeOffset> filterFunc)
+    [FilterTestDataSource(nameof(_testCases))]
+    public void FilterForDateTimeBySyntax_WorksAsExpected(FilterTestCase<DateTimeOffset, DateTimeOffset> testCase, EntityFilterFunc<TestModel<DateTimeOffset>> filterFunc)
         => testCase.Run(_testItems, filterFunc);
 
     private static readonly TestModel<DateTimeOffset>[] _testItems =
@@ -41,8 +41,8 @@ public class FilterForDateTimeOffsetBySyntaxTests : TestBase<DateTimeOffset>
 
     private static readonly FilterTestCase<DateTimeOffset, DateTimeOffset>[] _testCases =
     [
-        FilterTestCase.Create<DateTimeOffset>(1000, "null", _ => ALL, IgnoreParseExceptions),
-        FilterTestCase.Create<DateTimeOffset>(1001, "=null", _ => ALL, IgnoreParseExceptions),
+        FilterTestCase.Create<DateTimeOffset>(1000, "null", _ => TestItems.ALL, TestConfig.IgnoreParseExceptions),
+        FilterTestCase.Create<DateTimeOffset>(1001, "=null", _ => TestItems.ALL, TestConfig.IgnoreParseExceptions),
         FilterTestCase.Create<DateTimeOffset>(1002, "~2010", x => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2011, 01, 01, 0, 0, 0, TimeSpan.Zero)),
         FilterTestCase.Create<DateTimeOffset>(1003, "~2010+02:00", x => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(2)) && x < new DateTimeOffset(2011, 01, 01, 0, 0, 0, TimeSpan.FromHours(2))),
         FilterTestCase.Create<DateTimeOffset>(1004, "~2010-02:00", x => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(-2)) && x < new DateTimeOffset(2011, 01, 01, 0, 0, 0, TimeSpan.FromHours(-2))),
@@ -52,8 +52,8 @@ public class FilterForDateTimeOffsetBySyntaxTests : TestBase<DateTimeOffset>
         FilterTestCase.Create<DateTimeOffset>(1008, "~2010-06-15T12:30", x => x >= new DateTimeOffset(2010, 06, 15, 12, 30, 00, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 12, 31, 00, TimeSpan.Zero)),
         FilterTestCase.Create<DateTimeOffset>(1009, "~2010 06 15 12 30", x => x >= new DateTimeOffset(2010, 06, 15, 12, 30, 00, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 12, 31, 00, TimeSpan.Zero)),
         FilterTestCase.Create<DateTimeOffset>(1010, "~2010/06/15/12/30", x => x >= new DateTimeOffset(2010, 06, 15, 12, 30, 00, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 12, 31, 00, TimeSpan.Zero)),
-        FilterTestCase.Create<DateTimeOffset>(1011, "~01.06.2010", x => x >= new DateTimeOffset(2010, 01, 06, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 01, 07, 0, 0, 0, TimeSpan.Zero), CultureEnUs),
-        FilterTestCase.Create<DateTimeOffset>(1012, "~01.06.2010", x => x >= new DateTimeOffset(2010, 06, 01, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 07, 01, 0, 0, 0, TimeSpan.Zero), CultureDeDe),
+        FilterTestCase.Create<DateTimeOffset>(1011, "~01.06.2010", x => x >= new DateTimeOffset(2010, 01, 06, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 01, 07, 0, 0, 0, TimeSpan.Zero), TestConfig.CultureEnUs),
+        FilterTestCase.Create<DateTimeOffset>(1012, "~01.06.2010", x => x >= new DateTimeOffset(2010, 06, 01, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 07, 01, 0, 0, 0, TimeSpan.Zero), TestConfig.CultureDeDe),
         FilterTestCase.Create<DateTimeOffset>(1013, "one-month-ago", x => x >= new DateTimeOffset(2010, 05, 16, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 16, 0, 0, 0, TimeSpan.Zero), new FilterConfiguration { Now = () => new DateTimeOffset(2010, 06, 16, 0, 0, 0, TimeSpan.Zero) }),
         FilterTestCase.Create<DateTimeOffset>(1014, "june 1st_june-16th", x => x >= new DateTimeOffset(2010, 06, 01, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 16, 0, 0, 0, TimeSpan.Zero), new FilterConfiguration { Now = () => new DateTimeOffset(2010, 06, 16, 0, 0, 0, TimeSpan.Zero) }),
         FilterTestCase.Create<DateTimeOffset>(1015, "2010_2020", x => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2021, 01, 01, 0, 0, 0, TimeSpan.Zero)),
@@ -77,7 +77,7 @@ public class FilterForDateTimeOffsetBySyntaxTests : TestBase<DateTimeOffset>
         FilterTestCase.Create<DateTimeOffset>(1109, "2010-06-15T12", x => x >= new DateTimeOffset(2010, 06, 15, 12, 00, 00, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 13, 00, 00, TimeSpan.Zero)),
         FilterTestCase.Create<DateTimeOffset>(1110, "2010-06-15T12:30", x => x >= new DateTimeOffset(2010, 06, 15, 12, 30, 00, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 12, 31, 00, TimeSpan.Zero)),
         FilterTestCase.Create<DateTimeOffset>(1111, "2010-06-15T12:30:30", x => x >= new DateTimeOffset(2010, 06, 15, 12, 30, 30, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 12, 30, 31, TimeSpan.Zero)),
-        FilterTestCase.Create<DateTimeOffset>(1112, "2100-01-01", _ => NONE),
+        FilterTestCase.Create<DateTimeOffset>(1112, "2100-01-01", _ => TestItems.NONE),
         FilterTestCase.Create<DateTimeOffset>(1113, "2010-06-01_2010-06-15T12:31:00", x => x >= new DateTimeOffset(2010, 06, 01, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 12, 32, 00, TimeSpan.Zero)),
 
         FilterTestCase.Create<DateTimeOffset>(1200, "~null", new FilterExpressionException("Unable to parse given filter value")),
@@ -92,7 +92,7 @@ public class FilterForDateTimeOffsetBySyntaxTests : TestBase<DateTimeOffset>
         FilterTestCase.Create<DateTimeOffset>(1209, "~2010-06-15T12", x => x >= new DateTimeOffset(2010, 06, 15, 12, 00, 00, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 13, 00, 00, TimeSpan.Zero)),
         FilterTestCase.Create<DateTimeOffset>(1210, "~2010-06-15T12:30", x => x >= new DateTimeOffset(2010, 06, 15, 12, 30, 00, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 12, 31, 00, TimeSpan.Zero)),
         FilterTestCase.Create<DateTimeOffset>(1211, "~2010-06-15T12:30:30", x => x >= new DateTimeOffset(2010, 06, 15, 12, 30, 30, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 12, 30, 31, TimeSpan.Zero)),
-        FilterTestCase.Create<DateTimeOffset>(1212, "~2100-01-01", _ => NONE),
+        FilterTestCase.Create<DateTimeOffset>(1212, "~2100-01-01", _ => TestItems.NONE),
         FilterTestCase.Create<DateTimeOffset>(1213, "~2010-06-01_2010-06-15T12:31:00", x => x >= new DateTimeOffset(2010, 06, 01, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 12, 32, 00, TimeSpan.Zero)),
 
         FilterTestCase.Create<DateTimeOffset>(1300, "=null", new FilterExpressionException("Unable to parse given filter value")),

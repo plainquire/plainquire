@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using Schick.Plainquire.Filter.Newtonsoft.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using Schick.Plainquire.Filter.Newtonsoft.Extensions;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 

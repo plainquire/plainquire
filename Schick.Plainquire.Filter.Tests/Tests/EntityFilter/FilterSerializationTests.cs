@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schick.Plainquire.Filter.Extensions;
 using Schick.Plainquire.Filter.Filters;
 using Schick.Plainquire.Filter.Newtonsoft.Extensions;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;

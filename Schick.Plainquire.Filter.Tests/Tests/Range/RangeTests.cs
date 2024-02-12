@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schick.Plainquire.Filter.Abstractions.Extensions;
 using Schick.Plainquire.Filter.Abstractions.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics.CodeAnalysis;
 

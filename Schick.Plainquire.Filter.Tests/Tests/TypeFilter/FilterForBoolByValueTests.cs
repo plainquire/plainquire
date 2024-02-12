@@ -1,20 +1,20 @@
-﻿using Schick.Plainquire.Filter.Enums;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Enums;
 using Schick.Plainquire.Filter.Exceptions;
-using Schick.Plainquire.Filter.Tests.Attributes;
 using Schick.Plainquire.Filter.Tests.Extensions;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Schick.Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class FilterForBoolByValueTests : TestBase<bool>
+public class FilterForBoolByValueTests
 {
     [DataTestMethod]
-    [FilterTestDataSource(nameof(_testCases), nameof(TestModelFilterFunctions))]
-    public void FilterForBoolByValue_WorksAsExpected(FilterTestCase<bool, bool> testCase, TestModelFilterFunc<bool> filterFunc)
+    [FilterTestDataSource(nameof(_testCases))]
+    public void FilterForBoolByValue_WorksAsExpected(FilterTestCase<bool, bool> testCase, EntityFilterFunc<TestModel<bool>> filterFunc)
         => testCase.Run(_testItems, filterFunc);
 
     private static readonly TestModel<bool>[] _testItems =
@@ -28,21 +28,21 @@ public class FilterForBoolByValueTests : TestBase<bool>
     [
         FilterTestCase.Create(1100, FilterOperator.Default, [true], (bool x) => x),
         FilterTestCase.Create(1101, FilterOperator.Default, [false], (bool x) => !x),
-        FilterTestCase.Create(1102, FilterOperator.Default, [true, false], (bool _) => ALL),
+        FilterTestCase.Create(1102, FilterOperator.Default, [true, false], (bool _) => TestItems.ALL),
 
         FilterTestCase.Create(1200, FilterOperator.Contains, [false], new FilterExpressionException("Filter operator 'Contains' not allowed for property type 'System.Boolean'")),
 
         FilterTestCase.Create(1300, FilterOperator.EqualCaseInsensitive, [true], (bool x) => x),
         FilterTestCase.Create(1301, FilterOperator.EqualCaseInsensitive, [false], (bool x) => !x),
-        FilterTestCase.Create(1302, FilterOperator.EqualCaseInsensitive, [true, false], (bool _) => ALL),
+        FilterTestCase.Create(1302, FilterOperator.EqualCaseInsensitive, [true, false], (bool _) => TestItems.ALL),
 
         FilterTestCase.Create(1400, FilterOperator.EqualCaseSensitive, [true], (bool x) => x),
         FilterTestCase.Create(1401, FilterOperator.EqualCaseSensitive, [false], (bool x) => !x),
-        FilterTestCase.Create(1402, FilterOperator.EqualCaseSensitive, [true, false], (bool _) => ALL),
+        FilterTestCase.Create(1402, FilterOperator.EqualCaseSensitive, [true, false], (bool _) => TestItems.ALL),
 
         FilterTestCase.Create(1502, FilterOperator.NotEqual, [true], (bool x) => !x),
         FilterTestCase.Create(1503, FilterOperator.NotEqual, [false], (bool x) => x),
-        FilterTestCase.Create(1504, FilterOperator.NotEqual, [true, false], (bool _) => ALL),
+        FilterTestCase.Create(1504, FilterOperator.NotEqual, [true, false], (bool _) => TestItems.ALL),
 
         FilterTestCase.Create(1600, FilterOperator.LessThan, [false], new FilterExpressionException("Filter operator 'LessThan' not allowed for property type 'System.Boolean'")),
 

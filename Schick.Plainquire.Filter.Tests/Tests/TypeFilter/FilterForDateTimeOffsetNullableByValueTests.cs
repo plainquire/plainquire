@@ -1,9 +1,9 @@
-﻿using Schick.Plainquire.Filter.Abstractions.Models;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Abstractions.Models;
 using Schick.Plainquire.Filter.Enums;
-using Schick.Plainquire.Filter.Tests.Attributes;
 using Schick.Plainquire.Filter.Tests.Extensions;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -11,11 +11,11 @@ namespace Schick.Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class FilterForDateTimeOffsetNullableByValueTests : TestBase<DateTimeOffset?>
+public class FilterForDateTimeOffsetNullableByValueTests
 {
     [DataTestMethod]
-    [FilterTestDataSource(nameof(_testCases), nameof(TestModelFilterFunctions))]
-    public void FilterForDateTimeNullableByValue_WorksAsExpected(object testCase, TestModelFilterFunc<DateTimeOffset?> filterFunc)
+    [FilterTestDataSource(nameof(_testCases))]
+    public void FilterForDateTimeNullableByValue_WorksAsExpected(object testCase, EntityFilterFunc<TestModel<DateTimeOffset?>> filterFunc)
     {
         switch (testCase)
         {
@@ -58,13 +58,13 @@ public class FilterForDateTimeOffsetNullableByValueTests : TestBase<DateTimeOffs
         FilterTestCase.Create(1100, FilterOperator.Default, new DateTimeOffset?[] { new(2010, 01, 01, 0, 0, 0, TimeSpan.Zero) }, (DateTimeOffset? x) => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 01, 01, 0, 0, 1, TimeSpan.Zero)),
         FilterTestCase.Create(1101, FilterOperator.Default, new DateTimeOffset?[] { new(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(2)) }, (DateTimeOffset? x) => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(2)) && x < new DateTimeOffset(2010, 01, 01, 0, 0, 1, TimeSpan.FromHours(2))),
         FilterTestCase.Create(1102, FilterOperator.Default, new DateTimeOffset?[] { new(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(-2)) }, (DateTimeOffset? x) => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(-2)) && x < new DateTimeOffset(2010, 01, 01, 0, 0, 1, TimeSpan.FromHours(-2))),
-        FilterTestCase.Create(1103, FilterOperator.Default, new DateTimeOffset?[] { new(2100, 01, 01, 0, 0, 0, TimeSpan.Zero) }, (DateTimeOffset? _) => NONE),
+        FilterTestCase.Create(1103, FilterOperator.Default, new DateTimeOffset?[] { new(2100, 01, 01, 0, 0, 0, TimeSpan.Zero) }, (DateTimeOffset? _) => TestItems.NONE),
         FilterTestCase.Create(1104, FilterOperator.Default, new Range<DateTimeOffset>[] { new(new DateTimeOffset(2010, 06, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 06, 15, 12, 31, 00, TimeSpan.Zero)) }, (DateTimeOffset? x) => x >= new DateTimeOffset(2010, 06, 01, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 12, 31, 01, TimeSpan.Zero)),
 
         FilterTestCase.Create(1200, FilterOperator.Contains, new DateTimeOffset?[] { new(2010, 01, 01, 0, 0, 0, TimeSpan.Zero) }, (DateTimeOffset? x) => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 01, 01, 0, 0, 1, TimeSpan.Zero)),
         FilterTestCase.Create(1201, FilterOperator.Contains, new DateTimeOffset?[] { new(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(2)) }, (DateTimeOffset? x) => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(2)) && x < new DateTimeOffset(2010, 01, 01, 0, 0, 1, TimeSpan.FromHours(2))),
         FilterTestCase.Create(1202, FilterOperator.Contains, new DateTimeOffset?[] { new(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(-2)) }, (DateTimeOffset? x) => x >= new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(-2)) && x < new DateTimeOffset(2010, 01, 01, 0, 0, 1, TimeSpan.FromHours(-2))),
-        FilterTestCase.Create(1203, FilterOperator.Contains, new DateTimeOffset?[] { new(2100, 01, 01, 0, 0, 0, TimeSpan.Zero) }, (DateTimeOffset? _) => NONE),
+        FilterTestCase.Create(1203, FilterOperator.Contains, new DateTimeOffset?[] { new(2100, 01, 01, 0, 0, 0, TimeSpan.Zero) }, (DateTimeOffset? _) => TestItems.NONE),
         FilterTestCase.Create(1204, FilterOperator.Contains, new Range<DateTimeOffset>[] { new(new DateTimeOffset(2010, 06, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2010, 06, 15, 12, 31, 00, TimeSpan.Zero)) }, (DateTimeOffset? x) => x >= new DateTimeOffset(2010, 06, 01, 0, 0, 0, TimeSpan.Zero) && x < new DateTimeOffset(2010, 06, 15, 12, 31, 01, TimeSpan.Zero)),
 
         FilterTestCase.Create(1300, FilterOperator.EqualCaseInsensitive, new DateTimeOffset?[] { new(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(2)) }, (DateTimeOffset? x) => x == new DateTimeOffset(2010, 01, 01, 0, 0, 0, TimeSpan.FromHours(2))),

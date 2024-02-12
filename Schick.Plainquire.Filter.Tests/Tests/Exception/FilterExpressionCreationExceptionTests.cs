@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schick.Plainquire.Filter.Enums;
 using Schick.Plainquire.Filter.Exceptions;
 using Schick.Plainquire.Filter.Extensions;
 using Schick.Plainquire.Filter.Filters;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -12,7 +12,7 @@ namespace Schick.Plainquire.Filter.Tests.Tests.Exception;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class FilterExpressionCreationExceptionTests : TestBase
+public class FilterExpressionCreationExceptionTests
 {
     [TestMethod]
     public void WhenFilterExpressionCreationExceptionIsThrown_AllMembersAreFilled()

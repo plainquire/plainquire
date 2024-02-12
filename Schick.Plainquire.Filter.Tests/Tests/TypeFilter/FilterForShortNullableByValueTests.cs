@@ -1,8 +1,8 @@
-﻿using Schick.Plainquire.Filter.Enums;
-using Schick.Plainquire.Filter.Tests.Attributes;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Enums;
 using Schick.Plainquire.Filter.Tests.Extensions;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -10,11 +10,11 @@ namespace Schick.Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class FilterForShortNullableByValueTests : TestBase<short?>
+public class FilterForShortNullableByValueTests
 {
     [DataTestMethod]
-    [FilterTestDataSource(nameof(_testCases), nameof(TestModelFilterFunctions))]
-    public void FilterForShortNullableByValue_WorksAsExpected(object testCase, TestModelFilterFunc<short?> filterFunc)
+    [FilterTestDataSource(nameof(_testCases))]
+    public void FilterForShortNullableByValue_WorksAsExpected(object testCase, EntityFilterFunc<TestModel<short?>> filterFunc)
     {
         switch (testCase)
         {
@@ -46,32 +46,32 @@ public class FilterForShortNullableByValueTests : TestBase<short?>
         FilterTestCase.Create(1000, FilterOperator.EqualCaseInsensitive, new short?[] { -9 }, (short? x) => x == -9f),
 
         FilterTestCase.Create(1100, FilterOperator.Default, new short?[] { -5 }, (short? x) => x == -5),
-        FilterTestCase.Create(1101, FilterOperator.Default, new short?[] { -10 }, (short? _) => NONE),
+        FilterTestCase.Create(1101, FilterOperator.Default, new short?[] { -10 }, (short? _) => TestItems.NONE),
         FilterTestCase.Create(1102, FilterOperator.Default, new short?[] { +5 }, (short? x) => x == +5),
 
         FilterTestCase.Create(1200, FilterOperator.Contains, new short?[] { +5 }, (short? x) => x is +5 or -5),
         FilterTestCase.Create(1201, FilterOperator.Contains, new short?[] { -5 }, (short? x) => x == -5),
-        FilterTestCase.Create(1202, FilterOperator.Contains, new short?[] { +3 }, (short? _) => NONE),
+        FilterTestCase.Create(1202, FilterOperator.Contains, new short?[] { +3 }, (short? _) => TestItems.NONE),
         FilterTestCase.Create(1203, FilterOperator.Contains, new short?[] { +0 }, (short? x) => x == 0),
 
         FilterTestCase.Create(1300, FilterOperator.EqualCaseInsensitive, new short?[] { -5 }, (short? x) => x == -5),
-        FilterTestCase.Create(1301, FilterOperator.EqualCaseInsensitive, new short?[] { -10 }, (short? _) => NONE),
+        FilterTestCase.Create(1301, FilterOperator.EqualCaseInsensitive, new short?[] { -10 }, (short? _) => TestItems.NONE),
         FilterTestCase.Create(1302, FilterOperator.EqualCaseInsensitive, new short?[] { +5 }, (short? x) => x == +5),
 
         FilterTestCase.Create(1400, FilterOperator.EqualCaseSensitive, new short?[] { -5 }, (short? x) => x == -5),
-        FilterTestCase.Create(1401, FilterOperator.EqualCaseSensitive, new short?[] { -10 }, (short? _) => NONE),
+        FilterTestCase.Create(1401, FilterOperator.EqualCaseSensitive, new short?[] { -10 }, (short? _) => TestItems.NONE),
         FilterTestCase.Create(1402, FilterOperator.EqualCaseSensitive, new short?[] { +5 }, (short? x) => x == +5),
 
         FilterTestCase.Create(1500, FilterOperator.NotEqual, new short?[] { -5 }, (short? x) => x != -5),
-        FilterTestCase.Create(1501, FilterOperator.NotEqual, new short?[] { -10 }, (short? _) => ALL),
+        FilterTestCase.Create(1501, FilterOperator.NotEqual, new short?[] { -10 }, (short? _) => TestItems.ALL),
         FilterTestCase.Create(1502, FilterOperator.NotEqual, new short?[] { +5 }, (short? x) => x != +5),
 
         FilterTestCase.Create(1600, FilterOperator.LessThan, new short?[] { -5 }, (short? x) => x < -5),
-        FilterTestCase.Create(1601, FilterOperator.LessThan, new short?[] { -10 }, (short? _) => NONE),
+        FilterTestCase.Create(1601, FilterOperator.LessThan, new short?[] { -10 }, (short? _) => TestItems.NONE),
         FilterTestCase.Create(1602, FilterOperator.LessThan, new short?[] { +5 }, (short? x) => x < +5),
 
         FilterTestCase.Create(1700, FilterOperator.LessThanOrEqual, new short?[] { -5 }, (short? x) => x <= -5),
-        FilterTestCase.Create(1701, FilterOperator.LessThanOrEqual, new short?[] { -10 }, (short? _) => NONE),
+        FilterTestCase.Create(1701, FilterOperator.LessThanOrEqual, new short?[] { -10 }, (short? _) => TestItems.NONE),
         FilterTestCase.Create(1702, FilterOperator.LessThanOrEqual, new short?[] { +5 }, (short? x) => x <= +5),
 
         FilterTestCase.Create(1800, FilterOperator.GreaterThan, new short?[] { -5 }, (short? x) => x > -5),

@@ -1,19 +1,19 @@
-﻿using Schick.Plainquire.Filter.Exceptions;
-using Schick.Plainquire.Filter.Tests.Attributes;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Exceptions;
 using Schick.Plainquire.Filter.Tests.Extensions;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Schick.Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class FilterForStringBySyntaxTests : TestBase<string>
+public class FilterForStringBySyntaxTests
 {
     [DataTestMethod]
-    [FilterTestDataSource(nameof(_testCases), nameof(TestModelFilterFunctions))]
-    public void FilterForStringBySyntax_WorksAsExpected(FilterTestCase<string, string> testCase, TestModelFilterFunc<string> filterFunc)
+    [FilterTestDataSource(nameof(_testCases))]
+    public void FilterForStringBySyntax_WorksAsExpected(FilterTestCase<string, string> testCase, EntityFilterFunc<TestModel<string>> filterFunc)
         => testCase.Run(_testItems, filterFunc);
 
     private static readonly TestModel<string>[] _testItems =
@@ -44,7 +44,7 @@ public class FilterForStringBySyntaxTests : TestBase<string>
 
         FilterTestCase.Create<string>(1401, "==", x => x == ""),
         FilterTestCase.Create<string>(1402, "==Hello", x => x == "Hello"),
-        FilterTestCase.Create<string>(1403, "==hello", _ => NONE),
+        FilterTestCase.Create<string>(1403, "==hello", _ => TestItems.NONE),
         FilterTestCase.Create<string>(1404, "==HelloWorld", x => x == "HelloWorld"),
 
         FilterTestCase.Create<string>(1501, "!", x => x == null),

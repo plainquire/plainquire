@@ -6,8 +6,8 @@ using Schick.Plainquire.Filter.Enums;
 using Schick.Plainquire.Filter.Extensions;
 using Schick.Plainquire.Filter.Filters;
 using Schick.Plainquire.Filter.Interfaces;
-using Schick.Plainquire.Filter.Tests.Attributes;
 using Schick.Plainquire.Filter.Tests.Models;
+using Schick.Plainquire.Filter.Tests.Services;
 using Schick.Plainquire.Filter.ValueFilterExpression;
 using System;
 using System.Collections.Generic;
@@ -20,10 +20,10 @@ namespace Schick.Plainquire.Filter.Tests.Tests.EntityFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class InterceptorTests : TestBase
+public class InterceptorTests
 {
     [DataTestMethod]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    [FilterFuncDataSource<TestModel<string>>]
     public void WhenFilterInterceptorIsUsed_ValuesAreFilteredAsExpected(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var filter = new EntityFilter<TestModel<string>>()
@@ -46,7 +46,7 @@ public class InterceptorTests : TestBase
     }
 
     [DataTestMethod, DoNotParallelize]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    [FilterFuncDataSource<TestModel<string>>]
     public void WhenDefaultFilterInterceptorIsUsed_ValuesAreFilteredAsExpected(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var filter = new EntityFilter<TestModel<string>>()

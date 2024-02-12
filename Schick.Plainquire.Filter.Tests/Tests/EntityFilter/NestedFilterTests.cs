@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schick.Plainquire.Filter.Extensions;
 using Schick.Plainquire.Filter.Filters;
-using Schick.Plainquire.Filter.Tests.Attributes;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -13,10 +13,10 @@ namespace Schick.Plainquire.Filter.Tests.Tests.EntityFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class NestedFilterTests : TestBase
+public class NestedFilterTests
 {
     [DataTestMethod]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    [FilterFuncDataSource<TestModel<string>>]
     public void WhenNestedEntityFilterIsApplied_ThenNestedPropertyIsFiltered(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var nestedFilter = new EntityFilter<TestModelNested?>()
@@ -39,7 +39,7 @@ public class NestedFilterTests : TestBase
     }
 
     [DataTestMethod]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    [FilterFuncDataSource<TestModel<string>>]
     public void WhenNestedEntityFilterIsApplied_ThenNestedListIsFiltered(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var nestedFilter = new EntityFilter<TestModelNested>()
@@ -101,7 +101,7 @@ public class NestedFilterTests : TestBase
     }
 
     [DataTestMethod]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    [FilterFuncDataSource<TestModel<string>>]
     public void WhenNestedGivenNestedFilterIsNull_ThenEmptyNestedFilterIsCreated(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var outerFilter = new EntityFilter<TestModel<string>>()

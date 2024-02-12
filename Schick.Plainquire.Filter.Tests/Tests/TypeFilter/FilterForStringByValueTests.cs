@@ -1,20 +1,20 @@
-﻿using Schick.Plainquire.Filter.Enums;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Enums;
 using Schick.Plainquire.Filter.Exceptions;
-using Schick.Plainquire.Filter.Tests.Attributes;
 using Schick.Plainquire.Filter.Tests.Extensions;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Schick.Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class FilterForStringByValueTests : TestBase<string>
+public class FilterForStringByValueTests
 {
     [DataTestMethod]
-    [FilterTestDataSource(nameof(_testCases), nameof(TestModelFilterFunctions))]
-    public void FilterForStringByValue_WorksAsExpected(FilterTestCase<string, string> testCase, TestModelFilterFunc<string> filterFunc)
+    [FilterTestDataSource(nameof(_testCases))]
+    public void FilterForStringByValue_WorksAsExpected(FilterTestCase<string, string> testCase, EntityFilterFunc<TestModel<string>> filterFunc)
         => testCase.Run(_testItems, filterFunc);
 
     private static readonly TestModel<string>[] _testItems =
@@ -46,7 +46,7 @@ public class FilterForStringByValueTests : TestBase<string>
 
         FilterTestCase.Create(1400, FilterOperator.EqualCaseSensitive, [""], (string? x) => x == ""),
         FilterTestCase.Create(1401, FilterOperator.EqualCaseSensitive, ["Hello"], (string? x) => x == "Hello"),
-        FilterTestCase.Create(1402, FilterOperator.EqualCaseSensitive, ["hello"], (string? _) => NONE),
+        FilterTestCase.Create(1402, FilterOperator.EqualCaseSensitive, ["hello"], (string? _) => TestItems.NONE),
         FilterTestCase.Create(1403, FilterOperator.EqualCaseSensitive, ["HelloWorld"], (string? x) => x == "HelloWorld"),
 
         FilterTestCase.Create(1500, FilterOperator.NotEqual, [""], (string? x) => x == null),

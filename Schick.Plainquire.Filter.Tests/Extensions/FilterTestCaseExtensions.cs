@@ -3,6 +3,7 @@ using FluentAssertions.Execution;
 using Schick.Plainquire.Filter.Extensions;
 using Schick.Plainquire.Filter.Filters;
 using Schick.Plainquire.Filter.Tests.Models;
+using Schick.Plainquire.Filter.Tests.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -14,7 +15,7 @@ namespace Schick.Plainquire.Filter.Tests.Extensions;
 [ExcludeFromCodeCoverage]
 public static class FilterTestCaseExtensions
 {
-    public static void Run<TFilterValue, TModelValue>(this FilterTestCase<TFilterValue, TModelValue> testCase, ICollection<TestModel<TModelValue>> testItems, TestModelFilterFunc<TModelValue> filterFunc)
+    public static void Run<TFilterValue, TModelValue>(this FilterTestCase<TFilterValue, TModelValue> testCase, ICollection<TestModel<TModelValue>> testItems, EntityFilterFunc<TestModel<TModelValue>> filterFunc)
     {
         RunInternal(testRunner, testCase.ExpectedException);
         return;
@@ -34,7 +35,7 @@ public static class FilterTestCaseExtensions
                 .Invoke(null, [testRunner, expectedException]);
     }
 
-    private static void RunAndCheckExpectedItems<TFilterValue, TModelValue>(FilterTestCase<TFilterValue, TModelValue> testCase, ICollection<TestModel<TModelValue>> testItems, TestModelFilterFunc<TModelValue> filterFunc)
+    private static void RunAndCheckExpectedItems<TFilterValue, TModelValue>(FilterTestCase<TFilterValue, TModelValue> testCase, ICollection<TestModel<TModelValue>> testItems, EntityFilterFunc<TestModel<TModelValue>> filterFunc)
     {
         var entityFilter = CreateEntityFilter(testCase);
         var filteredItems = filterFunc(testItems, entityFilter, testCase.Configuration);

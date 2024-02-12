@@ -1,19 +1,19 @@
-﻿using Schick.Plainquire.Filter.Exceptions;
-using Schick.Plainquire.Filter.Tests.Attributes;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Exceptions;
 using Schick.Plainquire.Filter.Tests.Extensions;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Schick.Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class FilterForBoolNullableBySyntaxTests : TestBase<bool?>
+public class FilterForBoolNullableBySyntaxTests
 {
     [DataTestMethod]
-    [FilterTestDataSource(nameof(_testCases), nameof(TestModelFilterFunctions))]
-    public void FilterForBoolNullableBySyntax_WorksAsExpected(FilterTestCase<bool?, bool?> testCase, TestModelFilterFunc<bool?> filterFunc)
+    [FilterTestDataSource(nameof(_testCases))]
+    public void FilterForBoolNullableBySyntax_WorksAsExpected(FilterTestCase<bool?, bool?> testCase, EntityFilterFunc<TestModel<bool?>> filterFunc)
         => testCase.Run(_testItems, filterFunc);
 
     private static readonly TestModel<bool?>[] _testItems =
@@ -25,8 +25,8 @@ public class FilterForBoolNullableBySyntaxTests : TestBase<bool?>
 
     private static readonly FilterTestCase<bool?, bool?>[] _testCases =
     [
-        FilterTestCase.Create<bool?>(1000, "null", _ => ALL, IgnoreParseExceptions),
-        FilterTestCase.Create<bool?>(1001, "=null", _ => ALL, IgnoreParseExceptions),
+        FilterTestCase.Create<bool?>(1000, "null", _ => TestItems.ALL, TestConfig.IgnoreParseExceptions),
+        FilterTestCase.Create<bool?>(1001, "=null", _ => TestItems.ALL, TestConfig.IgnoreParseExceptions),
         FilterTestCase.Create<bool?>(1002, "TRUE", x => x == true),
         FilterTestCase.Create<bool?>(1003, "FALSE", x => x == false),
         FilterTestCase.Create<bool?>(1004, "yes", x => x == true),
@@ -60,7 +60,7 @@ public class FilterForBoolNullableBySyntaxTests : TestBase<bool?>
         FilterTestCase.Create<bool?>(1501, "!", new FilterExpressionException("Unable to parse given filter value")),
         FilterTestCase.Create<bool?>(1502, "!true", x => x != true),
         FilterTestCase.Create<bool?>(1503, "!false", x => x != false),
-        FilterTestCase.Create<bool?>(1504, "!true, !false", _ => ALL),
+        FilterTestCase.Create<bool?>(1504, "!true, !false", _ => TestItems.ALL),
 
         FilterTestCase.Create<bool?>(1600, "<", new FilterExpressionException("Filter operator 'LessThan' not allowed for property type 'System.Nullable`1[System.Boolean]'")),
 

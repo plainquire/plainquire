@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schick.Plainquire.Filter.Abstractions.Configurations;
 using Schick.Plainquire.Filter.Enums;
 using Schick.Plainquire.Filter.Extensions;
-using Schick.Plainquire.Filter.Tests.Attributes;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -13,7 +13,7 @@ namespace Schick.Plainquire.Filter.Tests.Tests.EntityFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class FilterConfigurationTests : TestBase
+public class FilterConfigurationTests
 {
     [TestMethod]
     public void WhenConfigurationIsCreated_ThenDefaultValuesAreSet()
@@ -30,7 +30,7 @@ public class FilterConfigurationTests : TestBase
     }
 
     [DataTestMethod, DoNotParallelize]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<DateTime>))]
+    [FilterFuncDataSource<TestModel<DateTime>>]
     public void WhenDefaultConfigurationIsSet_ConfigurationIsUsed(EntityFilterFunc<TestModel<DateTime>> filterFunc)
     {
         var filter = new Filters.EntityFilter<TestModel<DateTime>>()

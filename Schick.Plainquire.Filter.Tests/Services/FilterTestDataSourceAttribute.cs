@@ -1,25 +1,21 @@
-﻿using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
-namespace Schick.Plainquire.Filter.Tests.Attributes;
+namespace Schick.Plainquire.Filter.Tests.Services;
 
 [ExcludeFromCodeCoverage]
 [AttributeUsage(AttributeTargets.Method)]
 public class FilterTestDataSourceAttribute : Attribute, ITestDataSource
 {
     private readonly string _testCasesField;
-    private readonly string _filterFuncField;
 
-    public FilterTestDataSourceAttribute(string testCasesField, string filterFuncField)
-    {
-        _testCasesField = testCasesField;
-        _filterFuncField = filterFuncField;
-    }
+    public FilterTestDataSourceAttribute(string testCasesField)
+        => _testCasesField = testCasesField;
 
     public IEnumerable<object[]> GetData(MethodInfo methodInfo)
     {
@@ -33,15 +29,9 @@ public class FilterTestDataSourceAttribute : Attribute, ITestDataSource
         if (testCasesField.GetValue(null) is not IEnumerable<object> testCases)
             throw new InvalidOperationException($"Field {_testCasesField} of type '{methodInfo.DeclaringType.Name}' has no value or does not implement IEnumerable");
 
-
-        var filterFuncField = methodInfo.DeclaringType.GetField(_filterFuncField, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
-        if (filterFuncField == null)
-            throw new InvalidOperationException($"Field {_filterFuncField} not found in type '{methodInfo.DeclaringType.Name}'");
-
-        if (filterFuncField.GetValue(null) is not IEnumerable<object> filterFunctions)
-            throw new InvalidOperationException($"Field {_filterFuncField} of type '{methodInfo.DeclaringType.Name}' has no value or does not implement IEnumerable");
-
-        return testCases.SelectMany(_ => filterFunctions, (testCase, filterFunc) => new[] { testCase, filterFunc }).ToList();
+        var entitySortFuncParameterType = methodInfo.GetParameters()[1].ParameterType.GenericTypeArguments[0];
+        var filterFunctions = EntityFilterFunctions.GetEntityFilterFunctions(entitySortFuncParameterType);
+        return testCases.SelectMany(_ => filterFunctions, (testCase, sortFunc) => new[] { testCase, sortFunc }).ToList();
     }
 
     public string GetDisplayName(MethodInfo methodInfo, object?[]? data)

@@ -1,9 +1,9 @@
-﻿using Schick.Plainquire.Filter.Abstractions.Configurations;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Abstractions.Configurations;
 using Schick.Plainquire.Filter.Exceptions;
-using Schick.Plainquire.Filter.Tests.Attributes;
 using Schick.Plainquire.Filter.Tests.Extensions;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -11,11 +11,11 @@ namespace Schick.Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
-public class FilterForDateTimeBySyntaxTests : TestBase<DateTime>
+public class FilterForDateTimeBySyntaxTests
 {
     [DataTestMethod]
-    [FilterTestDataSource(nameof(_testCases), nameof(TestModelFilterFunctions))]
-    public void FilterForDateTimeBySyntax_WorksAsExpected(FilterTestCase<DateTime, DateTime> testCase, TestModelFilterFunc<DateTime> filterFunc)
+    [FilterTestDataSource(nameof(_testCases))]
+    public void FilterForDateTimeBySyntax_WorksAsExpected(FilterTestCase<DateTime, DateTime> testCase, EntityFilterFunc<TestModel<DateTime>> filterFunc)
         => testCase.Run(_testItems, filterFunc);
 
     private static readonly TestModel<DateTime>[] _testItems =
@@ -39,8 +39,8 @@ public class FilterForDateTimeBySyntaxTests : TestBase<DateTime>
 
     private static readonly FilterTestCase<DateTime, DateTime>[] _testCases =
     [
-        FilterTestCase.Create<DateTime>(1000, "null", _ => ALL, IgnoreParseExceptions),
-        FilterTestCase.Create<DateTime>(1001, "=null", _ => ALL, IgnoreParseExceptions),
+        FilterTestCase.Create<DateTime>(1000, "null", _ => TestItems.ALL, TestConfig.IgnoreParseExceptions),
+        FilterTestCase.Create<DateTime>(1001, "=null", _ => TestItems.ALL, TestConfig.IgnoreParseExceptions),
         FilterTestCase.Create<DateTime>(1002, "~2010", x => x >= new DateTime(2010, 01, 01) && x < new DateTime(2011, 01, 01)),
         FilterTestCase.Create<DateTime>(1003, "~2010-06", x => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 07, 01)),
         FilterTestCase.Create<DateTime>(1004, "~2010-06-15", x => x >= new DateTime(2010, 06, 15) && x < new DateTime(2010, 06, 16)),
@@ -48,8 +48,8 @@ public class FilterForDateTimeBySyntaxTests : TestBase<DateTime>
         FilterTestCase.Create<DateTime>(1006, "~2010-06-15T12:30", x => x >= new DateTime(2010, 06, 15, 12, 30, 00) && x < new DateTime(2010, 06, 15, 12, 31, 00)),
         FilterTestCase.Create<DateTime>(1007, "~2010 06 15 12 30", x => x >= new DateTime(2010, 06, 15, 12, 30, 00) && x < new DateTime(2010, 06, 15, 12, 31, 00)),
         FilterTestCase.Create<DateTime>(1008, "~2010/06/15/12/30", x => x >= new DateTime(2010, 06, 15, 12, 30, 00) && x < new DateTime(2010, 06, 15, 12, 31, 00)),
-        FilterTestCase.Create<DateTime>(1009, "~01.06.2010", x => x >= new DateTime(2010, 01, 06) && x < new DateTime(2010, 01, 07), CultureEnUs),
-        FilterTestCase.Create<DateTime>(1010, "~01.06.2010", x => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 07, 01), CultureDeDe),
+        FilterTestCase.Create<DateTime>(1009, "~01.06.2010", x => x >= new DateTime(2010, 01, 06) && x < new DateTime(2010, 01, 07), TestConfig.CultureEnUs),
+        FilterTestCase.Create<DateTime>(1010, "~01.06.2010", x => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 07, 01), TestConfig.CultureDeDe),
         FilterTestCase.Create<DateTime>(1011, "one-month-ago", x => x >= new DateTime(2010, 05, 16) && x < new DateTime(2010, 06, 16), new FilterConfiguration { Now = () => new DateTime(2010, 06, 16) }),
         FilterTestCase.Create<DateTime>(1012, "june 1st_june-16th", x => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 16), new FilterConfiguration { Now = () => new DateTime(2010, 06, 16) }),
         FilterTestCase.Create<DateTime>(1013, "2010_2020", x => x >= new DateTime(2010, 01, 01) && x < new DateTime(2021, 01, 01)),
@@ -70,7 +70,7 @@ public class FilterForDateTimeBySyntaxTests : TestBase<DateTime>
         FilterTestCase.Create<DateTime>(1106, "2010-06-15T12", x => x >= new DateTime(2010, 06, 15, 12, 00, 00) && x < new DateTime(2010, 06, 15, 13, 00, 00)),
         FilterTestCase.Create<DateTime>(1107, "2010-06-15T12:30", x => x >= new DateTime(2010, 06, 15, 12, 30, 00) && x < new DateTime(2010, 06, 15, 12, 31, 00)),
         FilterTestCase.Create<DateTime>(1108, "2010-06-15T12:30:30", x => x >= new DateTime(2010, 06, 15, 12, 30, 30) && x < new DateTime(2010, 06, 15, 12, 30, 31)),
-        FilterTestCase.Create<DateTime>(1109, "2100-01-01", _ => NONE),
+        FilterTestCase.Create<DateTime>(1109, "2100-01-01", _ => TestItems.NONE),
         FilterTestCase.Create<DateTime>(1110, "2010-06-01_2010-06-15T12:31:00", x => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 15, 12, 32, 00)),
 
         FilterTestCase.Create<DateTime>(1200, "~null", new FilterExpressionException("Unable to parse given filter value")),
@@ -82,7 +82,7 @@ public class FilterForDateTimeBySyntaxTests : TestBase<DateTime>
         FilterTestCase.Create<DateTime>(1206, "~2010-06-15T12", x => x >= new DateTime(2010, 06, 15, 12, 00, 00) && x < new DateTime(2010, 06, 15, 13, 00, 00)),
         FilterTestCase.Create<DateTime>(1207, "~2010-06-15T12:30", x => x >= new DateTime(2010, 06, 15, 12, 30, 00) && x < new DateTime(2010, 06, 15, 12, 31, 00)),
         FilterTestCase.Create<DateTime>(1208, "~2010-06-15T12:30:30", x => x >= new DateTime(2010, 06, 15, 12, 30, 30) && x < new DateTime(2010, 06, 15, 12, 30, 31)),
-        FilterTestCase.Create<DateTime>(1209, "~2100-01-01", _ => NONE),
+        FilterTestCase.Create<DateTime>(1209, "~2100-01-01", _ => TestItems.NONE),
         FilterTestCase.Create<DateTime>(1210, "~2010-06-01_2010-06-15T12:31:00", x => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 15, 12, 32, 00)),
 
         FilterTestCase.Create<DateTime>(1300, "=null", new FilterExpressionException("Unable to parse given filter value")),

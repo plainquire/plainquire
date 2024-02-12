@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schick.Plainquire.Filter.Enums;
 using Schick.Plainquire.Filter.Exceptions;
 using Schick.Plainquire.Filter.Extensions;
 using Schick.Plainquire.Filter.Filters;
-using Schick.Plainquire.Filter.Tests.Attributes;
 using Schick.Plainquire.Filter.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Schick.Plainquire.Filter.Tests.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -15,10 +15,10 @@ using System.Linq;
 namespace Schick.Plainquire.Filter.Tests.Tests.EntityFilter;
 
 [TestClass, ExcludeFromCodeCoverage]
-public class EntityFilterTests : TestBase
+public class EntityFilterTests
 {
     [DataTestMethod]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<DateTime>))]
+    [FilterFuncDataSource<TestModel<DateTime>>]
     public void WhenPropertyFilterIsAdded_ThenSamePropertyFiltersAreKept(EntityFilterFunc<TestModel<DateTime>> filterFunc)
     {
         var testItemsFilter = new EntityFilter<TestModel<DateTime>>()
@@ -38,7 +38,7 @@ public class EntityFilterTests : TestBase
     }
 
     [DataTestMethod]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    [FilterFuncDataSource<TestModel<string>>]
     public void WhenPropertyFilterIsReplaced_ThenSamePropertyFiltersAreRemoved(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var testItemsFilter = new EntityFilter<TestModel<string>>()
@@ -56,7 +56,7 @@ public class EntityFilterTests : TestBase
     }
 
     [DataTestMethod]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    [FilterFuncDataSource<TestModel<string>>]
     public void WhenPropertyFilterIsCleared_ThenOtherPropertyFiltersAreKept(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var testItemsFilter = new EntityFilter<TestModel<string>>()
@@ -122,7 +122,7 @@ public class EntityFilterTests : TestBase
     }
 
     [DataTestMethod]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    [FilterFuncDataSource<TestModel<string>>]
     public void WhenPropertyIsFilteredForNull_FilterOperatorIsRecognizedCorrectly(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var isNullFilterAdded = new EntityFilter<TestModel<string>>()
@@ -155,7 +155,7 @@ public class EntityFilterTests : TestBase
     }
 
     [DataTestMethod]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    [FilterFuncDataSource<TestModel<string>>]
     public void WhenPropertyIsFilteredForNull_GivenValuesAreIgnored(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var isNullFilterAdded = new EntityFilter<TestModel<string>>()
@@ -190,7 +190,7 @@ public class EntityFilterTests : TestBase
     }
 
     [DataTestMethod]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<string>))]
+    [FilterFuncDataSource<TestModel<string>>]
     public void WhenPropertyIsFilteredForEmptyString_MatchingEntitiesAreReturned(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var filter = new EntityFilter<TestModel<string>>()
@@ -209,7 +209,7 @@ public class EntityFilterTests : TestBase
     }
 
     [DataTestMethod]
-    [FilterFuncDataSource(nameof(GetEntityFilterFunctions), typeof(TestModel<bool>))]
+    [FilterFuncDataSource<TestModel<bool>>]
     public void WhenPropertyFilterValueIsInvalid_FilterExpressionCreationExceptionIsThrown(EntityFilterFunc<TestModel<bool>> filterFunc)
     {
         var filter = new EntityFilter<TestModel<bool>>()
