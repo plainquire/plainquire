@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Schick.Plainquire.Sort.Extensions;
 
-internal static class PropertySortQueryableExtensions
+internal static class PropertySortExtensions
 {
     public static bool BelongsTo(this PropertySort sort, string propertyName)
         => Regex.IsMatch(

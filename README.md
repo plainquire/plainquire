@@ -124,8 +124,8 @@ CLI : dotnet add package Schick.Plainquire.Filter.Mvc
 ```csharp
 using Schick.Plainquire.Filter.Mvc.Extensions;
 
-// Register required stuff by calling 'AddFilterExpressionSupport()' on IMvcBuilder instance
-services.AddControllers().AddFilterExpressionSupport();
+// Register required stuff by calling 'AddFilterSupport()' on IMvcBuilder instance
+services.AddControllers().AddFilterSupport();
 ```
 
 ### Map HTTP query parameters to `EntityFilter`
@@ -218,7 +218,7 @@ using Schick.Plainquire.Filter.Swashbuckle.Extensions;
 services.AddSwaggerGen(options =>
 {    
     // Register filters used to modify swagger.json
-    options.AddFilterExpressionSupport();
+    options.AddFilterSupport();
 });
 ```
 
@@ -230,7 +230,7 @@ To get descriptions for generated parameters from XML documentation, paths to do
 services.AddSwaggerGen(options =>
 {
     var filterDoc = Path.Combine(AppContext.BaseDirectory, "Schick.Plainquire.Filter.xml");
-    options.AddFilterExpressionSupport(filterDoc);
+    options.AddFilterSupport(filterDoc);
     options.IncludeXmlComments(filterDoc);
 });
 ```
@@ -510,8 +510,8 @@ CLI : dotnet add package Schick.Plainquire.Filter.Mvc.Newtonsoft
 using Schick.Plainquire.Filter.Mvc.Newtonsoft;
 
 // Register support for Newtonsoft by calling 
-// 'AddFilterExpressionNewtonsoftSupport()' on IMvcBuilder instance
-services.AddControllers().AddFilterExpressionNewtonsoftSupport();
+// 'AddFilterNewtonsoftSupport()' on IMvcBuilder instance
+services.AddControllers().AddFilterNewtonsoftSupport();
 ```
 
 ## Advanced Scenarios
