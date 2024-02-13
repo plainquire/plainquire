@@ -13,7 +13,7 @@ using System.Reflection;
 
 namespace Schick.Plainquire.Filter.Tests.Services;
 
-public delegate List<TEntity> EntityFilterFunc<TEntity>(ICollection<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration = null, IPropertyFilterInterceptor? interceptor = null);
+public delegate List<TEntity> EntityFilterFunc<TEntity>(ICollection<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration = null, IFilterInterceptor? interceptor = null);
 
 [ExcludeFromCodeCoverage]
 public static class EntityFilterFunctions
@@ -34,39 +34,39 @@ public static class EntityFilterFunctions
             .MakeGenericMethod(entityType)
             .Invoke(null, [])!;
 
-    private static List<TEntity> FilterDirectByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration, IPropertyFilterInterceptor? interceptor)
+    private static List<TEntity> FilterDirectByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration, IFilterInterceptor? interceptor)
     {
         var predicate = filter.CreateFilter(configuration, interceptor) ?? (x => true);
         return testItems.Where(predicate.Compile()).ToList();
     }
 
-    private static List<TEntity> FilterNetCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration, IPropertyFilterInterceptor? interceptor)
+    private static List<TEntity> FilterNetCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration, IFilterInterceptor? interceptor)
     {
         var predicate = filter.Clone().CreateFilter(configuration, interceptor) ?? (x => true);
         return testItems.Where(predicate.Compile()).ToList();
     }
 
-    private static List<TEntity> FilterNewtonCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration, IPropertyFilterInterceptor? interceptor)
+    private static List<TEntity> FilterNewtonCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration, IFilterInterceptor? interceptor)
     {
         var predicate = filter.NewtonsoftClone().CreateFilter(configuration, interceptor) ?? (x => true);
         return testItems.Where(predicate.Compile()).ToList();
     }
 
-    private static List<TEntity> FilterDirectByEF<TEntity>(this ICollection<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration, IPropertyFilterInterceptor? interceptor)
+    private static List<TEntity> FilterDirectByEF<TEntity>(this ICollection<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration, IFilterInterceptor? interceptor)
         where TEntity : class
     {
         var predicate = filter.CreateFilter(configuration, interceptor) ?? (x => true);
         return testItems.FilterByEF(predicate);
     }
 
-    private static List<TEntity> FilterNetCloneByEF<TEntity>(this ICollection<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration, IPropertyFilterInterceptor? interceptor)
+    private static List<TEntity> FilterNetCloneByEF<TEntity>(this ICollection<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration, IFilterInterceptor? interceptor)
         where TEntity : class
     {
         var predicate = filter.Clone().CreateFilter(configuration, interceptor) ?? (x => true);
         return testItems.FilterByEF(predicate);
     }
 
-    private static List<TEntity> FilterNewtonCloneByEF<TEntity>(this ICollection<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration, IPropertyFilterInterceptor? interceptor)
+    private static List<TEntity> FilterNewtonCloneByEF<TEntity>(this ICollection<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? configuration, IFilterInterceptor? interceptor)
         where TEntity : class
     {
         var predicate = filter.NewtonsoftClone().CreateFilter(configuration, interceptor) ?? (x => true);

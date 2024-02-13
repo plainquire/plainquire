@@ -480,7 +480,7 @@ var filteredOrders = orders.Where(filterExpression.Compile()).ToList();
 
 ## Interception
 
-Creation of filter expression can be intercepted via `IPropertyFilterInterceptor`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply an interceptor.
+Creation of filter expression can be intercepted via `IFilterInterceptor`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply an interceptor.
 
 An example can be found in the test code [InterceptorTests](https://github.com/fschick/Plainquire/blob/main/Schick.Plainquire.Filter.Tests/Tests/EntityFilter/InterceptorTests.cs)
 
@@ -493,7 +493,7 @@ public class EntityFilter
 {
 	public static FilterConfiguration DefaultConfiguration { get; set; } = new FilterConfiguration();
 
-	public static IPropertyFilterInterceptor? DefaultInterceptor { get; set; }
+	public static IFilterInterceptor? DefaultInterceptor { get; set; }
 }
 ```
 
@@ -855,7 +855,7 @@ var sortedOrders = orders.OrderBy(sortParam, configuration).ToList();
 
 ## Interception
 
-Creation of sort expression can be intercepted via `IPropertySortQueryableInterceptor`. 
+Creation of sort expression can be intercepted via `ISortQueryableInterceptor`. 
 
 An example can be found in the test code [InterceptorTests](https://github.com/fschick/Plainquire/blob/main/Schick.Plainquire.Sort.Tests/Tests/EntitySort/InterceptorTests.cs)
 
@@ -868,7 +868,7 @@ public class EntitySort
 {
 	public static SortConfiguration DefaultConfiguration { get; set; } = new FilterConfiguration();
 
-	public static IPropertySortQueryableInterceptor? DefaultInterceptor { get; set; }
+	public static ISortQueryableInterceptor? DefaultInterceptor { get; set; }
 }
 ```
 

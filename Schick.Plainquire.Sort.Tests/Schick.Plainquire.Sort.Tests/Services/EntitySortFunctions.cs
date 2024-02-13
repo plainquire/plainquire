@@ -13,7 +13,7 @@ using System.Reflection;
 
 namespace Schick.Plainquire.Sort.Tests.Services;
 
-public delegate List<TEntity> EntitySortFunction<TEntity>(IEnumerable<TEntity> items, EntitySort<TEntity> sort, SortConfiguration? configuration = null, IPropertySortQueryableInterceptor? interceptor = null);
+public delegate List<TEntity> EntitySortFunction<TEntity>(IEnumerable<TEntity> items, EntitySort<TEntity> sort, SortConfiguration? configuration = null, ISortInterceptor? interceptor = null);
 
 [ExcludeFromCodeCoverage]
 public static class EntitySortFunctions
@@ -34,24 +34,24 @@ public static class EntitySortFunctions
             .MakeGenericMethod(entityType)
             .Invoke(null, [])!;
 
-    private static List<TEntity> SortDirectByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> SortDirectByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, ISortInterceptor? interceptor)
         => testItems.OrderBy(sort, configuration, interceptor).ToList();
 
-    private static List<TEntity> SortNetCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> SortNetCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, ISortInterceptor? interceptor)
         => testItems.OrderBy(sort.Clone(), configuration, interceptor).ToList();
 
-    private static List<TEntity> SortNewtonCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> SortNewtonCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, ISortInterceptor? interceptor)
         => testItems.OrderBy(sort.NewtonsoftClone(), configuration, interceptor).ToList();
 
-    private static List<TEntity> SortDirectByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> SortDirectByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, ISortInterceptor? interceptor)
         where TEntity : class
         => testItems.OrderByEF(sort, configuration, interceptor);
 
-    private static List<TEntity> SortNetCloneByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> SortNetCloneByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, ISortInterceptor? interceptor)
         where TEntity : class
         => testItems.OrderByEF(sort.Clone(), configuration, interceptor);
 
-    private static List<TEntity> SortNewtonCloneByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> SortNewtonCloneByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, ISortInterceptor? interceptor)
         where TEntity : class
         => testItems.OrderByEF(sort.NewtonsoftClone(), configuration, interceptor);
 
@@ -62,7 +62,7 @@ public static class EntitySortFunctions
         return JsonConvert.DeserializeObject<EntitySort<TEntity>>(json, serializerSettings)!;
     }
 
-    private static List<TEntity> OrderByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, IPropertySortQueryableInterceptor? interceptor)
+    private static List<TEntity> OrderByEF<TEntity>(this IEnumerable<TEntity> testItems, EntitySort<TEntity> sort, SortConfiguration? configuration, ISortInterceptor? interceptor)
         where TEntity : class
     {
         using var dbContext = new TestDbContext<TEntity>();

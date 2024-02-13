@@ -142,7 +142,7 @@ public class EntitySort
     /// <summary>
     /// Gets or sets the default interceptor. Can be used to set a system-wide interceptor.
     /// </summary>
-    public static IPropertySortQueryableInterceptor? DefaultInterceptor { get; set; }
+    public static ISortInterceptor? DefaultInterceptor { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EntitySort"/> class.

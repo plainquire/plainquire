@@ -77,7 +77,7 @@ public class InterceptorTests
         sortedItems.Should().ContainInOrder(testItems[1], testItems[0], testItems[3], testItems[2]);
     }
 
-    private class NestedModelByValueInterceptor : IPropertySortQueryableInterceptor
+    private class NestedModelByValueInterceptor : ISortInterceptor
     {
         public IOrderedQueryable<TEntity>? OrderBy<TEntity>(IQueryable<TEntity> source, Sorts.PropertySort sort, SortConfiguration? configuration = null)
         {

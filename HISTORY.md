@@ -20,6 +20,10 @@ Obsolete methods removed from `EntityFilter.cs`
 
 `*FilterExpressionCreator*` classes and namespaces renamed to `*FilterExpression*`
 
+`IPropertyFilterInterceptor` renamed to `IFilterInterceptor`
+
+`IPropertySortQueryableInterceptor` renamed to `ISortInterceptor`
+
 # 4.6.1
 
 ## Fixes

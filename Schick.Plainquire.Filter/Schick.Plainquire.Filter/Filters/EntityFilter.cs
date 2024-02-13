@@ -205,7 +205,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// </summary>
     /// <param name="configuration">Filter configuration.</param>
     /// <param name="interceptor">An interceptor to manipulate the generated filters.</param>
-    public Expression<Func<TEntity, bool>>? CreateFilter(FilterConfiguration? configuration = null, IPropertyFilterInterceptor? interceptor = null)
+    public Expression<Func<TEntity, bool>>? CreateFilter(FilterConfiguration? configuration = null, IFilterInterceptor? interceptor = null)
         => CreateFilter<TEntity>(configuration, interceptor);
 
     /// <summary>
@@ -248,7 +248,7 @@ public class EntityFilter
     /// <summary>
     /// Gets or sets the default interceptor. Can be used to set a system-wide interceptor.
     /// </summary>
-    public static IPropertyFilterInterceptor? DefaultInterceptor { get; set; }
+    public static IFilterInterceptor? DefaultInterceptor { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EntityFilter"/> class.
@@ -383,7 +383,7 @@ public class EntityFilter
         => PropertyFilters.Clear();
 
     /// <inheritdoc cref="EntityFilter{TEntity}.CreateFilter" />
-    protected internal Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(FilterConfiguration? configuration = null, IPropertyFilterInterceptor? interceptor = null)
+    protected internal Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(FilterConfiguration? configuration = null, IFilterInterceptor? interceptor = null)
     {
         configuration ??= DefaultConfiguration;
         interceptor ??= DefaultInterceptor;

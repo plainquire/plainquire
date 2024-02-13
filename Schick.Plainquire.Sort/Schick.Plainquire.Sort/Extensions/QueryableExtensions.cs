@@ -16,8 +16,8 @@ namespace Schick.Plainquire.Sort.Extensions;
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
 public static class QueryableExtensions
 {
-    ///<inheritdoc cref="OrderBy{TEntity}(IQueryable{TEntity}, EntitySort{TEntity}, SortConfiguration?, IPropertySortQueryableInterceptor?)"/>
-    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IEnumerable<TEntity> source, EntitySort<TEntity> sort, SortConfiguration? configuration = null, IPropertySortQueryableInterceptor? interceptor = null)
+    /// <inheritdoc cref="OrderBy{TEntity}(IQueryable{TEntity}, EntitySort{TEntity}, SortConfiguration?, ISortInterceptor?)"/>
+    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IEnumerable<TEntity> source, EntitySort<TEntity> sort, SortConfiguration? configuration = null, ISortInterceptor? interceptor = null)
         => source.AsQueryable().OrderBy(sort, configuration, interceptor);
 
     /// <summary>
@@ -28,7 +28,7 @@ public static class QueryableExtensions
     /// <param name="sort">The <see cref="EntitySort{TEntity}"/> used to sort the elements.</param>
     /// <param name="configuration">Sort order configuration.</param>
     /// <param name="interceptor">An interceptor to manipulate the generated sort order.</param>
-    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, EntitySort<TEntity> sort, SortConfiguration? configuration = null, IPropertySortQueryableInterceptor? interceptor = null)
+    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, EntitySort<TEntity> sort, SortConfiguration? configuration = null, ISortInterceptor? interceptor = null)
     {
         var propertySorts = sort._propertySorts.OrderBy(x => x.Position).ToList();
         if (!propertySorts.Any())
