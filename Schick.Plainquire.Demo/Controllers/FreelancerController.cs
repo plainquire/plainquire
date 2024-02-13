@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Bogus;
+﻿using Bogus;
 using Bogus.DataSets;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +8,16 @@ using Schick.Plainquire.Demo.Models;
 using Schick.Plainquire.Demo.Models.FilterSets;
 using Schick.Plainquire.Demo.Routing;
 using Schick.Plainquire.Filter.Extensions;
+using Schick.Plainquire.Page.Extensions;
+using Schick.Plainquire.Page.Pages;
 using Schick.Plainquire.Sort.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Address = Schick.Plainquire.Demo.Models.Address;
 
 namespace Schick.Plainquire.Demo.Controllers;
@@ -44,18 +47,12 @@ public class FreelancerController : Controller
     /// </summary>
     /// <param name="filter">The freelancer/project filter set.</param>
     /// <param name="orderBy">The freelancer/address sort order set.</param>
+    /// <param name="page">The freelancer pagination set.</param>
     /// <param name="seed">A seed. Using the same seed returns predictable result.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
     [HttpGet]
-    public Task<FreelancerDto> GetFreelancers([FromQuery] FreelancerFilterSet filter, [FromQuery] FreelancerSortSet orderBy, int seed = 0, CancellationToken cancellationToken = default)
+    public async Task<FreelancerDto> GetFreelancers([FromQuery] FreelancerFilterSet filter, [FromQuery] FreelancerSortSet orderBy, [FromQuery] EntityPage page, int seed = 0, CancellationToken cancellationToken = default)
     {
-        var unfilteredCount = _dbContext.Set<Freelancer>().Count(x => x.Seed == seed);
-        if (unfilteredCount == 0)
-        {
-            RecreateFreelancers(seed: seed);
-            unfilteredCount = _dbContext.Set<Freelancer>().Count(x => x.Seed == seed);
-        }
-
         var freelancerFilter = filter.Freelancer;
         var projectFilter = filter.Project;
         var addressFilter = filter.Address;
@@ -69,24 +66,35 @@ public class FreelancerController : Controller
         freelancerOrderBy
             .AddNested(freelancer => freelancer.Address, orderBy.Address);
 
+        var unfilteredCount = await _dbContext.Set<Freelancer>().CountAsync(x => x.Seed == seed, cancellationToken);
+        if (unfilteredCount == 0)
+        {
+            await GenerateFreelancers(seed: seed, cancellationToken: cancellationToken);
+            unfilteredCount = await _dbContext.Set<Freelancer>().CountAsync(x => x.Seed == seed, cancellationToken);
+        }
+
+        var filteredCount = await _dbContext.Set<Freelancer>().CountAsync(freelancerFilter, cancellationToken);
+
         var query = _dbContext
             .Set<Freelancer>()
             .OrderBy(freelancerOrderBy)
             .Include(x => x.Projects)
-            .Where(freelancerFilter);
+            .Where(freelancerFilter)
+            .Page(page);
 
-        var data = query.ToList();
+        var data = await query.ToListAsync(cancellationToken);
+
         var freelancers = new FreelancerDto
         {
             Data = data,
-            FilteredCount = data.Count,
+            FilteredCount = filteredCount,
             UnfilteredCount = unfilteredCount,
-            SqlQuery = query.ToQueryString(),
+            SqlQuery = GetSqlQuery(query),
             FilterExpression = freelancerFilter.ToString(),
             HttpQuery = WebUtility.UrlDecode(HttpContext.Request.Path.Value + HttpContext.Request.QueryString.Value)
         };
 
-        return Task.FromResult(freelancers);
+        return freelancers;
     }
 
     /// <summary>
@@ -97,13 +105,13 @@ public class FreelancerController : Controller
     /// <param name="seed">A seed. Using the same seed returns predictable data.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
     [HttpPut]
-    public Task<List<Freelancer>> GenerateFreelancers(int amount = 10, string locale = "en_US", int seed = 0, CancellationToken cancellationToken = default)
+    public Task<List<Freelancer>> GenerateFreelancers(int amount = 12, string locale = "en_US", int seed = 0, CancellationToken cancellationToken = default)
     {
         var freelancers = RecreateFreelancers(amount, locale, seed);
         return Task.FromResult(freelancers);
     }
 
-    private List<Freelancer> RecreateFreelancers(int amount = 10, string locale = "en_US", int seed = 0)
+    private List<Freelancer> RecreateFreelancers(int amount, string locale, int seed)
     {
         var freelancers = GenerateFreelancersInternal(amount, locale, seed);
         _dbContext.Set<Freelancer>().Where(x => x.Seed == seed).ExecuteDelete();
@@ -112,7 +120,7 @@ public class FreelancerController : Controller
         return freelancers;
     }
 
-    private static List<Freelancer> GenerateFreelancersInternal(int amount = 10, string locale = "en_US", int seed = 0)
+    private static List<Freelancer> GenerateFreelancersInternal(int amount, string locale, int seed)
     {
         const int minAge = 15;
         const int maxAge = 80;
@@ -156,5 +164,20 @@ public class FreelancerController : Controller
             .UseSeed(seed)
             .Generate(amount)
             .ToList();
+    }
+
+    private static string GetSqlQuery(IQueryable query)
+    {
+        var queryString = query.ToQueryString();
+
+        var select = Regex.Match(queryString, "SELECT.*", RegexOptions.Singleline).Value;
+
+        var parameterMatches = Regex.Matches(queryString, @"^\s*.param set (?<paramName>@__p_\d+)\s+(?<paramValue>.*)\s*$", RegexOptions.Multiline);
+        var parameters = parameterMatches.Select(x => new { Name = x.Groups["paramName"].Value.Trim(), Value = x.Groups["paramValue"].Value.Trim() }).ToDictionary(x => x.Name, x => x.Value);
+
+        foreach (var parameter in parameters)
+            select = select.Replace(parameter.Key, parameter.Value);
+
+        return select;
     }
 }

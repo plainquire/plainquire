@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../Build/build_core.props" />
+  <Import Project="../../Build/build_version.props" />
+  <Import Project="../../Build/build_xml_documentation.props" />
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Schick.Plainquire.Filter\Schick.Plainquire.Filter.Abstractions\Schick.Plainquire.Filter.Abstractions.csproj" />
+    <ProjectReference Include="..\Schick.Plainquire.Page\Schick.Plainquire.Page.csproj" />
+  </ItemGroup>
+
+</Project>

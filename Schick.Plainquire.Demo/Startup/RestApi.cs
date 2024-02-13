@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Converters;
 using Schick.Plainquire.Filter.Mvc.Extensions;
 using Schick.Plainquire.Filter.Mvc.Newtonsoft.Extensions;
+using Schick.Plainquire.Page.Mvc.Extensions;
 using Schick.Plainquire.Sort.Mvc.Extensions;
 using Schick.Plainquire.Sort.Mvc.Newtonsoft.Extensions;
 
@@ -29,7 +30,8 @@ internal static class RestApi
             .AddFilterExpressionSupport()
             .AddFilterExpressionNewtonsoftSupport()
             .AddSortQueryableSupport()
-            .AddSortQueryableNewtonsoftSupport();
+            .AddSortQueryableNewtonsoftSupport()
+            .AddPageQueryableSupport();
 
         return services;
     }

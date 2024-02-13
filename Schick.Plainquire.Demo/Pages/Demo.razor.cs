@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Schick.Plainquire.Demo.Pages;
@@ -22,7 +23,11 @@ public class DemoPage : ComponentBase
     private readonly Random _randomizer = new();
 
     protected FreelancerQueryModel QueryModel = new();
+
     protected FreelancerDto QueryResult = new();
+
+    protected int PageCount => (int)Math.Ceiling(QueryResult.FilteredCount / (float)QueryModel.PageSize);
+
     protected readonly NumberFormatInfo NumberFormat;
 
     public DemoPage()
@@ -76,6 +81,18 @@ public class DemoPage : ComponentBase
         await UpdateQuery();
     }
 
+    protected async Task SetPage(int page)
+    {
+        QueryModel.PageNumber = page;
+        await UpdateQuery();
+    }
+
+    protected async Task SetPageSize(int pageSize)
+    {
+        QueryModel.PageSize = pageSize;
+        await UpdateQuery();
+    }
+
     protected async Task FormatSql()
         => QueryResult.SqlQuery = await FormatSql(QueryResult.SqlQuery!);
 
@@ -113,6 +130,12 @@ public class DemoPage : ComponentBase
 
             var json = await response.Content.ReadAsStringAsync();
             QueryResult = JsonConvert.DeserializeObject<FreelancerDto>(json) ?? new();
+
+            if (QueryModel.PageNumber > PageCount)
+            {
+                await SetPage(PageCount);
+                await LoadData();
+            }
         }
         catch (InvalidOperationException e)
         {
@@ -142,6 +165,10 @@ public class DemoPage : ComponentBase
 
         public string[] Sort { get; private set; } = ["", "", "", ""];
 
+        public int PageNumber { get; set; } = 1;
+
+        public int PageSize { get; set; } = 10;
+
         public string? Seed { get; set; }
 
         public static FreelancerQueryModel FromQuery(Dictionary<string, StringValues> queryParameters)
@@ -150,15 +177,24 @@ public class DemoPage : ComponentBase
             foreach (var (key, value) in queryParameters)
                 result.SetFilterByName(key, value);
 
-            if (!queryParameters.TryGetValue("orderBy", out var orderBy))
-                return result;
+            if (queryParameters.TryGetValue("orderBy", out var orderBy))
+            {
+                var sort = orderBy
+                    .SelectMany(value => value?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? [])
+                    .Take(4)
+                    .ToArray();
 
-            var sort = orderBy
-                .SelectMany(value => value?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? [])
-                .Take(4)
-                .ToArray();
+                Array.Copy(sort, result.Sort, sort.Length);
+            }
 
-            Array.Copy(sort, result.Sort, sort.Length);
+            if (queryParameters.TryGetValue("page", out var page))
+                result.PageNumber = int.Parse(page!);
+
+            if (queryParameters.TryGetValue("pageSize", out var pageSize))
+                result.PageSize = int.Parse(pageSize!);
+
+            if (queryParameters.TryGetValue("seed", out var seed))
+                result.Seed = seed;
 
             return result;
         }
@@ -179,11 +215,14 @@ public class DemoPage : ComponentBase
             if (sort.Count != 0)
                 query.Add("orderBy", string.Join(',', sort));
 
+            query.Add("page", new StringValues(PageNumber.ToString()));
+            query.Add("pageSize", new StringValues(PageSize.ToString()));
+
             return query;
         }
 
         private void SetFilterByName(string propertyName, string? value)
-            => Filter.GetType().GetProperty(propertyName)?.SetMethod?.Invoke(Filter, [value]);
+            => Filter.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Instance)?.SetMethod?.Invoke(Filter, [value]);
 
         public void Clear()
         {

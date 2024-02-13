@@ -176,7 +176,47 @@
             ? "Error"
             : QueryResult.Data != null ? QueryResult.FilteredCount + "/" + QueryResult.UnfilteredCount : "";
         }
-        Query Result (@resultDescription)
+
+        <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+                Query Result (@resultDescription)
+            </div>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination m-0">
+                    <li class="page-item">
+                        <a class="page-link" @onclick="() => SetPage(Math.Max(QueryModel.PageNumber - 1, 1))" aria-label="Previous page">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    @for (var pageIndex = 1; pageIndex <= PageCount; pageIndex++)
+                    {
+                        <li class="page-item @(pageIndex == QueryModel.PageNumber ? "active" : "")">
+                            @{
+                                var capturedPageIndex = pageIndex;
+                                <a class="page-link" @onclick="() => SetPage(capturedPageIndex)">@pageIndex</a>
+                            }
+                        </li>
+                    }
+                    <li class="page-item">
+                        <a class="page-link" @onclick="() => SetPage(Math.Min(QueryModel.PageNumber + 1, PageCount))" aria-label="Next page">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="dropdown ms-3">
+                <button class="btn btn-outline-primary dropdown-toggle border page-size" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    @QueryModel.PageSize
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" @onclick="() => SetPageSize(5)">5</a></li>
+                    <li><a class="dropdown-item" @onclick="() => SetPageSize(10)">10</a></li>
+                    <li><a class="dropdown-item" @onclick="() => SetPageSize(15)">15</a></li>
+                </ul>
+            </div>
+        </div>
     </h6>
     <ul class="list-group list-group-flush">
         @if (QueryResult.ErrorMessage != null)

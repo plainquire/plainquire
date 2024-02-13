@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using Schick.Plainquire.Demo.Extensions;
 using Schick.Plainquire.Demo.Routing;
 using Schick.Plainquire.Filter.Swashbuckle.Extensions;
+using Schick.Plainquire.Page.Swashbuckle.Extensions;
 using Schick.Plainquire.Sort.Swashbuckle.Extensions;
 using System;
 using System.IO;
@@ -31,20 +32,23 @@ internal static class OpenApi
 
     internal static IServiceCollection RegisterOpenApiController(this IServiceCollection services)
     {
-        var filterExpressionCreatorDoc = Path.Combine(AppContext.BaseDirectory, "Schick.Plainquire.Filter.xml");
-        var sortCreatorDoc = Path.Combine(AppContext.BaseDirectory, "Schick.Plainquire.Sort.xml");
-        var filterExpressionCreatorDemoDoc = Path.Combine(AppContext.BaseDirectory, "Schick.Plainquire.Demo.xml");
+        var filterExpressionDoc = Path.Combine(AppContext.BaseDirectory, "Schick.Plainquire.Filter.xml");
+        var sortQueryableDoc = Path.Combine(AppContext.BaseDirectory, "Schick.Plainquire.Sort.xml");
+        var pageQueryableDoc = Path.Combine(AppContext.BaseDirectory, "Schick.Plainquire.Page.xml");
+        var plainquireDemoDoc = Path.Combine(AppContext.BaseDirectory, "Schick.Plainquire.Demo.xml");
 
         return services
             .AddSwaggerGenNewtonsoftSupport()
             .AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(V1ApiController.API_VERSION, new OpenApiInfo { Title = $"{AssemblyExtensions.GetProgramProduct()} API", Version = V1ApiController.API_VERSION });
-                c.AddFilterExpressionSupport(filterExpressionCreatorDoc, filterExpressionCreatorDemoDoc);
-                c.AddSortQueryableSupport(sortCreatorDoc, filterExpressionCreatorDemoDoc);
-                c.IncludeXmlComments(filterExpressionCreatorDoc);
-                c.IncludeXmlComments(sortCreatorDoc);
-                c.IncludeXmlComments(filterExpressionCreatorDemoDoc);
+                c.AddFilterExpressionSupport(filterExpressionDoc, plainquireDemoDoc);
+                c.AddSortQueryableSupport(sortQueryableDoc, plainquireDemoDoc);
+                c.AddPageSupport(pageQueryableDoc, plainquireDemoDoc);
+                c.IncludeXmlComments(filterExpressionDoc);
+                c.IncludeXmlComments(sortQueryableDoc);
+                c.IncludeXmlComments(pageQueryableDoc);
+                c.IncludeXmlComments(plainquireDemoDoc);
             });
     }
 }
