@@ -2,15 +2,35 @@
 
 Dynamically creates lambda expressions to filter enumerable and database queries via `System.Linq.Enumerable.Where(...)`
 
+# Overview
+
+```csharp
+var getFreelancersUrl = "/GetFreelancers?firstName=Joe&orderBy=lastName&page=2&pageSize=1"
+
+[HttpGet]
+public List<Order> GetFreelancers(
+    [FromQuery] EntityFilter<Freelancer> filter,
+    [FromQuery] EntitySort<Freelancer> sort,
+    [FromQuery] EntityPage page)
+{   
+    var orders = dbContext.Freelancers
+        .Where(filter)
+        .OrderBy(sort)
+        .Page(page);
+    
+	// Freelancers in database
+    new Freelancer { FirstName = "Joe", LastName = "Smith" };
+    new Freelancer { FirstName = "Eve", LastName = "Smith" };
+    new Freelancer { FirstName = "Joe", LastName = "Jones" };
+}
+```
+
 # Demo
 
-Demo
 [https://filterexpressioncreator.schick-software.de/demo](https://filterexpressioncreator.schick-software.de/demo)
 
-Swagger / OpenAPI
-https://filterexpressioncreator.schick-software.de/openapi/
-
 # Table of Content
+
 - [Filter Entities](#filter-entities)
    * [Quick Start](#quick-start)
    * [REST / MVC](#rest-mvc)
@@ -34,7 +54,7 @@ https://filterexpressioncreator.schick-software.de/openapi/
 
 # Filter Entities
 
-## Quick Start
+## Getting Started
 
 Install the NuGet packages:
 ```
@@ -569,7 +589,7 @@ var filteredOrders = orders.Where(extendedFilter.Compile());
 
 # Sort Entities
 
-## Quick Start
+## Getting Started
 
 Install the NuGet packages:
 ```
