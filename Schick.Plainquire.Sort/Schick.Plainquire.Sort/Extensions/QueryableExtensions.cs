@@ -34,6 +34,7 @@ public static class QueryableExtensions
         if (!propertySorts.Any())
             return (IOrderedQueryable<TEntity>)source.Provider.CreateQuery<TEntity>(source.Expression);
 
+        configuration ??= EntitySort.DefaultConfiguration;
         interceptor ??= EntitySort.DefaultInterceptor;
 
         var first = propertySorts.First();

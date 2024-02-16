@@ -20,7 +20,7 @@ public interface ISortInterceptor
     /// <param name="configuration">The active sort order configuration</param>
     /// <returns>An <see cref="IOrderedEnumerable{TEntity}"/> with applied sort order or <c>null</c> to use the default sort order.</returns>
     [SuppressMessage("ReSharper", "ParameterTypeCanBeEnumerable.Global", Justification = "Required for functionallity.")]
-    public IOrderedQueryable<TEntity>? OrderBy<TEntity>(IQueryable<TEntity> source, PropertySort sort, SortConfiguration? configuration = null);
+    public IOrderedQueryable<TEntity>? OrderBy<TEntity>(IQueryable<TEntity> source, PropertySort sort, SortConfiguration configuration);
 
     /// <summary>
     /// Performs a subsequent ordering of a sequence according to the given <paramref name="sort"/>.
@@ -31,5 +31,5 @@ public interface ISortInterceptor
     /// <param name="configuration">The active sort order configuration</param>
     /// <returns>An <see cref="IOrderedEnumerable{TEntity}"/> with applied sort order or <c>null</c> to use the default sort order.</returns>
     [SuppressMessage("ReSharper", "ParameterTypeCanBeEnumerable.Global", Justification = "Required for functionallity.")]
-    public IOrderedQueryable<TEntity>? ThenBy<TEntity>(IOrderedQueryable<TEntity> source, PropertySort sort, SortConfiguration? configuration = null);
+    public IOrderedQueryable<TEntity>? ThenBy<TEntity>(IOrderedQueryable<TEntity> source, PropertySort sort, SortConfiguration configuration);
 }

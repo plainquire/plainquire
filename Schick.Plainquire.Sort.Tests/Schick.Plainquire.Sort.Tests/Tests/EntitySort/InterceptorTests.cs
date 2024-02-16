@@ -82,7 +82,7 @@ public class InterceptorTests
 
     private class NestedModelByValueInterceptor : ISortInterceptor
     {
-        public IOrderedQueryable<TEntity>? OrderBy<TEntity>(IQueryable<TEntity> source, Sorts.PropertySort sort, SortConfiguration? configuration = null)
+        public IOrderedQueryable<TEntity>? OrderBy<TEntity>(IQueryable<TEntity> source, Sorts.PropertySort sort, SortConfiguration configuration)
         {
             if (source is IQueryable<TestModel<string>> testModelSource && sort.PropertyPath == "NestedObject")
                 return (IOrderedQueryable<TEntity>)testModelSource.OrderBy(x => x.NestedObject!.Value);
@@ -90,7 +90,7 @@ public class InterceptorTests
             return null;
         }
 
-        public IOrderedQueryable<TEntity>? ThenBy<TEntity>(IOrderedQueryable<TEntity> source, Sorts.PropertySort sort, SortConfiguration? configuration = null)
+        public IOrderedQueryable<TEntity>? ThenBy<TEntity>(IOrderedQueryable<TEntity> source, Sorts.PropertySort sort, SortConfiguration configuration)
         {
             if (source is IOrderedQueryable<TestModel<string>> testModelSource && sort.PropertyPath == "NestedObject")
                 return (IOrderedQueryable<TEntity>)testModelSource.ThenBy(x => x.NestedObject!.Value);
