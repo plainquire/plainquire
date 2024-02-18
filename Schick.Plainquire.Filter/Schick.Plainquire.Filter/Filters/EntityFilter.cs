@@ -168,7 +168,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <summary>
     /// Creates a deep clone of this filter.
     /// </summary>
-    public EntityFilter<TEntity> Clone()
+    public new EntityFilter<TEntity> Clone()
         => JsonSerializer.Deserialize<EntityFilter<TEntity>>(JsonSerializer.Serialize(this))!;
 
     /// <summary>
@@ -233,7 +233,7 @@ public class EntityFilter<TEntity> : EntityFilter
 
 /// <inheritdoc cref="EntityFilter{TEntity}" />
 [JsonConverter(typeof(EntityFilterConverter))]
-public class EntityFilter
+public class EntityFilter : ICloneable
 {
     private static readonly MethodInfo _createFilterMethod = typeof(EntityFilter).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic).Single(x => x.Name == nameof(CreateFilter));
 
@@ -258,6 +258,10 @@ public class EntityFilter
         PropertyFilters = [];
         NestedFilters = [];
     }
+
+    /// <inheritdoc />
+    public object Clone()
+        => JsonSerializer.Deserialize<EntityFilter>(JsonSerializer.Serialize(this))!;
 
     /// <summary>
     /// Indicates whether this filter is empty.
