@@ -1,5 +1,4 @@
-﻿using LinqToDB.EntityFrameworkCore;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Schick.Plainquire.Demo.Models;
 
@@ -20,8 +19,6 @@ public class FreelancerDbContext : DbContext
         const string sqLiteDatabaseFile = "Freelancer";
         var connectionString = new SqliteConnectionStringBuilder { DataSource = $"{sqLiteDatabaseFile}.sqlite" }.ConnectionString;
         optionsBuilder.UseSqlite(connectionString);
-
-        LinqToDBForEFTools.Initialize();
     }
 
     /// <inheritdoc />

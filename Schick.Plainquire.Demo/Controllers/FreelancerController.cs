@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bogus;
 using Bogus.DataSets;
-using LinqToDB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Schick.Plainquire.Demo.Database;
@@ -107,7 +106,7 @@ public class FreelancerController : Controller
     private List<Freelancer> RecreateFreelancers(int amount = 10, string locale = "en_US", int seed = 0)
     {
         var freelancers = GenerateFreelancersInternal(amount, locale, seed);
-        _dbContext.Set<Freelancer>().Where(x => x.Seed == seed).Delete();
+        _dbContext.Set<Freelancer>().Where(x => x.Seed == seed).ExecuteDelete();
         _dbContext.AddRange(freelancers);
         _dbContext.SaveChanges();
         return freelancers;
