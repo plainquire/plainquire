@@ -17,7 +17,7 @@ public class JsonConverterExtensionsTests
     {
         var converters = new List<JsonConverter>();
 
-        converters.AddSortQueryableNewtonsoftSupport();
+        converters.AddSortNewtonsoftSupport();
 
         using var _ = new AssertionScope();
         converters.Should().HaveCount(2);

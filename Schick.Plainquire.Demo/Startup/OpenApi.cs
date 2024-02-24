@@ -42,7 +42,7 @@ internal static class OpenApi
             .AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(V1ApiController.API_VERSION, new OpenApiInfo { Title = $"{AssemblyExtensions.GetProgramProduct()} API", Version = V1ApiController.API_VERSION });
-                c.AddFilterExpressionSupport(filterExpressionDoc, plainquireDemoDoc);
+                c.AddFilterSupport(filterExpressionDoc, plainquireDemoDoc);
                 c.AddSortQueryableSupport(sortQueryableDoc, plainquireDemoDoc);
                 c.AddPageSupport(pageQueryableDoc, plainquireDemoDoc);
                 c.IncludeXmlComments(filterExpressionDoc);

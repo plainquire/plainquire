@@ -23,7 +23,7 @@ public class MvcBuilderExtensionsTests
         var mvcBuilderType = typeof(IMvcBuilder).Assembly.DefinedTypes.FirstOrDefault(x => x.Name == "MvcBuilder");
         var mvcBuilder = (IMvcBuilder)Activator.CreateInstance(mvcBuilderType!, servCollection, new ApplicationPartManager())!;
 
-        mvcBuilder.AddSortQueryableSupport();
+        mvcBuilder.AddSortSupport();
 
         using var serviceProvider = servCollection.BuildServiceProvider();
         var mvcOptions = serviceProvider.GetRequiredService<IOptions<MvcOptions>>().Value;

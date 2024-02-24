@@ -63,8 +63,8 @@ internal static class Program
     private static void ConfigureServerServices(WebHostBuilderContext context, IServiceCollection services)
     {
         services
-            .Configure<FilterExpressionConfiguration>(context.Configuration.GetSection(FilterExpressionConfiguration.CONFIGURATION_SECTION))
-            .AddSingleton(serviceProvider => serviceProvider.GetRequiredService<IOptions<FilterExpressionConfiguration>>().Value)
+            .Configure<FilterConfiguration>(context.Configuration.GetSection(FilterConfiguration.CONFIGURATION_SECTION))
+            .AddSingleton(serviceProvider => serviceProvider.GetRequiredService<IOptions<FilterConfiguration>>().Value)
             .RegisterApplicationServices()
             .RegisterOpenApiController()
             .RegisterRestApiController();

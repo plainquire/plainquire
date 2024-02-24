@@ -5,6 +5,7 @@ using Newtonsoft.Json.Converters;
 using Schick.Plainquire.Filter.Mvc.Extensions;
 using Schick.Plainquire.Filter.Mvc.Newtonsoft.Extensions;
 using Schick.Plainquire.Page.Mvc.Extensions;
+using Schick.Plainquire.Page.Mvc.Newtonsoft.Extensions;
 using Schick.Plainquire.Sort.Mvc.Extensions;
 using Schick.Plainquire.Sort.Mvc.Newtonsoft.Extensions;
 
@@ -27,11 +28,12 @@ internal static class RestApi
             {
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
             })
-            .AddFilterExpressionSupport()
-            .AddFilterExpressionNewtonsoftSupport()
-            .AddSortQueryableSupport()
-            .AddSortQueryableNewtonsoftSupport()
-            .AddPageQueryableSupport();
+            .AddFilterSupport()
+            .AddFilterNewtonsoftSupport()
+            .AddSortSupport()
+            .AddSortNewtonsoftSupport()
+            .AddPageSupport()
+            .AddPageNewtonsoftSupport();
 
         return services;
     }

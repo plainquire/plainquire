@@ -3,10 +3,10 @@
 /// <summary>
 /// Global application configuration
 /// </summary>
-public class FilterExpressionConfiguration
+public class FilterConfiguration
 {
     /// <summary>
     /// The configuration section bind to.
     /// </summary>
-    public const string CONFIGURATION_SECTION = "FilterExpressionCreator";
+    public const string CONFIGURATION_SECTION = "Plainquire:Filter";
 }

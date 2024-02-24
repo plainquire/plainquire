@@ -15,7 +15,7 @@ public class JsonConverterExtensionsTests
     {
         var converters = new List<JsonConverter>();
 
-        converters.AddFilterExpressionNewtonsoftSupport();
+        converters.AddFilterNewtonsoftSupport();
 
         converters.Should().HaveCount(2);
         converters.Should().Contain(x => x.GetType().FullName == "Schick.Plainquire.Filter.Newtonsoft.JsonConverters.ValueFilterConverter");

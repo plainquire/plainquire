@@ -6,23 +6,24 @@
 
 ## Breaking Changes
 
-Obsolete methods removed from `EntityFilter.cs`
-
-`FilterAttribute.Visible` renamed to `FilterAttribute.Filterable`
-
-`AddFilterExpressionsSupport` renamed to `AddFilterExpressionSupport`
-
-`AddFilterExpressionsNewtonsoftSupport` renamed to `AddFilterExpressionNewtonsoftSupport`
+Obsolete methods removed
 
 `FilterConfiguration` moved to namespace `Schick.Plainquire.Filter.Abstractions.Configurations`
 
-`ValueFilterExtensions.Create(...)` renamed to `ValueFiltersFactory.Create(...)`
+Name cleanup / renames:
 
-`*FilterExpressionCreator*` classes and namespaces renamed to `*FilterExpression*`
-
-`IPropertyFilterInterceptor` renamed to `IFilterInterceptor`
-
-`IPropertySortQueryableInterceptor` renamed to `ISortInterceptor`
+| 4.x                                    | 5.x                               |
+| -------------------------------------- | --------------------------------- |
+| `FilterAttribute.Visible`              | `FilterAttribute.Filterable`      |
+| `AddFilterExpressionSupport`           | `AddFilterSupport`                |
+| `AddFilterExpressionNewtonsoftSupport` | `AddFilterNewtonsoftSupport`      |
+| `AddSortQueryableSupport`              | `AddSortSupport`                  |
+| `AddSortQueryableNewtonsoftSupport`    | `AddSortNewtonsoftSupport`        |
+| `ValueFilterExtensions.Create(...)`    | `ValueFiltersFactory.Create(...)` |
+| `*FilterExpressionCreator*` classes    | `*FilterExpression*`              |
+| `IPropertyFilterInterceptor`           | `IFilterInterceptor`              |
+| `IPropertySortQueryableInterceptor`    | `ISortInterceptor`                |
+| `FilterExpressionCreationException`    | `FilterExpressionException`       |
 
 # 4.6.1
 

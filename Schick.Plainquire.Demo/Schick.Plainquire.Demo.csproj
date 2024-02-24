@@ -33,11 +33,11 @@
     <ProjectReference Include="..\Schick.Plainquire.Filter\Schick.Plainquire.Filter.Mvc\Schick.Plainquire.Filter.Mvc.csproj" />
     <ProjectReference Include="..\Schick.Plainquire.Filter\Schick.Plainquire.Filter.Swashbuckle\Schick.Plainquire.Filter.Swashbuckle.csproj" />
     <ProjectReference Include="..\Schick.Plainquire.Filter\Schick.Plainquire.Filter\Schick.Plainquire.Filter.csproj" />
+    <ProjectReference Include="..\Schick.Plainquire.Page\Schick.Plainquire.Page.Mvc.Newtonsoft\Schick.Plainquire.Page.Mvc.Newtonsoft.csproj" />
     <ProjectReference Include="..\Schick.Plainquire.Page\Schick.Plainquire.Page.Mvc\Schick.Plainquire.Page.Mvc.csproj" />
     <ProjectReference Include="..\Schick.Plainquire.Page\Schick.Plainquire.Page.Swashbuckle\Schick.Plainquire.Page.Swashbuckle.csproj" />
     <ProjectReference Include="..\Schick.Plainquire.Sort\Schick.Plainquire.Sort.Mvc.Newtonsoft\Schick.Plainquire.Sort.Mvc.Newtonsoft.csproj" />
     <ProjectReference Include="..\Schick.Plainquire.Sort\Schick.Plainquire.Sort.Mvc\Schick.Plainquire.Sort.Mvc.csproj" />
-    <ProjectReference Include="..\Schick.Plainquire.Sort\Schick.Plainquire.Sort.Newtonsoft\Schick.Plainquire.Sort.Newtonsoft.csproj" />
     <ProjectReference Include="..\Schick.Plainquire.Sort\Schick.Plainquire.Sort.Swashbuckle\Schick.Plainquire.Sort.Swashbuckle.csproj" />
     <ProjectReference Include="..\Schick.Plainquire.Sort\Schick.Plainquire.Sort\Schick.Plainquire.Sort.csproj" />
   </ItemGroup>
@@ -50,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Watch Remove="Models\Configuration\FilterExpressionConfiguration.cs" />
+    <Watch Remove="Models\Configuration\FilterConfiguration.cs" />
     <Watch Remove="Models\FilterSets\FreelancerSortSet.cs" />
   </ItemGroup>
 

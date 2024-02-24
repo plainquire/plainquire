@@ -210,7 +210,7 @@ public class EntityFilterTests
 
     [DataTestMethod]
     [FilterFuncDataSource<TestModel<bool>>]
-    public void WhenPropertyFilterValueIsInvalid_FilterExpressionCreationExceptionIsThrown(EntityFilterFunc<TestModel<bool>> filterFunc)
+    public void WhenPropertyFilterValueIsInvalid_FilterExpressionExceptionIsThrown(EntityFilterFunc<TestModel<bool>> filterFunc)
     {
         var filter = new EntityFilter<TestModel<bool>>()
             .Replace(x => x.ValueA, "=");
