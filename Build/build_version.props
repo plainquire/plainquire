@@ -6,7 +6,7 @@
     <Description>Library to dynamically create lambda expressions to filter lists and database queries</Description>
     <Authors>Florian Schick</Authors>
     <Company>Schick Software Entwicklung</Company>
-    <Copyright>© Florian Schick, 2021 all rights reserved</Copyright>
+    <Copyright>© Florian Schick, 2021-2024 all rights reserved</Copyright>
     <Owners>$(Company)</Owners>
     <Summary>$(Description)</Summary>
 
@@ -14,9 +14,8 @@
     <FileVersion>0.0.0.0</FileVersion>
     <AssemblyVersion>$(FileVersion)</AssemblyVersion>
 
-    <PackageId>$([MSBuild]::ValueOrDefault('$(AssemblyName)', '').Replace('FS.', 'Schick.'))</PackageId>
     <PackageDescription>$(Description)</PackageDescription>
-    <PackageIcon>Schick.Plainquire.png</PackageIcon>
+    <PackageIcon>Plainquire.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/fschick/Plainquire</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -29,7 +28,7 @@
   <ItemGroup>
     <None Include="..\..\LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
     <None Include="..\..\README.md" Pack="true" PackagePath="README.md" />
-    <None Include="..\..\Schick.Plainquire.png" Pack="true" PackagePath="Schick.Plainquire.png"/>
+    <None Include="..\..\Plainquire.png" Pack="true" PackagePath="Plainquire.png"/>
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <Import Project="../Build/build_core.props" />
+  <Import Project="../Build/build_version.props" />
+  <Import Project="../Build/build_xml_documentation.props" />
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
+    <None Include="..\README.md" Pack="true" PackagePath="README.md" />
+    <None Include="..\Plainquire.png" Pack="true" PackagePath="Plainquire.png" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="35.4.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.5.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Plainquire.Filter\Plainquire.Filter.Mvc.Newtonsoft\Plainquire.Filter.Mvc.Newtonsoft.csproj" />
+    <ProjectReference Include="..\Plainquire.Filter\Plainquire.Filter.Mvc\Plainquire.Filter.Mvc.csproj" />
+    <ProjectReference Include="..\Plainquire.Filter\Plainquire.Filter.Swashbuckle\Plainquire.Filter.Swashbuckle.csproj" />
+    <ProjectReference Include="..\Plainquire.Filter\Plainquire.Filter\Plainquire.Filter.csproj" />
+    <ProjectReference Include="..\Plainquire.Page\Plainquire.Page.Mvc.Newtonsoft\Plainquire.Page.Mvc.Newtonsoft.csproj" />
+    <ProjectReference Include="..\Plainquire.Page\Plainquire.Page.Mvc\Plainquire.Page.Mvc.csproj" />
+    <ProjectReference Include="..\Plainquire.Page\Plainquire.Page.Swashbuckle\Plainquire.Page.Swashbuckle.csproj" />
+    <ProjectReference Include="..\Plainquire.Sort\Plainquire.Sort.Mvc.Newtonsoft\Plainquire.Sort.Mvc.Newtonsoft.csproj" />
+    <ProjectReference Include="..\Plainquire.Sort\Plainquire.Sort.Mvc\Plainquire.Sort.Mvc.csproj" />
+    <ProjectReference Include="..\Plainquire.Sort\Plainquire.Sort.Swashbuckle\Plainquire.Sort.Swashbuckle.csproj" />
+    <ProjectReference Include="..\Plainquire.Sort\Plainquire.Sort\Plainquire.Sort.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="2.0.0" />
+    <Watch Include="..\**\*.razor" />
+    <Watch Include="..\**\*.scss" />
+    <Watch Include="..\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Watch Remove="Models\Configuration\FilterConfiguration.cs" />
+    <Watch Remove="Models\FilterSets\FreelancerSortSet.cs" />
+  </ItemGroup>
+
+</Project>

@@ -58,14 +58,14 @@ public List<Order> GetFreelancers(
 
 Install the NuGet packages:
 ```
-Package Manager : Install-Package Schick.Plainquire.
-CLI : dotnet add package Schick.Plainquire.Filter
+Package Manager : Install-Package Plainquire.Filter
+CLI : dotnet add package Plainquire.Filter
 ```
 Create a filter:
  ```csharp
-using Schick.Plainquire.Filter.Enums;
-using Schick.Plainquire.Filter.Extensions;
-using Schick.Plainquire.Filter.Filters;
+using Plainquire.Filter.Enums;
+using Plainquire.Filter.Extensions;
+using Plainquire.Filter.Filters;
 
 var orders = new[] {
     new Order { Customer = "Joe Miller", Number = 100 },
@@ -99,7 +99,7 @@ public class Order
 Or bind filter from query-parameters:
 
 ```csharp
-using Schick.Plainquire.Filter.Filters;
+using Plainquire.Filter.Filters;
 
 [HttpGet]
 public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order)
@@ -117,12 +117,12 @@ To filter an entity via model binding, the entity must be marked with `FilterEnt
 ### Register Model Binders
 
 ```
-Package Manager : Install-Package Schick.Plainquire.Filter.Mvc
-CLI : dotnet add package Schick.Plainquire.Filter.Mvc
+Package Manager : Install-Package Plainquire.Filter.Mvc
+CLI : dotnet add package Plainquire.Filter.Mvc
 ```
 
 ```csharp
-using Schick.Plainquire.Filter.Mvc.Extensions;
+using Plainquire.Filter.Mvc.Extensions;
 
 // Register required stuff by calling 'AddFilterSupport()' on IMvcBuilder instance
 services.AddControllers().AddFilterSupport();
@@ -133,7 +133,7 @@ services.AddControllers().AddFilterSupport();
 With model binding enabled, REST requests can be filtered using query parameters:
 
 ```csharp
-using Schick.Plainquire.Filter.Filters;
+using Plainquire.Filter.Filters;
 
 var getOrdersUrl = "/GetOrders?customer==Joe&number=>4711"
 
@@ -161,7 +161,7 @@ Parameters can be renamed or removed using  `FilterAttribute` and `FilterEntityA
 For the code below `Number` is not mapped anymore and `Customer` becomes `CustomerName`:
 
 ```csharp
-using Schick.Plainquire.Filter.Abstractions.Attributes;
+using Plainquire.Filter.Abstractions.Attributes;
 
 // Remove prefix, e.g. property 'Number' is mapped from 'number', not 'orderNumber'
 [FilterEntity(Prefix = "")]
@@ -183,8 +183,8 @@ Multiple entity filters can be combined to a set of filters using the `EntityFil
 You can write:
 
 ```csharp
-using Schick.Plainquire.Filter.Filters;
-using Schick.Plainquire.Filter.Abstractions.Attributes;
+using Plainquire.Filter.Filters;
+using Plainquire.Filter.Abstractions.Attributes;
 
 [HttpGet]
 // Use
@@ -208,12 +208,12 @@ public class OrderFilterSet
 ### Register OpenAPI Support
 Swagger / OpenAPI is supported when using [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
 ``` 
-Package Manager : Install-Package Schick.Plainquire.Filter.Swashbuckle
-CLI : dotnet add package Schick.Plainquire.Filter.Swashbuckle
+Package Manager : Install-Package Plainquire.Filter.Swashbuckle
+CLI : dotnet add package Plainquire.Filter.Swashbuckle
 ```
 
 ```csharp
-using Schick.Plainquire.Filter.Swashbuckle.Extensions;
+using Plainquire.Filter.Swashbuckle.Extensions;
 
 services.AddSwaggerGen(options =>
 {    
@@ -229,7 +229,7 @@ To get descriptions for generated parameters from XML documentation, paths to do
 ```csharp
 services.AddSwaggerGen(options =>
 {
-    var filterDoc = Path.Combine(AppContext.BaseDirectory, "Schick.Plainquire.Filter.xml");
+    var filterDoc = Path.Combine(AppContext.BaseDirectory, "Plainquire.Filter.xml");
     options.AddFilterSupport(filterDoc);
     options.IncludeXmlComments(filterDoc);
 });
@@ -466,7 +466,7 @@ ValueFilter[] filterValues = filter.GetPropertyFilterValues(x => x.Customer);
 Creation of filter expression can be configured via `FilterConfiguration`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply a configuration
 
 ```csharp
-using Schick.Plainquire.Filter.Models;
+using Plainquire.Filter.Models;
 
 // Parse filter values using german locale (e.g. "5,5" => 5.5f).
 var configuration = new FilterConfiguration { CultureInfo = new CultureInfo("de-DE") };
@@ -502,12 +502,12 @@ public class EntityFilter
 By default `System.Text.Json` is used to serialize/convert Plainquire specific stuff. If you like to use Newtonsoft.Json you must register it:
 
 ```
-Package Manager : Install-Package Schick.Plainquire.Filter.Mvc.Newtonsoft
-CLI : dotnet add package Schick.Plainquire.Filter.Mvc.Newtonsoft
+Package Manager : Install-Package Plainquire.Filter.Mvc.Newtonsoft
+CLI : dotnet add package Plainquire.Filter.Mvc.Newtonsoft
 ```
 
 ```csharp
-using Schick.Plainquire.Filter.Mvc.Newtonsoft;
+using Plainquire.Filter.Mvc.Newtonsoft;
 
 // Register support for Newtonsoft by calling 
 // 'AddFilterNewtonsoftSupport()' on IMvcBuilder instance
@@ -551,12 +551,12 @@ filter = JsonSerializer.Deserialize<EntityFilter<Order>>(json);
 When using `Newtonsoft.Json` additional converters are required
 
 ``` 
-Package Manager : Install-Package Schick.Plainquire.Filter.Newtonsoft
-CLI : dotnet add package Schick.Plainquire.Filter.Newtonsoft
+Package Manager : Install-Package Plainquire.Filter.Newtonsoft
+CLI : dotnet add package Plainquire.Filter.Newtonsoft
 ```
 
 ```csharp
-using Schick.Plainquire.Filter.Newtonsoft.Extensions;
+using Plainquire.Filter.Newtonsoft.Extensions;
 
 var json = JsonConvert.SerializeObject(filter, JsonConverterExtensions.NewtonsoftConverters);
 filter = JsonConvert.DeserializeObject<EntityFilter<Order>>(json, JsonConverterExtensions.NewtonsoftConverters);
@@ -575,7 +575,7 @@ var filteredOrders = orders
 or where this isn't possible combine filters with `CombineWithConditionalAnd`
 
 ```csharp
-using Schick.Plainquire.Filter.Abstractions.Extensions;
+using Plainquire.Filter.Abstractions.Extensions;
 
 var extendedFilter = new[]
     {
@@ -593,14 +593,14 @@ var filteredOrders = orders.Where(extendedFilter.Compile());
 
 Install the NuGet packages:
 ```
-Package Manager : Install-Package Schick.Plainquire.Sort
-CLI : dotnet add package Schick.Plainquire.Sort
+Package Manager : Install-Package Plainquire.Sort
+CLI : dotnet add package Plainquire.Sort
 ```
 Create a filter:
  ```csharp
-using Schick.Plainquire.Sort.Enums;
-using Schick.Plainquire.Sort.Extensions;
-using Schick.Plainquire.Sort.Sorts;
+using Plainquire.Sort.Enums;
+using Plainquire.Sort.Extensions;
+using Plainquire.Sort.Sorts;
 
 var orders = new[] {
     new Order { Customer = "Joe Miller", Number = 100 },
@@ -633,8 +633,8 @@ public class Order
 Or bind filter from query-parameters:
 
 ```csharp
-using Schick.Plainquire.Sort.Extensions;
-using Schick.Plainquire.Sort.Sorts;
+using Plainquire.Sort.Extensions;
+using Plainquire.Sort.Sorts;
 
 [HttpGet]
 public Task<List<Order>> GetOrders([FromQuery] EntitySort<Order> sort)
@@ -652,12 +652,12 @@ To sort an entity via model binding, the entity must be marked with `FilterEntit
 ### Register Model Binders
 
 ```
-Package Manager : Install-Package Schick.Plainquire.Sort.Mvc
-CLI : dotnet add package Schick.Plainquire.Sort.Mvc
+Package Manager : Install-Package Plainquire.Sort.Mvc
+CLI : dotnet add package Plainquire.Sort.Mvc
 ```
 
 ```csharp
-using Schick.Plainquire.Sort.Mvc.Extensions;
+using Plainquire.Sort.Mvc.Extensions;
 
 // Register required stuff by calling 'AddSortQueryableSupport()' on IMvcBuilder instance
 services.AddControllers().AddSortQueryableSupport();
@@ -668,7 +668,7 @@ services.AddControllers().AddSortQueryableSupport();
 With model binding enabled, REST requests can be sorted using query parameter `orderBy`:
 
 ```csharp
-using Schick.Plainquire.Sort.Sorts;
+using Plainquire.Sort.Sorts;
 
 var getOrdersUrl = "/GetOrders?orderBy=customer,number-desc"
 
@@ -694,7 +694,7 @@ Parameters can be renamed or removed using  `FilterAttribute` and `FilterEntityA
 For the code below `Number` is not mapped anymore and `Customer` becomes `CustomerName`:
 
 ```csharp
-using Schick.Plainquire.Filter.Abstractions.Attributes;
+using Plainquire.Filter.Abstractions.Attributes;
 
 // Remove prefix, e.g. property 'Number' is mapped from 'number', not 'orderNumber'
 // Use 'sortBy' as query parameter name instead of default 'orderBy'
@@ -717,8 +717,8 @@ Multiple entity sorts can be combined to a set of filters using the `EntitySortS
 You can write:
 
 ```csharp
-using Schick.Plainquire.Filter.Filters;
-using Schick.Plainquire.Filter.Abstractions.Attributes;
+using Plainquire.Filter.Filters;
+using Plainquire.Filter.Abstractions.Attributes;
 
 [HttpGet]
 // Use
@@ -742,12 +742,12 @@ public class OrderSortSet
 ### Register OpenAPI Support
 Swagger / OpenAPI is supported when using [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
 ``` 
-Package Manager : Install-Package Schick.Plainquire.Sort.Swashbuckle
-CLI : dotnet add package Schick.Plainquire.Sort.Swashbuckle
+Package Manager : Install-Package Plainquire.Sort.Swashbuckle
+CLI : dotnet add package Plainquire.Sort.Swashbuckle
 ```
 
 ```csharp
-using Schick.Plainquire.Sort.Swashbuckle.Extensions;
+using Plainquire.Sort.Swashbuckle.Extensions;
 
 services.AddSwaggerGen(options =>
 {    
@@ -847,7 +847,7 @@ var orderExpression = orders.OrderBy(orderSort).ToString()
 Creation of sort expression can be configured via `SortConfiguration`. 
 
 ```csharp
-using Schick.Plainquire.Sort.Abstractions.Configurations;
+using Plainquire.Sort.Abstractions.Configurations;
 
 var configuration = new SortConfiguration { IgnoreParseExceptions = true };
 var sortedOrders = orders.OrderBy(sortParam, configuration).ToList();
@@ -877,12 +877,12 @@ public class EntitySort
 By default, `System.Text.Json` is used to serialize/convert Plainquire specific stuff. If you like to use Newtonsoft.Json you must register it:
 
 ```
-Package Manager : Install-Package Schick.Plainquire.Sort.Mvc.Newtonsoft
-CLI : dotnet add package Schick.Plainquire.Sort.Mvc.Newtonsoft
+Package Manager : Install-Package Plainquire.Sort.Mvc.Newtonsoft
+CLI : dotnet add package Plainquire.Sort.Mvc.Newtonsoft
 ```
 
 ```csharp
-using Schick.Plainquire.Sort.Mvc.Newtonsoft;
+using Plainquire.Sort.Mvc.Newtonsoft;
 
 // Register support for Newtonsoft by calling 
 // 'AddSortQueryableNewtonsoftSupport()' on IMvcBuilder instance
@@ -926,12 +926,12 @@ filter = JsonSerializer.Deserialize<EntitySort<Order>>(json);
 When using `Newtonsoft.Json` additional converters are required
 
 ``` 
-Package Manager : Install-Package Schick.Plainquire.Sort.Newtonsoft
-CLI : dotnet add package Schick.Plainquire.Sort.Newtonsoft
+Package Manager : Install-Package Plainquire.Sort.Newtonsoft
+CLI : dotnet add package Plainquire.Sort.Newtonsoft
 ```
 
 ```csharp
-using Schick.Plainquire.Filter.Newtonsoft.Extensions;
+using Plainquire.Filter.Newtonsoft.Extensions;
 
 var json = JsonConvert.SerializeObject(sort, JsonConverterExtensions.NewtonsoftConverters);
 sort = JsonConvert.DeserializeObject<EntitySort<Order>>(json, JsonConverterExtensions.NewtonsoftConverters);

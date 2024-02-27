@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../Build/build_core.props" />
+  <Import Project="../../Build/build_version.props" />
+  <Import Project="../../Build/build_xml_documentation.props" />
+
+  <ItemGroup>
+    <PackageReference Include="LoxSmoke.DocXml" Version="3.6.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Plainquire.Filter.Mvc\Plainquire.Filter.Mvc.csproj" />
+    <ProjectReference Include="..\Plainquire.Filter\Plainquire.Filter.csproj" />
+  </ItemGroup>
+
+</Project>

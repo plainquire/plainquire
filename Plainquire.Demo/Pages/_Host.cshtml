@@ -1,0 +1,53 @@
+﻿@* ReSharper disable All *@
+@page "/"
+@using System.Globalization
+@using Microsoft.AspNetCore.Localization
+@namespace Plainquire.Demo.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plainquire Demo</title>
+    <base href="~/" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="Plainquire.Demo.styles.css" rel="stylesheet" />
+</head>
+<body>
+    @{
+        HttpContext.Response
+            .Cookies
+            .Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(
+                new RequestCulture(CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture))
+            );
+    }
+
+    <component type="typeof(App)" render-mode="Server" />
+
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script src="_framework/blazor.server.js"></script>
+    <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
+
+    <script>
+        <!-- Prevent blazor from scrolling to top on navigation, see https://github.com/dotnet/aspnetcore/issues/40190#issuecomment-1203857906 -->
+        window.scrollTo = undefined;
+    </script>
+</body>
+</html>
