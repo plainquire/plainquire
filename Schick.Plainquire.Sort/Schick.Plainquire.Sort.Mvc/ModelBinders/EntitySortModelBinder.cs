@@ -56,7 +56,7 @@ public class EntitySortModelBinder : IModelBinder
             .GetSortableProperties()
             .Select(property => new PropertyNameToParameterMap(
                 PropertyName: property.Name,
-                ParameterName: property.GetSortQueryableParameterName(entityFilterAttribute?.Prefix)
+                ParameterName: property.GetSortParameterName(entityFilterAttribute?.Prefix)
             ))
             .ToList();
 

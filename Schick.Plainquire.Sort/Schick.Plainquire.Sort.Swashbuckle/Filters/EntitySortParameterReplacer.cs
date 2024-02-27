@@ -122,7 +122,7 @@ public class EntitySortParameterReplacer : IOperationFilter
         var entityFilterAttribute = sortedType.GetCustomAttribute<FilterEntityAttribute>();
         var sortableProperties = sortedType
             .GetSortableProperties()
-            .Select(property => property.GetSortQueryableParameterName(entityFilterAttribute?.Prefix))
+            .Select(property => property.GetSortParameterName(entityFilterAttribute?.Prefix))
             .ToList();
 
         return sortableProperties;

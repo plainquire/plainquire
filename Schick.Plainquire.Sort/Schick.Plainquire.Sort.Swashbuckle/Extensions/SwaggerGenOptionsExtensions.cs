@@ -16,7 +16,7 @@ public static class SwaggerGenOptionsExtensions
     /// </summary>
     /// <param name="options">The options.</param>
     /// <param name="xmlDocumentationFilePaths">Paths to XML documentation files. Used to provide parameter descriptions.</param>
-    public static SwaggerGenOptions AddSortQueryableSupport(this SwaggerGenOptions options, params string[] xmlDocumentationFilePaths)
+    public static SwaggerGenOptions AddSortSupport(this SwaggerGenOptions options, params string[] xmlDocumentationFilePaths)
     {
         options.OperationFilter<EntitySortParameterReplacer>();
         options.OperationFilter<EntitySortSetParameterReplacer>();
