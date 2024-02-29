@@ -6,24 +6,45 @@
 
 ## Breaking Changes
 
-Obsolete methods removed
+### Common
 
-`FilterConfiguration` moved to namespace `Schick.Plainquire.Filter.Abstractions.Configurations`
+* Obsolete methods removed
 
-Name cleanup / renames:
+* `FilterConfiguration` moved to namespace `Schick.Plainquire.Filter.Abstractions`
+* `EntityFilter<TEntity>.Clear<TProperty>(...)`  renamed to `EntityFilter<TEntity>.Remove<TProperty>(...)`
+* `EntitySort<TEntity>.Clear<TProperty>(...)`  renamed to `EntitySort<TEntity>.Remove<TProperty>(...)`
+* `EntitySort<TEntity>.ClearNested<TProperty>(...)`  renamed to `EntitySort<TEntity>.RemoveNested<TProperty>(...)`
 
-| 4.x                                    | 5.x                               |
-| -------------------------------------- | --------------------------------- |
-| `FilterAttribute.Visible`              | `FilterAttribute.Filterable`      |
-| `AddFilterExpressionSupport`           | `AddFilterSupport`                |
-| `AddFilterExpressionNewtonsoftSupport` | `AddFilterNewtonsoftSupport`      |
-| `AddSortQueryableSupport`              | `AddSortSupport`                  |
-| `AddSortQueryableNewtonsoftSupport`    | `AddSortNewtonsoftSupport`        |
-| `ValueFilterExtensions.Create(...)`    | `ValueFiltersFactory.Create(...)` |
-| `*FilterExpressionCreator*` classes    | `*FilterExpression*`              |
-| `IPropertyFilterInterceptor`           | `IFilterInterceptor`              |
-| `IPropertySortQueryableInterceptor`    | `ISortInterceptor`                |
-| `FilterExpressionCreationException`    | `FilterExpressionException`       |
+### Namespaces Simplified
+
+| 4.x namespace                                                | 5.x namespace                      |
+| ------------------------------------------------------------ | ---------------------------------- |
+| `Plainquire.Filter.Enums`<br/>`Plainquire.Filter.Exceptions`<br/>`Plainquire.Filter.Extensions`<br/>`Plainquire.Filter.Filters`<br/>`Plainquire.Filter.Interfaces` | `Plainquire.Filter`                |
+| `Plainquire.Filter.Abstractions.Attributes`<br/>`Plainquire.Filter.Abstractions.Configurations`<br/>`Plainquire.Filter.Abstractions.Extensions`<br/>`Plainquire.Filter.Abstractions.Models` | `Plainquire.Filter.Abstractions`   |
+| `Plainquire.Filter.Mvc.Extensions`                           | `Plainquire.Filter.Mvc`            |
+| `Plainquire.Filter.Mvc.Newtonsoft.Extensions`                | `Plainquire.Filter.Mvc.Newtonsoft` |
+| `Plainquire.Filter.Newtonsoft.Extensions`                    | `Plainquire.Filter.Newtonsoft`     |
+| `Plainquire.Sort.Enums`<br/>`Plainquire.Sort.Extensions`<br/>`Plainquire.Sort.Interfaces`<br/>`Plainquire.Sort.Sorts` | `Plainquire.Sort`                  |
+| `Plainquire.Sort.Abstractions.Configurations`                | `Plainquire.Sort.Abstractions`     |
+| `Plainquire.Sort.Mvc.Extensions`                             | `Plainquire.Sort.Mvc`              |
+| `Plainquire.Sort.Mvc.Newtonsoft.Extensions`                  | `Plainquire.Sort.Mvc.Newtonsoft`   |
+| `Plainquire.Sort.Newtonsoft.Extensions`                      | `Plainquire.Sort.Newtonsoft`       |
+| `Plainquire.Sort.Swashbuckle.Extensions`                     | `Plainquire.Sort.Swashbuckle`      |
+
+### Class / Method / Property Names Cleanup / Renames
+
+| 4.x class / method / property name     | 5.x class / method / property name |
+| -------------------------------------- | ---------------------------------- |
+| `FilterAttribute.Visible`              | `FilterAttribute.Filterable`       |
+| `AddFilterExpressionSupport`           | `AddFilterSupport`                 |
+| `AddFilterExpressionNewtonsoftSupport` | `AddFilterNewtonsoftSupport`       |
+| `AddSortQueryableSupport`              | `AddSortSupport`                   |
+| `AddSortQueryableNewtonsoftSupport`    | `AddSortNewtonsoftSupport`         |
+| `ValueFilterExtensions.Create(...)`    | `ValueFiltersFactory.Create(...)`  |
+| `*FilterExpressionCreator*` classes    | `*FilterExpression*`               |
+| `IPropertyFilterInterceptor`           | `IFilterInterceptor`               |
+| `IPropertySortQueryableInterceptor`    | `ISortInterceptor`                 |
+| `FilterExpressionCreationException`    | `FilterExpressionException`        |
 
 # 4.6.1
 
