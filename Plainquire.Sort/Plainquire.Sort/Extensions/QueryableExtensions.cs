@@ -28,7 +28,7 @@ public static class QueryableExtensions
     /// <param name="interceptor">An interceptor to manipulate the generated sort order.</param>
     public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, EntitySort<TEntity> sort, SortConfiguration? configuration = null, ISortInterceptor? interceptor = null)
     {
-        var propertySorts = sort._propertySorts.OrderBy(x => x.Position).ToList();
+        var propertySorts = sort.PropertySorts.OrderBy(x => x.Position).ToList();
         if (!propertySorts.Any())
             return (IOrderedQueryable<TEntity>)source.Provider.CreateQuery<TEntity>(source.Expression);
 

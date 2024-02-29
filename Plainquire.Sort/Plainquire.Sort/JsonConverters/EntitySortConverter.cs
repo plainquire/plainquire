@@ -63,14 +63,14 @@ public class EntitySortConverter : JsonConverter<EntitySort>
         var entitySortData = JsonSerializer.Deserialize<EntitySortData>(ref reader, options) ?? new EntitySortData();
         return new TEntitySort
         {
-            _propertySorts = entitySortData.PropertySorts ?? []
+            PropertySorts = entitySortData.PropertySorts ?? []
         };
     }
 
     internal static void Write<TEntitySort>(Utf8JsonWriter writer, TEntitySort value, JsonSerializerOptions options)
         where TEntitySort : EntitySort
     {
-        var entitySortData = new EntitySortData { PropertySorts = value._propertySorts };
+        var entitySortData = new EntitySortData { PropertySorts = value.PropertySorts };
         JsonSerializer.Serialize(writer, entitySortData, options);
     }
 

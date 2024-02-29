@@ -129,7 +129,7 @@ public class EntitySort<TEntity> : EntitySort
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class EntitySort
 {
-    internal List<PropertySort> _propertySorts;
+    internal List<PropertySort> PropertySorts;
 
     /// <summary>
     /// Gets or sets the default configuration. Can be used to set a system-wide configuration.
@@ -145,17 +145,17 @@ public class EntitySort
     /// Initializes a new instance of the <see cref="EntitySort"/> class.
     /// </summary>
     public EntitySort()
-        => _propertySorts = [];
+        => PropertySorts = [];
 
     /// <summary>
     /// Indicates whether this entity sort is empty.
     /// </summary>
-    public bool IsEmpty() => !_propertySorts.Any();
+    public bool IsEmpty() => !PropertySorts.Any();
 
     /// <inheritdoc />
     public override string ToString()
     {
-        var sortStrings = _propertySorts
+        var sortStrings = PropertySorts
             .OrderBy(x => x.Position)
             .Select(sort => sort.ToString())
             .ToList();
@@ -172,7 +172,7 @@ public class EntitySort
     protected string? GetPropertySortSyntaxInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         var propertyPath = property.GetPropertyPath();
-        var propertySort = _propertySorts
+        var propertySort = PropertySorts
             .OrderBy(x => x.Position)
             .LastOrDefault(sort => sort.PropertyPath == propertyPath);
 
@@ -188,7 +188,7 @@ public class EntitySort
     protected SortDirection? GetPropertySortDirectionInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         var propertyPath = property.GetPropertyPath();
-        return _propertySorts
+        return PropertySorts
             .OrderBy(x => x.Position)
             .LastOrDefault(sort => sort.PropertyPath == propertyPath)?.Direction;
     }
@@ -218,7 +218,7 @@ public class EntitySort
         var propertyPath = property.GetPropertyPath();
         position = GetPosition(position);
         var propertySort = PropertySort.Create(propertyPath, direction ?? SortDirection.Ascending, position);
-        _propertySorts.Add(propertySort);
+        PropertySorts.Add(propertySort);
     }
 
     /// <summary>
@@ -230,7 +230,7 @@ public class EntitySort
     {
         position = GetPosition(position);
         var propertySort = PropertySort.Create(syntax, position);
-        _propertySorts.Add(propertySort);
+        PropertySorts.Add(propertySort);
     }
 
     /// <summary>
@@ -256,18 +256,18 @@ public class EntitySort
     protected void RemoveInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         var propertyPath = property.GetPropertyPath();
-        _propertySorts.RemoveAll(x => x.PropertyPath == propertyPath);
+        PropertySorts.RemoveAll(x => x.PropertyPath == propertyPath);
     }
 
     /// <inheritdoc cref="EntitySort{TEntity}.Clear" />
     protected void ClearInternal()
-        => _propertySorts.Clear();
+        => PropertySorts.Clear();
 
     /// <inheritdoc cref="EntitySort{TEntity}.RemoveNested{TProperty}(Expression{Func{TEntity, TProperty}})" />/>
     protected void RemoveNestedInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         var propertyPath = property.GetPropertyPath();
-        _propertySorts.RemoveAll(x => x.BelongsTo(propertyPath));
+        PropertySorts.RemoveAll(x => x.BelongsTo(propertyPath));
     }
 
     /// <summary>
@@ -322,7 +322,7 @@ public class EntitySort
     /// <returns></returns>
     private EntitySort GetNestedInternal(Type propertyType, string propertyPath)
     {
-        var relatedProperties = _propertySorts
+        var relatedProperties = PropertySorts
             .Where(sort => sort.BelongsTo(propertyPath))
             .ToList();
 
@@ -338,7 +338,7 @@ public class EntitySort
 
         var genericSort = typeof(EntitySort<>).MakeGenericType(propertyType);
         var nestedSort = (EntitySort)Activator.CreateInstance(genericSort);
-        nestedSort._propertySorts.AddRange(nestedSorts);
+        nestedSort.PropertySorts.AddRange(nestedSorts);
 
         return nestedSort;
     }
@@ -354,21 +354,21 @@ public class EntitySort
         if (nestedSort == null)
             throw new ArgumentNullException(nameof(nestedSort));
 
-        foreach (var propertySort in nestedSort._propertySorts)
+        foreach (var propertySort in nestedSort.PropertySorts)
         {
             var path = propertyPath;
             if (propertySort.PropertyPath != PropertySort.PATH_TO_SELF)
                 path += "." + propertySort.PropertyPath;
 
-            _propertySorts.Add(PropertySort.Create(path, propertySort.Direction, propertySort.Position));
+            PropertySorts.Add(PropertySort.Create(path, propertySort.Direction, propertySort.Position));
         }
     }
 
     private int GetPosition(int? position)
-        => position ?? (_propertySorts.Any() ? _propertySorts.Max(x => x.Position) + 1 : 0);
+        => position ?? (PropertySorts.Any() ? PropertySorts.Max(x => x.Position) + 1 : 0);
 
     private static int RemoveRelatedProperties(EntitySort sort, string propertyName)
-        => sort._propertySorts.RemoveAll(propertySort => propertySort.BelongsTo(propertyName));
+        => sort.PropertySorts.RemoveAll(propertySort => propertySort.BelongsTo(propertyName));
 
     [ExcludeFromCodeCoverage]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -376,10 +376,10 @@ public class EntitySort
     {
         get
         {
-            if (_propertySorts.Count == 0)
+            if (PropertySorts.Count == 0)
                 return "<EMPTY>";
 
-            var sortStrings = _propertySorts
+            var sortStrings = PropertySorts
                 .OrderBy(x => x.Position)
                 .Select(sort => $"{sort.Position}: {sort}")
                 .ToList();

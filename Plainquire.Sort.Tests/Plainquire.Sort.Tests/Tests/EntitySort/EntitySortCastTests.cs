@@ -26,11 +26,11 @@ public class EntitySortCastTests
         var castSort = sort.Cast<PersonModel>();
 
         using var _ = new AssertionScope();
-        castSort._propertySorts.Should().HaveCount(4);
-        castSort._propertySorts.Should().Contain(x => x.PropertyPath == "Name");
-        castSort._propertySorts.Should().Contain(x => x.PropertyPath == "Address");
-        castSort._propertySorts.Should().Contain(x => x.PropertyPath == "Address.Street");
-        castSort._propertySorts.Should().Contain(x => x.PropertyPath == "Address.Country.Name");
+        castSort.PropertySorts.Should().HaveCount(4);
+        castSort.PropertySorts.Should().Contain(x => x.PropertyPath == "Name");
+        castSort.PropertySorts.Should().Contain(x => x.PropertyPath == "Address");
+        castSort.PropertySorts.Should().Contain(x => x.PropertyPath == "Address.Street");
+        castSort.PropertySorts.Should().Contain(x => x.PropertyPath == "Address.Country.Name");
     }
 
     private record PersonModel(string Name, AddressModel Address);

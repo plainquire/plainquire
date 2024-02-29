@@ -65,7 +65,7 @@ public class EntitySortModelBinder : IModelBinder
         var entitySortType = typeof(EntitySort<>).MakeGenericType(sortedType);
         var entitySort = (EntitySort)Activator.CreateInstance(entitySortType)!;
         foreach (var propertySort in propertySorts)
-            entitySort._propertySorts.Add(propertySort);
+            entitySort.PropertySorts.Add(propertySort);
 
         return entitySort;
     }

@@ -69,7 +69,7 @@ public class NestedSortTests
         var outerSort = new EntitySort<TestModel<string>>()
             .AddNested(x => x.NestedObject, nestedSort);
 
-        outerSort._propertySorts.Should().ContainSingle(x => x.PropertyPath == "NestedObject.Value");
+        outerSort.PropertySorts.Should().ContainSingle(x => x.PropertyPath == "NestedObject.Value");
     }
 
     [TestMethod]
@@ -83,9 +83,9 @@ public class NestedSortTests
             .GetNested(x => x.NestedObject);
 
         using var _ = new AssertionScope();
-        nestedSort._propertySorts.Should().HaveCount(2);
-        nestedSort._propertySorts.Should().Contain(x => x.PropertyPath == PATH_TO_SELF);
-        nestedSort._propertySorts.Should().Contain(x => x.PropertyPath == "Value.Length");
+        nestedSort.PropertySorts.Should().HaveCount(2);
+        nestedSort.PropertySorts.Should().Contain(x => x.PropertyPath == PATH_TO_SELF);
+        nestedSort.PropertySorts.Should().Contain(x => x.PropertyPath == "Value.Length");
     }
 
     [TestMethod]
@@ -101,7 +101,7 @@ public class NestedSortTests
         var retrievedNestedSort = outerSort
             .GetNested(x => x.NestedObject);
 
-        retrievedNestedSort._propertySorts.Should().BeEquivalentTo(nestedSort._propertySorts);
+        retrievedNestedSort.PropertySorts.Should().BeEquivalentTo(nestedSort.PropertySorts);
     }
 
     [TestMethod]
@@ -114,7 +114,7 @@ public class NestedSortTests
 
         sort.RemoveNested(x => x.NestedObject);
 
-        sort._propertySorts.Should().ContainSingle(x => x.PropertyPath == "Value");
+        sort.PropertySorts.Should().ContainSingle(x => x.PropertyPath == "Value");
     }
 
     [TestMethod]

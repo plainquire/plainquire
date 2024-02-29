@@ -64,7 +64,7 @@ public class EntitySortModelBinderTests
 
         var personSort = (EntitySort<PersonWithSortBy>)bindingContext.Result.Model!;
 
-        personSort._propertySorts
+        personSort.PropertySorts
             .OrderBy(propertySort => propertySort.Position)
             .Select(propertySort => new { propertySort.PropertyPath, propertySort.Direction })
             .Should()
@@ -102,7 +102,7 @@ public class EntitySortModelBinderTests
         var addressSort = (EntitySort<Address>)addressBindingContext.Result.Model!;
 
         var combinedSort = personSort.AddNested(x => x.Address, addressSort);
-        combinedSort._propertySorts
+        combinedSort.PropertySorts
             .OrderBy(propertySort => propertySort.Position)
             .Select(propertySort => propertySort.PropertyPath)
             .Should()

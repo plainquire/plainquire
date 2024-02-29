@@ -40,7 +40,7 @@ public class EntitySortTests
             .Add(x => x.Value)
             .Add(x => x.Value);
 
-        sort._propertySorts.Should().HaveCount(2);
+        sort.PropertySorts.Should().HaveCount(2);
     }
 
     [TestMethod]
@@ -52,7 +52,7 @@ public class EntitySortTests
 
         sort.Remove(x => x.Value);
 
-        sort._propertySorts.Should().ContainSingle(x => x.PropertyPath == "Value2");
+        sort.PropertySorts.Should().ContainSingle(x => x.PropertyPath == "Value2");
     }
 
     [TestMethod]
@@ -64,7 +64,7 @@ public class EntitySortTests
 
         sort.Remove(x => x.NestedObject!.Value);
 
-        sort._propertySorts.Should().ContainSingle(x => x.PropertyPath == "Value");
+        sort.PropertySorts.Should().ContainSingle(x => x.PropertyPath == "Value");
     }
 
     [TestMethod]
@@ -76,7 +76,7 @@ public class EntitySortTests
 
         sort.Clear();
 
-        sort._propertySorts.Should().BeEmpty();
+        sort.PropertySorts.Should().BeEmpty();
     }
 
     [TestMethod]
@@ -166,7 +166,7 @@ public class EntitySortTests
             .Add(x => x.Value, SortDirection.Ascending)
             .Add(x => x.NestedObject!.Value, SortDirection.Ascending);
 
-        sort._propertySorts.Select(x => x.Position).Should().ContainInOrder(0, 1);
+        sort.PropertySorts.Select(x => x.Position).Should().ContainInOrder(0, 1);
     }
 
     [TestMethod]
@@ -176,7 +176,7 @@ public class EntitySortTests
             .Add(x => x.Value, SortDirection.Ascending, 10)
             .Add(x => x.NestedObject!.Value, SortDirection.Ascending);
 
-        sort._propertySorts.Select(x => x.Position).Should().ContainInOrder(10, 11);
+        sort.PropertySorts.Select(x => x.Position).Should().ContainInOrder(10, 11);
     }
 
     [TestMethod]

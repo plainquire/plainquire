@@ -23,7 +23,7 @@ public class EntitySortConverter : JsonConverter
             throw new ArgumentNullException(nameof(value));
 
         var entitySort = (EntitySort)value;
-        var entitySortData = new EntitySortData { PropertySorts = entitySort._propertySorts };
+        var entitySortData = new EntitySortData { PropertySorts = entitySort.PropertySorts };
         serializer.Serialize(writer, entitySortData);
     }
 
@@ -32,7 +32,7 @@ public class EntitySortConverter : JsonConverter
     {
         var entitySort = (EntitySort)Activator.CreateInstance(objectType);
         var entitySortData = serializer.Deserialize<EntitySortData>(reader) ?? new EntitySortData();
-        entitySort._propertySorts = entitySortData.PropertySorts ?? [];
+        entitySort.PropertySorts = entitySortData.PropertySorts ?? [];
         return entitySort;
     }
 
