@@ -1,71 +1,216 @@
 # Plainquire
 
-Dynamically creates lambda expressions to filter enumerable and database queries via `System.Linq.Enumerable.Where(...)`
+Easy Filtering, Sorting and Pagination for ASP.NET Core.
 
-# Overview
+Dynamically creates required expressions to filter, sort and page enumerable and database queries using LINQ.
 
-```csharp
-var getFreelancersUrl = "/GetFreelancers?firstName=Joe&orderBy=lastName&page=2&pageSize=1"
+## Features
 
-[HttpGet]
-public List<Order> GetFreelancers(
-    [FromQuery] EntityFilter<Freelancer> filter,
-    [FromQuery] EntitySort<Freelancer> sort,
-    [FromQuery] EntityPage page)
-{   
-    var orders = dbContext.Freelancers
-        .Where(filter)
-        .OrderBy(sort)
-        .Page(page);
-    
-	// Freelancers in database
-    new Freelancer { FirstName = "Joe", LastName = "Smith" };
-    new Freelancer { FirstName = "Eve", LastName = "Smith" };
-    new Freelancer { FirstName = "Joe", LastName = "Jones" };
-}
-```
+* Filtering, sorting and pagination for ASP.NET Core
+* HTTP query parameter binding
+* Swagger / OpenAPI supported via [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
+* Entity Framework and other ORM mapper supported via `IQueryable<T>`
+* In-memory lists and arrays supported via `IEnumerable<T>`
+* Filters, sorts and pages are serializable, e.g. to persist user preferences
+* Generated expressions can be customized via interceptors
 
-# Demo
+## Demo
 
 [https://filterexpressioncreator.schick-software.de/demo](https://filterexpressioncreator.schick-software.de/demo)
 
-# Table of Content
+## Overview
 
-- [Filter Entities](#filter-entities)
-   * [Quick Start](#quick-start)
-   * [REST / MVC](#rest-mvc)
-   * [Swagger / OpenAPI](#swagger-openapi)
-   * [Filter Operators / Syntax](#filter-operators-syntax)
-   * [Configuration](#configuration)
-   * [Interception](#interception)
-   * [Default Configuration and Interception](#default-configuration-and-interception)
-   * [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
-   * [Advanced Scenarios](#advanced-scenarios)
-- [Sort Entities](#sort-entities)
-   * [Quick Start](#quick-start-1)
-   * [REST / MVC](#rest-mvc-1)
-   * [Swagger / OpenAPI](#swagger-openapi-1)
-   * [Sort Operators / Syntax](#sort-operators-syntax)
-   * [Configuration](#configuration-1)
-   * [Interception](#interception-1)
-   * [Default Configuration and Interception](#default-configuration-and-interception-1)
-   * [Support for Newtonsoft.Json](#support-for-newtonsoftjson-1)
-   * [Advanced Scenarios](#advanced-scenarios-1)
+**HTTP request** (Syntax: [Filter Operators / Syntax](#filter-operators--syntax))
 
-# Filter Entities
+```bash
+BASE_URL=https://plainquire.com/api/Freelancer
+curl -O "$BASE_URL/GetFreelancers?firstName=Joe&orderBy=lastName&page=3&pageSize=5"
+```
 
-## Getting Started
+**To MVC action**
 
-Install the NuGet packages:
+```csharp
+[HttpGet]
+public List<FreelancerDto> GetFreelancers(
+    [FromQuery] EntityFilter<Freelancer> filter,
+    [FromQuery] EntitySort<Freelancer> sort,
+    [FromQuery] EntityPage page)
+{
+    return dbContext.Freelancers
+        .Where(filter)
+        .OrderBy(sort)
+        .Page(page);
+}
+```
+
+**Results in SQL statement** (SQLite syntax)
+
+```sql
+SELECT *
+FROM "Freelancer"
+WHERE instr(upper("FirstName"), 'JOE') > 0
+ORDER BY "LastName"
+LIMIT 5 OFFSET 10
+```
+
+# Table of content
+
+- [Overview](#overview)
+- [Getting started](#getting-started)
+- [Filter entities](#filter-entities)
+  - [Basic usage](#basic-usage)
+  - [REST / MVC](#rest--mvc)
+  - [Swagger / OpenAPI](#swagger--openapi)
+  - [Filter operators / syntax](#filter-operators--syntax)
+  - [Configuration](#configuration)
+  - [Interception](#interception)
+  - [Default configuration and interception](#default-configuration-and-interception)
+  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
+  - [Advanced scenarios](#advanced-scenarios)
+- [Sort entities](#sort-entities)
+  - [Basic usage](#basic-usage)
+  - [REST / MVC](#rest--mvc)
+  - [Swagger / OpenAPI](#swagger--openapi)
+  - [Sort operators / syntax](#sort-operators--syntax)
+  - [Configuration](#configuration)
+  - [Interception](#interception)
+  - [Default configuration and interception](#default-configuration-and-interception)
+  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
+  - [Advanced scenarios](#advanced-scenarios)
+- [Page Entities](#page-entities)
+  - [Basic usage](#basic-usage)
+  - [REST / MVC](#rest--mvc)
+  - [Swagger / OpenAPI](#swagger--openapi)
+  - [Configuration](#configuration)
+  - [Interception](#interception)
+  - [Default configuration and interception](#default-configuration-and-interception)
+  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
+  - [Advanced Scenarios](#advanced-scenarios)
+
+# Getting started
+
+## Web / MVC application
+
+```cmd
+dotnet add package Plainquire.Filter
+dotnet add package Plainquire.Filter.Mvc
+dotnet add package Plainquire.Filter.Swashbuckle
+dotnet add package Plainquire.Page
+dotnet add package Plainquire.Page.Mvc
+dotnet add package Plainquire.Page.Swashbuckle
+dotnet add package Plainquire.Sort
+dotnet add package Plainquire.Sort.Mvc
+dotnet add package Plainquire.Sort.Swashbuckle
+```
+
+```csharp
+using Plainquire.Filter.Mvc;
+using Plainquire.Filter.Swashbuckle;
+using Plainquire.Page.Mvc;
+using Plainquire.Page.Swashbuckle;
+using Plainquire.Sort.Mvc;
+using Plainquire.Sort.Swashbuckle;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers()
+    .AddFilterSupport()
+    .AddSortSupport()
+    .AddPageSupport();
+
+builder.Services.AddSwaggerGen(options => options
+    .AddFilterSupport()
+    .AddSortSupport()
+    .AddPageSupport());
+```
+
+```csharp
+using Plainquire.Filter;
+using Plainquire.Page;
+using Plainquire.Sort;
+
+[FilterEntity]
+public record Order(int Number, string Customer);
+
+[HttpGet(Name = "GetOrders")]
+public IEnumerable<Order> GetOrders(
+    [FromQuery] EntityFilter<Order> filter,
+    [FromQuery] EntitySort<Order> sort,
+    [FromQuery] EntityPage page)
+{
+    var orders = GenerateOrders(); // See code below
+    var requestedOrders = orders.Where(filter).OrderBy(sort).Page(page);
+    return requestedOrders;
+}
+```
+
+## Non-web application
+
+```cmd
+dotnet add package Plainquire.Filter
+dotnet add package Plainquire.Sort
+dotnet add package Plainquire.Page
+```
+
+```cs
+using Plainquire.Filter;
+using Plainquire.Sort;
+using Plainquire.Page;
+
+[FilterEntity]
+public record Order(int Number, string Customer);
+
+public IEnumerable<Order> GetOrders()
+{
+    var orders = GenerateOrders(); // See code below
+
+    var filter = new EntityFilter<Order>().Add(x => x.Customer, "~Santos");
+    var sort = new EntitySort<Order>().Add(x => x.Customer, SortDirection.Ascending);
+    var page = new EntityPage { PageNumber = 2, PageSize = 3 };
+
+    var requestedOrders = orders.Where(filter).OrderBy(sort).Page(page);
+    return requestedOrders;
+}
+```
+
+## Generate sample orders
+
+```csharp
+private static readonly string[] _customerNames =
+[
+    "Brock Luettgen",
+    "Santos Rath",
+    "Camden Goldner",
+    "Santos Marks"
+];
+
+private static List<Order> GenerateOrders()
+{
+    return Enumerable
+        .Range(1, 5)
+        .Select(index => new Order
+        (
+            Number: index,
+            Customer: _customerNames[Random.Shared.Next(_customerNames.Length)]
+        ))
+        .ToList();
+}
+```
+
+# Filter entities
+
+## Basic usage
+
+**Install NuGet packages**
+
 ```
 Package Manager : Install-Package Plainquire.Filter
 CLI : dotnet add package Plainquire.Filter
 ```
-Create a filter:
+**Create a filter**
+
  ```csharp
-using Plainquire.Filter.Enums;
-using Plainquire.Filter.Extensions;
-using Plainquire.Filter.Filters;
+using Plainquire.Filter;
 
 var orders = new[] {
     new Order { Customer = "Joe Miller", Number = 100 },
@@ -96,10 +241,10 @@ public class Order
 }
  ```
 
-Or bind filter from query-parameters:
+**Or bind sort from query-parameters**
 
 ```csharp
-using Plainquire.Filter.Filters;
+using Plainquire.Filter;
 
 [HttpGet]
 public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order)
@@ -110,11 +255,9 @@ public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order)
 
 ## REST / MVC
 
-Model binding for MVC controllers is supported.
-
 To filter an entity via model binding, the entity must be marked with `FilterEntityAttribute`
 
-### Register Model Binders
+### Register model binders
 
 ```
 Package Manager : Install-Package Plainquire.Filter.Mvc
@@ -122,7 +265,7 @@ CLI : dotnet add package Plainquire.Filter.Mvc
 ```
 
 ```csharp
-using Plainquire.Filter.Mvc.Extensions;
+using Plainquire.Filter.Mvc;
 
 // Register required stuff by calling 'AddFilterSupport()' on IMvcBuilder instance
 services.AddControllers().AddFilterSupport();
@@ -133,7 +276,7 @@ services.AddControllers().AddFilterSupport();
 With model binding enabled, REST requests can be filtered using query parameters:
 
 ```csharp
-using Plainquire.Filter.Filters;
+using Plainquire.Filter;
 
 var getOrdersUrl = "/GetOrders?customer==Joe&number=>4711"
 
@@ -146,13 +289,13 @@ public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> filter)
     //   ((x.Customer != null) AndAlso (x.Customer.ToUpper() == "JOE"))
     //   AndAlso (x.Number > 4711)
     // )
-    
+
     var queryParams = filter.ToQueryParams();
     // Output: customer==Joe&number=>4711
 }
 ```
 
-### Configure Model Binding
+### Configure model binding
 
 By default, parameters for properties of filtered entity are named `{Entity}{Property}`.
 By default, all public non-complex properties (`string`, `int`, `DateTime`, ...) are recognized.
@@ -161,7 +304,7 @@ Parameters can be renamed or removed using  `FilterAttribute` and `FilterEntityA
 For the code below `Number` is not mapped anymore and `Customer` becomes `CustomerName`:
 
 ```csharp
-using Plainquire.Filter.Abstractions.Attributes;
+using Plainquire.Filter.Abstractions;
 
 // Remove prefix, e.g. property 'Number' is mapped from 'number', not 'orderNumber'
 [FilterEntity(Prefix = "")]
@@ -176,20 +319,18 @@ public class Order
     public string Customer { get; set; }
 }
 ```
-### Filter Sets
+### Filter sets
 
 Multiple entity filters can be combined to a set of filters using the `EntityFilterSetAttribute`.
 
-You can write:
-
 ```csharp
-using Plainquire.Filter.Filters;
-using Plainquire.Filter.Abstractions.Attributes;
+using Plainquire.Filter;
+using Plainquire.Filter.Abstractions;
 
-[HttpGet]
 // Use
+[HttpGet]
 public Task<List<Order>> GetOrders([FromQuery] OrderFilterSet filterSet)
-{ 
+{
     var order = filterSet.Order;
     var orderItem = filterSet.OrderItem;
 }
@@ -200,31 +341,31 @@ public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order, Entity
 [EntityFilterSet]
 public class OrderFilterSet
 {
-	public EntityFilter<Order> Order { get; set; }
-	public EntityFilter<OrderItem> OrderItem { get; set; }
+    public EntityFilter<Order> Order { get; set; }
+    public EntityFilter<OrderItem> OrderItem { get; set; }
 }
 ```
 ## Swagger / OpenAPI
-### Register OpenAPI Support
+### Register OpenAPI support
 Swagger / OpenAPI is supported when using [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
-``` 
+```
 Package Manager : Install-Package Plainquire.Filter.Swashbuckle
 CLI : dotnet add package Plainquire.Filter.Swashbuckle
 ```
 
 ```csharp
-using Plainquire.Filter.Swashbuckle.Extensions;
+using Plainquire.Filter.Swashbuckle;
 
 services.AddSwaggerGen(options =>
-{    
+{
     // Register filters used to modify swagger.json
     options.AddFilterSupport();
 });
 ```
 
-### Register XML Documentation
+### Register XML documentation
 
-To get descriptions for generated parameters from XML documentation, paths to documentation files can be provided:
+To get descriptions for generated parameters from XML documentation, paths to documentation files can be provided.
 
 ```csharp
 services.AddSwaggerGen(options =>
@@ -235,11 +376,11 @@ services.AddSwaggerGen(options =>
 });
 ```
 
-## Filter Operators / Syntax
+## Filter operators / syntax
 
 The filter micro syntax consists of a comma separated list of an operator shortcut and a value (e.g. `~Joe,=Doe`). When a value contains a comma itself, it must be escaped by a backslash.
 
-| Operator             | Micro Syntax | Description                                                  |
+| Operator             | Micro syntax | Description                                                  |
 | -------------------- | ------------ | ------------------------------------------------------------ |
 | Default              |              | Selects the operator according to the filtered type. When filtering `string` the default is `Contains`; otherwise `EqualCaseInsensitive` |
 | Contains             | ~            | Hits when the filtered property contains the filter value    |
@@ -257,9 +398,9 @@ The filter micro syntax consists of a comma separated list of an operator shortc
 
 Multiple values given to one call are combined using conditional `OR`.
 
-Customer contains `Joe` || `Doe`:
-
 ```csharp
+// Customer contains `Joe` || `Doe`
+
 var filter = new EntityFilter<Order>();
 
 // via operator
@@ -276,13 +417,13 @@ var getOrdersUrl = "/GetOrders?customer=~Joe,~Doe"
 
 ### Add/Replace filter using logical AND
 
-Multiple calls are combined using conditional `AND`. 
-
-Customer contains `Joe` && `Doe`:
+Multiple calls are combined using conditional `AND`.
 
 ```csharp
+// Customer contains `Joe` && `Doe`
+
 var filter = new EntityFilter<Order>();
-    
+
 // via operator
 filter
     .Add(x => x.Customer, FilterOperator.Contains, "Joe")
@@ -331,15 +472,15 @@ filter.Add(x => x.Created, ">2020/01/01");
 // Date/Time
 filter.Add(x => x.Created, ">2020-01-01-12-30");
 // Output: x => (x.Created > 01.01.2020 12:30:00)
-    
+
 // Partial values are supported too
 filter.Add(x => x.Created, "2020-01");
 // Output: x => ((x.Created >= 01.01.2020 00:00:00) AndAlso (x.Created < 01.02.2020 00:00:00))
 ```
 
-### Date/Time with Natural Language
+### Date/Time with natural language
 
-Thanks to [nChronic.Core](https://github.com/robbell/nChronic.Core) natural language for date/time is supported. 
+Thanks to [nChronic.Core](https://github.com/robbell/nChronic.Core) natural language for date/time is supported.
 
 ```csharp
 // This
@@ -385,7 +526,7 @@ filter.Add(x => x.Number, "~1");
 // Output: x => x.Number.ToString().ToUpper().Contains("1")
 ```
 
-### Nested Filters
+### Nested filters
 
 Nested objects are filtered directly (`x => x.Address.City == "Berlin"`)
 
@@ -413,7 +554,7 @@ public class Order
 {
     public int Number { get; set; }
     public string Customer { get; set; }
-    
+
     public Address Address { get; set; }
     public List<OrderItem> Items { get; set; }
 }
@@ -422,7 +563,7 @@ public record Address(string Street, string City);
 public record OrderItem(int Position, string Article);
 ```
 
-### Retrieve Syntax and Filter Values
+### Retrieve syntax and filter values
 
 ```csharp
 var filter = new EntityFilter<Order>()
@@ -446,7 +587,7 @@ ValueFilter[] filterValues = filter.GetPropertyFilterValues(x => x.Customer);
 // }]
 ```
 
-### Syntax Examples
+### Syntax examples
 
 | Syntax        | Description                                                  |
 | ------------- | ------------------------------------------------------------ |
@@ -466,7 +607,7 @@ ValueFilter[] filterValues = filter.GetPropertyFilterValues(x => x.Customer);
 Creation of filter expression can be configured via `FilterConfiguration`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply a configuration
 
 ```csharp
-using Plainquire.Filter.Models;
+using Plainquire.Filter;
 
 // Parse filter values using german locale (e.g. "5,5" => 5.5f).
 var configuration = new FilterConfiguration { CultureInfo = new CultureInfo("de-DE") };
@@ -484,16 +625,15 @@ Creation of filter expression can be intercepted via `IFilterInterceptor`. While
 
 An example can be found in the test code [InterceptorTests](https://github.com/fschick/Plainquire/blob/main/Schick.Plainquire.Filter.Tests/Tests/EntityFilter/InterceptorTests.cs)
 
-## Default Configuration and Interception
+## Default configuration and interception
 
 `EntityFilter` has static properties to provide a system-wide configuration and/or interceptors
 
 ```c#
 public class EntityFilter
 {
-	public static FilterConfiguration DefaultConfiguration { get; set; } = new FilterConfiguration();
-
-	public static IFilterInterceptor? DefaultInterceptor { get; set; }
+    public static FilterConfiguration DefaultConfiguration { get; set; } = new FilterConfiguration();
+    public static IFilterInterceptor? DefaultInterceptor { get; set; }
 }
 ```
 
@@ -509,14 +649,14 @@ CLI : dotnet add package Plainquire.Filter.Mvc.Newtonsoft
 ```csharp
 using Plainquire.Filter.Mvc.Newtonsoft;
 
-// Register support for Newtonsoft by calling 
+// Register support for Newtonsoft by calling
 // 'AddFilterNewtonsoftSupport()' on IMvcBuilder instance
 services.AddControllers().AddFilterNewtonsoftSupport();
 ```
 
-## Advanced Scenarios
+## Advanced scenarios
 
-### Deep Copy
+### Deep copy
 
 The `EntityFilter<T>` class supports deep cloning by calling the `Clone()` method
 
@@ -524,7 +664,7 @@ The `EntityFilter<T>` class supports deep cloning by calling the `Clone()` metho
 var copy = filter.Clone();
 ```
 
-### Cast Filters
+### Casting
 
 Filters can be cast between entities, e.g. to convert them between DTOs and database models.
 
@@ -535,7 +675,7 @@ var dtoFilter = new EntityFilter<OrderDto>().Add(...);
 var orderFilter = dtoFilter.Cast<Order>();
 ```
 
-### Serialize Filters
+### Serialization
 
 #### Using `System.Text.Json`
 
@@ -550,19 +690,19 @@ filter = JsonSerializer.Deserialize<EntityFilter<Order>>(json);
 
 When using `Newtonsoft.Json` additional converters are required
 
-``` 
+```
 Package Manager : Install-Package Plainquire.Filter.Newtonsoft
 CLI : dotnet add package Plainquire.Filter.Newtonsoft
 ```
 
 ```csharp
-using Plainquire.Filter.Newtonsoft.Extensions;
+using Plainquire.Filter.Newtonsoft;
 
 var json = JsonConvert.SerializeObject(filter, JsonConverterExtensions.NewtonsoftConverters);
 filter = JsonConvert.DeserializeObject<EntityFilter<Order>>(json, JsonConverterExtensions.NewtonsoftConverters);
 ```
 
-### Combine Filter Expressions
+### Combine filter expressions
 
 To add custom checks to a filter either call `.Where(...)` again
 
@@ -575,7 +715,7 @@ var filteredOrders = orders
 or where this isn't possible combine filters with `CombineWithConditionalAnd`
 
 ```csharp
-using Plainquire.Filter.Abstractions.Extensions;
+using Plainquire.Filter.Abstractions;
 
 var extendedFilter = new[]
     {
@@ -587,20 +727,20 @@ var extendedFilter = new[]
 var filteredOrders = orders.Where(extendedFilter.Compile());
 ```
 
-# Sort Entities
+# Sort entities
 
-## Getting Started
+## Basic usage
 
-Install the NuGet packages:
+**Install NuGet packages**
+
 ```
 Package Manager : Install-Package Plainquire.Sort
 CLI : dotnet add package Plainquire.Sort
 ```
-Create a filter:
+**Create a sort**
+
  ```csharp
-using Plainquire.Sort.Enums;
-using Plainquire.Sort.Extensions;
-using Plainquire.Sort.Sorts;
+using Plainquire.Sort;
 
 var orders = new[] {
     new Order { Customer = "Joe Miller", Number = 100 },
@@ -630,11 +770,10 @@ public class Order
 }
  ```
 
-Or bind filter from query-parameters:
+**Or bind sort from query-parameters**
 
 ```csharp
-using Plainquire.Sort.Extensions;
-using Plainquire.Sort.Sorts;
+using Plainquire.Sort;
 
 [HttpGet]
 public Task<List<Order>> GetOrders([FromQuery] EntitySort<Order> sort)
@@ -645,11 +784,9 @@ public Task<List<Order>> GetOrders([FromQuery] EntitySort<Order> sort)
 
 ## REST / MVC
 
-Model binding for MVC controllers is supported.
-
 To sort an entity via model binding, the entity must be marked with `FilterEntityAttribute`
 
-### Register Model Binders
+### Register model binders
 
 ```
 Package Manager : Install-Package Plainquire.Sort.Mvc
@@ -657,18 +794,18 @@ CLI : dotnet add package Plainquire.Sort.Mvc
 ```
 
 ```csharp
-using Plainquire.Sort.Mvc.Extensions;
+using Plainquire.Sort.Mvc;
 
-// Register required stuff by calling 'AddSortQueryableSupport()' on IMvcBuilder instance
-services.AddControllers().AddSortQueryableSupport();
+// Register required stuff by calling 'AddSortSupport()' on IMvcBuilder instance
+services.AddControllers().AddSortSupport();
 ```
 
 ### Map HTTP query parameter to `EntitySort`
 
-With model binding enabled, REST requests can be sorted using query parameter `orderBy`:
+With model binding enabled, REST requests can be sorted using query parameter `orderBy`.
 
 ```csharp
-using Plainquire.Sort.Sorts;
+using Plainquire.Sort;
 
 var getOrdersUrl = "/GetOrders?orderBy=customer,number-desc"
 
@@ -679,29 +816,29 @@ public Task<List<Order>> GetOrders([FromQuery] EntitySort<Order> sort)
     var sortedOrders = orders.OrderBy(sort);
     Console.WriteLine($"{sortedOrders.OrderBy(sort)}");
     // Output: orders.OrderBy(x => IIF((x == null), null, x.Customer)).ThenByDescending(x => x.Number)
-    
+
     var queryParams = sort.ToString();
     // Output: Customer-asc, Number-desc
 }
 ```
 
-### Configure Model Binding
+### Configure model binding
 
 By default, parameters for properties of sorted entity are named `{Entity}{Property}`.
 By default, all public non-complex properties (`string`, `int`, `DateTime`, ...) are recognized.
 Parameters can be renamed or removed using  `FilterAttribute` and `FilterEntityAttribute`.
 
-For the code below `Number` is not mapped anymore and `Customer` becomes `CustomerName`:
+For the code below `Number` is not mapped anymore and `Customer` becomes `CustomerName`.
 
 ```csharp
-using Plainquire.Filter.Abstractions.Attributes;
+using Plainquire.Filter.Abstractions;
 
 // Remove prefix, e.g. property 'Number' is mapped from 'number', not 'orderNumber'
 // Use 'sortBy' as query parameter name instead of default 'orderBy'
 [FilterEntity(Prefix = "", SortByParameter = "sortBy")]
 public class Order
 {
-     // 'Number' is removed from filter and will be ignored
+     // 'Number' is removed from sort and will be ignored
     [Filter(Sortable = false)]
     public int Number { get; set; }
 
@@ -710,55 +847,53 @@ public class Order
     public string Customer { get; set; }
 }
 ```
-### Order Sets
+### Order sets
 
 Multiple entity sorts can be combined to a set of filters using the `EntitySortSetAttribute`.
 
-You can write:
-
 ```csharp
-using Plainquire.Filter.Filters;
-using Plainquire.Filter.Abstractions.Attributes;
+using Plainquire.Sort;
+using Plainquire.Sort.Abstractions;
 
-[HttpGet]
 // Use
+[HttpGet]
 public Task<List<Order>> GetOrders([FromQuery] OrderSortSet orderSet)
-{ 
+{
     var orderSort = orderSet.Order;
     var orderItemSort = orderSet.OrderItem;
 }
 
 // Instead of
-public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> orderSort, EntityFilter<OrderItem> orderItemSort) { ... }
+public Task<List<Order>> GetOrders([FromQuery] EntitySort<Order> orderSort, EntitySort<OrderItem> orderItemSort) { ... }
 
-[EntityFilterSet]
+[EntitySortSet]
 public class OrderSortSet
 {
-	public EntitySort<Order> Order { get; set; }
-	public EntitySort<OrderItem> OrderItem { get; set; }
+    public EntitySort<Order> Order { get; set; }
+    public EntitySort<OrderItem> OrderItem { get; set; }
 }
 ```
 ## Swagger / OpenAPI
-### Register OpenAPI Support
+### Register OpenAPI support
 Swagger / OpenAPI is supported when using [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
-``` 
+```
 Package Manager : Install-Package Plainquire.Sort.Swashbuckle
 CLI : dotnet add package Plainquire.Sort.Swashbuckle
 ```
 
 ```csharp
-using Plainquire.Sort.Swashbuckle.Extensions;
+using Plainquire.Sort.Swashbuckle;
 
 services.AddSwaggerGen(options =>
-{    
+{
     // Register filters used to modify swagger.json
-    options.AddSortQueryableSupport();
+    options.AddSortSupport();
 });
 ```
 
-## Sort Operators / Syntax
+## Sort operators / syntax
 
-The filter micro syntax consists of a property to sort with an optional sort direction marker before or after (e.g. `customer-asc`). For the HTTP query parameter, a comma separated list of properties is allowed (`orderBy=customer,number-desc`).
+The sort micro syntax consists of a property to sort with an optional sort direction marker before or after (e.g. `customer-asc`). For the HTTP query parameter, a comma separated list of properties is allowed (`orderBy=customer,number-desc`).
 
 Allowed sort direction markers are:
 
@@ -769,13 +904,13 @@ Descending postfix: `-`, `~`, `-desc`, `-dsc`, ` desc`, ` dsc` (with leading spa
 
 When no sort marker is given, sort is done in ascending order.
 
-### Add Sorting
+### Add sorting
 
 Multiple values given to one call are combined using conditional `OR`.
 
-Customer contains `Joe` || `Doe`:
-
 ```csharp
+// Order is sorted by `Address` ascending.
+
 var sort = new EntitySort<Order>();
 
 // via operator
@@ -788,10 +923,10 @@ sort.Add("Address-asc")
 var getOrdersUrl = "/GetOrders?orderBy=customer-asc"
 ```
 
-### Nested Sorting
+### Nested sorting
 
-Nested objects are sorted directly (`x=> x.OrderBy(order => order.Customer)`). 
-Deep property paths (e.g. `order => order.Customer.Length`) are supported. 
+Nested objects are sorted directly (`x=> x.OrderBy(order => order.Customer)`).
+Deep property paths (e.g. `order => order.Customer.Length`) are supported.
 Methods calls (e.g. `order => order.Customer.SubString(1)`) are not supported for security reasons.
 
 Nested lists cannot be sorted directly. You can create an own `EntitySort` for it and sort the nested list by.
@@ -809,7 +944,7 @@ var orderSort = new EntitySort<Order>()
 var orderSort = new EntitySort<Order>()
     .Add(x => x.Address.City, SortDirection.Ascending);
 
-// Print filter
+// Print sort
 Console.WriteLine(orders.OrderBy(orderSort).ToString());
 // Output:
 // orders => orders.OrderBy(x => IIF((IIF((x == null), null, x.Address) == null), null, x.Address.City))
@@ -824,7 +959,7 @@ public class Order
 public record Address(string Street, string City);
 ```
 
-### Retrieve Syntax and Sort Direction
+### Retrieve syntax and sort direction
 
 ```csharp
 var orderSort = new EntitySort<Order>()
@@ -836,7 +971,7 @@ var syntax = orderSort.GetPropertySortSyntax(x => x.Customer);
 
 // Retrive sort direction
 var direction = orderSort.GetPropertySortDirection(x => x.Customer);
-// Output: Ascending 
+// Output: Ascending
 
 // Retrive sort expression string:
 var orderExpression = orders.OrderBy(orderSort).ToString()
@@ -844,37 +979,36 @@ var orderExpression = orders.OrderBy(orderSort).ToString()
 
 ## Configuration
 
-Creation of sort expression can be configured via `SortConfiguration`. 
+Creation of sort expression can be configured via `SortConfiguration`.
 
 ```csharp
-using Plainquire.Sort.Abstractions.Configurations;
+using Plainquire.Sort.Abstractions;
 
 var configuration = new SortConfiguration { IgnoreParseExceptions = true };
-var sortedOrders = orders.OrderBy(sortParam, configuration).ToList();
+var sortedOrders = orders.OrderBy(sort, configuration).ToList();
 ```
 
 ## Interception
 
-Creation of sort expression can be intercepted via `ISortQueryableInterceptor`. 
+Creation of sort expression can be intercepted via `ISortInterceptor`.
 
 An example can be found in the test code [InterceptorTests](https://github.com/fschick/Plainquire/blob/main/Schick.Plainquire.Sort.Tests/Tests/EntitySort/InterceptorTests.cs)
 
-## Default Configuration and Interception
+## Default configuration and interception
 
 `EntitySort` has static properties to provide a system-wide configuration and/or interceptors
 
 ```c#
 public class EntitySort
 {
-	public static SortConfiguration DefaultConfiguration { get; set; } = new FilterConfiguration();
-
-	public static ISortQueryableInterceptor? DefaultInterceptor { get; set; }
+    public static SortConfiguration DefaultConfiguration { get; set; } = new SortConfiguration();
+    public static ISortInterceptor? DefaultInterceptor { get; set; }
 }
 ```
 
 ## Support for Newtonsoft.Json
 
-By default, `System.Text.Json` is used to serialize/convert Plainquire specific stuff. If you like to use Newtonsoft.Json you must register it:
+By default, `System.Text.Json` is used to serialize/convert Plainquire specific stuff. If you like to use Newtonsoft.Json you must register it.
 
 ```
 Package Manager : Install-Package Plainquire.Sort.Mvc.Newtonsoft
@@ -884,22 +1018,22 @@ CLI : dotnet add package Plainquire.Sort.Mvc.Newtonsoft
 ```csharp
 using Plainquire.Sort.Mvc.Newtonsoft;
 
-// Register support for Newtonsoft by calling 
-// 'AddSortQueryableNewtonsoftSupport()' on IMvcBuilder instance
-services.AddControllers().AddSortQueryableNewtonsoftSupport();
+// Register support for Newtonsoft by calling
+// 'AddSortNewtonsoftSupport()' on IMvcBuilder instance
+services.AddControllers().AddSortNewtonsoftSupport();
 ```
 
-## Advanced Scenarios
+## Advanced scenarios
 
-### Deep Copy
+### Deep copy
 
 The `EntitySort<T>` class supports deep cloning by calling the `Clone()` method
 
 ```csharp
-var copy = filter.Clone();
+var copy = sort.Clone();
 ```
 
-### Cast Sorting
+### Casting
 
 Sorting can be cast between entities, e.g. to convert them between DTOs and database models.
 
@@ -907,32 +1041,209 @@ Properties are matched by type (check if assignable) and name (case-sensitive)
 
 ```csharp
 var dtoSort = new EntitySort<OrderDto>().Add(...);
-var orderSort = dtoFilter.Cast<Order>();
+var orderSort = dtoSort.Cast<Order>();
 ```
 
-### Serialize Sort
+### Serialization
 
 #### Using `System.Text.Json`
 
 Objects of type `EntitySort<T>` can be serialized via `System.Text.Json.JsonSerializer` without further requirements
 
 ```csharp
-var json = JsonSerializer.Serialize(filter);
-filter = JsonSerializer.Deserialize<EntitySort<Order>>(json);
+var json = JsonSerializer.Serialize(sort);
+sort = JsonSerializer.Deserialize<EntitySort<Order>>(json);
 ```
 
 #### Using `Newtonsoft.Json`
 
 When using `Newtonsoft.Json` additional converters are required
 
-``` 
+```
 Package Manager : Install-Package Plainquire.Sort.Newtonsoft
 CLI : dotnet add package Plainquire.Sort.Newtonsoft
 ```
 
 ```csharp
-using Plainquire.Filter.Newtonsoft.Extensions;
+using Plainquire.Sort.Newtonsoft;
 
 var json = JsonConvert.SerializeObject(sort, JsonConverterExtensions.NewtonsoftConverters);
 sort = JsonConvert.DeserializeObject<EntitySort<Order>>(json, JsonConverterExtensions.NewtonsoftConverters);
+```
+
+# Page Entities
+
+## Basic usage
+
+**Install NuGet packages**
+
+```
+Package Manager : Install-Package Plainquire.Page
+CLI : dotnet add package Plainquire.Page
+```
+**Create a page**
+
+ ```csharp
+using Plainquire.Page;
+
+// Create page
+ var page = new EntityPage(pageNumber: 2, pageSize: 3);
+
+// Use page with LINQ
+var pagedOrders = orders.Page(page).ToList();
+// Or queryables (e.g. Entity Framework)
+var pagedOrders = dbContext.Orders.Page(page).ToList();
+
+// Direct pageing is supported too
+var pagedOrders = orders.Page(pageNumber: 2, pageSize: 3).ToList();
+ ```
+
+## REST / MVC
+
+To page an entity via model binding, the entity must be marked with `FilterEntityAttribute`
+
+### Register model binders
+
+```
+Package Manager : Install-Package Plainquire.Page.Mvc
+CLI : dotnet add package Plainquire.Page.Mvc
+```
+
+```csharp
+using Plainquire.Page.Mvc;
+
+// Register required stuff by calling 'AddPageSupport()' on IMvcBuilder instance
+services.AddControllers().AddPageSupport();
+```
+
+### Map HTTP query parameter to `EntityPage`
+
+With model binding enabled, REST requests can be paged using query parameters `page` and `pageSize`.
+
+```csharp
+using Plainquire.Page;
+
+var getOrdersUrl = "/GetOrders?page=2&pageSize=3"
+
+[HttpGet]
+public Task<List<Order>> GetOrders([FromQuery] EntityPage<Order> page)
+{
+    return dbContext.Orders.Page(page).ToList();
+}
+```
+
+### Configure model binding
+
+Parameters can be renamed `FilterEntityAttribute`.
+
+For the code below page number is taken from query parameter `pageNumber` and page size from `size`.
+
+```csharp
+using Plainquire.Filter.Abstractions;
+
+[FilterEntity(PageNumberParameter = "pageNumber", PageSizeParameter = "size")]
+public class Order
+{
+    public string Customer { get; set; }
+}
+```
+## Swagger / OpenAPI
+### Register OpenAPI support
+Swagger / OpenAPI is supported when using [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore).
+```
+Package Manager : Install-Package Plainquire.Page.Swashbuckle
+CLI : dotnet add package Plainquire.Page.Swashbuckle
+```
+
+```csharp
+using Plainquire.Page.Swashbuckle;
+
+services.AddSwaggerGen(options =>
+{
+    // Register filters used to modify swagger.json
+    options.AddPageSupport();
+});
+```
+
+## Configuration
+
+Creation of page expression can be configured via `PageConfiguration`.
+
+```csharp
+using Plainquire.Page.Abstractions;
+
+var configuration = new PageConfiguration { IgnoreParseExceptions = true };
+var pagedOrders = orders.Page(page, configuration).ToList();
+```
+
+## Interception
+
+Creation of page expression can be intercepted via `IPageInterceptor`.
+
+An example can be found in the test code [InterceptorTests](https://github.com/fschick/Plainquire/blob/main/Schick.Plainquire.Page.Tests/Tests/EntityPage/InterceptorTests.cs)
+
+## Default configuration and interception
+
+`EntityPage` has static properties to provide a system-wide configuration and/or interceptors
+
+```c#
+public class EntityPage
+{
+    public static PageConfiguration DefaultConfiguration { get; set; } = new PageConfiguration();
+    public static IPageInterceptor? DefaultInterceptor { get; set; }
+}
+```
+
+## Support for Newtonsoft.Json
+
+By default, `System.Text.Json` is used to serialize/convert Plainquire specific stuff. If you like to use Newtonsoft.Json you must register it.
+
+```
+Package Manager : Install-Package Plainquire.Page.Mvc.Newtonsoft
+CLI : dotnet add package Plainquire.Page.Mvc.Newtonsoft
+```
+
+```csharp
+using Plainquire.Page.Mvc.Newtonsoft;
+
+// Register support for Newtonsoft by calling
+// 'AddPageNewtonsoftSupport()' on IMvcBuilder instance
+services.AddControllers().AddPageNewtonsoftSupport();
+```
+
+## Advanced Scenarios
+
+### Deep copy
+
+The `EntityPage<T>` class supports deep cloning by calling the `Clone()` method
+
+```csharp
+var copy = page.Clone();
+```
+
+### Serialization
+
+#### Using `System.Text.Json`
+
+Objects of type `EntityPage<T>` can be serialized via `System.Text.Json.JsonSerializer` without further requirements
+
+```csharp
+var json = JsonSerializer.Serialize(page);
+page = JsonSerializer.Deserialize<EntityPage<Order>>(json);
+```
+
+#### Using `Newtonsoft.Json`
+
+When using `Newtonsoft.Json` additional converters are required
+
+```
+Package Manager : Install-Package Plainquire.Page.Newtonsoft
+CLI : dotnet add package Plainquire.Page.Newtonsoft
+```
+
+```csharp
+using Plainquire.Page.Newtonsoft;
+
+var json = JsonConvert.SerializeObject(page, JsonConverterExtensions.NewtonsoftConverters);
+sort = JsonConvert.DeserializeObject<EntityPage<Order>>(json, JsonConverterExtensions.NewtonsoftConverters);
 ```
