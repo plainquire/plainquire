@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using System;
 
 namespace Plainquire.Demo.Routing;
 
@@ -16,7 +16,7 @@ internal class V1ApiController : ControllerAttribute, IApiBehaviorMetadata, IRou
     public string GroupName => API_VERSION;
 
     /// <inheritdoc />
-    public string Template => $"{API_PREFIX}/{API_VERSION}/[controller]/[action]";
+    public string Template => $"{API_PREFIX}/[controller]/[action]";
 
     /// <inheritdoc />
     public int? Order => 0;

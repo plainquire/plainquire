@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Bogus;
+﻿using Bogus;
 using Bogus.DataSets;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +11,13 @@ using Plainquire.Filter.Extensions;
 using Plainquire.Page.Extensions;
 using Plainquire.Page.Pages;
 using Plainquire.Sort.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Address = Plainquire.Demo.Models.Address;
 
 namespace Plainquire.Demo.Controllers;
@@ -51,7 +51,7 @@ public class FreelancerController : Controller
     /// <param name="seed">A seed. Using the same seed returns predictable result.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
     [HttpGet]
-    public async Task<FreelancerDto> GetFreelancers([FromQuery] FreelancerFilterSet filter, [FromQuery] FreelancerSortSet orderBy, [FromQuery] EntityPage page, int seed = 0, CancellationToken cancellationToken = default)
+    public async Task<FreelancerDto> GetFreelancers([FromQuery] FreelancerFilterSet filter, [FromQuery] FreelancerSortSet orderBy, [FromQuery] EntityPage<Freelancer> page, int seed = 0, CancellationToken cancellationToken = default)
     {
         var freelancerFilter = filter.Freelancer;
         var projectFilter = filter.Project;

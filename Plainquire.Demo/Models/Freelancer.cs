@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Plainquire.Filter.Abstractions.Attributes;
 
 namespace Plainquire.Demo.Models;
 
 /// <summary>
 /// Freelancer.
 /// </summary>
-[FilterEntity(Prefix = "")]
+[FilterEntity(Prefix = "", PageSize = 10)]
 [SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
 public class Freelancer
 {

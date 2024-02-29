@@ -26,7 +26,7 @@ public class DemoPage : ComponentBase
 
     protected FreelancerDto QueryResult = new();
 
-    protected int PageCount => (int)Math.Ceiling(QueryResult.FilteredCount / (float)QueryModel.PageSize);
+    protected int PageCount => GetPageCount();
 
     protected readonly NumberFormatInfo NumberFormat;
 
@@ -83,7 +83,7 @@ public class DemoPage : ComponentBase
 
     protected async Task SetPage(int page)
     {
-        QueryModel.PageNumber = page;
+        QueryModel.PageNumber = Math.Max(page, 1);
         await UpdateQuery();
     }
 
@@ -95,6 +95,15 @@ public class DemoPage : ComponentBase
 
     protected async Task FormatSql()
         => QueryResult.SqlQuery = await FormatSql(QueryResult.SqlQuery!);
+
+    private int GetPageCount()
+    {
+        if (QueryResult.FilteredCount == 0)
+            return 1;
+
+        var pageFraction = QueryResult.FilteredCount / (float)QueryModel.PageSize;
+        return (int)Math.Ceiling(pageFraction);
+    }
 
     private void SetQueryModelFromUrl(string url)
     {
@@ -117,7 +126,7 @@ public class DemoPage : ComponentBase
     {
         try
         {
-            var requestUri = $"{NavigationManager.BaseUri}api/v1/Freelancer/GetFreelancers";
+            var requestUri = $"{NavigationManager.BaseUri}api/Freelancer/GetFreelancers";
             requestUri = QueryHelpers.AddQueryString(requestUri, QueryModel.ToQuery());
 
             using var response = await HttpClient.GetAsync(requestUri);
@@ -131,7 +140,7 @@ public class DemoPage : ComponentBase
             var json = await response.Content.ReadAsStringAsync();
             QueryResult = JsonConvert.DeserializeObject<FreelancerDto>(json) ?? new();
 
-            if (QueryModel.PageNumber > PageCount)
+            if (QueryModel.PageNumber > 1 && QueryModel.PageNumber > PageCount)
             {
                 await SetPage(PageCount);
                 await LoadData();
@@ -208,15 +217,18 @@ public class DemoPage : ComponentBase
                 .Where(x => !string.IsNullOrEmpty(x.Value))
                 .ToDictionary(x => x.Name.LowercaseFirstChar(), x => new StringValues(x.Value));
 
-            if (!string.IsNullOrEmpty(Seed))
-                query.Add("seed", new StringValues(Seed));
-
             var sort = Sort.Where(x => !string.IsNullOrEmpty(x)).ToList();
             if (sort.Count != 0)
                 query.Add("orderBy", string.Join(',', sort));
 
-            query.Add("page", new StringValues(PageNumber.ToString()));
-            query.Add("pageSize", new StringValues(PageSize.ToString()));
+            if (PageNumber != 1)
+                query.Add("page", new StringValues(PageNumber.ToString()));
+
+            if (PageSize != 10)
+                query.Add("pageSize", new StringValues(PageSize.ToString()));
+
+            if (!string.IsNullOrEmpty(Seed))
+                query.Add("seed", new StringValues(Seed));
 
             return query;
         }
