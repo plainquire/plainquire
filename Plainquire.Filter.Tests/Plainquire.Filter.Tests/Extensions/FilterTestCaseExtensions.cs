@@ -1,13 +1,11 @@
+using FluentAssertions;
+using FluentAssertions.Execution;
+using Plainquire.Filter.Tests.Models;
+using Plainquire.Filter.Tests.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using FluentAssertions;
-using FluentAssertions.Execution;
-using Plainquire.Filter.Extensions;
-using Plainquire.Filter.Filters;
-using Plainquire.Filter.Tests.Models;
-using Plainquire.Filter.Tests.Services;
 
 namespace Plainquire.Filter.Tests.Extensions;
 

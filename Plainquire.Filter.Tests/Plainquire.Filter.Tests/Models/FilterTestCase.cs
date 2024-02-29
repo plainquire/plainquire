@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using System;
 using System.Diagnostics.CodeAnalysis;
-using Plainquire.Filter.Abstractions.Configurations;
-using Plainquire.Filter.Enums;
 
 namespace Plainquire.Filter.Tests.Models;
 

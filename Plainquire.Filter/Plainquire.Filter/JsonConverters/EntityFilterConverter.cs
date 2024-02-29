@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Plainquire.Filter.Extensions;
-using Plainquire.Filter.Filters;
 
 namespace Plainquire.Filter.JsonConverters;
 

@@ -1,4 +1,4 @@
-﻿namespace Plainquire.Sort.Abstractions.Configurations;
+﻿namespace Plainquire.Sort.Abstractions;
 
 /// <summary>
 /// Holds sort order specific configuration.

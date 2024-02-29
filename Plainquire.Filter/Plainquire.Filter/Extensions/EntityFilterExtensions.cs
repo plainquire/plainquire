@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
-using Plainquire.Filter.Abstractions.Attributes;
-using Plainquire.Filter.Enums;
-using Plainquire.Filter.Filters;
 
-namespace Plainquire.Filter.Extensions;
+namespace Plainquire.Filter;
 
 /// <summary>
 /// Extension methods for <see cref="EntityFilter{TEntity}"/>

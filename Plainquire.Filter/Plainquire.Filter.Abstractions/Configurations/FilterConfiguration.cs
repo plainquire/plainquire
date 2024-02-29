@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Plainquire.Filter.Abstractions.Configurations;
+namespace Plainquire.Filter.Abstractions;
 
 /// <summary>
 /// Holds filter specific configuration.

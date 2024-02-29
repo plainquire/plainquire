@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Plainquire.Page.Abstractions;
+using Plainquire.Page.JsonConverters;
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Plainquire.Page.Abstractions.Configurations;
-using Plainquire.Page.Interfaces;
-using Plainquire.Page.JsonConverters;
 
-namespace Plainquire.Page.Pages;
+namespace Plainquire.Page;
 
 /// <summary>
 /// Hub to create pagination for <typeparamref name="TEntity"/>.

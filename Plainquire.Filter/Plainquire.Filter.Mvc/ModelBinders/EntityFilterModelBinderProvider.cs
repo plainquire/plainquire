@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
-using Plainquire.Filter.Extensions;
 using System;
 
 namespace Plainquire.Filter.Mvc.ModelBinders;

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Plainquire.Filter.Filters;
+namespace Plainquire.Filter;
 
 /// <summary>
 /// Factory to create <see cref="ValueFilter"/> for all values from filterSyntax.

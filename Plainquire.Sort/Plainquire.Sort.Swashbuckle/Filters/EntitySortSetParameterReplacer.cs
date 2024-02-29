@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
-using Plainquire.Sort.Extensions;
-using Plainquire.Sort.Sorts;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

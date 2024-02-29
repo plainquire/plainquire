@@ -1,15 +1,9 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
-using Plainquire.Filter.Abstractions.Configurations;
-using Plainquire.Filter.Abstractions.Extensions;
-using Plainquire.Filter.Enums;
-using Plainquire.Filter.Exceptions;
-using Plainquire.Filter.Extensions;
-using Plainquire.Filter.Filters;
-using Plainquire.Filter.Interfaces;
 
 namespace Plainquire.Filter.ValueFilterExpression;
 

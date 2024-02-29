@@ -1,6 +1,6 @@
 ﻿#pragma warning disable 1591
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
 
 namespace Plainquire.Demo.Components;
 

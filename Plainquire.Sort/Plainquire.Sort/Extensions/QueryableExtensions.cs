@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Plainquire.Sort.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Plainquire.Sort.Abstractions.Configurations;
-using Plainquire.Sort.Interfaces;
-using Plainquire.Sort.Sorts;
 
-namespace Plainquire.Sort.Extensions;
+namespace Plainquire.Sort;
 
 /// <summary>
 /// Extension methods for <see cref="IQueryable{TEntity}"/>
@@ -41,7 +39,7 @@ public static class QueryableExtensions
         var result = interceptor?.OrderBy(source, first, configuration);
         if (result == null)
         {
-            var ascending = first.Direction == Enums.SortDirection.Ascending;
+            var ascending = first.Direction == SortDirection.Ascending;
             result ??= ascending
                 ? source.OrderBy(first.PropertyPath, configuration)
                 : source.OrderByDescending(first.PropertyPath, configuration);
@@ -56,7 +54,7 @@ public static class QueryableExtensions
                 continue;
             }
 
-            var ascending = sortedProperty.Direction == Enums.SortDirection.Ascending;
+            var ascending = sortedProperty.Direction == SortDirection.Ascending;
             result = ascending
                 ? result.ThenBy(sortedProperty.PropertyPath, configuration)
                 : result.ThenByDescending(sortedProperty.PropertyPath, configuration);

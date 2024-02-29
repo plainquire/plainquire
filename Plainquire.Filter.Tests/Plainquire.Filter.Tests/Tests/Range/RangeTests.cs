@@ -1,10 +1,9 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Filter.Abstractions.Extensions;
-using Plainquire.Filter.Abstractions.Models;
+using Plainquire.Filter.Abstractions;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.Range;
 
@@ -18,7 +17,7 @@ public class RangeTests
         range1.Start.Should().Be(1);
         range1.End.Should().Be(2);
 
-        var range2 = Abstractions.Models.Range.Create(1, 2);
+        var range2 = Abstractions.Range.Create(1, 2);
         range2.Start.Should().Be(1);
         range2.End.Should().Be(2);
     }
@@ -31,19 +30,19 @@ public class RangeTests
         var range1 = new Range<int>(1, 2);
         range1.ToString().Should().Be("1_2");
 
-        var range2 = Abstractions.Models.Range.Create<NonConvertible>(default, default);
+        var range2 = Abstractions.Range.Create<NonConvertible>(default, default);
         range2.ToString().Should().Be("_");
 
-        var range3 = Abstractions.Models.Range.Create(new DateTime(2020, 1, 1), new DateTime(2020, 1, 1));
+        var range3 = Abstractions.Range.Create(new DateTime(2020, 1, 1), new DateTime(2020, 1, 1));
         range3.ToString().Should().Be("2020-01-01T00:00:00.0000000_2020-01-01T00:00:00.0000000");
 
-        var range4 = Abstractions.Models.Range.Create(new NonConvertible(), default);
+        var range4 = Abstractions.Range.Create(new NonConvertible(), default);
         range4.ToString().Should().Be("NonConvertible_");
 
-        var range5 = Abstractions.Models.Range.Create(default, new NonConvertible());
+        var range5 = Abstractions.Range.Create(default, new NonConvertible());
         range5.ToString().Should().Be("_NonConvertible");
 
-        var range6 = Abstractions.Models.Range.Create(new NonConvertible(), new NonConvertible());
+        var range6 = Abstractions.Range.Create(new NonConvertible(), new NonConvertible());
         range6.ToString().Should().Be("NonConvertible_NonConvertible");
     }
 

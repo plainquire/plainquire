@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Plainquire.Filter.Filters;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

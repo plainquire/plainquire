@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
-using Plainquire.Sort.Enums;
 
 namespace Plainquire.Sort.Tests.Models;
 

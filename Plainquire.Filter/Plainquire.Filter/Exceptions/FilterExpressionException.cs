@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Plainquire.Filter.Enums;
 
-namespace Plainquire.Filter.Exceptions;
+namespace Plainquire.Filter;
 
 /// <summary>
 /// Exception is thrown when a filter expression cannot be created

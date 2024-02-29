@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Plainquire.Filter.Enums;
-using Plainquire.Filter.Filters;
 
-namespace Plainquire.Filter.Extensions;
+namespace Plainquire.Filter;
 
 /// <summary>
 /// Extension methods for <see cref="ValueFilter"/>.

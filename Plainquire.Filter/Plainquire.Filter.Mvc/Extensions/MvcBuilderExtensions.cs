@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Plainquire.Filter.Mvc.ModelBinders;
 
-namespace Plainquire.Filter.Mvc.Extensions;
+namespace Plainquire.Filter.Mvc;
 
 /// <summary>
 /// Extensions to register entity filter extensions to MVC

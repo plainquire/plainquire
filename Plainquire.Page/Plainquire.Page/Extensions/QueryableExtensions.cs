@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Plainquire.Page.Abstractions;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Plainquire.Page.Abstractions.Configurations;
-using Plainquire.Page.Interfaces;
-using Plainquire.Page.Pages;
 
-namespace Plainquire.Page.Extensions;
+namespace Plainquire.Page;
 
 /// <summary>
 /// Extension methods for <see cref="IQueryable{TEntity}"/>

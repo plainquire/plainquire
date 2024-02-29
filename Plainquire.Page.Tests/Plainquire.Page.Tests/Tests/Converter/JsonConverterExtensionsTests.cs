@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Plainquire.Page.JsonConverters;
-using Plainquire.Page.Newtonsoft.Extensions;
+using Plainquire.Page.Newtonsoft;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Page.Tests.Tests.Converter;
 

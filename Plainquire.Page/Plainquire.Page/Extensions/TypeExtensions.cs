@@ -1,7 +1,6 @@
 ﻿using System;
-using Plainquire.Page.Pages;
 
-namespace Plainquire.Page.Extensions;
+namespace Plainquire.Page;
 
 /// <summary>
 /// Extension methods for <see cref="Type"/>.

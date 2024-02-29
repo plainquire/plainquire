@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Plainquire.Sort.Sorts;
 using Plainquire.Sort.Swashbuckle.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Plainquire.Sort.Swashbuckle.Extensions;
+namespace Plainquire.Sort.Swashbuckle;
 
 /// <summary>
 /// Extensions to register entity filter extensions to Swashbuckle.AspNetCore (https://github.com/domaindrivendev/Swashbuckle.AspNetCore)

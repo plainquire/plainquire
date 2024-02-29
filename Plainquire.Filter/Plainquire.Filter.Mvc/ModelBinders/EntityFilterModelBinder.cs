@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Plainquire.Filter.Abstractions.Attributes;
-using Plainquire.Filter.Extensions;
-using Plainquire.Filter.Filters;
+using Plainquire.Filter.Abstractions;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Plainquire.Sort.Mvc.Extensions;
+namespace Plainquire.Sort.Mvc;
 
 internal static class StringExtensions
 {

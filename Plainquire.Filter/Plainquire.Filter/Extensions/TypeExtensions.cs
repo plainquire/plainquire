@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using Plainquire.Filter.Filters;
 
-namespace Plainquire.Filter.Extensions;
+namespace Plainquire.Filter;
 
 /// <summary>
 /// Extension methods for <see cref="Type"/>.

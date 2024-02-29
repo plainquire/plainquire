@@ -1,8 +1,6 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Plainquire.Sort.Enums;
-using Plainquire.Sort.Sorts;
+using System;
 
 namespace Plainquire.Sort.Newtonsoft.JsonConverters;
 

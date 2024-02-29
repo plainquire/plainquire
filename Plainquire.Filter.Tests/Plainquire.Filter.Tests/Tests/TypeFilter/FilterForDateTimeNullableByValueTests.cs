@@ -1,11 +1,10 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Filter.Abstractions.Models;
-using Plainquire.Filter.Enums;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 

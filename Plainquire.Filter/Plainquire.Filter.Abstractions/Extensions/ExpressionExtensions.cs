@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions.ExpressionVisitors;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Plainquire.Filter.Abstractions.ExpressionVisitors;
 
-namespace Plainquire.Filter.Abstractions.Extensions;
+namespace Plainquire.Filter.Abstractions;
 
 /// <summary>
 /// Extension methods for <see cref="Expression"/>.

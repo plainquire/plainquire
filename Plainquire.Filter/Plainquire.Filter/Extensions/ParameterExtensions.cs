@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Plainquire.Filter.Abstractions.Attributes;
-using Plainquire.Filter.Filters;
 
-namespace Plainquire.Filter.Extensions;
+namespace Plainquire.Filter;
 
 /// <summary>
 /// Extension methods used to handle MVC controller action parameters

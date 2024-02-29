@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Plainquire.Page.Newtonsoft.Extensions;
+using Plainquire.Page.Newtonsoft;
 
-namespace Plainquire.Page.Mvc.Newtonsoft.Extensions;
+namespace Plainquire.Page.Mvc.Newtonsoft;
 
 /// <summary>
 /// Extensions to register entity page extensions to MVC

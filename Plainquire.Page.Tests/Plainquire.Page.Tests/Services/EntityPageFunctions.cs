@@ -1,15 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Plainquire.Page.Abstractions;
+using Plainquire.Page.Newtonsoft;
+using Plainquire.Page.Tests.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using Newtonsoft.Json;
-using Plainquire.Page.Abstractions.Configurations;
-using Plainquire.Page.Extensions;
-using Plainquire.Page.Interfaces;
-using Plainquire.Page.Newtonsoft.Extensions;
-using Plainquire.Page.Pages;
-using Plainquire.Page.Tests.Models;
 
 namespace Plainquire.Page.Tests.Services;
 

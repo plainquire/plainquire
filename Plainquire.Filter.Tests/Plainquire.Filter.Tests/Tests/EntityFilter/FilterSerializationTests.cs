@@ -1,12 +1,10 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Plainquire.Filter.Newtonsoft;
+using Plainquire.Filter.Tests.Models;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Filter.Extensions;
-using Plainquire.Filter.Filters;
-using Plainquire.Filter.Newtonsoft.Extensions;
-using Plainquire.Filter.Tests.Models;
 using NetSerializer = System.Text.Json.JsonSerializer;
 using NewtonSerializer = Newtonsoft.Json.JsonConvert;
 

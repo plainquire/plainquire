@@ -1,9 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Filter.Exceptions;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 

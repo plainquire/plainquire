@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Plainquire.Filter.Abstractions.Attributes;
-using Plainquire.Filter.Abstractions.Extensions;
-using Plainquire.Sort.Extensions;
-using Plainquire.Sort.Mvc.Extensions;
-using Plainquire.Sort.Sorts;
+using Plainquire.Filter.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

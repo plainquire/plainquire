@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -8,9 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Filter.Abstractions.Attributes;
+using Plainquire.Filter.Abstractions;
 using Plainquire.Page.Mvc.ModelBinders;
-using Plainquire.Page.Pages;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Page.Tests.Tests.ModelBinder;
 
@@ -85,7 +84,7 @@ public class EntityPageModelBinderTests
             ["pageSize"] = "3",
         };
 
-        var bindingContext = CreateBindingContext<Pages.EntityPage>(queryParameters);
+        var bindingContext = CreateBindingContext<Page.EntityPage>(queryParameters);
         var binder = new EntityPageModelBinder();
 
         // Act
@@ -96,7 +95,7 @@ public class EntityPageModelBinderTests
 
         bindingContext.Result.IsModelSet.Should().BeTrue();
 
-        var page = (Pages.EntityPage)bindingContext.Result.Model!;
+        var page = (Page.EntityPage)bindingContext.Result.Model!;
 
         page.PageNumber.Should().Be(2);
         page.PageSize.Should().Be(3);

@@ -3,9 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Plainquire.Demo.Extensions;
 using Plainquire.Demo.Routing;
-using Plainquire.Filter.Swashbuckle.Extensions;
-using Plainquire.Page.Swashbuckle.Extensions;
-using Plainquire.Sort.Swashbuckle.Extensions;
+using Plainquire.Filter.Swashbuckle;
+using Plainquire.Page.Swashbuckle;
+using Plainquire.Sort.Swashbuckle;
 using System;
 using System.IO;
 

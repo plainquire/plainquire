@@ -1,12 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Page.Abstractions.Configurations;
-using Plainquire.Page.Extensions;
-using Plainquire.Page.Interfaces;
+using Plainquire.Page.Abstractions;
 using Plainquire.Page.Tests.Models;
 using Plainquire.Page.Tests.Services;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
 
@@ -19,7 +17,7 @@ public class InterceptorTests
     {
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };
 
-        var entityPage = new Pages.EntityPage<TestModel<string>>(1, 3);
+        var entityPage = new EntityPage<TestModel<string>>(1, 3);
 
         var interceptor = new FixedPageSizeInterceptor();
 
@@ -33,21 +31,21 @@ public class InterceptorTests
     {
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };
 
-        var entityPage = new Pages.EntityPage<TestModel<string>>(1, 3);
+        var entityPage = new EntityPage<TestModel<string>>(1, 3);
 
-        Pages.EntityPage.DefaultInterceptor = new FixedPageSizeInterceptor();
+        Page.EntityPage.DefaultInterceptor = new FixedPageSizeInterceptor();
         var pagedItems = pageFunc(testItems, entityPage);
         pagedItems.Should().Equal(testItems[0], testItems[1]);
 
         // Cleanup
-        Pages.EntityPage.DefaultInterceptor = null;
+        Page.EntityPage.DefaultInterceptor = null;
     }
 
     private class FixedPageSizeInterceptor : IPageInterceptor
     {
-        public IQueryable<TEntity> Page<TEntity>(IQueryable<TEntity> source, Pages.EntityPage page, PageConfiguration configuration)
+        public IQueryable<TEntity> Page<TEntity>(IQueryable<TEntity> source, Page.EntityPage page, PageConfiguration configuration)
         {
-            var fixedPageSizePage = new Pages.EntityPage
+            var fixedPageSizePage = new Page.EntityPage
             {
                 PageNumber = page.PageNumber,
                 PageSize = 2

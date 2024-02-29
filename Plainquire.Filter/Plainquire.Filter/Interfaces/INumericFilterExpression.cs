@@ -1,4 +1,4 @@
-﻿namespace Plainquire.Filter.Interfaces;
+﻿namespace Plainquire.Filter;
 
 /// <summary>
 /// Converter to create the body of filter expressions for numeric values.

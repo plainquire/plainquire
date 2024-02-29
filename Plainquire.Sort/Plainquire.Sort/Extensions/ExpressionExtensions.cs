@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Plainquire.Sort.Sorts;
 
-namespace Plainquire.Sort.Extensions;
+namespace Plainquire.Sort;
 
 /// <summary>
 /// Extension methods for <see cref="Expression"/>.

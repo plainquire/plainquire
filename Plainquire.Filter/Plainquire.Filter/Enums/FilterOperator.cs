@@ -1,6 +1,4 @@
-﻿using Plainquire.Filter.Filters;
-
-namespace Plainquire.Filter.Enums;
+﻿namespace Plainquire.Filter;
 
 /// <summary>
 /// Operators used by <see cref="ValueFilter"/>

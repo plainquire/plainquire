@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using System;
 using System.Linq.Expressions;
-using Plainquire.Filter.Abstractions.Configurations;
-using Plainquire.Filter.Filters;
 
-namespace Plainquire.Filter.Interfaces;
+namespace Plainquire.Filter;
 
 /// <summary>
 /// Converter to create the body for a filter expression for a given <see cref="ValueFilter"/>.

@@ -1,13 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Sort.Abstractions.Configurations;
-using Plainquire.Sort.Enums;
-using Plainquire.Sort.Interfaces;
-using Plainquire.Sort.Sorts;
+using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Sort.Tests.Services;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
@@ -72,17 +69,17 @@ public class InterceptorTests
         var entitySort = new EntitySort<TestModel<string>>()
             .Add(x => x.NestedObject, SortDirection.Ascending);
 
-        Sorts.EntitySort.DefaultInterceptor = new NestedModelByValueInterceptor();
+        Sort.EntitySort.DefaultInterceptor = new NestedModelByValueInterceptor();
         var sortedItems = sortFunc(testItems, entitySort);
         sortedItems.Should().ContainInOrder(testItems[1], testItems[0], testItems[3], testItems[2]);
 
         // Cleanup
-        Sorts.EntitySort.DefaultInterceptor = null;
+        Sort.EntitySort.DefaultInterceptor = null;
     }
 
     private class NestedModelByValueInterceptor : ISortInterceptor
     {
-        public IOrderedQueryable<TEntity>? OrderBy<TEntity>(IQueryable<TEntity> source, Sorts.PropertySort sort, SortConfiguration configuration)
+        public IOrderedQueryable<TEntity>? OrderBy<TEntity>(IQueryable<TEntity> source, Sort.PropertySort sort, SortConfiguration configuration)
         {
             if (source is IQueryable<TestModel<string>> testModelSource && sort.PropertyPath == "NestedObject")
                 return (IOrderedQueryable<TEntity>)testModelSource.OrderBy(x => x.NestedObject!.Value);
@@ -90,7 +87,7 @@ public class InterceptorTests
             return null;
         }
 
-        public IOrderedQueryable<TEntity>? ThenBy<TEntity>(IOrderedQueryable<TEntity> source, Sorts.PropertySort sort, SortConfiguration configuration)
+        public IOrderedQueryable<TEntity>? ThenBy<TEntity>(IOrderedQueryable<TEntity> source, Sort.PropertySort sort, SortConfiguration configuration)
         {
             if (source is IOrderedQueryable<TestModel<string>> testModelSource && sort.PropertyPath == "NestedObject")
                 return (IOrderedQueryable<TEntity>)testModelSource.ThenBy(x => x.NestedObject!.Value);

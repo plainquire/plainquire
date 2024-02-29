@@ -1,6 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Plainquire.Filter.Abstractions.Attributes;
-using Plainquire.Filter.Filters;
+﻿using Plainquire.Filter;
+using Plainquire.Filter.Abstractions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Demo.Models.FilterSets;
 

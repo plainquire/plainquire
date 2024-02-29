@@ -1,6 +1,4 @@
-﻿using Plainquire.Sort.Sorts;
-
-namespace Plainquire.Sort.Enums;
+﻿namespace Plainquire.Sort;
 
 /// <summary>
 /// Sort order for <see cref="PropertySort"/>.

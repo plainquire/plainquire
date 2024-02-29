@@ -1,9 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Page.Extensions;
 using Plainquire.Page.Tests.Models;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.Extensions;
 

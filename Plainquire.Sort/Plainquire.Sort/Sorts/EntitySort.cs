@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Plainquire.Sort.Abstractions;
+using Plainquire.Sort.JsonConverters;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -6,13 +8,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Plainquire.Sort.Abstractions.Configurations;
-using Plainquire.Sort.Enums;
-using Plainquire.Sort.Extensions;
-using Plainquire.Sort.Interfaces;
-using Plainquire.Sort.JsonConverters;
 
-namespace Plainquire.Sort.Sorts;
+namespace Plainquire.Sort;
 
 /// <summary>
 /// Hub to create sort order for <typeparamref name="TEntity"/> with fluent API.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Plainquire.Filter.Filters;
+namespace Plainquire.Filter;
 
 internal class NestedFilter
 {

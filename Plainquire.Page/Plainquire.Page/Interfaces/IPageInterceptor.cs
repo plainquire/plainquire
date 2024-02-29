@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using Plainquire.Page.Abstractions.Configurations;
-using Plainquire.Page.Pages;
+﻿using Plainquire.Page.Abstractions;
+using System.Linq;
 
-namespace Plainquire.Page.Interfaces;
+namespace Plainquire.Page;
 
 /// <summary>
 /// Interceptor to provide custom page logic.

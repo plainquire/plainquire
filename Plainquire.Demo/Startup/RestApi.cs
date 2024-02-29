@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Converters;
-using Plainquire.Filter.Mvc.Extensions;
-using Plainquire.Filter.Mvc.Newtonsoft.Extensions;
-using Plainquire.Page.Mvc.Extensions;
-using Plainquire.Page.Mvc.Newtonsoft.Extensions;
-using Plainquire.Sort.Mvc.Extensions;
-using Plainquire.Sort.Mvc.Newtonsoft.Extensions;
+using Plainquire.Filter.Mvc;
+using Plainquire.Filter.Mvc.Newtonsoft;
+using Plainquire.Page.Mvc;
+using Plainquire.Page.Mvc.Newtonsoft;
+using Plainquire.Sort.Mvc;
+using Plainquire.Sort.Mvc.Newtonsoft;
 
 namespace Plainquire.Demo.Startup;
 

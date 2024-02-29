@@ -1,8 +1,7 @@
-﻿using System;
-using Plainquire.Page.Abstractions.Configurations;
-using Plainquire.Page.Pages;
+﻿using Plainquire.Page.Abstractions;
+using System;
 
-namespace Plainquire.Page.Extensions;
+namespace Plainquire.Page;
 
 /// <summary>
 /// Extension methods for <see cref="EntityPage"/>

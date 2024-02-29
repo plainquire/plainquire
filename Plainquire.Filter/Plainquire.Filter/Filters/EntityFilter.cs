@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using Plainquire.Filter.JsonConverters;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -7,13 +9,8 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Plainquire.Filter.Abstractions.Configurations;
-using Plainquire.Filter.Abstractions.Extensions;
-using Plainquire.Filter.Extensions;
-using Plainquire.Filter.Interfaces;
-using Plainquire.Filter.JsonConverters;
 
-namespace Plainquire.Filter.Filters;
+namespace Plainquire.Filter;
 
 /// <summary>
 /// Hub to create filter expressions for <typeparamref name="TEntity"/> with fluent API.

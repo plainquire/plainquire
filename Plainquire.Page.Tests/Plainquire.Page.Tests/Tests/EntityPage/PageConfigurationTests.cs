@@ -1,12 +1,11 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Page.Abstractions.Configurations;
-using Plainquire.Page.Pages;
+using Plainquire.Page.Abstractions;
 using Plainquire.Page.Tests.Models;
 using Plainquire.Page.Tests.Services;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
 
@@ -69,7 +68,7 @@ public class PageConfigurationTests
     {
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };
 
-        Pages.EntityPage.DefaultConfiguration = new PageConfiguration { IgnoreParseExceptions = true };
+        Page.EntityPage.DefaultConfiguration = new PageConfiguration { IgnoreParseExceptions = true };
         var pagedItems = pageFunc(testItems, (EntityPage<TestModel<string>>)testCase.Page);
 
         var expectedItems = testItems;
@@ -77,6 +76,6 @@ public class PageConfigurationTests
         pagedItems.Should().Equal(expectedItems);
 
         // Cleanup
-        Pages.EntityPage.DefaultConfiguration = new PageConfiguration();
+        Page.EntityPage.DefaultConfiguration = new PageConfiguration();
     }
 }

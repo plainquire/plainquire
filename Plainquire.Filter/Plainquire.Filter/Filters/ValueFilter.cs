@@ -1,13 +1,11 @@
-﻿using System;
+﻿using Plainquire.Filter.JsonConverters;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using Plainquire.Filter.Enums;
-using Plainquire.Filter.Extensions;
-using Plainquire.Filter.JsonConverters;
 
-namespace Plainquire.Filter.Filters;
+namespace Plainquire.Filter;
 
 /// <summary>
 /// Defines a single filter.

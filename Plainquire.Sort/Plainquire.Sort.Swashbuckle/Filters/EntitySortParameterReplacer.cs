@@ -2,9 +2,7 @@
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
-using Plainquire.Filter.Abstractions.Attributes;
-using Plainquire.Sort.Extensions;
-using Plainquire.Sort.Sorts;
+using Plainquire.Filter.Abstractions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;

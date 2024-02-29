@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using Plainquire.Sort.Sorts;
 
-namespace Plainquire.Sort.Extensions;
+namespace Plainquire.Sort;
 
 internal static class PropertySortExtensions
 {

@@ -1,4 +1,4 @@
-﻿using Plainquire.Filter.Abstractions.Attributes;
+﻿using Plainquire.Filter.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

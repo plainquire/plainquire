@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using Plainquire.Sort.Enums;
 
-namespace Plainquire.Sort.Sorts;
+namespace Plainquire.Sort;
 
 /// <summary>
 /// A sort order for a property.

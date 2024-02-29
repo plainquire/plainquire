@@ -1,6 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
-using Plainquire.Filter.Filters;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Plainquire.Filter.Newtonsoft.JsonConverters;
 

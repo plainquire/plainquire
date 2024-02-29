@@ -1,11 +1,11 @@
 ﻿using Chronic.Core;
-using Plainquire.Filter.Abstractions.Models;
+using Plainquire.Filter.Abstractions;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace Plainquire.Filter.Extensions;
+namespace Plainquire.Filter;
 
 /// <summary>
 /// Extension methods for <see cref="DateTime"/>.
@@ -72,13 +72,13 @@ public static class DateTimeRangeExtensions
         if (value == null)
             return false;
 
-        if (Abstractions.Extensions.DateTimeRangeExtensions.TryConvertDateTimeRangeFormattedString(value, cultureInfo, out dateTimeRange))
+        if (Abstractions.DateTimeRangeExtensions.TryConvertDateTimeRangeFormattedString(value, cultureInfo, out dateTimeRange))
             return true;
-        if (Abstractions.Extensions.DateTimeRangeExtensions.TryConvertIso8601FormattedString(value, cultureInfo, out dateTimeRange))
+        if (Abstractions.DateTimeRangeExtensions.TryConvertIso8601FormattedString(value, cultureInfo, out dateTimeRange))
             return true;
         if (TryConvertChronicRangeFormattedString(value, now, out dateTimeRange))
             return true;
-        if (Abstractions.Extensions.DateTimeRangeExtensions.TryConvertUnknownFormattedString(value, cultureInfo, out dateTimeRange))
+        if (Abstractions.DateTimeRangeExtensions.TryConvertUnknownFormattedString(value, cultureInfo, out dateTimeRange))
             return true;
 
         return false;

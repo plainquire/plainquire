@@ -1,15 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Plainquire.Sort.Abstractions;
+using Plainquire.Sort.Newtonsoft;
+using Plainquire.Sort.Tests.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using Newtonsoft.Json;
-using Plainquire.Sort.Abstractions.Configurations;
-using Plainquire.Sort.Extensions;
-using Plainquire.Sort.Interfaces;
-using Plainquire.Sort.Newtonsoft.Extensions;
-using Plainquire.Sort.Sorts;
-using Plainquire.Sort.Tests.Models;
 
 namespace Plainquire.Sort.Tests.Services;
 

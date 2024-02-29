@@ -1,8 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Sort.Sorts;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 

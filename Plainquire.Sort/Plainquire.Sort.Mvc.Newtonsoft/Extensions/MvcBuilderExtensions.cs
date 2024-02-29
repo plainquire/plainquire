@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Plainquire.Sort.Newtonsoft.Extensions;
+using Plainquire.Sort.Newtonsoft;
 
-namespace Plainquire.Sort.Mvc.Newtonsoft.Extensions;
+namespace Plainquire.Sort.Mvc.Newtonsoft;
 
 /// <summary>
 /// Extensions to register entity filter extensions to MVC

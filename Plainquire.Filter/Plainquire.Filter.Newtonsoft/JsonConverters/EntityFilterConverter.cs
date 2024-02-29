@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Plainquire.Filter.Extensions;
-using Plainquire.Filter.Filters;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

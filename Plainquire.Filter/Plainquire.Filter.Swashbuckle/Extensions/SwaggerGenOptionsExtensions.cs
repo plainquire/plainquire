@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
-using Plainquire.Filter.Filters;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plainquire.Filter.Swashbuckle.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Collections.Generic;
 
-namespace Plainquire.Filter.Swashbuckle.Extensions;
+namespace Plainquire.Filter.Swashbuckle;
 
 /// <summary>
 /// Extensions to register entity filter extensions to Swashbuckle.AspNetCore (https://github.com/domaindrivendev/Swashbuckle.AspNetCore)

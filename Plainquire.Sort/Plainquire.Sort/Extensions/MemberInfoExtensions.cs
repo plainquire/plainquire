@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using Plainquire.Filter.Abstractions.Attributes;
+﻿using Plainquire.Filter.Abstractions;
+using System.Reflection;
 
-namespace Plainquire.Sort.Extensions;
+namespace Plainquire.Sort;
 
 internal static class MemberInfoExtensions
 {

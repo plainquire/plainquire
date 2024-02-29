@@ -1,7 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Filter.Filters;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.ValueFilter;
 

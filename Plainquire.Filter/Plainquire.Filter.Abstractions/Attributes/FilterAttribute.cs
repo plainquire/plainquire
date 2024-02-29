@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Plainquire.Filter.Abstractions.Attributes;
+namespace Plainquire.Filter.Abstractions;
 
 /// <summary>
 /// Filter expression related settings.

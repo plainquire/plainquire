@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Plainquire.Sort.Extensions;
+namespace Plainquire.Sort;
 
 /// <summary>
 /// Extension methods for <see cref="string"/>.

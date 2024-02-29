@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Plainquire.Filter.Abstractions.Models;
+namespace Plainquire.Filter.Abstractions;
 
 /// <summary>
 /// Represents a range of <typeparamref name="TType"/>.

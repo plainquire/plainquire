@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Plainquire.Sort.Sorts;
+namespace Plainquire.Sort;
 
 /// <summary>
 /// Accepted modifiers for sort direction.

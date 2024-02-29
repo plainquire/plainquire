@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Plainquire.Filter.Abstractions.Extensions;
+namespace Plainquire.Filter.Abstractions;
 
 internal static class EnumerableExtensions
 {

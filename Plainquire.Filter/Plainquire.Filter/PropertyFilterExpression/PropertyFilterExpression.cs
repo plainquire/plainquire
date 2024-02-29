@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using Plainquire.Filter.ValueFilterExpression;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Plainquire.Filter.Abstractions.Configurations;
-using Plainquire.Filter.Abstractions.Extensions;
-using Plainquire.Filter.Filters;
-using Plainquire.Filter.Interfaces;
-using Plainquire.Filter.ValueFilterExpression;
 
 namespace Plainquire.Filter.PropertyFilterExpression;
 

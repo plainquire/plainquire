@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Plainquire.Filter.Abstractions.Attributes;
-using Plainquire.Sort.Sorts;
 
-namespace Plainquire.Sort.Extensions;
+namespace Plainquire.Sort;
 
 /// <summary>
 /// Extension methods for <see cref="Type"/>.

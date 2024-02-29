@@ -1,6 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Plainquire.Filter.Abstractions;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Plainquire.Filter.Abstractions.Configurations;
 
 namespace Plainquire.Filter.Tests.Models;
 

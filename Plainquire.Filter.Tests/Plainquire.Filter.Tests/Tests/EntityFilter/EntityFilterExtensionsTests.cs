@@ -1,12 +1,9 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Filter.Abstractions.Attributes;
-using Plainquire.Filter.Enums;
-using Plainquire.Filter.Extensions;
-using Plainquire.Filter.Filters;
+using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Models;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 

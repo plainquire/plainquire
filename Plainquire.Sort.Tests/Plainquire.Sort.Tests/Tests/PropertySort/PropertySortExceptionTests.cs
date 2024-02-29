@@ -1,10 +1,9 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Sort.Sorts;
 using Plainquire.Sort.Tests.Models;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Sort.Tests.Tests.PropertySort;
 

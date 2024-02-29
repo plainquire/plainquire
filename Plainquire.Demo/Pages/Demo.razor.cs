@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Plainquire.Demo.DTOs;
-using Plainquire.Filter.Extensions;
+using Plainquire.Filter;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

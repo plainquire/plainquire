@@ -1,4 +1,4 @@
-﻿namespace Plainquire.Page.Abstractions.Configurations;
+﻿namespace Plainquire.Page.Abstractions;
 
 /// <summary>
 /// Holds paging specific configuration.

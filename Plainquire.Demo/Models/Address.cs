@@ -1,5 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Plainquire.Filter.Abstractions.Attributes;
+﻿using Plainquire.Filter.Abstractions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Demo.Models;
 

@@ -1,7 +1,7 @@
 ﻿#pragma warning disable 1591
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
 
 namespace Plainquire.Demo.Shared;
 

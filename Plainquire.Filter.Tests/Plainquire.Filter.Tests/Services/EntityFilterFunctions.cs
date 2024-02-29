@@ -1,15 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Plainquire.Filter.Abstractions;
+using Plainquire.Filter.Newtonsoft;
+using Plainquire.Filter.Tests.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Newtonsoft.Json;
-using Plainquire.Filter.Abstractions.Configurations;
-using Plainquire.Filter.Filters;
-using Plainquire.Filter.Interfaces;
-using Plainquire.Filter.Newtonsoft.Extensions;
-using Plainquire.Filter.Tests.Models;
 
 namespace Plainquire.Filter.Tests.Services;
 

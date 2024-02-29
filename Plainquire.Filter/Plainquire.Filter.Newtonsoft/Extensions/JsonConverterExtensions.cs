@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Plainquire.Filter.Newtonsoft.JsonConverters;
+using System.Collections.Generic;
 
-namespace Plainquire.Filter.Newtonsoft.Extensions;
+namespace Plainquire.Filter.Newtonsoft;
 
 /// <summary>
 /// Extension methods for <see cref="JsonConverter"/>.

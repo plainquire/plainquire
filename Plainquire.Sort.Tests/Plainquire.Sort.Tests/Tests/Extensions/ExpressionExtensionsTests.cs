@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Sort.Extensions;
 using Plainquire.Sort.Tests.Models;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -17,7 +16,7 @@ public class ExpressionExtensionsTests
     {
         Expression<Func<string, string>> expr = value => value;
         var path = expr.GetPropertyPath();
-        path.Should().Be(Sorts.PropertySort.PATH_TO_SELF);
+        path.Should().Be(Sort.PropertySort.PATH_TO_SELF);
     }
 
     [TestMethod]

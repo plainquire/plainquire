@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Plainquire.Page.Pages;
 using Plainquire.Page.Swashbuckle.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Plainquire.Page.Swashbuckle.Extensions;
+namespace Plainquire.Page.Swashbuckle;
 
 /// <summary>
 /// Extensions to register entity filter extensions to Swashbuckle.AspNetCore (https://github.com/domaindrivendev/Swashbuckle.AspNetCore)

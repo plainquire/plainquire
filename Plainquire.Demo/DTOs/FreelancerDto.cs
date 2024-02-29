@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Plainquire.Demo.Models;
+﻿using Plainquire.Demo.Models;
+using System.Collections.Generic;
 
 namespace Plainquire.Demo.DTOs;
 

@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using Plainquire.Filter.Abstractions.Configurations;
-using Plainquire.Filter.Filters;
 
-namespace Plainquire.Filter.Interfaces;
+namespace Plainquire.Filter;
 
 /// <summary>
 /// Interceptor to provide custom filter logic for filtered properties.

@@ -1,9 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Plainquire.Sort.Abstractions;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Plainquire.Sort.Abstractions.Configurations;
-using Plainquire.Sort.Sorts;
 
-namespace Plainquire.Sort.Interfaces;
+namespace Plainquire.Sort;
 
 /// <summary>
 /// Interceptor to provide custom sort logic for sorted properties.

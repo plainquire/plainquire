@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Reflection;
-using LoxSmoke.DocXml;
+﻿using LoxSmoke.DocXml;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
-using Plainquire.Filter.Abstractions.Attributes;
-using Plainquire.Filter.Extensions;
-using Plainquire.Filter.Filters;
+using Plainquire.Filter.Abstractions;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Reflection;
 
 namespace Plainquire.Filter.Swashbuckle.Filters;
 

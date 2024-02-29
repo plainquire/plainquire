@@ -1,6 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Plainquire.Filter.Abstractions.Attributes;
-using Plainquire.Sort.Sorts;
+﻿using Plainquire.Filter.Abstractions;
+using Plainquire.Sort;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Demo.Models.FilterSets;
 

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Plainquire.Filter.Abstractions.Models;
-using Range = Plainquire.Filter.Abstractions.Models.Range;
 
-namespace Plainquire.Filter.Abstractions.Extensions;
+namespace Plainquire.Filter.Abstractions;
 
 /// <summary>
 /// Extension methods for <see cref="Range"/>.

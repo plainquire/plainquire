@@ -1,13 +1,11 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Plainquire.Sort.Tests.Models;
+using Plainquire.Sort.Tests.Services;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Sort.Enums;
-using Plainquire.Sort.Sorts;
-using Plainquire.Sort.Tests.Models;
-using Plainquire.Sort.Tests.Services;
 
 namespace Plainquire.Sort.Tests.Tests.PropertySort;
 

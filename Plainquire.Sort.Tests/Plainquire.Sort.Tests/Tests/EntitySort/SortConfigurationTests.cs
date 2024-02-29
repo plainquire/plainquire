@@ -1,13 +1,11 @@
-﻿using System;
+﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Plainquire.Sort.Abstractions;
+using Plainquire.Sort.Tests.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Sort.Abstractions.Configurations;
-using Plainquire.Sort.Extensions;
-using Plainquire.Sort.Sorts;
-using Plainquire.Sort.Tests.Models;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
@@ -93,7 +91,7 @@ public class SortConfigurationTests
     [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed", Justification = "Required to execute sorting")]
     public void WhenConfigurationIsSetViaStaticDefault_ConfigurationIsUsed()
     {
-        Sorts.EntitySort.DefaultConfiguration = new SortConfiguration
+        Sort.EntitySort.DefaultConfiguration = new SortConfiguration
         {
             UseConditionalAccess = ConditionalAccess.Always
         };
