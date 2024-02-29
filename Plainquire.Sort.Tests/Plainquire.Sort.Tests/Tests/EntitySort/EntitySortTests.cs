@@ -44,25 +44,25 @@ public class EntitySortTests
     }
 
     [TestMethod]
-    public void WhenPropertySortIsCleared_OtherSortsAreKept()
+    public void WhenPropertySortIsRemoved_OtherSortsAreKept()
     {
         var sort = new EntitySort<TestModel<string>>()
             .Add(x => x.Value)
             .Add(x => x.Value2);
 
-        sort.Clear(x => x.Value);
+        sort.Remove(x => x.Value);
 
         sort._propertySorts.Should().ContainSingle(x => x.PropertyPath == "Value2");
     }
 
     [TestMethod]
-    public void WhenNestedPropertySortIsCleared_OtherSortsAreKept()
+    public void WhenNestedPropertySortIsRemoved_OtherSortsAreKept()
     {
         var sort = new EntitySort<TestModel<string>>()
             .Add(x => x.Value)
             .Add(x => x.NestedObject!.Value);
 
-        sort.Clear(x => x.NestedObject!.Value);
+        sort.Remove(x => x.NestedObject!.Value);
 
         sort._propertySorts.Should().ContainSingle(x => x.PropertyPath == "Value");
     }

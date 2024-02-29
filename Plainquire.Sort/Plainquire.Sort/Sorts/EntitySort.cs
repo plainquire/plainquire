@@ -83,9 +83,9 @@ public class EntitySort<TEntity> : EntitySort
     /// </summary>
     /// <typeparam name="TProperty">The type of the property to remove sorting from.</typeparam>
     /// <param name="property">The property to remove the sort order for.</param>
-    public EntitySort<TEntity> Clear<TProperty>(Expression<Func<TEntity, TProperty?>> property)
+    public EntitySort<TEntity> Remove<TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
-        ClearInternal(property);
+        RemoveInternal(property);
         return this;
     }
 
@@ -103,9 +103,9 @@ public class EntitySort<TEntity> : EntitySort
     /// </summary>
     /// <typeparam name="TProperty"></typeparam>
     /// <param name="property"></param>
-    public EntitySort<TEntity> ClearNested<TProperty>(Expression<Func<TEntity, TProperty?>> property)
+    public EntitySort<TEntity> RemoveNested<TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
-        ClearNestedInternal(property);
+        RemoveNestedInternal(property);
         return this;
     }
 
@@ -253,7 +253,7 @@ public class EntitySort
     /// <typeparam name="TEntity">The entity type to be sorted.</typeparam>
     /// <typeparam name="TProperty">The type of the property to remove sorting from.</typeparam>
     /// <param name="property">The property to remove the sort order for.</param>
-    protected void ClearInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
+    protected void RemoveInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         var propertyPath = property.GetPropertyPath();
         _propertySorts.RemoveAll(x => x.PropertyPath == propertyPath);
@@ -263,8 +263,8 @@ public class EntitySort
     protected void ClearInternal()
         => _propertySorts.Clear();
 
-    /// <inheritdoc cref="EntitySort{TEntity}.ClearNested{TProperty}(Expression{Func{TEntity, TProperty}})" />/>
-    protected void ClearNestedInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
+    /// <inheritdoc cref="EntitySort{TEntity}.RemoveNested{TProperty}(Expression{Func{TEntity, TProperty}})" />/>
+    protected void RemoveNestedInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         var propertyPath = property.GetPropertyPath();
         _propertySorts.RemoveAll(x => x.BelongsTo(propertyPath));

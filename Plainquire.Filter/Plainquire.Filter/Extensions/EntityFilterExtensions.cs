@@ -91,7 +91,7 @@ public static class EntityFilterExtensions
     public static EntityFilter<TEntity> Replace<TEntity, TProperty>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, string? filterSyntax)
     {
         if (filterSyntax == null)
-            return entityFilter.Clear(property);
+            return entityFilter.Remove(property);
 
         var valueFilters = ValueFiltersFactory.Create(filterSyntax);
         entityFilter.Replace(property, valueFilters);
@@ -110,7 +110,7 @@ public static class EntityFilterExtensions
     public static EntityFilter<TEntity> Replace<TEntity, TProperty, TValue>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, params TValue[]? values)
     {
         if (values == null || values.Length == 0)
-            return entityFilter.Clear(property);
+            return entityFilter.Remove(property);
 
         return entityFilter.Replace(property, values.Select(value => ValueFilter.Create(FilterOperator.Default, value)).ToArray());
     }
@@ -140,7 +140,7 @@ public static class EntityFilterExtensions
     {
         var isNullableFilterOperator = filterOperator is FilterOperator.IsNull or FilterOperator.NotNull;
         if ((values == null || values.Length == 0) && !isNullableFilterOperator)
-            return entityFilter.Clear(property);
+            return entityFilter.Remove(property);
 
         var valueFilters = values?.Select(value => ValueFilter.Create(filterOperator, value)).ToArray();
         entityFilter.Replace(property, valueFilters);

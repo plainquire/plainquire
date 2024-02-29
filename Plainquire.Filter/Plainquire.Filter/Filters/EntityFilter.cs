@@ -119,7 +119,7 @@ public class EntityFilter<TEntity> : EntityFilter
     public EntityFilter<TEntity> ReplaceNested<TProperty>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TProperty>? nestedFilter)
     {
         if (nestedFilter == null)
-            return Clear(property);
+            return Remove(property);
 
         ReplaceNestedInternal(property, nestedFilter);
         return this;
@@ -136,7 +136,7 @@ public class EntityFilter<TEntity> : EntityFilter
         where TProperty : IEnumerable<TNested>
     {
         if (nestedFilter == null)
-            return Clear(property);
+            return Remove(property);
 
         ReplaceNestedInternal(property, nestedFilter);
         return this;
@@ -147,9 +147,9 @@ public class EntityFilter<TEntity> : EntityFilter
     /// </summary>
     /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
     /// <param name="property">The property to remove all filters for.</param>
-    public EntityFilter<TEntity> Clear<TProperty>(Expression<Func<TEntity, TProperty?>> property)
+    public EntityFilter<TEntity> Remove<TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
-        ClearInternal(property);
+        RemoveInternal(property);
         return this;
     }
 
@@ -372,8 +372,8 @@ public class EntityFilter : ICloneable
         NestedFilters.Add(new NestedFilter(propertyName, nestedFilter));
     }
 
-    /// <inheritdoc cref="EntityFilter{TEntity}.Clear{TProperty}(Expression{Func{TEntity, TProperty}})" />
-    protected void ClearInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
+    /// <inheritdoc cref="EntityFilter{TEntity}.Remove{TProperty}(Expression{Func{TEntity, TProperty}})" />
+    protected void RemoveInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         var propertyName = property.GetPropertyName();
         PropertyFilters.RemoveAll(x => x.PropertyName == propertyName);

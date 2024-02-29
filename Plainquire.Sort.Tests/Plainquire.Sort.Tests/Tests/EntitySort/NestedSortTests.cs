@@ -105,14 +105,14 @@ public class NestedSortTests
     }
 
     [TestMethod]
-    public void WhenNestedSortIsCleared_ChildSortsAreRemoved()
+    public void WhenNestedSortIsRemoved_ChildSortsAreRemoved()
     {
         var sort = new EntitySort<TestModel<string>>()
             .Add(x => x.Value)
             .Add(x => x.NestedObject!.Value)
             .Add(x => x.NestedObject!.Value!.Length);
 
-        sort.ClearNested(x => x.NestedObject);
+        sort.RemoveNested(x => x.NestedObject);
 
         sort._propertySorts.Should().ContainSingle(x => x.PropertyPath == "Value");
     }

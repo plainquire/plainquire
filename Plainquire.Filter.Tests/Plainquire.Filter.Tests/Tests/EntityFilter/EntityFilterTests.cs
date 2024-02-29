@@ -53,12 +53,12 @@ public class EntityFilterTests
 
     [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
-    public void WhenPropertyFilterIsCleared_ThenOtherPropertyFiltersAreKept(EntityFilterFunc<TestModel<string>> filterFunc)
+    public void WhenPropertyFilterIsRemoved_ThenOtherPropertyFiltersAreKept(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var testItemsFilter = new EntityFilter<TestModel<string>>()
             .Replace(x => x.ValueA, "=A")
             .Replace(x => x.ValueB, "=2")
-            .Clear(x => x.ValueB);
+            .Remove(x => x.ValueB);
 
         var testItems = new List<TestModel<string>>
         {
