@@ -35,12 +35,12 @@ public class NumericFilterExpression : DefaultFilterExpression, INumericFilterEx
         => _primitiveNumberTypes.Contains(type.GetUnderlyingType());
 
     /// <inheritdoc />
-    protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration)
+    protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
     {
-        if (decimal.TryParse(value, NumberStyles.Any, configuration.CultureInfo, out var decimalValue))
+        if (decimal.TryParse(value, NumberStyles.Any, filterConfiguration.CultureInfo, out var decimalValue))
             return CreateNumberExpressionByFilterOperator(propertySelector, filterOperator, decimalValue);
 
-        if (configuration.IgnoreParseExceptions)
+        if (filterConfiguration.IgnoreParseExceptions)
             return null;
 
         throw CreateFilterExpressionCreationException("Unable to parse given filter value", propertySelector, filterOperator, value);

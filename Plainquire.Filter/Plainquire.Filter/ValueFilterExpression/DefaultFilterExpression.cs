@@ -39,7 +39,7 @@ public class DefaultFilterExpression : IValueFilterExpression
         => true;
 
     /// <inheritdoc />
-    public Expression? CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[]? filters, FilterConfiguration configuration)
+    public Expression? CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[]? filters, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
     {
         if (filters == null || filters.Length == 0)
             return null;
@@ -67,7 +67,7 @@ public class DefaultFilterExpression : IValueFilterExpression
                             throw CreateFilterExpressionCreationException($"Filter operator '{filter.Operator}' not allowed for property type '{propertyType}'", propertySelector, filter.Operator, filter.Value);
                         return Expression.NotEqual(propertySelector.Body, Expression.Constant(null));
                     default:
-                        return CreateExpressionForValue(propertySelector, filter.Operator, filter.Value, configuration);
+                        return CreateExpressionForValue(propertySelector, filter.Operator, filter.Value, filterConfiguration, syntaxConfiguration);
                 }
             })
             .ToList();
@@ -85,8 +85,8 @@ public class DefaultFilterExpression : IValueFilterExpression
     /// <param name="propertySelector">The property to create the expression for.</param>
     /// <param name="filterOperator">The filter operator to use.</param>
     /// <param name="value">The value to create the expression for.</param>
-    /// <param name="configuration">The filter configuration to use.</param>
-    protected internal virtual Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration)
+    /// <param name="filterConfiguration">The filter configuration to use.</param>
+    protected internal virtual Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
     {
         switch (filterOperator)
         {

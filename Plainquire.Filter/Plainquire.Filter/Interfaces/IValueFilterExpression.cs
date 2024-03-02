@@ -28,6 +28,6 @@ public interface IValueFilterExpression
     /// <typeparam name="TProperty">The type of the property.</typeparam>
     /// <param name="propertySelector">The property to create the expression for.</param>
     /// <param name="filters">The filters to create the expression for.</param>
-    /// <param name="configuration">The filter configuration to use.</param>
-    Expression? CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[] filters, FilterConfiguration configuration);
+    /// <param name="filterConfiguration">The filter configuration to use.</param>
+    Expression? CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[] filters, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration);
 }

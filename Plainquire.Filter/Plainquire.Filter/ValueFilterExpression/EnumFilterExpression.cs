@@ -32,17 +32,17 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
         => type.GetUnderlyingType().IsEnum;
 
     /// <inheritdoc />
-    protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration)
+    protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
     {
-        if (long.TryParse(value, NumberStyles.Any, configuration.CultureInfo, out var numericValue))
+        if (long.TryParse(value, NumberStyles.Any, filterConfiguration.CultureInfo, out var numericValue))
             return CreateEnumExpressionByFilterOperator(propertySelector, filterOperator, numericValue);
 
-        return CreateEnumFromStringExpression(propertySelector, filterOperator, value, configuration);
+        return CreateEnumFromStringExpression(propertySelector, filterOperator, value, filterConfiguration, syntaxConfiguration);
     }
 
-    private Expression CreateEnumFromStringExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration)
+    private Expression CreateEnumFromStringExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
     {
-        var enumValues = GetEnumValuesMatchByStringFilter<TProperty>(filterOperator, value, configuration).ToList();
+        var enumValues = GetEnumValuesMatchByStringFilter<TProperty>(filterOperator, value, filterConfiguration, syntaxConfiguration).ToList();
         if (!enumValues.Any())
             return Expression.Constant(false);
 
@@ -80,7 +80,7 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
         }
     }
 
-    private static IEnumerable<TProperty> GetEnumValuesMatchByStringFilter<TProperty>(FilterOperator filterOperator, string? value, FilterConfiguration configuration)
+    private static IEnumerable<TProperty> GetEnumValuesMatchByStringFilter<TProperty>(FilterOperator filterOperator, string? value, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
     {
         var underlyingEnumType = typeof(TProperty).GetUnderlyingType();
         var enumValueToNameMap = Enum
@@ -99,7 +99,7 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
             _ => FilterOperator.EqualCaseInsensitive
         };
 
-        var stringFilterExpression = stringFilterExpressionCreator.CreateExpressionForValue(dictionaryValueSelector, stringFilterOperator, value, configuration);
+        var stringFilterExpression = stringFilterExpressionCreator.CreateExpressionForValue(dictionaryValueSelector, stringFilterOperator, value, filterConfiguration, syntaxConfiguration);
 
         var stringFilter = Expression
             .Lambda<Func<KeyValuePair<TProperty, string>, bool>>(stringFilterExpression, dictionaryValueSelector.Parameters)

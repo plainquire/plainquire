@@ -29,13 +29,13 @@ public class FilterForBoolBySyntaxTests
         FilterTestCase.Create<bool>(1003, "FALSE", x => x == false),
         FilterTestCase.Create<bool>(1004, "yes", x => x == true),
         FilterTestCase.Create<bool>(1005, "no", x => x == false),
-        FilterTestCase.Create<bool>(1004, "ja", x => x == true, TestConfig.CultureDeDe),
+        FilterTestCase.Create<bool>(1006, "ja", x => x == true, TestConfig.FilterCultureDeDe, TestConfig.SyntaxCultureDeDe),
         // ReSharper disable once StringLiteralTypo
-        FilterTestCase.Create<bool>(1005, "nein", x => x == false, TestConfig.CultureDeDe),
-        FilterTestCase.Create<bool>(1006, "YES", x => x == true),
-        FilterTestCase.Create<bool>(1007, "NO", x => x == false),
-        FilterTestCase.Create<bool>(1008, "1", x => x == true),
-        FilterTestCase.Create<bool>(1009, "0", x => x == false),
+        FilterTestCase.Create<bool>(1007, "nein", x => x == false, TestConfig.FilterCultureDeDe, TestConfig.SyntaxCultureDeDe),
+        FilterTestCase.Create<bool>(1008, "YES", x => x == true),
+        FilterTestCase.Create<bool>(1009, "NO", x => x == false),
+        FilterTestCase.Create<bool>(1010, "1", x => x == true),
+        FilterTestCase.Create<bool>(1011, "0", x => x == false),
         // ReSharper restore RedundantBoolCompare
 
         FilterTestCase.Create<bool>(1100, "null", new FilterExpressionException("Unable to parse given filter value")),

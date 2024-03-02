@@ -28,14 +28,14 @@ public class GuidFilterExpression : DefaultFilterExpression, IGuidFilterExpressi
         => type.GetUnderlyingType() == typeof(Guid);
 
     /// <inheritdoc />
-    protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration)
+    protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
     {
         if (Guid.TryParse(value, out var guidValue))
             return CreateGuidExpressionByFilterOperator(propertySelector, filterOperator, guidValue);
         if (filterOperator == FilterOperator.Contains)
             return CreateGuidContainsExpression(propertySelector, value);
 
-        if (configuration.IgnoreParseExceptions)
+        if (filterConfiguration.IgnoreParseExceptions)
             return null;
 
         throw CreateFilterExpressionCreationException("Unable to parse given filter value", propertySelector, filterOperator, value);

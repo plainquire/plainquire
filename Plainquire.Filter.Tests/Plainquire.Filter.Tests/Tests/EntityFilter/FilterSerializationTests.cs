@@ -146,7 +146,7 @@ public class FilterSerializationTests
         {
             "PropertyFilters": [{
                 "PropertyName": "ValueA",
-                "ValueFilters": ["2020-03-15T00:00:00.0000000Z"]
+                "ValueFilters": [{ "Operator": 0, "Value": "2020-03-15T00:00:00.0000000Z" }]
             }],
             "NestedFilters": null
         }
@@ -156,7 +156,7 @@ public class FilterSerializationTests
         {
             "PropertyFilters": [{
                 "PropertyName": "ValueA",
-                "ValueFilters": ["2020-03-15T00:00:00.0000000Z"]
+                "ValueFilters": [{ "Operator": 0, "Value": "2020-03-15T00:00:00.0000000Z" }]
             }],
             "NestedFilters": []
         }
@@ -166,7 +166,7 @@ public class FilterSerializationTests
         {
             "PropertyFilters": [{
                 "PropertyName": "ValueA",
-                "ValueFilters": ["2020-03-15T00:00:00.0000000Z"]
+                "ValueFilters": [{ "Operator": 0, "Value": "2020-03-15T00:00:00.0000000Z" }]
             }],
             "NestedFilters": [{
                 "PropertyName": "NestedObject",
@@ -181,7 +181,7 @@ public class FilterSerializationTests
         {
             "PropertyFilters": [{
                 "PropertyName": "ValueA",
-                "ValueFilters": ["2020-03-15T00:00:00.0000000Z"]
+                "ValueFilters": [{ "Operator": 0, "Value": "2020-03-15T00:00:00.0000000Z" }]
             }],
             "NestedFilters": [{
                 "PropertyName": "NestedObject",
@@ -194,30 +194,33 @@ public class FilterSerializationTests
 
     private const string FILTER_FULL = """
         {
-            "PropertyFilters": [{
-                "PropertyName": "ValueA",
-                "ValueFilters": ["2020-03-15T00:00:00.0000000Z"]
-            }],
-            "NestedFilters": [{
-                "PropertyName": "NestedObject",
-                "EntityFilter":
-            {
+          "PropertyFilters": [{
+              "PropertyName": "ValueA",
+              "ValueFilters": [{ "Operator": 0, "Value": "2020-03-15T00:00:00.0000000Z" }]
+            }
+          ],
+          "NestedFilters": [{
+              "PropertyName": "NestedObject",
+              "EntityFilter": {
                 "PropertyFilters": [{
                     "PropertyName": "Value",
-                    "ValueFilters": ["==NestedA"]
-                }],
+                    "ValueFilters": [{ "Operator": 2, "Value": "NestedA" }]
+                  }
+                ],
                 "NestedFilters": []
-            }
+              }
             }, {
-                "PropertyName": "NestedList",
-                "EntityFilter": {
-                    "PropertyFilters": [{
-                        "PropertyName": "Value",
-                        "ValueFilters": ["==NestedB"]
-                    }],
-                    "NestedFilters": []
-                }
-            }]
+              "PropertyName": "NestedList",
+              "EntityFilter": {
+                "PropertyFilters": [{
+                    "PropertyName": "Value",
+                    "ValueFilters": [{ "Operator": 2, "Value": "NestedB" }]
+                  }
+                ],
+                "NestedFilters": []
+              }
+            }
+          ]
         }
         """;
 }

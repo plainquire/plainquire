@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Plainquire.Filter.Abstractions;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -13,10 +14,11 @@ public static class ValueFiltersFactory
     /// Create <see cref="ValueFilter"/> from filterSyntax.
     /// </summary>
     /// <param name="filterSyntax">The filter micro syntax to create the filter from.</param>
-    public static ValueFilter[] Create(string filterSyntax)
+    /// <param name="syntaxConfiguration">Configuration of the micro syntax.</param>
+    public static ValueFilter[] Create(string filterSyntax, SyntaxConfiguration? syntaxConfiguration = null)
     {
         var filters = SplitValues(filterSyntax);
-        return filters.Select(ValueFilter.Create).ToArray();
+        return filters.Select(filter => ValueFilter.Create(filter, syntaxConfiguration)).ToArray();
     }
 
     private static IEnumerable<string> SplitValues(string? filterSyntax)

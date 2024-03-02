@@ -11,11 +11,10 @@
 * Obsolete methods removed
 
 * `FilterConfiguration` moved to namespace `Schick.Plainquire.Filter.Abstractions`
-* `EntityFilter<TEntity>.Clear<TProperty>(...)`  renamed to `EntityFilter<TEntity>.Remove<TProperty>(...)`
-* `EntitySort<TEntity>.Clear<TProperty>(...)`  renamed to `EntitySort<TEntity>.Remove<TProperty>(...)`
-* `EntitySort<TEntity>.ClearNested<TProperty>(...)`  renamed to `EntitySort<TEntity>.RemoveNested<TProperty>(...)`
+* `FilterOperator` moved to namespace `Schick.Plainquire.Filter.Abstractions`
+* Serialized filters are incompatible between 4.x and 5.x. If you have stored filters and need to convert it, open an issue
 
-### Namespaces Simplified
+### Namespaces simplified
 
 | 4.x namespace                                                | 5.x namespace                      |
 | ------------------------------------------------------------ | ---------------------------------- |
@@ -31,20 +30,24 @@
 | `Plainquire.Sort.Newtonsoft.Extensions`                      | `Plainquire.Sort.Newtonsoft`       |
 | `Plainquire.Sort.Swashbuckle.Extensions`                     | `Plainquire.Sort.Swashbuckle`      |
 
-### Class / Method / Property Names Cleanup / Renames
+### Class / Method / Property renames
 
-| 4.x class / method / property name     | 5.x class / method / property name |
-| -------------------------------------- | ---------------------------------- |
-| `FilterAttribute.Visible`              | `FilterAttribute.Filterable`       |
-| `AddFilterExpressionSupport`           | `AddFilterSupport`                 |
-| `AddFilterExpressionNewtonsoftSupport` | `AddFilterNewtonsoftSupport`       |
-| `AddSortQueryableSupport`              | `AddSortSupport`                   |
-| `AddSortQueryableNewtonsoftSupport`    | `AddSortNewtonsoftSupport`         |
-| `ValueFilterExtensions.Create(...)`    | `ValueFiltersFactory.Create(...)`  |
-| `*FilterExpressionCreator*` classes    | `*FilterExpression*`               |
-| `IPropertyFilterInterceptor`           | `IFilterInterceptor`               |
-| `IPropertySortQueryableInterceptor`    | `ISortInterceptor`                 |
-| `FilterExpressionCreationException`    | `FilterExpressionException`        |
+| 4.x class / method / property name                | 5.x class / method / property name                 |
+| ------------------------------------------------- | -------------------------------------------------- |
+| `FilterAttribute.Visible`                         | `FilterAttribute.Filterable`                       |
+| `AddFilterExpressionSupport`                      | `AddFilterSupport`                                 |
+| `AddFilterExpressionNewtonsoftSupport`            | `AddFilterNewtonsoftSupport`                       |
+| `AddSortQueryableSupport`                         | `AddSortSupport`                                   |
+| `AddSortQueryableNewtonsoftSupport`               | `AddSortNewtonsoftSupport`                         |
+| `*FilterExpressionCreator*` classes               | `*FilterExpression*`                               |
+| `ValueFilterExtensions.Create(...)`               | `ValueFiltersFactory.Create(...)`                  |
+| `EntityFilter<TEntity>.Clear<TProperty>(...)`     | `EntityFilter<TEntity>.Remove<TProperty>(...)`     |
+| `EntitySort<TEntity>.Clear<TProperty>(...)`       | `EntitySort<TEntity>.Remove<TProperty>(...)`       |
+| `EntitySort<TEntity>.ClearNested<TProperty>(...)` | `EntitySort<TEntity>.RemoveNested<TProperty>(...)` |
+| `EntityFilter.DefaultConfiguration`               | `EntityFilter.DefaultFilterConfiguration`          |
+| `FilterExpressionCreationException`               | `FilterExpressionException`                        |
+| `IPropertyFilterInterceptor`                      | `IFilterInterceptor`                               |
+| `IPropertySortQueryableInterceptor`               | `ISortInterceptor`                                 |
 
 # 4.6.1
 

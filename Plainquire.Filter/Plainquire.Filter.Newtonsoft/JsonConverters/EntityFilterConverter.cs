@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Plainquire.Filter.JsonConverters;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Newtonsoft.JsonConverters;
@@ -17,30 +17,34 @@ public class EntityFilterConverter : JsonConverter
         => objectType.IsGenericEntityFilter() || objectType == typeof(EntityFilter);
 
     /// <inheritdoc />
+    public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+    {
+        var entityFilter = (EntityFilter)Activator.CreateInstance(objectType);
+        var entityFilterData = serializer.Deserialize<EntityFilterConverterData>(reader) ?? new EntityFilterConverterData();
+        var propertyFilters = Filter.JsonConverters.EntityFilterConverter.GetPropertyFilters(entityFilterData);
+
+        entityFilter.PropertyFilters = propertyFilters ?? [];
+        entityFilter.NestedFilters = entityFilterData.NestedFilters ?? [];
+        entityFilter.SyntaxConfiguration = entityFilterData.SyntaxConfiguration;
+        return entityFilter;
+    }
+
+    /// <inheritdoc />
     public override void WriteJson(JsonWriter writer, [NotNull] object? value, JsonSerializer serializer)
     {
         if (value == null)
             throw new ArgumentNullException(nameof(value));
 
         var entityFilter = (EntityFilter)value;
-        var entityFilterData = new EntityFilterData { PropertyFilters = entityFilter.PropertyFilters, NestedFilters = entityFilter.NestedFilters };
+        var propertyFiltersData = Filter.JsonConverters.EntityFilterConverter.GetPropertyFilterData(entityFilter);
+
+        var entityFilterData = new EntityFilterConverterData
+        {
+            PropertyFilters = propertyFiltersData,
+            NestedFilters = entityFilter.NestedFilters,
+            SyntaxConfiguration = entityFilter.SyntaxConfiguration
+        };
+
         serializer.Serialize(writer, entityFilterData);
-    }
-
-    /// <inheritdoc />
-    public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
-    {
-        var entityFilter = (EntityFilter)Activator.CreateInstance(objectType);
-        var entityFilterData = serializer.Deserialize<EntityFilterData>(reader) ?? new EntityFilterData();
-        entityFilter.PropertyFilters = entityFilterData.PropertyFilters ?? [];
-        entityFilter.NestedFilters = entityFilterData.NestedFilters ?? [];
-        return entityFilter;
-    }
-
-    private class EntityFilterData
-    {
-        public List<PropertyFilter>? PropertyFilters { get; set; } = [];
-
-        public List<NestedFilter>? NestedFilters { get; set; } = [];
     }
 }

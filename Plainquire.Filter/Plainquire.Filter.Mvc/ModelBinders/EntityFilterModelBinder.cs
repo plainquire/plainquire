@@ -31,7 +31,7 @@ public class EntityFilterModelBinder : IModelBinder
             var parameterName = property.GetFilterParameterName(entityFilterAttribute?.Prefix);
             var parameterValues = bindingContext.ValueProvider.GetValue(parameterName);
             foreach (var filterSyntax in parameterValues)
-                entityFilter.PropertyFilters.Add(new PropertyFilter(property.Name, ValueFiltersFactory.Create(filterSyntax)));
+                entityFilter.PropertyFilters.Add(new PropertyFilter(property.Name, ValueFiltersFactory.Create(filterSyntax, entityFilter.SyntaxConfiguration)));
         }
 
         bindingContext.Result = ModelBindingResult.Success(entityFilter);

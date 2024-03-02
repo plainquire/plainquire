@@ -1,7 +1,7 @@
-﻿namespace Plainquire.Filter;
+﻿namespace Plainquire.Filter.Abstractions;
 
 /// <summary>
-/// Operators used by <see cref="ValueFilter"/>
+/// Filter operators.
 /// </summary>
 public enum FilterOperator
 {

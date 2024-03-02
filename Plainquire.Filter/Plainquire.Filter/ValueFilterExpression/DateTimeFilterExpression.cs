@@ -34,12 +34,12 @@ public class DateTimeFilterExpression : DefaultFilterExpression, IDateTimeFilter
         => new[] { typeof(Range<DateTimeOffset>), typeof(DateTime), typeof(DateTimeOffset) }.Contains(type.GetUnderlyingType());
 
     /// <inheritdoc />
-    protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration)
+    protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
     {
-        if (value.TryConvertStringToDateTimeRange(configuration.Now(), out var dateTimeSpan, configuration.CultureInfo))
+        if (value.TryConvertStringToDateTimeRange(filterConfiguration.Now(), out var dateTimeSpan, filterConfiguration.CultureInfo))
             return CreateDateTimeExpressionByFilterOperator(propertySelector, filterOperator, dateTimeSpan);
 
-        if (configuration.IgnoreParseExceptions)
+        if (filterConfiguration.IgnoreParseExceptions)
             return null;
 
         throw CreateFilterExpressionCreationException("Unable to parse given filter value", propertySelector, filterOperator, value);

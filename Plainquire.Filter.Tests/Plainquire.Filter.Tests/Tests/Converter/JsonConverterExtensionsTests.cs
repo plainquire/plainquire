@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Plainquire.Filter.Newtonsoft;
@@ -17,8 +18,8 @@ public class JsonConverterExtensionsTests
 
         converters.AddFilterNewtonsoftSupport();
 
-        converters.Should().HaveCount(2);
-        converters.Should().Contain(x => x.GetType().FullName == "Plainquire.Filter.Newtonsoft.JsonConverters.ValueFilterConverter");
+        using var scope = new AssertionScope();
+        converters.Should().HaveCount(1);
         converters.Should().Contain(x => x.GetType().FullName == "Plainquire.Filter.Newtonsoft.JsonConverters.EntityFilterConverter");
     }
 }

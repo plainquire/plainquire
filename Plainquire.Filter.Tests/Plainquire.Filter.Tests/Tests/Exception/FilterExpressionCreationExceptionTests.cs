@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Models;
 using System;
 using System.Diagnostics.CodeAnalysis;

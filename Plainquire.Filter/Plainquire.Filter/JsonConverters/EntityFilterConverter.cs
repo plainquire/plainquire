@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -60,25 +62,84 @@ public class EntityFilterConverter : JsonConverter<EntityFilter>
     internal static TEntityFilter Read<TEntityFilter>(ref Utf8JsonReader reader, JsonSerializerOptions options)
         where TEntityFilter : EntityFilter, new()
     {
-        var entityFilterData = JsonSerializer.Deserialize<EntityFilterData>(ref reader, options) ?? new EntityFilterData();
+        var entityFilterData = JsonSerializer.Deserialize<EntityFilterConverterData>(ref reader, options) ?? new EntityFilterConverterData();
+        var propertyFilters = GetPropertyFilters(entityFilterData);
+
         return new TEntityFilter
         {
-            PropertyFilters = entityFilterData.PropertyFilters ?? [],
-            NestedFilters = entityFilterData.NestedFilters ?? []
+            PropertyFilters = propertyFilters ?? [],
+            NestedFilters = entityFilterData.NestedFilters ?? [],
+            SyntaxConfiguration = entityFilterData.SyntaxConfiguration
         };
     }
 
     internal static void Write<TEntityFilter>(Utf8JsonWriter writer, TEntityFilter value, JsonSerializerOptions options)
         where TEntityFilter : EntityFilter
     {
-        var entityFilterData = new EntityFilterData { PropertyFilters = value.PropertyFilters, NestedFilters = value.NestedFilters };
+        var propertyFiltersData = GetPropertyFilterData(value);
+
+        var entityFilterData = new EntityFilterConverterData
+        {
+            PropertyFilters = propertyFiltersData,
+            NestedFilters = value.NestedFilters,
+            SyntaxConfiguration = value.SyntaxConfiguration
+        };
+
         JsonSerializer.Serialize(writer, entityFilterData, options);
     }
 
-    private class EntityFilterData
-    {
-        public List<PropertyFilter>? PropertyFilters { get; set; } = [];
+    internal static List<PropertyFilter>? GetPropertyFilters(EntityFilterConverterData entityFilterData)
+        => entityFilterData
+            .PropertyFilters?
+            .Select(filter => new PropertyFilter(
+                propertyName: filter.PropertyName,
+                valueFilters: filter.ValueFilters
+                    .Select(valueFilter => ValueFilter.Create(
+                        valueFilter.Operator,
+                        valueFilter.Value,
+                        entityFilterData.SyntaxConfiguration
+                    ))
+                    .ToArray()
+            ))
+            .ToList();
 
-        public List<NestedFilter>? NestedFilters { get; set; } = [];
+    internal static List<PropertyFilterConverterData> GetPropertyFilterData<TEntityFilter>(TEntityFilter entityFilter) where TEntityFilter : EntityFilter
+        => entityFilter.PropertyFilters
+            .Select(filter => new PropertyFilterConverterData
+            (
+                propertyName: filter.PropertyName,
+                valueFilters: filter.ValueFilters
+                    .Select(valueFilter => new ValueFilterConverterData { Operator = valueFilter.Operator, Value = valueFilter.Value })
+                    .ToList()
+            ))
+            .ToList();
+}
+
+internal class EntityFilterConverterData
+{
+    public List<PropertyFilterConverterData>? PropertyFilters { get; set; } = [];
+
+    public List<NestedFilter>? NestedFilters { get; set; } = [];
+
+    public SyntaxConfiguration? SyntaxConfiguration { get; set; }
+}
+
+internal class PropertyFilterConverterData
+{
+    public PropertyFilterConverterData(string propertyName, List<ValueFilterConverterData> valueFilters)
+    {
+        PropertyName = propertyName;
+        ValueFilters = valueFilters;
     }
+
+    public string PropertyName { get; }
+
+    public List<ValueFilterConverterData> ValueFilters { get; }
+}
+
+internal class ValueFilterConverterData
+{
+    public FilterOperator Operator { get; set; }
+
+    public string? Value { get; set; }
 }

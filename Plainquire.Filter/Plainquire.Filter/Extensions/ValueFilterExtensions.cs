@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,12 +16,13 @@ public static class ValueFilterExtensions
     /// <typeparam name="TValue">The type of the filtered value.</typeparam>
     /// <param name="filterSyntax">The filter syntax.</param>
     /// <param name="valueName">Name of the value.</param>
-    public static string HumanizeFilterSyntax<TValue>(this string? filterSyntax, string valueName)
+    /// <param name="syntaxConfiguration">Configuration of the micro syntax.</param>
+    public static string HumanizeFilterSyntax<TValue>(this string? filterSyntax, string valueName, SyntaxConfiguration? syntaxConfiguration = null)
     {
         if (string.IsNullOrWhiteSpace(filterSyntax))
             return $"{valueName} is unfiltered";
 
-        var filters = ValueFiltersFactory.Create(filterSyntax)
+        var filters = ValueFiltersFactory.Create(filterSyntax, syntaxConfiguration)
             .GroupBy(x => x.Operator)
             .Select(filterGroup =>
             {

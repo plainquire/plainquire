@@ -16,14 +16,7 @@ public class FilterConfigurationTests
     public void WhenConfigurationIsCreated_ThenDefaultValuesAreSet()
     {
         var configuration = new FilterConfiguration();
-
-        configuration.Should()
-            .BeEquivalentTo(new FilterConfiguration
-            {
-                CultureInfo = CultureInfo.CurrentCulture,
-                BoolFalseStrings = ["NO", "0"],
-                BoolTrueStrings = ["YES", "1"],
-            });
+        configuration.Should().BeEquivalentTo(new FilterConfiguration { CultureInfo = CultureInfo.CurrentCulture });
     }
 
     [DataTestMethod, DoNotParallelize]
@@ -34,12 +27,12 @@ public class FilterConfigurationTests
             .Replace(x => x.ValueA, FilterOperator.EqualCaseSensitive, "InvalidTimeTimeSyntax");
 
         var configuration = new FilterConfiguration { IgnoreParseExceptions = true };
-        Filter.EntityFilter.DefaultConfiguration = configuration;
+        Filter.EntityFilter.DefaultFilterConfiguration = configuration;
         var filteredItems = () => filterFunc([], filter);
 
         filteredItems.Should().NotThrow();
 
         // Cleanup
-        Filter.EntityFilter.DefaultConfiguration = new FilterConfiguration();
+        Filter.EntityFilter.DefaultFilterConfiguration = new FilterConfiguration();
     }
 }

@@ -23,14 +23,4 @@ public class FilterConfiguration
     /// Return <c>x => true</c> in case of any exception while parsing the value
     /// </summary>
     public bool IgnoreParseExceptions { get; set; }
-
-    /// <summary>
-    /// Strings that should be handled as boolean <c>false</c>
-    /// </summary>
-    public string[] BoolFalseStrings = ["NO", "0"];
-
-    /// <summary>
-    /// Strings that should be handled as boolean <c>true</c>
-    /// </summary>
-    public string[] BoolTrueStrings = ["YES", "1"];
 }

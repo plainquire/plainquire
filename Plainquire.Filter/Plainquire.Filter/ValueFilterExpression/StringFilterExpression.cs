@@ -28,7 +28,7 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
         => type.GetUnderlyingType() == typeof(string);
 
     /// <inheritdoc />
-    protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration)
+    protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
     {
         var strFilter = value?.Trim();
         switch (filterOperator)

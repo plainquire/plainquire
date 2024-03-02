@@ -68,7 +68,7 @@ public class InterceptorTests
 
     private class FilterStringsCaseInsensitiveInterceptor : IFilterInterceptor
     {
-        public Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, Filter.ValueFilter[] filters, FilterConfiguration configuration)
+        public Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, Filter.ValueFilter[] filters, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
         {
             var filteredPropertyIsTypeOfString = propertyInfo.PropertyType == typeof(string);
             if (!filteredPropertyIsTypeOfString)
@@ -95,7 +95,7 @@ public class InterceptorTests
                 .ToArray();
 
             var unmodifiedFilterLambda = PropertyFilterExpression.PropertyFilterExpression
-                .CreateFilter<TEntity>(propertyInfo.PropertyType, propertySelector, unmodifiedFilters, configuration);
+                .CreateFilter<TEntity>(propertyInfo.PropertyType, propertySelector, unmodifiedFilters, filterConfiguration, syntaxConfiguration);
 
             var filterExpression = new[] { modifiedFilterLambda, unmodifiedFilterLambda }.CombineWithConditionalOr();
 

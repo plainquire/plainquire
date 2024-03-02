@@ -1,46 +1,31 @@
-﻿using Plainquire.Filter.JsonConverters;
+﻿using Plainquire.Filter.Abstractions;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
+using System.Linq;
 
 namespace Plainquire.Filter;
 
 /// <summary>
 /// Defines a single filter.
 /// </summary>
-[JsonConverter(typeof(ValueFilterConverter))]
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class ValueFilter
 {
-    /// <summary>
-    /// Map between <see cref="Operator"/> and the string prefix used for JSON API calls.
-    /// </summary>
-    private static readonly Dictionary<FilterOperator, string> _filterOperatorToPrefixMap = new()
-    {
-        {FilterOperator.Default, string.Empty},
-        {FilterOperator.Contains, "~"},
-        {FilterOperator.EqualCaseInsensitive, "="},
-        {FilterOperator.EqualCaseSensitive, "=="},
-        {FilterOperator.NotEqual, "!"},
-        {FilterOperator.GreaterThan, ">"},
-        {FilterOperator.GreaterThanOrEqual, ">="},
-        {FilterOperator.LessThan, "<"},
-        {FilterOperator.LessThanOrEqual, "<="},
-        {FilterOperator.IsNull, "ISNULL"},
-        {FilterOperator.NotNull, "NOTNULL"}
-    };
-
     /// <summary>
     /// Gets the filter operator. See <see cref="Operator"/> for details.
     /// </summary>
     public FilterOperator Operator { get; private set; }
 
     /// <summary>
-    /// Gets the values to filter for. Multiple values are combined with logical OR.
+    /// JSON or Chronic representation of the value to filter for. Unused, if <see cref="Operator"/> is <see cref="FilterOperator.IsNull"/> or <see cref="FilterOperator.NotNull"/>; otherwise at least one value is required.
     /// </summary>
     public string? Value { get; private set; }
+
+    /// <summary>
+    /// Gets or sets the syntax configuration.
+    /// </summary>
+    public SyntaxConfiguration? SyntaxConfiguration { get; set; }
 
     /// <summary>
     /// Indicates whether this filter is empty.
@@ -55,7 +40,8 @@ public class ValueFilter
     /// <typeparam name="TValue">The type of the value.</typeparam>
     /// <param name="filterOperator">The filter operator.</param>
     /// <param name="value">The value to filter for. Unused, if <paramref name="filterOperator"/> is <see cref="FilterOperator.IsNull"/> or <see cref="FilterOperator.NotNull"/>; otherwise at least one value is required.</param>
-    public static ValueFilter Create<TValue>(FilterOperator filterOperator, TValue? value)
+    /// <param name="syntaxConfiguration">Configuration of the micro syntax.</param>
+    public static ValueFilter Create<TValue>(FilterOperator filterOperator, TValue? value, SyntaxConfiguration? syntaxConfiguration = null)
     {
         var isNullableFilterOperator = filterOperator is FilterOperator.IsNull or FilterOperator.NotNull;
         if (isNullableFilterOperator)
@@ -68,7 +54,8 @@ public class ValueFilter
         return new ValueFilter
         {
             Operator = filterOperator,
-            Value = ValueToFilterString(value)
+            Value = ValueToFilterString(value),
+            SyntaxConfiguration = syntaxConfiguration
         };
     }
 
@@ -76,13 +63,14 @@ public class ValueFilter
     /// Creates the specified filter
     /// </summary>
     /// <param name="filterOperator">The filter operator.</param>
-    public static ValueFilter Create(FilterOperator filterOperator)
+    /// <param name="syntaxConfiguration">Configuration of the micro syntax.</param>
+    public static ValueFilter Create(FilterOperator filterOperator, SyntaxConfiguration? syntaxConfiguration = null)
     {
         var isNullableFilterOperator = filterOperator is FilterOperator.IsNull or FilterOperator.NotNull;
         if (!isNullableFilterOperator)
             throw new InvalidOperationException("A value is required for operators other than NULL/NOT NULL.");
 
-        return Create<object>(filterOperator, null);
+        return Create<object>(filterOperator, null, syntaxConfiguration);
     }
 
     /// <summary>
@@ -90,26 +78,30 @@ public class ValueFilter
     /// </summary>
     /// <typeparam name="TValue">The type of the value.</typeparam>
     /// <param name="value">The value to filter for.</param>
-    public static ValueFilter Create<TValue>(TValue value)
-        => Create(FilterOperator.Default, value);
+    /// <param name="syntaxConfiguration">Configuration of the micro syntax.</param>
+    public static ValueFilter Create<TValue>(TValue value, SyntaxConfiguration? syntaxConfiguration = null)
+        => Create(FilterOperator.Default, value, syntaxConfiguration);
 
     /// <summary>
     /// Creates the specified filter.
     /// </summary>
     /// <param name="filterSyntax">The filter micro syntax to create the filter from.</param>
-    public static ValueFilter Create(string? filterSyntax)
+    /// <param name="syntaxConfiguration">Configuration of the micro syntax.</param>
+    public static ValueFilter Create(string? filterSyntax, SyntaxConfiguration? syntaxConfiguration = null)
     {
-        var (filterOperator, value) = ExtractFilterOperator(filterSyntax);
-        return Create(filterOperator, value);
+        var (filterOperator, value) = ExtractFilterOperator(filterSyntax, syntaxConfiguration);
+        return Create(filterOperator, value, syntaxConfiguration);
     }
 
     /// <inheritdoc />
     public override string? ToString()
     {
-        if (string.IsNullOrEmpty(_filterOperatorToPrefixMap[Operator]) && Value == null)
+        var syntaxConfiguration = SyntaxConfiguration ?? new SyntaxConfiguration();
+        var operatorSyntax = syntaxConfiguration.FilterOperatorMap.FirstOrDefault(x => x.Value == Operator).Key;
+        if (string.IsNullOrEmpty(operatorSyntax) && Value == null)
             return null;
 
-        return _filterOperatorToPrefixMap[Operator] + Value;
+        return operatorSyntax + Value;
     }
 
     private static string ValueToFilterString(object? value)
@@ -125,42 +117,24 @@ public class ValueFilter
         return result;
     }
 
-    private static (FilterOperator, string?) ExtractFilterOperator(string? filter)
+    private static (FilterOperator, string?) ExtractFilterOperator(string? filter, SyntaxConfiguration? syntaxConfiguration)
     {
-        var filterOperator = FilterOperator.Default;
+        syntaxConfiguration ??= new SyntaxConfiguration();
 
         if (filter == null)
-            return (filterOperator, null);
+            return (FilterOperator.Default, null);
 
         var trimmedFilter = filter.TrimStart();
 
-        // TODO: Check if this can be shortened by automatic length detection
-        // Order of if-statements must be from longest to shortest filter operator, e.g. '==' must be parsed before '=' matches
-        if (trimmedFilter.StartsWith(_filterOperatorToPrefixMap[FilterOperator.IsNull]))
-            filterOperator = FilterOperator.IsNull;
-        else if (trimmedFilter.StartsWith(_filterOperatorToPrefixMap[FilterOperator.NotNull]))
-            filterOperator = FilterOperator.NotNull;
-        else if (trimmedFilter.StartsWith(_filterOperatorToPrefixMap[FilterOperator.EqualCaseSensitive]))
-            filterOperator = FilterOperator.EqualCaseSensitive;
-        else if (trimmedFilter.StartsWith(_filterOperatorToPrefixMap[FilterOperator.GreaterThanOrEqual]))
-            filterOperator = FilterOperator.GreaterThanOrEqual;
-        else if (trimmedFilter.StartsWith(_filterOperatorToPrefixMap[FilterOperator.LessThanOrEqual]))
-            filterOperator = FilterOperator.LessThanOrEqual;
-        else if (trimmedFilter.StartsWith(_filterOperatorToPrefixMap[FilterOperator.GreaterThan]))
-            filterOperator = FilterOperator.GreaterThan;
-        else if (trimmedFilter.StartsWith(_filterOperatorToPrefixMap[FilterOperator.LessThan]))
-            filterOperator = FilterOperator.LessThan;
-        else if (trimmedFilter.StartsWith(_filterOperatorToPrefixMap[FilterOperator.EqualCaseInsensitive]))
-            filterOperator = FilterOperator.EqualCaseInsensitive;
-        else if (trimmedFilter.StartsWith(_filterOperatorToPrefixMap[FilterOperator.NotEqual]))
-            filterOperator = FilterOperator.NotEqual;
-        else if (trimmedFilter.StartsWith(_filterOperatorToPrefixMap[FilterOperator.Contains]))
-            filterOperator = FilterOperator.Contains;
+        var (filterSyntax, filterOperator) = syntaxConfiguration
+            .FilterOperatorMap
+            .OrderByDescending(x => x.Key.Length)
+            .FirstOrDefault(x => trimmedFilter.StartsWith(x.Key));
 
-        var hasFilterOperator = !string.IsNullOrEmpty(_filterOperatorToPrefixMap[filterOperator]);
+        var hasFilterOperator = !string.IsNullOrEmpty(filterSyntax);
         filter = hasFilterOperator ? trimmedFilter : filter;
 
-        var filterValue = filter[_filterOperatorToPrefixMap[filterOperator].Length..];
+        var filterValue = filter[filterSyntax.Length..];
 
         return (filterOperator, filterValue);
     }
