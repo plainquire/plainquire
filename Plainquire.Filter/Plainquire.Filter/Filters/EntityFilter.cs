@@ -21,6 +21,18 @@ namespace Plainquire.Filter;
 public class EntityFilter<TEntity> : EntityFilter
 {
     /// <summary>
+    /// Initializes a new instance of the <see cref="EntityFilter{TEntity}"/> class.
+    /// </summary>
+    public EntityFilter() { }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EntityFilter{TEntity}"/> class.
+    /// </summary>
+    /// <param name="configuration">The configuration to use.</param>
+    public EntityFilter(FilterConfiguration configuration)
+        : base(configuration) { }
+
+    /// <summary>
     /// Gets the filter syntax for the given <paramref name="property"/>.
     /// </summary>
     /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
@@ -200,10 +212,9 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <summary>
     /// Creates the filter expression. Returns <c>null</c> when filter is empty.
     /// </summary>
-    /// <param name="filterConfiguration">Filter configuration.</param>
     /// <param name="interceptor">An interceptor to manipulate the generated filters.</param>
-    public Expression<Func<TEntity, bool>>? CreateFilter(FilterConfiguration? filterConfiguration = null, IFilterInterceptor? interceptor = null)
-        => CreateFilter<TEntity>(filterConfiguration, interceptor);
+    public Expression<Func<TEntity, bool>>? CreateFilter(IFilterInterceptor? interceptor = null)
+        => CreateFilter<TEntity>(interceptor);
 
     /// <summary>
     /// Performs an implicit conversion from <see cref="EntityFilter{TEntity}"/> to <see cref="Expression{TDelegate}"/> where <c>TDelegate</c> is <see cref="Func{T, TResult}"/>.
@@ -238,19 +249,14 @@ public class EntityFilter : ICloneable
     internal List<NestedFilter> NestedFilters;
 
     /// <summary>
-    /// Gets or sets the default configuration. Can be used to set a system-wide configuration.
-    /// </summary>
-    public static FilterConfiguration DefaultFilterConfiguration { get; set; } = new();
-
-    /// <summary>
     /// Gets or sets the default interceptor. Can be used to set a system-wide interceptor.
     /// </summary>
     public static IFilterInterceptor? DefaultInterceptor { get; set; }
 
     /// <summary>
-    /// Gets or sets the configuration of the micro syntax.
+    /// Gets or sets the default configuration. Can be used to set a system-wide configuration.
     /// </summary>
-    public SyntaxConfiguration? SyntaxConfiguration { get; set; }
+    public FilterConfiguration? Configuration { get; internal set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EntityFilter"/> class.
@@ -260,6 +266,14 @@ public class EntityFilter : ICloneable
         PropertyFilters = [];
         NestedFilters = [];
     }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EntityFilter"/> class.
+    /// </summary>
+    /// <param name="configuration">The configuration to use.</param>
+    public EntityFilter(FilterConfiguration configuration)
+        : this()
+        => Configuration = configuration;
 
     /// <inheritdoc />
     public object Clone()
@@ -389,9 +403,9 @@ public class EntityFilter : ICloneable
         => PropertyFilters.Clear();
 
     /// <inheritdoc cref="EntityFilter{TEntity}.CreateFilter" />
-    protected internal Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(FilterConfiguration? filterConfiguration = null, IFilterInterceptor? interceptor = null)
+    protected internal Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(IFilterInterceptor? interceptor = null)
     {
-        filterConfiguration ??= DefaultFilterConfiguration;
+        var configuration = Configuration ?? new FilterConfiguration();
         interceptor ??= DefaultInterceptor;
 
         var properties = typeof(TEntity)
@@ -408,8 +422,8 @@ public class EntityFilter : ICloneable
             .Select(x =>
             {
                 var propertySelector = typeof(TEntity).CreatePropertySelector(x.Property.Name);
-                return interceptor?.CreatePropertyFilter<TEntity>(x.Property, x.ValueFilters, filterConfiguration, SyntaxConfiguration)
-                    ?? PropertyFilterExpression.PropertyFilterExpression.CreateFilter<TEntity>(x.Property.PropertyType, propertySelector, x.ValueFilters, filterConfiguration, SyntaxConfiguration);
+                return interceptor?.CreatePropertyFilter<TEntity>(x.Property, x.ValueFilters, configuration)
+                    ?? PropertyFilterExpression.PropertyFilterExpression.CreateFilter<TEntity>(x.Property.PropertyType, propertySelector, x.ValueFilters, configuration, interceptor);
             })
             .ToList();
 
@@ -425,7 +439,7 @@ public class EntityFilter : ICloneable
             .Select(x =>
             {
                 var createFilterExpression = _createFilterMethod.MakeGenericMethod(x.Property.PropertyType);
-                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, [filterConfiguration, interceptor]);
+                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, [interceptor]);
                 if (nestedFilterExpression == null)
                     return null;
 
@@ -453,7 +467,7 @@ public class EntityFilter : ICloneable
             {
                 var propertyType = x.Property.PropertyType.GetGenericArguments()[0];
                 var createFilterExpression = _createFilterMethod.MakeGenericMethod(propertyType);
-                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, [filterConfiguration, interceptor]);
+                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, [interceptor]);
                 if (nestedFilterExpression == null)
                     return null;
 

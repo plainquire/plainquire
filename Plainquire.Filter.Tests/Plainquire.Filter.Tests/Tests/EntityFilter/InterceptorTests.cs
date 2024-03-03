@@ -34,7 +34,7 @@ public class InterceptorTests
         };
 
         var interceptor = new FilterStringsCaseInsensitiveInterceptor();
-        var filteredEntities = filterFunc(testItems, filter, null, interceptor);
+        var filteredEntities = filterFunc(testItems, filter, interceptor);
 
         filteredEntities.Should().BeEquivalentTo(new[] { testItems[1], testItems[2] });
     }
@@ -68,7 +68,9 @@ public class InterceptorTests
 
     private class FilterStringsCaseInsensitiveInterceptor : IFilterInterceptor
     {
-        public Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, Filter.ValueFilter[] filters, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
+        Func<DateTimeOffset> IFilterInterceptor.Now => throw new NotImplementedException();
+
+        public Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, Filter.ValueFilter[] filters, FilterConfiguration configuration)
         {
             var filteredPropertyIsTypeOfString = propertyInfo.PropertyType == typeof(string);
             if (!filteredPropertyIsTypeOfString)
@@ -95,7 +97,7 @@ public class InterceptorTests
                 .ToArray();
 
             var unmodifiedFilterLambda = PropertyFilterExpression.PropertyFilterExpression
-                .CreateFilter<TEntity>(propertyInfo.PropertyType, propertySelector, unmodifiedFilters, filterConfiguration, syntaxConfiguration);
+                .CreateFilter<TEntity>(propertyInfo.PropertyType, propertySelector, unmodifiedFilters, configuration, this);
 
             var filterExpression = new[] { modifiedFilterLambda, unmodifiedFilterLambda }.CombineWithConditionalOr();
 

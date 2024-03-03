@@ -16,13 +16,13 @@ public static class ValueFilterExtensions
     /// <typeparam name="TValue">The type of the filtered value.</typeparam>
     /// <param name="filterSyntax">The filter syntax.</param>
     /// <param name="valueName">Name of the value.</param>
-    /// <param name="syntaxConfiguration">Configuration of the micro syntax.</param>
-    public static string HumanizeFilterSyntax<TValue>(this string? filterSyntax, string valueName, SyntaxConfiguration? syntaxConfiguration = null)
+    /// <param name="configuration">The filter configuration to use.</param>
+    public static string HumanizeFilterSyntax<TValue>(this string? filterSyntax, string valueName, FilterConfiguration? configuration = null)
     {
         if (string.IsNullOrWhiteSpace(filterSyntax))
             return $"{valueName} is unfiltered";
 
-        var filters = ValueFiltersFactory.Create(filterSyntax, syntaxConfiguration)
+        var filters = ValueFiltersFactory.Create(filterSyntax, configuration)
             .GroupBy(x => x.Operator)
             .Select(filterGroup =>
             {

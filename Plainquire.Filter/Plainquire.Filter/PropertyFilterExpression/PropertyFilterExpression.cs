@@ -39,11 +39,12 @@ public static class PropertyFilterExpression
     /// <typeparam name="TProperty">The type of the property.</typeparam>
     /// <param name="propertySelector">The property selector.</param>
     /// <param name="valueFilters">The filters to use.</param>
-    /// <param name="filterConfiguration">The filter configuration.</param>
-    public static Expression<Func<TEntity, bool>>? CreateFilter<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[] valueFilters, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
+    /// <param name="configuration">The filter configuration to use.</param>
+    /// <param name="interceptor">An interceptor to manipulate the generated filters.</param>
+    public static Expression<Func<TEntity, bool>>? CreateFilter<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[] valueFilters, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
         var valueFilterExpressionCreator = _valueFilterExpressionCreators.FirstOrDefault(x => x.CanCreateExpressionFor<TProperty>()) ?? _defaultValueFilterExpressionCreator;
-        var propertyExpression = valueFilterExpressionCreator.CreateExpression(propertySelector, valueFilters, filterConfiguration, syntaxConfiguration);
+        var propertyExpression = valueFilterExpressionCreator.CreateExpression(propertySelector, valueFilters, configuration, interceptor);
         if (propertyExpression == null)
             return null;
 
@@ -58,13 +59,14 @@ public static class PropertyFilterExpression
     /// <param name="propertyType">The type of the property.</param>
     /// <param name="propertySelector">The property selector.</param>
     /// <param name="valueFilters">The filters to use.</param>
-    /// <param name="filterConfiguration">The filter configuration.</param>
-    public static Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(Type propertyType, LambdaExpression propertySelector, ValueFilter[] valueFilters, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
+    /// <param name="configuration">The filter configuration.</param>
+    /// <param name="interceptor">An interceptor to manipulate the generated filters.</param>
+    public static Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(Type propertyType, LambdaExpression propertySelector, ValueFilter[] valueFilters, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
         try
         {
             var genericMethod = _createFilterMethod.MakeGenericMethod(typeof(TEntity), propertyType);
-            var propertyExpression = (Expression<Func<TEntity, bool>>?)genericMethod.Invoke(null, [propertySelector, valueFilters, filterConfiguration, syntaxConfiguration]);
+            var propertyExpression = (Expression<Func<TEntity, bool>>?)genericMethod.Invoke(null, [propertySelector, valueFilters, configuration, interceptor]);
             return propertyExpression;
         }
         catch (TargetInvocationException ex) when (ex.InnerException != null)

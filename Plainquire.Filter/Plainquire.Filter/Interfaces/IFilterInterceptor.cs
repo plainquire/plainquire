@@ -12,12 +12,17 @@ namespace Plainquire.Filter;
 public interface IFilterInterceptor
 {
     /// <summary>
+    /// Returns the value for 'now' when parsing relative date/time values (e.g. one-week-ago).
+    /// </summary>
+    Func<DateTimeOffset> Now { get; }
+
+    /// <summary>
     /// Creates a property filter for given values. Called for every filtered property.
     /// </summary>
     /// <typeparam name="TEntity">The type of the filtered entity.</typeparam>
     /// <param name="propertyInfo">The filtered property belongs to <typeparamref name="TEntity"/>.</param>
     /// <param name="filters">The filter values.</param>
-    /// <param name="filterConfiguration">The active filter configuration</param>
+    /// <param name="configuration">The filter configuration to use.</param>
     /// <returns>An expression to used to filter the given property or <c>null</c> to use the default filter creator.</returns>
-    public Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, ValueFilter[] filters, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration);
+    Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, ValueFilter[] filters, FilterConfiguration configuration);
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
@@ -50,8 +49,8 @@ public class FilterForDateTimeNullableBySyntaxTests
         FilterTestCase.Create<DateTime?>(1008, "~2010/06/15/12/30", x => x >= new DateTime(2010, 06, 15, 12, 30, 00) && x < new DateTime(2010, 06, 15, 12, 31, 00)),
         FilterTestCase.Create<DateTime?>(1009, "~01.06.2010", x => x >= new DateTime(2010, 01, 06) && x < new DateTime(2010, 01, 07), TestConfig.FilterCultureEnUs),
         FilterTestCase.Create<DateTime?>(1010, "~01.06.2010", x => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 07, 01), TestConfig.FilterCultureDeDe),
-        FilterTestCase.Create<DateTime?>(1011, "one-month-ago", x => x >= new DateTime(2010, 05, 16) && x < new DateTime(2010, 06, 16), new FilterConfiguration { Now = () => new DateTime(2010, 06, 16) }),
-        FilterTestCase.Create<DateTime?>(1012, "june 1st_june-16th", x => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 16), new FilterConfiguration { Now = () => new DateTime(2010, 06, 16) }),
+        FilterTestCase.Create<DateTime?>(1011, "one-month-ago", x => x >= new DateTime(2010, 05, 16) && x < new DateTime(2010, 06, 16), null, new DateInterceptor { Now = () => new DateTime(2010, 06, 16) }),
+        FilterTestCase.Create<DateTime?>(1012, "june 1st_june-16th", x => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 16), null, new DateInterceptor { Now = () => new DateTime(2010, 06, 16) }),
         FilterTestCase.Create<DateTime?>(1013, "2010_2020", x => x >= new DateTime(2010, 01, 01) && x < new DateTime(2021, 01, 01)),
         FilterTestCase.Create<DateTime?>(1014, "2010-06_2010-07", x => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 08, 01)),
         FilterTestCase.Create<DateTime?>(1015, "2010-06-01_2010-06-01", x => x >= new DateTime(2010, 06, 01) && x < new DateTime(2010, 06, 02)),

@@ -26,7 +26,7 @@ public static class EntityFilterExtensions
         if (filterSyntax == null)
             return entityFilter;
 
-        var filters = ValueFiltersFactory.Create(filterSyntax, entityFilter.SyntaxConfiguration);
+        var filters = ValueFiltersFactory.Create(filterSyntax, entityFilter.Configuration);
         entityFilter.Add(property, filters);
         return entityFilter;
     }
@@ -49,7 +49,7 @@ public static class EntityFilterExtensions
             .Select(value => ValueFilter.Create(
                 FilterOperator.Default,
                 value,
-                entityFilter.SyntaxConfiguration
+                entityFilter.Configuration
             ))
             .ToArray();
 
@@ -65,7 +65,7 @@ public static class EntityFilterExtensions
     /// <param name="property">The property to filter.</param>
     /// <param name="filterOperator">The filter operator to use.</param>
     public static EntityFilter<TEntity> Add<TEntity, TProperty>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, FilterOperator filterOperator)
-        => entityFilter.Add(property, ValueFilter.Create(filterOperator, entityFilter.SyntaxConfiguration));
+        => entityFilter.Add(property, ValueFilter.Create(filterOperator, entityFilter.Configuration));
 
     /// <summary>
     /// Adds a filter for the given property. Existing filters for the same property are preserved.
@@ -87,7 +87,7 @@ public static class EntityFilterExtensions
             .Select(value => ValueFilter.Create(
                 filterOperator,
                 value,
-                entityFilter.SyntaxConfiguration
+                entityFilter.Configuration
             ))
             .ToArray();
 
@@ -108,7 +108,7 @@ public static class EntityFilterExtensions
         if (filterSyntax == null)
             return entityFilter.Remove(property);
 
-        var valueFilters = ValueFiltersFactory.Create(filterSyntax, entityFilter.SyntaxConfiguration);
+        var valueFilters = ValueFiltersFactory.Create(filterSyntax, entityFilter.Configuration);
         entityFilter.Replace(property, valueFilters);
         return entityFilter;
     }
@@ -131,7 +131,7 @@ public static class EntityFilterExtensions
             .Select(value => ValueFilter.Create(
                 FilterOperator.Default,
                 value,
-                entityFilter.SyntaxConfiguration
+                entityFilter.Configuration
                 ))
             .ToArray();
 
@@ -147,7 +147,7 @@ public static class EntityFilterExtensions
     /// <param name="property">The property to filter.</param>
     /// <param name="filterOperator">The filter operator to use.</param>
     public static EntityFilter<TEntity> Replace<TEntity, TProperty>(this EntityFilter<TEntity> entityFilter, Expression<Func<TEntity, TProperty?>> property, FilterOperator filterOperator)
-        => entityFilter.Replace(property, ValueFilter.Create(filterOperator, entityFilter.SyntaxConfiguration));
+        => entityFilter.Replace(property, ValueFilter.Create(filterOperator, entityFilter.Configuration));
 
     /// <summary>
     /// Replaces the filter for the given property. Existing filters for the same property are removed.
@@ -169,7 +169,7 @@ public static class EntityFilterExtensions
             .Select(value => ValueFilter.Create(
                 filterOperator,
                 value,
-                entityFilter.SyntaxConfiguration
+                entityFilter.Configuration
                 ))
             .ToArray();
 

@@ -35,10 +35,10 @@ public static class FilterTestCaseExtensions
     private static void RunAndCheckExpectedItems<TFilterValue, TModelValue>(FilterTestCase<TFilterValue, TModelValue> testCase, ICollection<TestModel<TModelValue>> testItems, EntityFilterFunc<TestModel<TModelValue>> filterFunc)
     {
         var entityFilter = CreateEntityFilter(testCase);
-        var filteredItems = filterFunc(testItems, entityFilter, testCase.FilterConfiguration);
+        var filteredItems = filterFunc(testItems, entityFilter, testCase.Interceptor);
         var expectedItems = testItems.Select(x => x.ValueA).Where(testCase.ExpectedTestItemsExpression ?? (_ => true)).ToList();
 
-        using (new AssertionScope($"items filtered by '{entityFilter.CreateFilter(testCase.FilterConfiguration)}'"))
+        using (new AssertionScope($"items filtered by '{entityFilter.CreateFilter()}'"))
             filteredItems.Select(x => x.ValueA).Should().Equal(expectedItems);
     }
 
@@ -48,7 +48,7 @@ public static class FilterTestCaseExtensions
 
     private static EntityFilter<TestModel<TModelValue>> CreateEntityFilter<TFilterValue, TModelValue>(FilterTestCase<TFilterValue, TModelValue> testCase)
     {
-        var filter = new EntityFilter<TestModel<TModelValue>>() { SyntaxConfiguration = testCase.SyntaxConfiguration };
+        var filter = new EntityFilter<TestModel<TModelValue>>(testCase.FilterConfiguration!);
         if (testCase.FilterSyntax != null)
             filter.Replace(x => x.ValueA, testCase.FilterSyntax);
         else

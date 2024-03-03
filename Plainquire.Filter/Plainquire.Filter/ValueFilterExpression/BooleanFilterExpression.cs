@@ -26,18 +26,16 @@ public class BooleanFilterExpression : DefaultFilterExpression, IBooleanFilterEx
         => type.GetUnderlyingType() == typeof(bool);
 
     /// <inheritdoc />
-    protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
+    protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
         if (bool.TryParse(value, out var boolValue))
             return CreateBoolExpressionByFilterOperator(propertySelector, filterOperator, boolValue);
 
-        syntaxConfiguration ??= new SyntaxConfiguration();
-
-        var boolSyntax = syntaxConfiguration.BooleanMap.FirstOrDefault(x => x.Key.Equals(value, StringComparison.OrdinalIgnoreCase));
+        var boolSyntax = configuration.BooleanMap.FirstOrDefault(x => x.Key.Equals(value, StringComparison.OrdinalIgnoreCase));
         if (boolSyntax.Key != null)
             return CreateBoolExpressionByFilterOperator(propertySelector, filterOperator, boolSyntax.Value);
 
-        if (filterConfiguration.IgnoreParseExceptions)
+        if (configuration.IgnoreParseExceptions)
             return null;
 
         throw CreateFilterExpressionCreationException("Unable to parse given filter value", propertySelector, filterOperator, value);

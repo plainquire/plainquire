@@ -12,6 +12,8 @@ namespace Plainquire.Filter;
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class ValueFilter
 {
+    private FilterConfiguration? _configuration;
+
     /// <summary>
     /// Gets the filter operator. See <see cref="Operator"/> for details.
     /// </summary>
@@ -21,11 +23,6 @@ public class ValueFilter
     /// JSON or Chronic representation of the value to filter for. Unused, if <see cref="Operator"/> is <see cref="FilterOperator.IsNull"/> or <see cref="FilterOperator.NotNull"/>; otherwise at least one value is required.
     /// </summary>
     public string? Value { get; private set; }
-
-    /// <summary>
-    /// Gets or sets the syntax configuration.
-    /// </summary>
-    public SyntaxConfiguration? SyntaxConfiguration { get; set; }
 
     /// <summary>
     /// Indicates whether this filter is empty.
@@ -40,8 +37,8 @@ public class ValueFilter
     /// <typeparam name="TValue">The type of the value.</typeparam>
     /// <param name="filterOperator">The filter operator.</param>
     /// <param name="value">The value to filter for. Unused, if <paramref name="filterOperator"/> is <see cref="FilterOperator.IsNull"/> or <see cref="FilterOperator.NotNull"/>; otherwise at least one value is required.</param>
-    /// <param name="syntaxConfiguration">Configuration of the micro syntax.</param>
-    public static ValueFilter Create<TValue>(FilterOperator filterOperator, TValue? value, SyntaxConfiguration? syntaxConfiguration = null)
+    /// <param name="configuration">The filter configuration to use.</param>
+    public static ValueFilter Create<TValue>(FilterOperator filterOperator, TValue? value, FilterConfiguration? configuration = null)
     {
         var isNullableFilterOperator = filterOperator is FilterOperator.IsNull or FilterOperator.NotNull;
         if (isNullableFilterOperator)
@@ -55,7 +52,7 @@ public class ValueFilter
         {
             Operator = filterOperator,
             Value = ValueToFilterString(value),
-            SyntaxConfiguration = syntaxConfiguration
+            _configuration = configuration
         };
     }
 
@@ -63,14 +60,14 @@ public class ValueFilter
     /// Creates the specified filter
     /// </summary>
     /// <param name="filterOperator">The filter operator.</param>
-    /// <param name="syntaxConfiguration">Configuration of the micro syntax.</param>
-    public static ValueFilter Create(FilterOperator filterOperator, SyntaxConfiguration? syntaxConfiguration = null)
+    /// <param name="configuration">The filter configuration to use.</param>
+    public static ValueFilter Create(FilterOperator filterOperator, FilterConfiguration? configuration = null)
     {
         var isNullableFilterOperator = filterOperator is FilterOperator.IsNull or FilterOperator.NotNull;
         if (!isNullableFilterOperator)
             throw new InvalidOperationException("A value is required for operators other than NULL/NOT NULL.");
 
-        return Create<object>(filterOperator, null, syntaxConfiguration);
+        return Create<object>(filterOperator, null, configuration);
     }
 
     /// <summary>
@@ -78,26 +75,26 @@ public class ValueFilter
     /// </summary>
     /// <typeparam name="TValue">The type of the value.</typeparam>
     /// <param name="value">The value to filter for.</param>
-    /// <param name="syntaxConfiguration">Configuration of the micro syntax.</param>
-    public static ValueFilter Create<TValue>(TValue value, SyntaxConfiguration? syntaxConfiguration = null)
-        => Create(FilterOperator.Default, value, syntaxConfiguration);
+    /// <param name="configuration">The filter configuration to use.</param>
+    public static ValueFilter Create<TValue>(TValue value, FilterConfiguration? configuration = null)
+        => Create(FilterOperator.Default, value, configuration);
 
     /// <summary>
     /// Creates the specified filter.
     /// </summary>
     /// <param name="filterSyntax">The filter micro syntax to create the filter from.</param>
-    /// <param name="syntaxConfiguration">Configuration of the micro syntax.</param>
-    public static ValueFilter Create(string? filterSyntax, SyntaxConfiguration? syntaxConfiguration = null)
+    /// <param name="configuration">The filter configuration to use.</param>
+    public static ValueFilter Create(string? filterSyntax, FilterConfiguration? configuration = null)
     {
-        var (filterOperator, value) = ExtractFilterOperator(filterSyntax, syntaxConfiguration);
-        return Create(filterOperator, value, syntaxConfiguration);
+        var (filterOperator, value) = ExtractFilterOperator(filterSyntax, configuration);
+        return Create(filterOperator, value, configuration);
     }
 
     /// <inheritdoc />
     public override string? ToString()
     {
-        var syntaxConfiguration = SyntaxConfiguration ?? new SyntaxConfiguration();
-        var operatorSyntax = syntaxConfiguration.FilterOperatorMap.FirstOrDefault(x => x.Value == Operator).Key;
+        var configuration = _configuration ?? new FilterConfiguration();
+        var operatorSyntax = configuration.FilterOperatorMap.FirstOrDefault(x => x.Value == Operator).Key;
         if (string.IsNullOrEmpty(operatorSyntax) && Value == null)
             return null;
 
@@ -117,16 +114,16 @@ public class ValueFilter
         return result;
     }
 
-    private static (FilterOperator, string?) ExtractFilterOperator(string? filter, SyntaxConfiguration? syntaxConfiguration)
+    private static (FilterOperator, string?) ExtractFilterOperator(string? filter, FilterConfiguration? configuration)
     {
-        syntaxConfiguration ??= new SyntaxConfiguration();
+        configuration ??= new FilterConfiguration();
 
         if (filter == null)
             return (FilterOperator.Default, null);
 
         var trimmedFilter = filter.TrimStart();
 
-        var (filterSyntax, filterOperator) = syntaxConfiguration
+        var (filterSyntax, filterOperator) = configuration
             .FilterOperatorMap
             .OrderByDescending(x => x.Key.Length)
             .FirstOrDefault(x => trimmedFilter.StartsWith(x.Key));

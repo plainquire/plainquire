@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
-using FilterConfiguration = Plainquire.Filter.Abstractions.FilterConfiguration;
 
 namespace Plainquire.Filter.ValueFilterExpression;
 
@@ -34,12 +34,13 @@ public class DateTimeFilterExpression : DefaultFilterExpression, IDateTimeFilter
         => new[] { typeof(Range<DateTimeOffset>), typeof(DateTime), typeof(DateTimeOffset) }.Contains(type.GetUnderlyingType());
 
     /// <inheritdoc />
-    protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration filterConfiguration, SyntaxConfiguration? syntaxConfiguration)
+    protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
-        if (value.TryConvertStringToDateTimeRange(filterConfiguration.Now(), out var dateTimeSpan, filterConfiguration.CultureInfo))
+        var now = interceptor?.Now() ?? DateTimeOffset.Now;
+        if (value.TryConvertStringToDateTimeRange(now, out var dateTimeSpan, new CultureInfo(configuration.CultureName)))
             return CreateDateTimeExpressionByFilterOperator(propertySelector, filterOperator, dateTimeSpan);
 
-        if (filterConfiguration.IgnoreParseExceptions)
+        if (configuration.IgnoreParseExceptions)
             return null;
 
         throw CreateFilterExpressionCreationException("Unable to parse given filter value", propertySelector, filterOperator, value);

@@ -15,12 +15,25 @@ public class SyntaxConfigurationTests
     [TestMethod]
     public void WhenConfigurationIsCreated_ThenDefaultValuesAreSet()
     {
-        var configuration = new SyntaxConfiguration();
+        var configuration = new FilterConfiguration();
 
         using var _ = new AssertionScope();
 
-        configuration.FilterOperatorMap.Should()
-            .BeEquivalentTo(new Dictionary<string, FilterOperator>
+        configuration.Should().BeEquivalentTo(new
+        {
+            CultureName = System.Globalization.CultureInfo.CurrentCulture.Name,
+
+            IgnoreParseExceptions = false,
+
+            BooleanMap = new Dictionary<string, bool>
+            {
+                {"NO", false},
+                {"0", false},
+                {"YES", true},
+                {"1", true},
+            },
+
+            FilterOperatorMap = new Dictionary<string, FilterOperator>
             {
                 {string.Empty, FilterOperator.Default},
                 {"~", FilterOperator.Contains},
@@ -33,16 +46,8 @@ public class SyntaxConfigurationTests
                 {"<=" , FilterOperator.LessThanOrEqual},
                 {"ISNULL" , FilterOperator.IsNull},
                 {"NOTNULL" , FilterOperator.NotNull}
-            });
-
-        configuration.BooleanMap.Should()
-            .BeEquivalentTo(new Dictionary<string, bool>
-            {
-                {"NO", false},
-                {"0", false},
-                {"YES", true},
-                {"1", true},
-            });
+            }
+        });
     }
 
     [DataTestMethod]
@@ -51,7 +56,7 @@ public class SyntaxConfigurationTests
     {
         var random = new Random(seed);
 
-        var configuration = new SyntaxConfiguration();
+        var configuration = new FilterConfiguration();
 
         configuration.FilterOperatorMap = configuration
             .FilterOperatorMap
@@ -75,7 +80,7 @@ public class SyntaxConfigurationTests
     {
         var random = new Random(seed);
 
-        var configuration = new SyntaxConfiguration();
+        var configuration = new FilterConfiguration();
 
         configuration.FilterOperatorMap = configuration
             .FilterOperatorMap
@@ -99,7 +104,7 @@ public class SyntaxConfigurationTests
     {
         var random = new Random(seed);
 
-        var configuration = new SyntaxConfiguration();
+        var configuration = new FilterConfiguration();
 
         configuration.FilterOperatorMap = configuration
             .FilterOperatorMap
@@ -120,7 +125,7 @@ public class SyntaxConfigurationTests
     [TestMethod]
     public void WhenSieveFilterOperatorSyntaxIsUsed_ExtractedFilterOperatorsMatches()
     {
-        var configuration = new SyntaxConfiguration
+        var configuration = new FilterConfiguration
         {
             FilterOperatorMap = new Dictionary<string, FilterOperator>
             {

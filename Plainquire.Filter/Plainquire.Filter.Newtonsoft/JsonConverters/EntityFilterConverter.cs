@@ -25,7 +25,7 @@ public class EntityFilterConverter : JsonConverter
 
         entityFilter.PropertyFilters = propertyFilters ?? [];
         entityFilter.NestedFilters = entityFilterData.NestedFilters ?? [];
-        entityFilter.SyntaxConfiguration = entityFilterData.SyntaxConfiguration;
+        entityFilter.Configuration = entityFilterData.Configuration;
         return entityFilter;
     }
 
@@ -42,7 +42,7 @@ public class EntityFilterConverter : JsonConverter
         {
             PropertyFilters = propertyFiltersData,
             NestedFilters = entityFilter.NestedFilters,
-            SyntaxConfiguration = entityFilter.SyntaxConfiguration
+            Configuration = entityFilter.Configuration
         };
 
         serializer.Serialize(writer, entityFilterData);

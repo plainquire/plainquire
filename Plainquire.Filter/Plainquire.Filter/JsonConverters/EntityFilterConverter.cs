@@ -69,7 +69,7 @@ public class EntityFilterConverter : JsonConverter<EntityFilter>
         {
             PropertyFilters = propertyFilters ?? [],
             NestedFilters = entityFilterData.NestedFilters ?? [],
-            SyntaxConfiguration = entityFilterData.SyntaxConfiguration
+            Configuration = entityFilterData.Configuration
         };
     }
 
@@ -82,7 +82,7 @@ public class EntityFilterConverter : JsonConverter<EntityFilter>
         {
             PropertyFilters = propertyFiltersData,
             NestedFilters = value.NestedFilters,
-            SyntaxConfiguration = value.SyntaxConfiguration
+            Configuration = value.Configuration
         };
 
         JsonSerializer.Serialize(writer, entityFilterData, options);
@@ -97,7 +97,7 @@ public class EntityFilterConverter : JsonConverter<EntityFilter>
                     .Select(valueFilter => ValueFilter.Create(
                         valueFilter.Operator,
                         valueFilter.Value,
-                        entityFilterData.SyntaxConfiguration
+                        entityFilterData.Configuration
                     ))
                     .ToArray()
             ))
@@ -121,7 +121,7 @@ internal class EntityFilterConverterData
 
     public List<NestedFilter>? NestedFilters { get; set; } = [];
 
-    public SyntaxConfiguration? SyntaxConfiguration { get; set; }
+    public FilterConfiguration? Configuration { get; set; }
 }
 
 internal class PropertyFilterConverterData

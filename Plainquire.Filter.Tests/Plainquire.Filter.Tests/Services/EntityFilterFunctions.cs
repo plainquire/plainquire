@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Newtonsoft;
 using Plainquire.Filter.Tests.Models;
 using System;
@@ -11,7 +10,7 @@ using System.Reflection;
 
 namespace Plainquire.Filter.Tests.Services;
 
-public delegate List<TEntity> EntityFilterFunc<TEntity>(ICollection<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? filterConfiguration = null, IFilterInterceptor? interceptor = null);
+public delegate List<TEntity> EntityFilterFunc<TEntity>(ICollection<TEntity> testItems, EntityFilter<TEntity> filter, IFilterInterceptor? interceptor = null);
 
 [ExcludeFromCodeCoverage]
 public static class EntityFilterFunctions
@@ -32,42 +31,42 @@ public static class EntityFilterFunctions
             .MakeGenericMethod(entityType)
             .Invoke(null, [])!;
 
-    private static List<TEntity> FilterDirectByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? filterConfiguration, IFilterInterceptor? interceptor)
+    private static List<TEntity> FilterDirectByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, IFilterInterceptor? interceptor)
     {
-        var predicate = filter.CreateFilter(filterConfiguration, interceptor) ?? (x => true);
+        var predicate = filter.CreateFilter(interceptor) ?? (x => true);
         return testItems.Where(predicate.Compile()).ToList();
     }
 
-    private static List<TEntity> FilterNetCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? filterConfiguration, IFilterInterceptor? interceptor)
+    private static List<TEntity> FilterNetCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, IFilterInterceptor? interceptor)
     {
-        var predicate = filter.Clone().CreateFilter(filterConfiguration, interceptor) ?? (x => true);
+        var predicate = filter.Clone().CreateFilter(interceptor) ?? (x => true);
         return testItems.Where(predicate.Compile()).ToList();
     }
 
-    private static List<TEntity> FilterNewtonCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? filterConfiguration, IFilterInterceptor? interceptor)
+    private static List<TEntity> FilterNewtonCloneByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, IFilterInterceptor? interceptor)
     {
-        var predicate = filter.NewtonsoftClone().CreateFilter(filterConfiguration, interceptor) ?? (x => true);
+        var predicate = filter.NewtonsoftClone().CreateFilter(interceptor) ?? (x => true);
         return testItems.Where(predicate.Compile()).ToList();
     }
 
-    private static List<TEntity> FilterDirectByEF<TEntity>(this ICollection<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? filterConfiguration, IFilterInterceptor? interceptor)
+    private static List<TEntity> FilterDirectByEF<TEntity>(this ICollection<TEntity> testItems, EntityFilter<TEntity> filter, IFilterInterceptor? interceptor)
         where TEntity : class
     {
-        var predicate = filter.CreateFilter(filterConfiguration, interceptor) ?? (x => true);
+        var predicate = filter.CreateFilter(interceptor) ?? (x => true);
         return testItems.FilterByEF(predicate);
     }
 
-    private static List<TEntity> FilterNetCloneByEF<TEntity>(this ICollection<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? filterConfiguration, IFilterInterceptor? interceptor)
+    private static List<TEntity> FilterNetCloneByEF<TEntity>(this ICollection<TEntity> testItems, EntityFilter<TEntity> filter, IFilterInterceptor? interceptor)
         where TEntity : class
     {
-        var predicate = filter.Clone().CreateFilter(filterConfiguration, interceptor) ?? (x => true);
+        var predicate = filter.Clone().CreateFilter(interceptor) ?? (x => true);
         return testItems.FilterByEF(predicate);
     }
 
-    private static List<TEntity> FilterNewtonCloneByEF<TEntity>(this ICollection<TEntity> testItems, EntityFilter<TEntity> filter, FilterConfiguration? filterConfiguration, IFilterInterceptor? interceptor)
+    private static List<TEntity> FilterNewtonCloneByEF<TEntity>(this ICollection<TEntity> testItems, EntityFilter<TEntity> filter, IFilterInterceptor? interceptor)
         where TEntity : class
     {
-        var predicate = filter.NewtonsoftClone().CreateFilter(filterConfiguration, interceptor) ?? (x => true);
+        var predicate = filter.NewtonsoftClone().CreateFilter(interceptor) ?? (x => true);
         return testItems.FilterByEF(predicate);
     }
 
