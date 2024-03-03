@@ -33,11 +33,9 @@ public class BooleanFilterExpression : DefaultFilterExpression, IBooleanFilterEx
 
         syntaxConfiguration ??= new SyntaxConfiguration();
 
-        if (syntaxConfiguration.BoolTrueStrings.Contains(value?.ToUpper()))
-            return CreateBoolExpressionByFilterOperator(propertySelector, filterOperator, true);
-
-        if (syntaxConfiguration.BoolFalseStrings.Contains(value?.ToUpper()))
-            return CreateBoolExpressionByFilterOperator(propertySelector, filterOperator, false);
+        var boolSyntax = syntaxConfiguration.BooleanMap.FirstOrDefault(x => x.Key.Equals(value, StringComparison.OrdinalIgnoreCase));
+        if (boolSyntax.Key != null)
+            return CreateBoolExpressionByFilterOperator(propertySelector, filterOperator, boolSyntax.Value);
 
         if (filterConfiguration.IgnoreParseExceptions)
             return null;

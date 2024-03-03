@@ -34,6 +34,15 @@ public class SyntaxConfigurationTests
                 {"ISNULL" , FilterOperator.IsNull},
                 {"NOTNULL" , FilterOperator.NotNull}
             });
+
+        configuration.BooleanMap.Should()
+            .BeEquivalentTo(new Dictionary<string, bool>
+            {
+                {"NO", false},
+                {"0", false},
+                {"YES", true},
+                {"1", true},
+            });
     }
 
     [DataTestMethod]

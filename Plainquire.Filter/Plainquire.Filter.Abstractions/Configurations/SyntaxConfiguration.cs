@@ -8,7 +8,7 @@ namespace Plainquire.Filter.Abstractions;
 public class SyntaxConfiguration
 {
     /// <summary>
-    /// Map between micro syntax and filter operator.
+    /// Map between micro syntax and filter operator. Micro syntax is case-sensitive.
     /// </summary>
     public Dictionary<string, FilterOperator> FilterOperatorMap { get; set; } = new()
     {
@@ -26,12 +26,13 @@ public class SyntaxConfiguration
     };
 
     /// <summary>
-    /// Strings that should be handled as boolean <c>false</c>
+    /// Map between string and boolean value. Strings are case-insensitive.
     /// </summary>
-    public string[] BoolFalseStrings { get; set; } = ["NO", "0"];
-
-    /// <summary>
-    /// Strings that should be handled as boolean <c>true</c>
-    /// </summary>
-    public string[] BoolTrueStrings { get; set; } = ["YES", "1"];
+    public Dictionary<string, bool> BooleanMap { get; set; } = new()
+    {
+        {"NO", false},
+        {"0", false},
+        {"YES", true},
+        {"1", true},
+    };
 }
