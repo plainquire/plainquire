@@ -12,13 +12,15 @@ namespace Plainquire.Page.Tests.Tests.EntityPage;
 [TestClass, ExcludeFromCodeCoverage]
 public class PageConfigurationTests
 {
+    private static readonly PageConfiguration _ignoreParseExceptionConfiguration = new() { IgnoreParseExceptions = true };
+
     private static readonly PageTestcase<TestModel<string>>[] _invalidPageNumber =
     [
-        PageTestcase<TestModel<string>>.Create(null!, "1"),
-        PageTestcase<TestModel<string>>.Create("", "1"),
-        PageTestcase<TestModel<string>>.Create("-1", "1"),
-        PageTestcase<TestModel<string>>.Create("0", "1"),
-        PageTestcase<TestModel<string>>.Create("a", "1"),
+        PageTestcase<TestModel<string>>.Create(null!, "1", _ignoreParseExceptionConfiguration),
+        PageTestcase<TestModel<string>>.Create("", "1", _ignoreParseExceptionConfiguration),
+        PageTestcase<TestModel<string>>.Create("-1", "1", _ignoreParseExceptionConfiguration),
+        PageTestcase<TestModel<string>>.Create("0", "1", _ignoreParseExceptionConfiguration),
+        PageTestcase<TestModel<string>>.Create("a", "1", _ignoreParseExceptionConfiguration),
     ];
 
     [DataTestMethod]
@@ -30,8 +32,7 @@ public class PageConfigurationTests
 
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };
 
-        var configuration = new PageConfiguration { IgnoreParseExceptions = true };
-        var pagedItems = pageFunc(testItems, (EntityPage<TestModel<string>>)testCase.Page, configuration);
+        var pagedItems = pageFunc(testItems, (EntityPage<TestModel<string>>)testCase.Page);
 
         var expectedItems = testItems
             .Take(testCase.Page.PageSize.Value);
@@ -41,11 +42,11 @@ public class PageConfigurationTests
 
     private static readonly PageTestcase<TestModel<string>>[] _invalidPageSize =
     [
-        PageTestcase<TestModel<string>>.Create("1", null!),
-        PageTestcase<TestModel<string>>.Create("1", ""),
-        PageTestcase<TestModel<string>>.Create("1", "-1"),
-        PageTestcase<TestModel<string>>.Create("1", "0"),
-        PageTestcase<TestModel<string>>.Create("1", "a"),
+        PageTestcase<TestModel<string>>.Create("1", null!, _ignoreParseExceptionConfiguration),
+        PageTestcase<TestModel<string>>.Create("1", "", _ignoreParseExceptionConfiguration),
+        PageTestcase<TestModel<string>>.Create("1", "-1", _ignoreParseExceptionConfiguration),
+        PageTestcase<TestModel<string>>.Create("1", "0", _ignoreParseExceptionConfiguration),
+        PageTestcase<TestModel<string>>.Create("1", "a", _ignoreParseExceptionConfiguration),
     ];
 
     [DataTestMethod]
@@ -54,28 +55,10 @@ public class PageConfigurationTests
     {
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };
 
-        var configuration = new PageConfiguration { IgnoreParseExceptions = true };
-        var pagedItems = pageFunc(testItems, (EntityPage<TestModel<string>>)testCase.Page, configuration);
-
-        var expectedItems = testItems;
-
-        pagedItems.Should().Equal(expectedItems);
-    }
-
-    [DataTestMethod]
-    [PageTestCaseDataSource(nameof(_invalidPageSize))]
-    public void WhenParseExceptionsAreIgnoredByDefaultConfiguration_AllItemsReturned(PageTestcase<TestModel<string>> testCase, EntityPageFunction<TestModel<string>> pageFunc)
-    {
-        var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };
-
-        Page.EntityPage.DefaultConfiguration = new PageConfiguration { IgnoreParseExceptions = true };
         var pagedItems = pageFunc(testItems, (EntityPage<TestModel<string>>)testCase.Page);
 
         var expectedItems = testItems;
 
         pagedItems.Should().Equal(expectedItems);
-
-        // Cleanup
-        Page.EntityPage.DefaultConfiguration = new PageConfiguration();
     }
 }

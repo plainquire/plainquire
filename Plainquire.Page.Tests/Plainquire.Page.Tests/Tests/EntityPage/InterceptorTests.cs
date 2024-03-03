@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Page.Abstractions;
 using Plainquire.Page.Tests.Models;
 using Plainquire.Page.Tests.Services;
 using System.Diagnostics.CodeAnalysis;
@@ -21,7 +20,7 @@ public class InterceptorTests
 
         var interceptor = new FixedPageSizeInterceptor();
 
-        var pagedItems = pageFunc(testItems, entityPage, null, interceptor);
+        var pagedItems = pageFunc(testItems, entityPage, interceptor);
         pagedItems.Should().Equal(testItems[0], testItems[1]);
     }
 
@@ -43,7 +42,7 @@ public class InterceptorTests
 
     private class FixedPageSizeInterceptor : IPageInterceptor
     {
-        public IQueryable<TEntity> Page<TEntity>(IQueryable<TEntity> source, Page.EntityPage page, PageConfiguration configuration)
+        public IQueryable<TEntity> Page<TEntity>(IQueryable<TEntity> source, Page.EntityPage page)
         {
             var fixedPageSizePage = new Page.EntityPage
             {
@@ -51,7 +50,7 @@ public class InterceptorTests
                 PageSize = 2
             };
 
-            var (skip, take) = fixedPageSizePage.GetSkipAndTake(configuration);
+            var (skip, take) = fixedPageSizePage.GetSkipAndTake();
 
             if (skip is > 0)
                 source = source.Skip(skip.Value);

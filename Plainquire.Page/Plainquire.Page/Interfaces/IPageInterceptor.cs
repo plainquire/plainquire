@@ -1,5 +1,4 @@
-﻿using Plainquire.Page.Abstractions;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Plainquire.Page;
 
@@ -14,6 +13,5 @@ public interface IPageInterceptor
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="source">The elements to page.</param>
     /// <param name="page">The <see cref="EntityPage"/> used to page the elements.</param>
-    /// <param name="configuration">Page configuration.</param>
-    IQueryable<TEntity> Page<TEntity>(IQueryable<TEntity> source, EntityPage page, PageConfiguration configuration);
+    IQueryable<TEntity> Page<TEntity>(IQueryable<TEntity> source, EntityPage page);
 }

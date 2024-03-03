@@ -9,15 +9,13 @@ namespace Plainquire.Page;
 public static class EntityPageExtensions
 {
     /// <summary>
-    /// Get the skip and take values for the given <paramref name="page"/> and <paramref name="configuration"/>.
+    /// Get the skip and take values for the given <paramref name="page"/>.
     /// </summary>
     /// <param name="page"></param>
-    /// <param name="configuration"></param>
-    /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static (int? Skip, int? Take) GetSkipAndTake(this EntityPage page, PageConfiguration? configuration)
+    public static (int? Skip, int? Take) GetSkipAndTake(this EntityPage page)
     {
-        configuration ??= EntityPage.DefaultConfiguration;
+        var configuration = page.Configuration ?? new PageConfiguration();
 
         var pageNumber = ParsePageNumber(page, configuration);
         var pageSize = ParsePageSize(page, configuration);

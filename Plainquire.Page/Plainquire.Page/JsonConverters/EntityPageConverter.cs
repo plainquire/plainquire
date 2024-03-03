@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Plainquire.Page.Abstractions;
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -64,19 +65,27 @@ public class EntityPageConverter : JsonConverter<EntityPage>
         {
             PageNumberValue = entityPageData.PageNumber ?? string.Empty,
             PageSizeValue = entityPageData.PageSize ?? string.Empty,
+            Configuration = entityPageData.Configuration
         };
     }
 
     internal static void Write<TEntityPage>(Utf8JsonWriter writer, TEntityPage value, JsonSerializerOptions options)
         where TEntityPage : EntityPage
     {
-        var entityPageData = new EntityPageData { PageNumber = value.PageNumberValue, PageSize = value.PageSizeValue };
+        var entityPageData = new EntityPageData
+        {
+            PageNumber = value.PageNumberValue,
+            PageSize = value.PageSizeValue,
+            Configuration = value.Configuration
+        };
+
         JsonSerializer.Serialize(writer, entityPageData, options);
     }
+}
 
-    private class EntityPageData
-    {
-        public string? PageNumber { get; set; } = string.Empty;
-        public string? PageSize { get; set; } = string.Empty;
-    }
+internal class EntityPageData
+{
+    public string? PageNumber { get; set; } = string.Empty;
+    public string? PageSize { get; set; } = string.Empty;
+    public PageConfiguration? Configuration { get; set; }
 }

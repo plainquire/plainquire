@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Plainquire.Page.JsonConverters;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -22,7 +23,13 @@ public class EntityPageConverter : JsonConverter
             throw new ArgumentNullException(nameof(value));
 
         var entityPage = (EntityPage)value;
-        var entityPageData = new EntityPageData { PageNumber = entityPage.PageNumberValue, PageSize = entityPage.PageSizeValue };
+        var entityPageData = new EntityPageData
+        {
+            PageNumber = entityPage.PageNumberValue,
+            PageSize = entityPage.PageSizeValue,
+            Configuration = entityPage.Configuration
+        };
+
         serializer.Serialize(writer, entityPageData);
     }
 
@@ -33,12 +40,7 @@ public class EntityPageConverter : JsonConverter
         var entityPageData = serializer.Deserialize<EntityPageData>(reader) ?? new EntityPageData();
         entityPage.PageNumberValue = entityPageData.PageNumber ?? string.Empty;
         entityPage.PageSizeValue = entityPageData.PageSize ?? string.Empty;
+        entityPage.Configuration = entityPageData.Configuration;
         return entityPage;
-    }
-
-    private class EntityPageData
-    {
-        public string? PageNumber { get; set; } = string.Empty;
-        public string? PageSize { get; set; } = string.Empty;
     }
 }
