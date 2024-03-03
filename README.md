@@ -8,11 +8,12 @@ Dynamically creates required expressions to filter, sort and page enumerable and
 
 * Filtering, sorting and pagination for ASP.NET Core
 * HTTP query parameter binding
+* Customizable syntax via configuration
 * Swagger / OpenAPI supported via [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
-* Entity Framework and other ORM mapper supported via `IQueryable<T>`
+* ORM mapper (e.g. Entity Framework and other) supported via `IQueryable<T>`
 * In-memory lists and arrays supported via `IEnumerable<T>`
-* Filters, sorts and pages are serializable, e.g. to persist user preferences
-* Generated expressions can be customized via interceptors
+* Filters, sorts and pages are serializable, e.g. to persist user defined filters
+* Interceptors allow expressions to be customized
 
 ## Demo
 
@@ -27,7 +28,7 @@ BASE_URL=https://plainquire.com/api/Freelancer
 curl -O "$BASE_URL/GetFreelancers?firstName=Joe&orderBy=lastName&page=3&pageSize=5"
 ```
 
-**To MVC action**
+**MVC action**
 
 ```csharp
 [HttpGet]
@@ -1086,7 +1087,10 @@ CLI : dotnet add package Plainquire.Page
  ```csharp
 using Plainquire.Page;
 
-// Create page
+// Direct pageing is the preferred way
+var pagedOrders = orders.Page(pageNumber: 2, pageSize: 3).ToList();
+
+// Alternative, create a EntityPage object
  var page = new EntityPage(pageNumber: 2, pageSize: 3);
 
 // Use page with LINQ
@@ -1094,8 +1098,6 @@ var pagedOrders = orders.Page(page).ToList();
 // Or queryables (e.g. Entity Framework)
 var pagedOrders = dbContext.Orders.Page(page).ToList();
 
-// Direct pageing is supported too
-var pagedOrders = orders.Page(pageNumber: 2, pageSize: 3).ToList();
  ```
 
 ## REST / MVC
