@@ -24,22 +24,6 @@ public class InterceptorTests
         pagedItems.Should().Equal(testItems[0], testItems[1]);
     }
 
-    [DataTestMethod]
-    [PageFuncDataSource<TestModel<string>>]
-    public void WhenPagedUsingDefaultInterceptor_InterceptorIsCalledToCreatePage(EntityPageFunction<TestModel<string>> pageFunc)
-    {
-        var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };
-
-        var entityPage = new EntityPage<TestModel<string>>(1, 3);
-
-        Page.EntityPage.DefaultInterceptor = new FixedPageSizeInterceptor();
-        var pagedItems = pageFunc(testItems, entityPage);
-        pagedItems.Should().Equal(testItems[0], testItems[1]);
-
-        // Cleanup
-        Page.EntityPage.DefaultInterceptor = null;
-    }
-
     private class FixedPageSizeInterceptor : IPageInterceptor
     {
         public IQueryable<TEntity> Page<TEntity>(IQueryable<TEntity> source, Page.EntityPage page)

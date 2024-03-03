@@ -53,29 +53,6 @@ public class InterceptorTests
         sortedItems.Should().ContainInOrder(testItems[1], testItems[3], testItems[0], testItems[2]);
     }
 
-    [DataTestMethod]
-    [SortFuncDataSource<TestModel<string>>]
-    public void WhenInterceptorIsSetViaStaticDefault_ConfigurationIsUsed(EntitySortFunction<TestModel<string>> sortFunc)
-    {
-        TestModel<string>[] testItems =
-        [
-            new() { Value = "odd", NestedObject = new() { Value = "222" } },
-            new() { Value = "even", NestedObject = new() { Value = "1111" } },
-            new() { Value = "odd", NestedObject = new() { Value = "4" } },
-            new() { Value = "even", NestedObject = new() { Value = "33" } }
-        ];
-
-        var entitySort = new EntitySort<TestModel<string>>()
-            .Add(x => x.NestedObject, SortDirection.Ascending);
-
-        Sort.EntitySort.DefaultInterceptor = new NestedModelByValueInterceptor();
-        var sortedItems = sortFunc(testItems, entitySort);
-        sortedItems.Should().ContainInOrder(testItems[1], testItems[0], testItems[3], testItems[2]);
-
-        // Cleanup
-        Sort.EntitySort.DefaultInterceptor = null;
-    }
-
     private class NestedModelByValueInterceptor : ISortInterceptor
     {
         public IOrderedQueryable<TEntity>? OrderBy<TEntity>(IQueryable<TEntity> source, Sort.PropertySort sort)

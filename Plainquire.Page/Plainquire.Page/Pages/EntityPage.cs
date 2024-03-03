@@ -42,11 +42,6 @@ public class EntityPage : ICloneable
     internal string PageSizeValue = string.Empty;
 
     /// <summary>
-    /// Gets or sets the default interceptor. Can be used to set a system-wide interceptor.
-    /// </summary>
-    public static IPageInterceptor? DefaultInterceptor { get; set; }
-
-    /// <summary>
     /// Gets or sets the default configuration. Can be used to set a system-wide configuration.
     /// </summary>
     public PageConfiguration? Configuration { get; internal set; }

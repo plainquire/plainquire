@@ -144,11 +144,6 @@ public class EntitySort
     internal List<PropertySort> PropertySorts;
 
     /// <summary>
-    /// Gets or sets the default interceptor. Can be used to set a system-wide interceptor.
-    /// </summary>
-    public static ISortInterceptor? DefaultInterceptor { get; set; }
-
-    /// <summary>
     /// Gets or sets the default configuration. Can be used to set a system-wide configuration.
     /// </summary>
     public SortConfiguration? Configuration { get; internal set; }

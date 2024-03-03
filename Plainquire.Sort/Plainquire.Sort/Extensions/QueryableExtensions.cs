@@ -32,7 +32,6 @@ public static class QueryableExtensions
             return (IOrderedQueryable<TEntity>)source.Provider.CreateQuery<TEntity>(source.Expression);
 
         var configuration = sort.Configuration ?? new SortConfiguration();
-        interceptor ??= EntitySort.DefaultInterceptor;
 
         var first = propertySorts.First();
         var result = interceptor?.OrderBy(source, first);

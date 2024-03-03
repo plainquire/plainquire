@@ -39,33 +39,6 @@ public class InterceptorTests
         filteredEntities.Should().BeEquivalentTo(new[] { testItems[1], testItems[2] });
     }
 
-    [DataTestMethod, DoNotParallelize]
-    [FilterFuncDataSource<TestModel<string>>]
-    public void WhenDefaultFilterInterceptorIsUsed_ValuesAreFilteredAsExpected(EntityFilterFunc<TestModel<string>> filterFunc)
-    {
-        var filter = new EntityFilter<TestModel<string>>()
-            .Replace(x => x.ValueA, FilterOperator.EqualCaseSensitive, "TestA")
-            .Replace(x => x.ValueB, FilterOperator.Contains, "TestB");
-
-        var testItems = new List<TestModel<string>>
-        {
-            new() { ValueA = "TestA", ValueB = "TestA" },
-            new() { ValueA = "TestA", ValueB = "TestB" },
-            // ReSharper disable once StringLiteralTypo
-            new() { ValueA = "TESTA", ValueB = "TestB" },
-            new() { ValueA = "TestB", ValueB = "TestB" }
-        };
-
-        var interceptor = new FilterStringsCaseInsensitiveInterceptor();
-        Filter.EntityFilter.DefaultInterceptor = interceptor;
-        var filteredEntities = filterFunc(testItems, filter);
-
-        filteredEntities.Should().BeEquivalentTo(new[] { testItems[1], testItems[2] });
-
-        // Cleanup
-        Filter.EntityFilter.DefaultInterceptor = null;
-    }
-
     private class FilterStringsCaseInsensitiveInterceptor : IFilterInterceptor
     {
         Func<DateTimeOffset> IFilterInterceptor.Now => throw new NotImplementedException();

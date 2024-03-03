@@ -249,11 +249,6 @@ public class EntityFilter : ICloneable
     internal List<NestedFilter> NestedFilters;
 
     /// <summary>
-    /// Gets or sets the default interceptor. Can be used to set a system-wide interceptor.
-    /// </summary>
-    public static IFilterInterceptor? DefaultInterceptor { get; set; }
-
-    /// <summary>
     /// Gets or sets the default configuration. Can be used to set a system-wide configuration.
     /// </summary>
     public FilterConfiguration? Configuration { get; internal set; }
@@ -406,7 +401,6 @@ public class EntityFilter : ICloneable
     protected internal Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(IFilterInterceptor? interceptor = null)
     {
         var configuration = Configuration ?? new FilterConfiguration();
-        interceptor ??= DefaultInterceptor;
 
         var properties = typeof(TEntity)
             .GetProperties();
