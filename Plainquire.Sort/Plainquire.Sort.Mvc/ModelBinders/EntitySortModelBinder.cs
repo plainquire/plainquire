@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Plainquire.Filter.Abstractions;
+using Plainquire.Sort.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -23,7 +26,15 @@ public class EntitySortModelBinder : IModelBinder
         if (bindingContext == null)
             throw new ArgumentNullException(nameof(bindingContext));
 
+        var serviceProvider = bindingContext.ActionContext.HttpContext.RequestServices;
+
         var sortedType = bindingContext.ModelType.GetGenericArguments()[0];
+        var entitySort = ResolveEntitySort(serviceProvider, sortedType);
+
+        var entitySortConfiguration = entitySort.Configuration;
+        var defaultConfiguration = serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value;
+        var configuration = entitySortConfiguration ?? defaultConfiguration ?? new SortConfiguration();
+
         var entityFilterAttribute = sortedType.GetCustomAttribute<FilterEntityAttribute>();
         var sortByParameterName = entityFilterAttribute?.SortByParameter ?? FilterEntityAttribute.DEFAULT_SORT_BY_PARAMETER_NAME;
 
@@ -33,7 +44,7 @@ public class EntitySortModelBinder : IModelBinder
             .SelectMany(value => value.SplitCommaSeparatedValues())
             .ToList();
 
-        var entityEntitySort = CreateEntitySort(sortedType, sortByParameterValues);
+        var entityEntitySort = entitySort.Apply(sortByParameterValues, configuration);
         bindingContext.Result = ModelBindingResult.Success(entityEntitySort);
         return Task.CompletedTask;
     }
@@ -44,8 +55,21 @@ public class EntitySortModelBinder : IModelBinder
     private static ValueProviderResult GetParameterValues(string queryParameter, ModelBindingContext bindingContext)
         => bindingContext.ValueProvider.GetValue(queryParameter);
 
-    private static EntitySort CreateEntitySort(Type sortedType, IEnumerable<string> sortParameters)
+    private static EntitySort ResolveEntitySort(IServiceProvider serviceProvider, Type sortedType)
     {
+        var entitySortType = typeof(EntitySort<>).MakeGenericType(sortedType);
+        var entitySort = (EntitySort)Activator.CreateInstance(entitySortType)!;
+        var prototype = (EntitySort?)serviceProvider.GetService(entitySortType);
+        entitySort.Configuration = prototype?.Configuration;
+        return entitySort;
+    }
+}
+
+file static class Extensions
+{
+    public static EntitySort Apply(this EntitySort entitySort, IEnumerable<string> sortParameters, SortConfiguration configuration)
+    {
+        var sortedType = entitySort.GetType().GenericTypeArguments[0];
         var entityFilterAttribute = sortedType.GetCustomAttribute<FilterEntityAttribute>();
 
         var sortablePropertyNameToParameterMap = sortedType
@@ -57,22 +81,20 @@ public class EntitySortModelBinder : IModelBinder
             .ToList();
 
         var propertySorts = sortParameters
-            .Select(parameter => MapToPropertyPath(parameter, sortablePropertyNameToParameterMap))
+            .Select(parameter => MapToPropertyPath(parameter, sortablePropertyNameToParameterMap, configuration))
             .Select((propertyPath, index) => propertyPath != null ? PropertySort.Create(propertyPath, index) : null)
             .WhereNotNull()
             .ToList();
 
-        var entitySortType = typeof(EntitySort<>).MakeGenericType(sortedType);
-        var entitySort = (EntitySort)Activator.CreateInstance(entitySortType)!;
         foreach (var propertySort in propertySorts)
             entitySort.PropertySorts.Add(propertySort);
 
         return entitySort;
     }
 
-    private static string? MapToPropertyPath(string parameter, IReadOnlyCollection<PropertyNameToParameterMap> sortableProperties)
+    private static string? MapToPropertyPath(string parameter, IReadOnlyCollection<PropertyNameToParameterMap> sortableProperties, SortConfiguration configuration)
     {
-        var sortSyntaxMatch = Regex.Match(parameter, PropertySort._sortSyntaxPattern, RegexOptions.IgnoreCase);
+        var sortSyntaxMatch = Regex.Match(parameter, configuration.SortDirectionPattern, RegexOptions.IgnoreCase);
         if (!sortSyntaxMatch.Success)
             return null;
 

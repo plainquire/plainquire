@@ -19,6 +19,18 @@ namespace Plainquire.Sort;
 public class EntitySort<TEntity> : EntitySort
 {
     /// <summary>
+    /// Initializes a new instance of the <see cref="EntitySort"/> class.
+    /// </summary>
+    public EntitySort() { }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EntitySort"/> class.
+    /// </summary>
+    /// <param name="configuration">The configuration to use.</param>
+    public EntitySort(SortConfiguration configuration)
+        : base(configuration) { }
+
+    /// <summary>
     /// Gets the sort order syntax for the given <paramref name="property"/>.
     /// </summary>
     /// <typeparam name="TProperty">The type of the property sorted by.</typeparam>
@@ -132,20 +144,28 @@ public class EntitySort
     internal List<PropertySort> PropertySorts;
 
     /// <summary>
-    /// Gets or sets the default configuration. Can be used to set a system-wide configuration.
-    /// </summary>
-    public static SortConfiguration DefaultConfiguration { get; set; } = new();
-
-    /// <summary>
     /// Gets or sets the default interceptor. Can be used to set a system-wide interceptor.
     /// </summary>
     public static ISortInterceptor? DefaultInterceptor { get; set; }
+
+    /// <summary>
+    /// Gets or sets the default configuration. Can be used to set a system-wide configuration.
+    /// </summary>
+    public SortConfiguration? Configuration { get; internal set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EntitySort"/> class.
     /// </summary>
     public EntitySort()
         => PropertySorts = [];
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EntitySort"/> class.
+    /// </summary>
+    /// <param name="configuration">The configuration to use.</param>
+    public EntitySort(SortConfiguration configuration)
+        : this()
+        => Configuration = configuration;
 
     /// <summary>
     /// Indicates whether this entity sort is empty.

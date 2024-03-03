@@ -13,6 +13,8 @@ namespace Plainquire.Sort.Tests.Tests.EntitySort;
 [TestClass, ExcludeFromCodeCoverage]
 public class EntitySortTests
 {
+    private static readonly SortConfiguration _defaultConfiguration = new();
+
     [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenObjectIsNull_ThenValidQueryableIsCreated(EntitySortFunction<TestModel<string>> sortFunc)
@@ -82,7 +84,7 @@ public class EntitySortTests
     [TestMethod]
     public void WhenPropertySortStringForSingleValueIsRetrieved_ThenSortSyntaxIsSameAsGiven()
     {
-        var syntax = $"NestedObject.Id{SortDirectionModifiers.DefaultDescendingPostfix}";
+        var syntax = $"NestedObject.Id{_defaultConfiguration.PrimaryDescendingPostfix}";
         var sort = new EntitySort<TestModel<string>>()
             .Add(syntax);
 
@@ -96,7 +98,7 @@ public class EntitySortTests
             .Add(x => x.Value2, SortDirection.Descending, 20)
             .Add(x => x.NestedObject!.Id, default, 10);
 
-        sort.ToString().Should().Be($"NestedObject.Id{SortDirectionModifiers.DefaultAscendingPostfix}, Value2{SortDirectionModifiers.DefaultDescendingPostfix}");
+        sort.ToString().Should().Be($"NestedObject.Id{_defaultConfiguration.PrimaryAscendingPostfix}, Value2{_defaultConfiguration.PrimaryDescendingPostfix}");
     }
 
     [DataTestMethod]
@@ -187,7 +189,7 @@ public class EntitySortTests
             .Add(x => x.Value);
 
         var valueASyntax = sort.GetPropertySortSyntax(x => x.Value);
-        valueASyntax.Should().Be($"Value{SortDirectionModifiers.DefaultAscendingPostfix}");
+        valueASyntax.Should().Be($"Value{_defaultConfiguration.PrimaryAscendingPostfix}");
     }
 
     [TestMethod]
@@ -224,12 +226,12 @@ public class EntitySortTests
     {
         TestModel<string>[] testItems = [];
 
-        var entitySort = new EntitySort<TestModel<string>>()
-            .Add("NestedObject.Value.length-desc");
-
         var configuration = new SortConfiguration { CaseInsensitivePropertyMatching = false };
 
-        var sortItems = () => sortFunc(testItems, entitySort, configuration);
+        var entitySort = new EntitySort<TestModel<string>>(configuration)
+            .Add("NestedObject.Value.length-desc");
+
+        var sortItems = () => sortFunc(testItems, entitySort);
         sortItems.Should()
             .Throw<ArgumentException>()
             .WithMessage("Property 'length' not found on type 'String'.");
@@ -246,12 +248,13 @@ public class EntitySortTests
             new() { Value = "odd", NestedObject = new() { Value = "1" } },
         ];
 
-        var entitySort = new EntitySort<TestModel<string>>()
+        var configuration = new SortConfiguration { IgnoreParseExceptions = true };
+
+        var entitySort = new EntitySort<TestModel<string>>(configuration)
             .Add("notExists")
             .Add("NestedObject.Value");
 
-        var configuration = new SortConfiguration { IgnoreParseExceptions = true };
-        var sortedItems = sortFunc(testItems, entitySort, configuration);
+        var sortedItems = sortFunc(testItems, entitySort);
         sortedItems.Should().ContainInOrder(testItems[2], testItems[1], testItems[0]);
     }
 

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Plainquire.Sort.JsonConverters;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Sort.Newtonsoft.JsonConverters;
@@ -17,27 +17,32 @@ public class EntitySortConverter : JsonConverter
         => objectType.IsGenericEntitySort() || objectType == typeof(EntitySort);
 
     /// <inheritdoc />
+    public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+    {
+        var entitySort = (EntitySort)Activator.CreateInstance(objectType);
+        var entitySortData = serializer.Deserialize<EntitySortConverterData>(reader) ?? new EntitySortConverterData();
+        var propertySorts = Sort.JsonConverters.EntitySortConverter.GetPropertySorts(entitySortData);
+
+        entitySort.PropertySorts = propertySorts ?? [];
+        entitySort.Configuration = entitySortData.Configuration;
+        return entitySort;
+    }
+
+    /// <inheritdoc />
     public override void WriteJson(JsonWriter writer, [NotNull] object? value, JsonSerializer serializer)
     {
         if (value == null)
             throw new ArgumentNullException(nameof(value));
 
         var entitySort = (EntitySort)value;
-        var entitySortData = new EntitySortData { PropertySorts = entitySort.PropertySorts };
+        var propertySortsData = Sort.JsonConverters.EntitySortConverter.GetPropertySortData(entitySort);
+
+        var entitySortData = new EntitySortConverterData
+        {
+            PropertySorts = propertySortsData,
+            Configuration = entitySort.Configuration
+        };
+
         serializer.Serialize(writer, entitySortData);
-    }
-
-    /// <inheritdoc />
-    public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
-    {
-        var entitySort = (EntitySort)Activator.CreateInstance(objectType);
-        var entitySortData = serializer.Deserialize<EntitySortData>(reader) ?? new EntitySortData();
-        entitySort.PropertySorts = entitySortData.PropertySorts ?? [];
-        return entitySort;
-    }
-
-    private class EntitySortData
-    {
-        public List<PropertySort>? PropertySorts { get; set; } = [];
     }
 }

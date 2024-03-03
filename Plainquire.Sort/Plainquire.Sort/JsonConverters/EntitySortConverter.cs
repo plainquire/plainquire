@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Plainquire.Sort.Abstractions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -60,22 +62,68 @@ public class EntitySortConverter : JsonConverter<EntitySort>
     internal static TEntitySort Read<TEntitySort>(ref Utf8JsonReader reader, JsonSerializerOptions options)
         where TEntitySort : EntitySort, new()
     {
-        var entitySortData = JsonSerializer.Deserialize<EntitySortData>(ref reader, options) ?? new EntitySortData();
+        var entitySortData = JsonSerializer.Deserialize<EntitySortConverterData>(ref reader, options) ?? new EntitySortConverterData();
+        var propertySorts = GetPropertySorts(entitySortData);
+
         return new TEntitySort
         {
-            PropertySorts = entitySortData.PropertySorts ?? []
+            PropertySorts = propertySorts ?? [],
+            Configuration = entitySortData.Configuration
         };
     }
 
     internal static void Write<TEntitySort>(Utf8JsonWriter writer, TEntitySort value, JsonSerializerOptions options)
         where TEntitySort : EntitySort
     {
-        var entitySortData = new EntitySortData { PropertySorts = value.PropertySorts };
+        var propertySortData = GetPropertySortData(value);
+
+        var entitySortData = new EntitySortConverterData
+        {
+            PropertySorts = propertySortData,
+            Configuration = value.Configuration
+        };
+
         JsonSerializer.Serialize(writer, entitySortData, options);
     }
 
-    private class EntitySortData
+    internal static List<PropertySort>? GetPropertySorts(EntitySortConverterData entitySortData)
+        => entitySortData
+            .PropertySorts?
+            .Select(filter => new PropertySort(
+                propertyPath: filter.PropertyPath,
+                direction: filter.Direction,
+                position: filter.Position,
+                configuration: entitySortData.Configuration
+            ))
+            .ToList();
+
+    internal static List<PropertySortConverterData> GetPropertySortData<TEntitySort>(TEntitySort entitySort) where TEntitySort : EntitySort
+        => entitySort.PropertySorts
+            .Select(filter => new PropertySortConverterData
+            (
+                propertyPath: filter.PropertyPath,
+                direction: filter.Direction,
+                position: filter.Position
+            ))
+            .ToList();
+}
+
+internal class EntitySortConverterData
+{
+    public List<PropertySortConverterData>? PropertySorts { get; set; } = [];
+    public SortConfiguration? Configuration { get; set; }
+}
+
+internal class PropertySortConverterData
+{
+    public string PropertyPath { get; set; }
+    public SortDirection Direction { get; set; }
+    public int Position { get; set; }
+
+    public PropertySortConverterData(string propertyPath, SortDirection direction, int position)
     {
-        public List<PropertySort>? PropertySorts { get; set; } = [];
+        PropertyPath = propertyPath;
+        Direction = direction;
+        Position = position;
     }
 }

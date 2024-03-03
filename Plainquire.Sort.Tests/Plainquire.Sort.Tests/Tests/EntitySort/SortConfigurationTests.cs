@@ -39,10 +39,10 @@ public class SortConfigurationTests
             UseConditionalAccess = ConditionalAccess.Never
         };
 
-        var sort = new EntitySort<TestModel<string>>()
+        var sort = new EntitySort<TestModel<string>>(configuration)
             .Add(x => x.NestedObject!.Value);
 
-        Action sortEnumerableWithNullValues = () => testItems.OrderBy(sort, configuration).ToList();
+        Action sortEnumerableWithNullValues = () => testItems.OrderBy(sort).ToList();
 
         sortEnumerableWithNullValues.Should().Throw<NullReferenceException>();
     }
@@ -55,14 +55,14 @@ public class SortConfigurationTests
             UseConditionalAccess = ConditionalAccess.Always
         };
 
-        var sort = new EntitySort<TestModel<string>>()
+        var sort = new EntitySort<TestModel<string>>(configuration)
             .Add(x => x.NestedObject!.Value);
 
         using var dbContext = new TestDbContext<TestModel<string>>(useSqlite: true);
 
         var queryable = dbContext
             .Set<TestModel<string>>()
-            .OrderBy(sort, configuration);
+            .OrderBy(sort);
 
         queryable.Expression.ToString()
             .Should()
@@ -84,28 +84,5 @@ public class SortConfigurationTests
         queryable.Expression.ToString()
             .Should()
             .Contain("OrderBy(x => x.NestedObject.Value)");
-    }
-
-    [TestMethod]
-    [SuppressMessage("Performance", "CA1806:Do not ignore method results", Justification = "Required to execute sorting")]
-    [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed", Justification = "Required to execute sorting")]
-    public void WhenConfigurationIsSetViaStaticDefault_ConfigurationIsUsed()
-    {
-        Sort.EntitySort.DefaultConfiguration = new SortConfiguration
-        {
-            UseConditionalAccess = ConditionalAccess.Always
-        };
-
-        var sort = new EntitySort<TestModel<string>>()
-            .Add(x => x.NestedObject!.Value);
-
-        using var dbContext = new TestDbContext<TestModel<string>>(useSqlite: true);
-        var queryable = dbContext
-            .Set<TestModel<string>>()
-            .OrderBy(sort);
-
-        queryable.Expression.ToString()
-            .Should()
-            .Contain(".OrderBy(x => IIF((IIF((x == null), null, x.NestedObject) == null), null, IIF((x == null), null, x.NestedObject).Value))");
     }
 }

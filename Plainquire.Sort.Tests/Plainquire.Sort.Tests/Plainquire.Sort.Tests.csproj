@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,6 +17,7 @@
     <ProjectReference Include="..\..\Plainquire.Sort\Plainquire.Sort.Mvc.Newtonsoft\Plainquire.Sort.Mvc.Newtonsoft.csproj" />
     <ProjectReference Include="..\..\Plainquire.Sort\Plainquire.Sort.Mvc\Plainquire.Sort.Mvc.csproj" />
     <ProjectReference Include="..\..\Plainquire.Sort\Plainquire.Sort.Newtonsoft\Plainquire.Sort.Newtonsoft.csproj" />
+    <ProjectReference Include="..\..\Plainquire.Sort\Plainquire.Sort.Swashbuckle\Plainquire.Sort.Swashbuckle.csproj" />
     <ProjectReference Include="..\..\Plainquire.Sort\Plainquire.Sort\Plainquire.Sort.csproj" />
   </ItemGroup>
 

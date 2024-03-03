@@ -14,9 +14,9 @@ namespace Plainquire.Sort;
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
 public static class QueryableExtensions
 {
-    /// <inheritdoc cref="OrderBy{TEntity}(IQueryable{TEntity}, EntitySort{TEntity}, SortConfiguration?, ISortInterceptor?)"/>
-    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IEnumerable<TEntity> source, EntitySort<TEntity> sort, SortConfiguration? configuration = null, ISortInterceptor? interceptor = null)
-        => source.AsQueryable().OrderBy(sort, configuration, interceptor);
+    /// <inheritdoc cref="OrderBy{TEntity}(IQueryable{TEntity}, EntitySort{TEntity}, ISortInterceptor?)"/>
+    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IEnumerable<TEntity> source, EntitySort<TEntity> sort, ISortInterceptor? interceptor = null)
+        => source.AsQueryable().OrderBy(sort, interceptor);
 
     /// <summary>
     /// Sorts the elements of a sequence according to the given <paramref name="sort"/>.
@@ -24,19 +24,18 @@ public static class QueryableExtensions
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="source">The elements to sort.</param>
     /// <param name="sort">The <see cref="EntitySort{TEntity}"/> used to sort the elements.</param>
-    /// <param name="configuration">Sort order configuration.</param>
     /// <param name="interceptor">An interceptor to manipulate the generated sort order.</param>
-    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, EntitySort<TEntity> sort, SortConfiguration? configuration = null, ISortInterceptor? interceptor = null)
+    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, EntitySort<TEntity> sort, ISortInterceptor? interceptor = null)
     {
         var propertySorts = sort.PropertySorts.OrderBy(x => x.Position).ToList();
         if (!propertySorts.Any())
             return (IOrderedQueryable<TEntity>)source.Provider.CreateQuery<TEntity>(source.Expression);
 
-        configuration ??= EntitySort.DefaultConfiguration;
+        var configuration = sort.Configuration ?? new SortConfiguration();
         interceptor ??= EntitySort.DefaultInterceptor;
 
         var first = propertySorts.First();
-        var result = interceptor?.OrderBy(source, first, configuration);
+        var result = interceptor?.OrderBy(source, first);
         if (result == null)
         {
             var ascending = first.Direction == SortDirection.Ascending;
@@ -47,7 +46,7 @@ public static class QueryableExtensions
 
         foreach (var sortedProperty in propertySorts.Skip(1))
         {
-            var interceptedResult = interceptor?.ThenBy(result, sortedProperty, configuration);
+            var interceptedResult = interceptor?.ThenBy(result, sortedProperty);
             if (interceptedResult != null)
             {
                 result = interceptedResult;
@@ -70,7 +69,7 @@ public static class QueryableExtensions
     /// <param name="source">A sequence of values to sort.</param>
     /// <param name="propertyPath">Path to the property to sort by.</param>
     /// <param name="configuration">Sort order configuration.</param>
-    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, string propertyPath, SortConfiguration? configuration = null)
+    public static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, string propertyPath, SortConfiguration configuration)
         => source.OrderBy(nameof(Queryable.OrderBy), propertyPath, configuration);
 
     /// <summary>
@@ -80,7 +79,7 @@ public static class QueryableExtensions
     /// <param name="source">A sequence of values to sort.</param>
     /// <param name="propertyPath">Path to the property to sort by.</param>
     /// <param name="configuration">Sort order configuration.</param>
-    public static IOrderedQueryable<TEntity> OrderByDescending<TEntity>(this IQueryable<TEntity> source, string propertyPath, SortConfiguration? configuration = null)
+    public static IOrderedQueryable<TEntity> OrderByDescending<TEntity>(this IQueryable<TEntity> source, string propertyPath, SortConfiguration configuration)
         => source.OrderBy(nameof(Queryable.OrderByDescending), propertyPath, configuration);
 
     /// <summary>
@@ -90,7 +89,7 @@ public static class QueryableExtensions
     /// <param name="source">A sequence of values to sort.</param>
     /// <param name="propertyPath">Path to the property to sort by.</param>
     /// <param name="configuration">Sort order configuration.</param>
-    public static IOrderedQueryable<TEntity> ThenBy<TEntity>(this IOrderedQueryable<TEntity> source, string propertyPath, SortConfiguration? configuration = null)
+    public static IOrderedQueryable<TEntity> ThenBy<TEntity>(this IOrderedQueryable<TEntity> source, string propertyPath, SortConfiguration configuration)
         => source.OrderBy(nameof(Queryable.ThenBy), propertyPath, configuration);
 
     /// <summary>
@@ -100,13 +99,11 @@ public static class QueryableExtensions
     /// <param name="source">A sequence of values to sort.</param>
     /// <param name="propertyPath">Path to the property to sort by.</param>
     /// <param name="configuration">Sort order configuration.</param>
-    public static IOrderedQueryable<TEntity> ThenByDescending<TEntity>(this IOrderedQueryable<TEntity> source, string propertyPath, SortConfiguration? configuration = null)
+    public static IOrderedQueryable<TEntity> ThenByDescending<TEntity>(this IOrderedQueryable<TEntity> source, string propertyPath, SortConfiguration configuration)
         => source.OrderBy(nameof(Queryable.ThenByDescending), propertyPath, configuration);
 
-    private static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, string methodName, string propertyPath, SortConfiguration? configuration)
+    private static IOrderedQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> source, string methodName, string propertyPath, SortConfiguration configuration)
     {
-        configuration ??= EntitySort.DefaultConfiguration;
-
         var propertyPathParts = propertyPath.Split('.');
         if (!propertyPathParts.Any())
             throw new ArgumentException("Property path must not be empty.", nameof(propertyPath));

@@ -9,11 +9,14 @@
 ### Common
 
 * Obsolete methods removed
-* `FilterConfiguration` moved to namespace `Schick.Plainquire.Filter.Abstractions`
 * `FilterOperator` moved to namespace `Schick.Plainquire.Filter.Abstractions`
+* `FilterConfiguration` moved to namespace `Schick.Plainquire.Filter.Abstractions`
 * `FilterConfiguration.Now` moved to `IFilterInterceptor.Now`
-* Configuration parameter removed from `EntityFilter.CreateFilter`. Use `EntityFilter.Configuration` instead
 * Static `EntityFilter.DefaultConfiguration` replaced by instance specific `EntityFilter.Configuration`
+* Static `EntitySort.DefaultConfiguration` replaced by instance specific `EntitySort.Configuration`
+* `FilterConfiguration` removed from `EntityFilter.CreateFilter`. Use `EntityFilter.Configuration` instead
+* `SortConfiguration` removed from `QueryableExtensions.OrderBy`. Use `EntitySort.Configuration` instead
+* Static `DefaultInterceptor` removed from `Entity(Filter|Sort|Page)`. Use DI / static variables from your application instead
 * Serialized filters are incompatible between 4.x and 5.x. If you have stored filters and need to convert it, open an issue
 
 ### Namespaces simplified

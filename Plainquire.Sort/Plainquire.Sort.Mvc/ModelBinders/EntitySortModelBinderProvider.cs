@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -18,7 +17,7 @@ public class EntitySortModelBinderProvider : IModelBinderProvider
             throw new ArgumentNullException(nameof(context));
 
         return context.Metadata.ModelType.IsGenericEntitySort()
-            ? new BinderTypeModelBinder(typeof(EntitySortModelBinder))
+            ? new EntitySortModelBinder()
             : null;
     }
 }

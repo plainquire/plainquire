@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Sort.Tests.Services;
 using System.Diagnostics.CodeAnalysis;
@@ -10,6 +11,8 @@ namespace Plainquire.Sort.Tests.Tests.PropertySort;
 [TestClass, ExcludeFromCodeCoverage]
 public class PropertySortSyntaxTests
 {
+    private static readonly SortConfiguration _defaultConfiguration = new();
+
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
     private readonly TestModel<string>[] _testItems =
     [
@@ -60,25 +63,25 @@ public class PropertySortSyntaxTests
 
     private static SortTestcase<TestModel<TValue>>[] CreateOwnPropertyTestcases<TValue>()
     {
-        var ascendingPrefixTestcases = SortDirectionModifiers.AscendingPrefixes
+        var ascendingPrefixTestcases = _defaultConfiguration.AscendingPrefixes
             .Select(selector: ascPrefix => SortTestcase<TestModel<TValue>>.Create(
                 syntax: $"{ascPrefix}Value",
                 expectedSortFunc: query => query.OrderBy(keySelector: model => model.Value)
             ));
 
-        var descendingPrefixTestcases = SortDirectionModifiers.DescendingPrefixes
+        var descendingPrefixTestcases = _defaultConfiguration.DescendingPrefixes
             .Select(selector: descPrefix => SortTestcase<TestModel<TValue>>.Create(
                 syntax: $"{descPrefix}Value",
                 expectedSortFunc: query => query.OrderByDescending(keySelector: model => model.Value)
             ));
 
-        var ascendingPostfixTestcases = SortDirectionModifiers.AscendingPostfixes
+        var ascendingPostfixTestcases = _defaultConfiguration.AscendingPostfixes
             .Select(selector: ascPostfix => SortTestcase<TestModel<TValue>>.Create(
                 syntax: $"Value{ascPostfix}",
                 expectedSortFunc: query => query.OrderBy(keySelector: model => model.Value)
             ));
 
-        var descendingPostfixTestcases = SortDirectionModifiers.DescendingPostfixes
+        var descendingPostfixTestcases = _defaultConfiguration.DescendingPostfixes
             .Select(selector: descPostfix => SortTestcase<TestModel<TValue>>.Create(
                 syntax: $"Value{descPostfix}",
                 expectedSortFunc: query => query.OrderByDescending(keySelector: model => model.Value)
@@ -93,25 +96,25 @@ public class PropertySortSyntaxTests
 
     private static SortTestcase<TestModel<TValue>>[] CreateNavigationPropertyTestcases<TValue>()
     {
-        var ascendingPrefixTestcases = SortDirectionModifiers.AscendingPrefixes
+        var ascendingPrefixTestcases = _defaultConfiguration.AscendingPrefixes
             .Select(selector: ascPrefix => SortTestcase<TestModel<TValue>>.Create(
                 syntax: $"{ascPrefix}NestedObject.Value",
                 expectedSortFunc: query => query.OrderBy(keySelector: model => model.NestedObject!.Value)
             ));
 
-        var descendingPrefixTestcases = SortDirectionModifiers.DescendingPrefixes
+        var descendingPrefixTestcases = _defaultConfiguration.DescendingPrefixes
             .Select(selector: descPrefix => SortTestcase<TestModel<TValue>>.Create(
                 syntax: $"{descPrefix}NestedObject.Value",
                 expectedSortFunc: query => query.OrderByDescending(keySelector: model => model.NestedObject!.Value)
             ));
 
-        var ascendingPostfixTestcases = SortDirectionModifiers.AscendingPostfixes
+        var ascendingPostfixTestcases = _defaultConfiguration.AscendingPostfixes
             .Select(selector: ascPostfix => SortTestcase<TestModel<TValue>>.Create(
                 syntax: $"NestedObject.Value{ascPostfix}",
                 expectedSortFunc: query => query.OrderBy(keySelector: model => model.NestedObject!.Value)
             ));
 
-        var descendingPostfixTestcases = SortDirectionModifiers.DescendingPostfixes
+        var descendingPostfixTestcases = _defaultConfiguration.DescendingPostfixes
             .Select(selector: descPostfix => SortTestcase<TestModel<TValue>>.Create(
                 syntax: $"NestedObject.Value{descPostfix}",
                 expectedSortFunc: query => query.OrderByDescending(keySelector: model => model.NestedObject!.Value)

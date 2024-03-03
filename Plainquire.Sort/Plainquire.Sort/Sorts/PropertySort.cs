@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Plainquire.Sort.Abstractions;
+using System;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -10,7 +11,7 @@ namespace Plainquire.Sort;
 /// </summary>
 public class PropertySort
 {
-    internal static readonly string _sortSyntaxPattern = $"^(?<prefix>{SortDirectionModifiers.PrefixPattern})(?<propertyPath>.*?)(?<postfix>{SortDirectionModifiers.PostfixPattern})$";
+    private readonly SortConfiguration? _configuration;
 
     /// <summary>
     /// Path used when no member is specified in a member access expression (<c>person => person</c> instead of <c>person => person.Name</c>).
@@ -38,13 +39,15 @@ public class PropertySort
     /// <param name="propertyPath">Path to the property to be sorted by.</param>
     /// <param name="direction">Sort direction to use.</param>
     /// <param name="position">Position in the final sorting sequence.</param>
+    /// <param name="configuration">The configuration to use.</param>
     /// <exception cref="ArgumentException"></exception>
     [JsonConstructor]
-    private PropertySort(string propertyPath, SortDirection direction, int position)
+    internal PropertySort(string propertyPath, SortDirection direction, int position, SortConfiguration? configuration)
     {
         PropertyPath = propertyPath ?? throw new ArgumentNullException(nameof(propertyPath));
         Direction = direction;
         Position = position;
+        _configuration = configuration;
     }
 
     /// <summary>
@@ -53,41 +56,48 @@ public class PropertySort
     /// <param name="propertyPath">Path to the property to be sorted by.</param>
     /// <param name="direction">Sort direction to use.</param>
     /// <param name="position">Position in the final sorting sequence.</param>
+    /// <param name="configuration">The configuration to use.</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public static PropertySort Create(string propertyPath, SortDirection direction, int? position = null)
-        => new(propertyPath, direction, position ?? 0);
+    public static PropertySort Create(string propertyPath, SortDirection direction, int? position = null, SortConfiguration? configuration = null)
+        => new(propertyPath, direction, position ?? 0, configuration);
 
     /// <summary>
     /// Creates a new instance of <see cref="PropertySort"/>.
     /// </summary>
     /// <param name="sortSyntax">The sort order syntax.</param>
     /// <param name="position">Position in the final sorting sequence.</param>
+    /// <param name="configuration">The configuration to use.</param>
     /// <returns></returns>
-    public static PropertySort Create(string sortSyntax, int? position = null)
+    public static PropertySort Create(string sortSyntax, int? position = null, SortConfiguration? configuration = null)
     {
         if (string.IsNullOrEmpty(sortSyntax))
             throw new ArgumentException("Value cannot be null or empty.", nameof(sortSyntax));
 
-        var (propertyPath, sortDirection) = ParseSortSyntax(sortSyntax);
-        return Create(propertyPath, sortDirection, position);
+        var (propertyPath, sortDirection) = ParseSortSyntax(sortSyntax, configuration);
+        return Create(propertyPath, sortDirection, position, configuration);
     }
 
     /// <inheritdoc />
     public override string ToString()
     {
+        var configuration = _configuration ?? new SortConfiguration();
+
         var directionPostfix = Direction == SortDirection.Ascending
-            ? SortDirectionModifiers.AscendingPostfixes[0]
-            : SortDirectionModifiers.DescendingPostfixes[0];
+            ? configuration.PrimaryAscendingPostfix
+            : configuration.PrimaryDescendingPostfix;
 
         return $"{PropertyPath}{directionPostfix}";
     }
 
-    private static (string PropertyPath, SortDirection Direction) ParseSortSyntax(string sortSyntax)
+    private static (string PropertyPath, SortDirection Direction) ParseSortSyntax(string sortSyntax, SortConfiguration? configuration)
     {
-        var match = Regex.Match(sortSyntax, _sortSyntaxPattern, RegexOptions.IgnoreCase);
+        configuration ??= new SortConfiguration();
 
-        var hasDescendingPrefix = SortDirectionModifiers.DescendingPrefixes.Contains(match.Groups["prefix"].Value);
-        var hasDescendingPostfix = SortDirectionModifiers.DescendingPostfixes.Contains(match.Groups["postfix"].Value);
+        var sortSyntaxPattern = $"^(?<prefix>{configuration.SortDirectionPrefixPattern})(?<propertyPath>.*?)(?<postfix>{configuration.SortDirectionPostfixPattern})$";
+        var match = Regex.Match(sortSyntax, sortSyntaxPattern, RegexOptions.IgnoreCase);
+
+        var hasDescendingPrefix = configuration.DescendingPrefixes.Contains(match.Groups["prefix"].Value);
+        var hasDescendingPostfix = configuration.DescendingPostfixes.Contains(match.Groups["postfix"].Value);
 
         var sortDirection = hasDescendingPrefix || hasDescendingPostfix
             ? SortDirection.Descending
