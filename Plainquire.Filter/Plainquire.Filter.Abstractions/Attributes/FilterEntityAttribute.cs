@@ -12,11 +12,6 @@ namespace Plainquire.Filter.Abstractions;
 public class FilterEntityAttribute : Attribute
 {
     /// <summary>
-    /// The default name for the query parameter used to sort entities.
-    /// </summary>
-    public const string DEFAULT_SORT_BY_PARAMETER_NAME = "orderBy";
-
-    /// <summary>
     /// The default name for the page selection parameter.
     /// </summary>
     public const string DEFAULT_PAGE_NUMBER_PARAMETER_NAME = "page";
@@ -36,11 +31,6 @@ public class FilterEntityAttribute : Attribute
     /// Page size taken when not overriden by HTTP query parameter.
     /// </summary>
     public int PageSize { get; set; }
-
-    /// <summary>
-    /// The name of the query parameter used to sort the entities.
-    /// </summary>
-    public string SortByParameter { get; set; } = DEFAULT_SORT_BY_PARAMETER_NAME;
 
     /// <summary>
     /// The name of the query parameter used to sort the entities.

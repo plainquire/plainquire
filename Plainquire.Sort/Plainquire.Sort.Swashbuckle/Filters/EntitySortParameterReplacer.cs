@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Plainquire.Filter.Abstractions;
+using Plainquire.Sort.Abstractions;
+using Plainquire.Sort.Swashbuckle.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -16,9 +19,21 @@ namespace Plainquire.Sort.Swashbuckle.Filters;
 /// Implements <see cref="IOperationFilter" />
 /// </summary>
 /// <seealso cref="IOperationFilter" />
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Instantiated via DI.")]
 public class EntitySortParameterReplacer : IOperationFilter
 {
-    private const string ENTITY_EXTENSION = "x-entity-sort-order";
+    private readonly IServiceProvider _serviceProvider;
+    private readonly SortConfiguration _defaultConfiguration;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EntitySortParameterReplacer"/> class.
+    /// </summary>
+    /// <param name="serviceProvider"></param>
+    public EntitySortParameterReplacer(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+        _defaultConfiguration = _serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value ?? new SortConfiguration();
+    }
 
     /// <summary>
     /// Replaces all parameters of type <see cref="EntitySort{TEntity}"/> with their applicable sort order properties.
@@ -27,95 +42,48 @@ public class EntitySortParameterReplacer : IOperationFilter
     /// <param name="context">The context.</param>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        var entitySortParameters = GetEntitySortParameters(operation, context);
-
-        var sortParameters = entitySortParameters
-            .Select(sortParameter => new
+        var parametersToReplace = operation.Parameters
+            .Zip(
+                context.ApiDescription.ParameterDescriptions,
+                (parameter, description) => (Parameter: parameter, Description: description)
+            )
+            .Where(openApi => openApi.Description.IsEntitySortParameter())
+            .Select(openApi =>
             {
-                Parameter = ReplaceOpenApiParameter(operation, sortParameter),
-                PropertyNames = GetSortPropertyNames(sortParameter.SortedType)
-            })
-            .GroupBy(parameter => parameter.Parameter.Name)
-            .Select(parameter => new
-            {
-                OpneApi = parameter.First().Parameter,
-                PropertyNames = parameter.SelectMany(f => f.PropertyNames).ToList()
+                var entitySortType = openApi.Description.ParameterDescriptor.ParameterType;
+                var configuration = GetConfiguration(entitySortType);
+                return new SortParameterReplacement
+                {
+                    OpenApiParameter = openApi.Parameter,
+                    OpenApiDescription = openApi.Description,
+                    SortedType = entitySortType.GenericTypeArguments[0],
+                    Configuration = configuration
+                };
             })
             .ToList();
 
-        var prefixRegex = SortDirectionModifiers.PrefixPattern;
-        var postfixRegex = SortDirectionModifiers.PostfixPattern;
-
-        foreach (var parameter in sortParameters)
-        {
-            var allowedPropertyNamePattern = $"^{prefixRegex}({string.Join("|", parameter.PropertyNames)}){postfixRegex}$";
-            parameter.OpneApi.Schema.Items.Pattern = allowedPropertyNamePattern;
-        }
+        operation.ReplaceSortParameters(parametersToReplace);
     }
 
-    /// <summary>
-    /// Return all parameters of type <see cref="EntitySort{TEntity}"/> from the given context.
-    /// </summary>
-    /// <param name="operation">The API operation.</param>
-    /// <param name="context">The operation filter context.</param>
-    protected virtual List<EntitySortParameter> GetEntitySortParameters(OpenApiOperation operation, OperationFilterContext context)
-        => context
-            .ApiDescription
-            .ParameterDescriptions
-            .Where(IsEntitySortParameter)
-            .Join(
-                operation.Parameters,
-                parameterDescription => parameterDescription.Name,
-                parameter => parameter.Name,
-                (description, parameter) => new { Parameter = parameter, description.ParameterDescriptor.ParameterType }
-            )
-            .Select(x =>
-            {
-                var sortedType = x.ParameterType.GetGenericArguments().First();
-                return new EntitySortParameter(Parameter: x.Parameter, SortedType: sortedType);
-            })
-            .ToList();
+    private SortConfiguration GetConfiguration(Type entitySortType)
+    {
+        if (!entitySortType.IsGenericEntitySort())
+            throw new ArgumentException("Type is not an EntitySort<>", nameof(entitySortType));
 
-    private static bool IsEntitySortParameter(ApiParameterDescription description)
+        var entityTypeConfiguration = ((EntitySort?)_serviceProvider.GetService(entitySortType))?.Configuration;
+        return entityTypeConfiguration ?? _defaultConfiguration;
+    }
+}
+
+internal static class Ext
+{
+    public static bool IsEntitySortParameter(this ApiParameterDescription description)
         => description.ParameterDescriptor.ParameterType.IsGenericEntitySort();
 
-    private static OpenApiParameter ReplaceOpenApiParameter(OpenApiOperation operation, EntitySortParameter sortParameter)
-    {
-        var parameterIndex = operation.Parameters.IndexOf(sortParameter.Parameter);
-        operation.Parameters.RemoveAt(parameterIndex);
+    public static bool IsEntitySortSetParameter(this ApiParameterDescription description)
+        => description.ParameterDescriptor.ParameterType.GetCustomAttribute<EntitySortSetAttribute>() != null;
 
-        var entityFilterAttribute = sortParameter.SortedType.GetCustomAttribute<FilterEntityAttribute>();
-        var sortByParameterName = entityFilterAttribute?.SortByParameter ?? FilterEntityAttribute.DEFAULT_SORT_BY_PARAMETER_NAME;
-        var openApiParameter = operation.Parameters.FirstOrDefault(x => x.Name == sortByParameterName);
-        if (openApiParameter != null)
-            return openApiParameter;
-
-        openApiParameter = new OpenApiParameter
-        {
-            Name = sortByParameterName,
-            Description = $"Sorts the result by the given property in ascending ({SortDirectionModifiers.DefaultAscendingPostfix}) or descending $({SortDirectionModifiers.DefaultDescendingPostfix}) order.",
-            Schema = new OpenApiSchema
-            {
-                Type = "array",
-                Items = new OpenApiSchema
-                {
-                    Type = "string",
-                    Example = new OpenApiString(string.Empty)
-                },
-            },
-            In = ParameterLocation.Query,
-            Extensions = new Dictionary<string, IOpenApiExtension>
-            {
-                [ENTITY_EXTENSION] = new OpenApiBoolean(true)
-            }
-        };
-
-        operation.Parameters.Insert(parameterIndex, openApiParameter);
-
-        return openApiParameter;
-    }
-
-    private static List<string> GetSortPropertyNames(Type sortedType)
+    public static List<string> GetSortPropertyNames(this Type sortedType)
     {
         var entityFilterAttribute = sortedType.GetCustomAttribute<FilterEntityAttribute>();
         var sortableProperties = sortedType
@@ -125,14 +93,4 @@ public class EntitySortParameterReplacer : IOperationFilter
 
         return sortableProperties;
     }
-
-    /// <summary>
-    /// A single sort order parameter.
-    /// </summary>
-    /// <remarks>
-    /// Initializes a new instance of the <see cref="EntitySortParameterReplacer"/> class.
-    /// </remarks>
-    /// <param name="Parameter">Gets the OpenAPI parameter.</param>
-    /// <param name="SortedType">Gets the type of the entity to sort.</param>
-    protected record EntitySortParameter(OpenApiParameter Parameter, Type SortedType);
 }

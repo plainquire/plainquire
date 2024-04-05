@@ -35,6 +35,11 @@ public class SortConfiguration
     public List<string> DescendingPostfixes { get => _descendingPostfixes; set => SetDescendingPostfixes(value); }
 
     /// <summary>
+    /// The name of the query parameter used to define the sort order.
+    /// </summary>
+    public string HttpQueryParameterName { get; set; } = "orderBy";
+
+    /// <summary>
     /// Return <c>source.OrderBy(x => 0)</c> in case of any exception while parsing the value
     /// </summary>
     public bool IgnoreParseExceptions { get; set; }

@@ -35,8 +35,7 @@ public class EntitySortModelBinder : IModelBinder
         var defaultConfiguration = serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value;
         var configuration = entitySortConfiguration ?? defaultConfiguration ?? new SortConfiguration();
 
-        var entityFilterAttribute = sortedType.GetCustomAttribute<FilterEntityAttribute>();
-        var sortByParameterName = entityFilterAttribute?.SortByParameter ?? FilterEntityAttribute.DEFAULT_SORT_BY_PARAMETER_NAME;
+        var sortByParameterName = configuration.HttpQueryParameterName;
 
         var sortByParameterValues = bindingContext.HttpContext.Request.Query.Keys
             .Where(queryParameter => IsSortByParameter(queryParameter, sortByParameterName))
