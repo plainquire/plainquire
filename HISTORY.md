@@ -2,39 +2,38 @@
 
 ## New Features
 
-...
+Support for pagination
 
 ## Breaking Changes
 
 ### Common
 
-* Obsolete methods removed
-* `FilterOperator` moved to namespace `Schick.Plainquire.Filter.Abstractions`
-* `FilterConfiguration` moved to namespace `Schick.Plainquire.Filter.Abstractions`
-* `FilterConfiguration.Now` moved to `IFilterInterceptor.Now`
-* Static `EntityFilter.DefaultConfiguration` replaced by instance specific `EntityFilter.Configuration`
-* Static `EntitySort.DefaultConfiguration` replaced by instance specific `EntitySort.Configuration`
-* `FilterConfiguration` removed from `EntityFilter.CreateFilter`. Use `EntityFilter.Configuration` instead
-* `SortConfiguration` removed from `QueryableExtensions.OrderBy`. Use `EntitySort.Configuration` instead
-* Static `DefaultInterceptor` removed from `Entity(Filter|Sort|Page)`. Use DI / static variables from your application instead
-* Serialized filters are incompatible between 4.x and 5.x. If you have stored filters and need to convert it, open an issue
-* `FilterEntityAttribute.SortByParameter` removed. Parameter name is taken from controller action parameter name or `IFromQueryMetadata.Name` (`[FromQuery(Name = "sortBy")]`)
+Obsolete methods removed
+`FilterConfiguration` removed from `EntityFilter.CreateFilter`. Use `EntityFilter.Configuration` instead
+`SortConfiguration` removed from `QueryableExtensions.OrderBy`. Use `EntitySort.Configuration` instead
+`FilterEntityAttribute.SortByParameter` removed. Parameter name is taken from controller action parameter name or `IFromQueryMetadata.Name` (`[FromQuery(Name = "sortBy")]`)
+Static `EntityFilter.DefaultConfiguration` replaced by `FilterConfiguration.Default`
+Static `EntitySort.DefaultConfiguration` replaced by `SortConfiguration.Default`
+`FilterConfiguration.Now` moved to `IFilterInterceptor.Now`
+Static `EntityFilter.DefaultInterceptor` replaced by `IFilterInterceptor.Default`
+Static `EntitySort.DefaultInterceptor` replaced by `ISortInterceptor.Default`
+Serialized filters are incompatible between 4.x and 5.x. If you have stored filters and need to convert it, open an issue
 
 ### Namespaces simplified
 
 | 4.x namespace                                                | 5.x namespace                      |
 | ------------------------------------------------------------ | ---------------------------------- |
-| `Plainquire.Filter.Enums`<br/>`Plainquire.Filter.Exceptions`<br/>`Plainquire.Filter.Extensions`<br/>`Plainquire.Filter.Filters`<br/>`Plainquire.Filter.Interfaces` | `Plainquire.Filter`                |
-| `Plainquire.Filter.Abstractions.Attributes`<br/>`Plainquire.Filter.Abstractions.Configurations`<br/>`Plainquire.Filter.Abstractions.Extensions`<br/>`Plainquire.Filter.Abstractions.Models` | `Plainquire.Filter.Abstractions`   |
-| `Plainquire.Filter.Mvc.Extensions`                           | `Plainquire.Filter.Mvc`            |
-| `Plainquire.Filter.Mvc.Newtonsoft.Extensions`                | `Plainquire.Filter.Mvc.Newtonsoft` |
-| `Plainquire.Filter.Newtonsoft.Extensions`                    | `Plainquire.Filter.Newtonsoft`     |
-| `Plainquire.Sort.Enums`<br/>`Plainquire.Sort.Extensions`<br/>`Plainquire.Sort.Interfaces`<br/>`Plainquire.Sort.Sorts` | `Plainquire.Sort`                  |
-| `Plainquire.Sort.Abstractions.Configurations`                | `Plainquire.Sort.Abstractions`     |
-| `Plainquire.Sort.Mvc.Extensions`                             | `Plainquire.Sort.Mvc`              |
-| `Plainquire.Sort.Mvc.Newtonsoft.Extensions`                  | `Plainquire.Sort.Mvc.Newtonsoft`   |
-| `Plainquire.Sort.Newtonsoft.Extensions`                      | `Plainquire.Sort.Newtonsoft`       |
-| `Plainquire.Sort.Swashbuckle.Extensions`                     | `Plainquire.Sort.Swashbuckle`      |
+| `FS.FilterExpressionCreator.Enums`<br/>`FS.FilterExpressionCreator.Exceptions`<br/>`FS.FilterExpressionCreator.Extensions`<br/>`FS.FilterExpressionCreator.Filters`<br/>`FS.FilterExpressionCreator.Interfaces` | `Plainquire.Filter`                |
+| `FS.FilterExpressionCreator.Abstractions.Attributes`<br/>`FS.FilterExpressionCreator.Abstractions.Configurations`<br/>`FS.FilterExpressionCreator.Abstractions.Extensions`<br/>`FS.FilterExpressionCreator.Abstractions.Models` | `Plainquire.Filter.Abstractions`   |
+| `FS.FilterExpressionCreator.Mvc.Extensions`                  | `Plainquire.Filter.Mvc`            |
+| `FS.FilterExpressionCreator.Mvc.Newtonsoft.Extensions`       | `Plainquire.Filter.Mvc.Newtonsoft` |
+| `FS.FilterExpressionCreator.Newtonsoft.Extensions`           | `Plainquire.Filter.Newtonsoft`     |
+| `FS.SortQueryableCreator.Enums`<br/>`FS.SortQueryableCreator.Extensions`<br/>`FS.SortQueryableCreator.Interfaces`<br/>`FS.SortQueryableCreator.Sorts` | `Plainquire.Sort`                  |
+| `FS.SortQueryableCreator.Abstractions.Configurations`        | `Plainquire.Sort.Abstractions`     |
+| `FS.SortQueryableCreator.Mvc.Extensions`                     | `Plainquire.Sort.Mvc`              |
+| `FS.SortQueryableCreator.Mvc.Newtonsoft.Extensions`          | `Plainquire.Sort.Mvc.Newtonsoft`   |
+| `FS.SortQueryableCreator.Newtonsoft.Extensions`              | `Plainquire.Sort.Newtonsoft`       |
+| `FS.SortQueryableCreator.Swashbuckle.Extensions`             | `Plainquire.Sort.Swashbuckle`      |
 
 ### Class / Method / Property renames
 
