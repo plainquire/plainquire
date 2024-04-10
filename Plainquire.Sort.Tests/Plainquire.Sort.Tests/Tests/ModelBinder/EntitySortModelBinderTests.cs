@@ -5,17 +5,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Mvc.ModelBinders;
 using Plainquire.Sort.Tests.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Plainquire.Sort.Tests.Tests.ModelBinder;
 
@@ -25,24 +25,23 @@ namespace Plainquire.Sort.Tests.Tests.ModelBinder;
 public class EntitySortModelBinderTests
 {
     [DataTestMethod]
-    [DataRow(nameof(EntitySortController.SingleSort))]
-    [DataRow(nameof(EntitySortController.SingleSortAtStart))]
-    [DataRow(nameof(EntitySortController.SingleSortAtEnd))]
-    [DataRow(nameof(EntitySortController.SingleSortBetween))]
-    public void WhenSingleEntitySortIsGiven_FinalOrderMatchesQueryParams(string actionName)
+    [DataRow(nameof(EntitySortPositionController.SingleSort))]
+    [DataRow(nameof(EntitySortPositionController.SingleSortAtStart))]
+    [DataRow(nameof(EntitySortPositionController.SingleSortAtEnd))]
+    [DataRow(nameof(EntitySortPositionController.SingleSortBetween))]
+    public async Task WhenSingleEntitySortIsGiven_FinalOrderMatchesQueryParams(string actionName)
     {
         // Arrange
         var serviceProvider = A.Fake<IServiceProvider>();
         A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
 
-        var queryParameters = GetQueryParameters<EntitySortController>(actionName, serviceProvider);
-        queryParameters["orderBy"] = "fullname, birthday";
+        var queryParameters = new Dictionary<string, string> { ["orderBy"] = "fullname, birthday" };
 
         var binder = new EntitySortModelBinder();
-        var personBindingContext = CreateBindingContext<EntitySort<TestPerson>>(queryParameters, serviceProvider);
+        var personBindingContext = CreateBindingContext<EntitySortPositionController>(actionName, "orderBy", queryParameters, serviceProvider);
 
         // Act
-        binder.BindModelAsync(personBindingContext);
+        await binder.BindModelAsync(personBindingContext);
 
         // Assert
         using var _ = new AssertionScope();
@@ -58,31 +57,27 @@ public class EntitySortModelBinderTests
     }
 
     [DataTestMethod]
-    [DataRow(nameof(EntitySortController.MultipleSort))]
-    [DataRow(nameof(EntitySortController.MultipleSortAtStart))]
-    [DataRow(nameof(EntitySortController.MultipleSortAtEnd))]
-    [DataRow(nameof(EntitySortController.MultipleSortBetween))]
-    [DataRow(nameof(EntitySortController.MultipleSortAround))]
-    [DataRow(nameof(EntitySortController.MultipleSortSpread))]
-    public void WhenMultipleEntitySortWithSingleConfigurationAreGiven_FinalOrderMatchesQueryParams(string actionName)
+    [DataRow(nameof(EntitySortPositionController.MultipleSortSameParameter))]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortAtStartSameParameter))]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortAtEndSameParameter))]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortBetweenSameParameter))]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortAroundSameParameter))]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortSpreadSameParameter))]
+    public async Task WhenMultipleEntitySortWithSameParameterNameAreGiven_FinalOrderMatchesQueryParams(string actionName)
     {
         // Arrange
         var serviceProvider = A.Fake<IServiceProvider>();
         A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
 
-        var sortByConfiguration = new SortConfiguration { HttpQueryParameterName = "sortBy" };
-        A.CallTo(() => serviceProvider.GetService(typeof(IOptions<SortConfiguration>))).Returns(Options.Create(sortByConfiguration));
-
-        var queryParameters = GetQueryParameters<EntitySortController>(actionName, serviceProvider);
-        queryParameters["sortBy"] = "fullname, birthday, addressStreet";
+        var queryParameters = new Dictionary<string, string> { ["orderBy"] = "fullname, birthday, addressStreet" };
 
         var binder = new EntitySortModelBinder();
-        var personBindingContext = CreateBindingContext<EntitySort<TestPerson>>(queryParameters, serviceProvider);
-        var addressBindingContext = CreateBindingContext<EntitySort<TestAddress>>(queryParameters, serviceProvider);
+        var personBindingContext = CreateBindingContext<EntitySortPositionController>(actionName, "orderBy", queryParameters, serviceProvider);
+        var addressBindingContext = CreateBindingContext<EntitySortPositionController>(actionName, "addressOrderBy", queryParameters, serviceProvider);
 
         // Act
-        binder.BindModelAsync(personBindingContext);
-        binder.BindModelAsync(addressBindingContext);
+        await binder.BindModelAsync(personBindingContext);
+        await binder.BindModelAsync(addressBindingContext);
 
         // Assert
         using var _ = new AssertionScope();
@@ -102,32 +97,31 @@ public class EntitySortModelBinderTests
     }
 
     [DataTestMethod]
-    [DataRow(nameof(EntitySortController.MultipleSort))]
-    [DataRow(nameof(EntitySortController.MultipleSortAtStart))]
-    [DataRow(nameof(EntitySortController.MultipleSortAtEnd))]
-    [DataRow(nameof(EntitySortController.MultipleSortBetween))]
-    [DataRow(nameof(EntitySortController.MultipleSortAround))]
-    [DataRow(nameof(EntitySortController.MultipleSortSpread))]
-    public void WhenMultipleEntitySortWithMultipleConfigurationAreGiven_FinalOrderMatchesQueryParams(string actionName)
+    [DataRow(nameof(EntitySortPositionController.MultipleSortSeparateParameter))]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortAtStartSeparateParameter))]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortAtEndSeparateParameter))]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortBetweenSeparateParameter))]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortAroundSeparateParameter))]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortSpreadSeparateParameter))]
+    public async Task WhenMultipleEntitySortWithSeparateParameterNamesAreGiven_FinalOrderMatchesQueryParams(string actionName)
     {
         // Arrange
         var serviceProvider = A.Fake<IServiceProvider>();
         A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
 
-        var sortByConfiguration = new SortConfiguration { HttpQueryParameterName = "sortBy" };
-        A.CallTo(() => serviceProvider.GetService(typeof(EntitySort<TestAddress>))).Returns(new EntitySort<TestAddress> { Configuration = sortByConfiguration });
-
-        var queryParameters = GetQueryParameters<EntitySortController>(actionName, serviceProvider);
-        queryParameters["orderBy"] = "fullname, birthday";
-        queryParameters["sortBy"] = "addressStreet";
+        var queryParameters = new Dictionary<string, string>
+        {
+            ["orderBy"] = "fullname, birthday",
+            ["sortBy"] = "addressStreet"
+        };
 
         var binder = new EntitySortModelBinder();
-        var personBindingContext = CreateBindingContext<EntitySort<TestPerson>>(queryParameters, serviceProvider);
-        var addressBindingContext = CreateBindingContext<EntitySort<TestAddress>>(queryParameters, serviceProvider);
+        var personBindingContext = CreateBindingContext<EntitySortPositionController>(actionName, "orderBy", queryParameters, serviceProvider);
+        var addressBindingContext = CreateBindingContext<EntitySortPositionController>(actionName, "sortBy", queryParameters, serviceProvider);
 
         // Act
-        binder.BindModelAsync(personBindingContext);
-        binder.BindModelAsync(addressBindingContext);
+        await binder.BindModelAsync(personBindingContext);
+        await binder.BindModelAsync(addressBindingContext);
 
         // Assert
         using var _ = new AssertionScope();
@@ -150,41 +144,26 @@ public class EntitySortModelBinderTests
             .ContainInOrder("Street");
     }
 
-    private static Dictionary<string, string> GetQueryParameters<TController>(string actionName, IServiceProvider serviceProvider)
+    private static DefaultModelBindingContext CreateBindingContext<TController>(string actionName, string parameterName, Dictionary<string, string> queryParameters, IServiceProvider serviceProvider)
     {
-        var methodInfo = typeof(TController).GetMethod(actionName)
-            ?? throw new ArgumentException("Method not found", nameof(actionName));
-
-        var queryParameters = methodInfo
+        var parameterInfo = typeof(TController)
+            .GetMethod(actionName)?
             .GetParameters()
-            .Select(parameter =>
-            {
-                if (!parameter.ParameterType.IsGenericEntitySort())
-                    return parameter.Name!;
+            .FirstOrDefault(parameter => parameter.Name == parameterName)
+            ?? throw new ArgumentException("Method or parameter not found", nameof(actionName));
 
-                var entitySortConfiguration = ((Sort.EntitySort?)serviceProvider.GetService(parameter.ParameterType))?.Configuration;
-                var defaultConfiguration = serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value;
-                var configuration = entitySortConfiguration ?? defaultConfiguration ?? new SortConfiguration();
-                return configuration.HttpQueryParameterName;
-            })
-            .Distinct()
-            .ToDictionary(parameterName => parameterName, _ => "");
-
-        return queryParameters;
-    }
-
-    private static DefaultModelBindingContext CreateBindingContext<TModel>(Dictionary<string, string> queryParameters, IServiceProvider serviceProvider)
-    {
-        var modelType = typeof(TModel);
-
-        var bindingSource = new BindingSource("", "", false, false);
+        var bindingSource = new BindingSource("Query", "Query", false, true);
         var routeValueDictionary = new RouteValueDictionary(queryParameters!);
         var valueProvider = new RouteValueProvider(bindingSource, routeValueDictionary);
 
+        var modelMetadata = (DefaultModelMetadata)new EmptyModelMetadataProvider().GetMetadataForParameter(parameterInfo, parameterInfo.ParameterType);
+        var binderModelName = parameterInfo.GetCustomAttribute<FromQueryAttribute>()?.Name;
+        modelMetadata.BindingMetadata.BinderModelName = binderModelName;
+
         var bindingContext = new DefaultModelBindingContext
         {
-            ModelMetadata = new EmptyModelMetadataProvider().GetMetadataForType(modelType),
-            ModelName = modelType.Name,
+            ModelMetadata = modelMetadata,
+            ModelName = parameterInfo.Name ?? throw new InvalidOperationException("Parameter name not found"),
             ModelState = new ModelStateDictionary(),
             ValueProvider = valueProvider,
             ActionContext = new ActionContext

@@ -2,15 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Plainquire.Filter.Abstractions;
 using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Swashbuckle.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
 
 namespace Plainquire.Sort.Swashbuckle.Filters;
 
@@ -47,23 +44,24 @@ public class EntitySortParameterReplacer : IOperationFilter
                 context.ApiDescription.ParameterDescriptions,
                 (parameter, description) => (Parameter: parameter, Description: description)
             )
-            .Where(openApi => openApi.Description.IsEntitySortParameter())
+            .Where(openApi => IsEntitySortParameter(openApi.Description))
             .Select(openApi =>
             {
                 var entitySortType = openApi.Description.ParameterDescriptor.ParameterType;
                 var configuration = GetConfiguration(entitySortType);
-                return new SortParameterReplacement
-                {
-                    OpenApiParameter = openApi.Parameter,
-                    OpenApiDescription = openApi.Description,
-                    SortedType = entitySortType.GenericTypeArguments[0],
-                    Configuration = configuration
-                };
+                return new SortParameterReplacement(
+                    OpenApiParameter: openApi.Parameter,
+                    OpenApiDescription: openApi.Description,
+                    SortedType: entitySortType.GenericTypeArguments[0],
+                    Configuration: configuration);
             })
             .ToList();
 
         operation.ReplaceSortParameters(parametersToReplace);
     }
+
+    private static bool IsEntitySortParameter(ApiParameterDescription description)
+        => description.ParameterDescriptor.ParameterType.IsGenericEntitySort();
 
     private SortConfiguration GetConfiguration(Type entitySortType)
     {
@@ -72,25 +70,5 @@ public class EntitySortParameterReplacer : IOperationFilter
 
         var entityTypeConfiguration = ((EntitySort?)_serviceProvider.GetService(entitySortType))?.Configuration;
         return entityTypeConfiguration ?? _defaultConfiguration;
-    }
-}
-
-internal static class Ext
-{
-    public static bool IsEntitySortParameter(this ApiParameterDescription description)
-        => description.ParameterDescriptor.ParameterType.IsGenericEntitySort();
-
-    public static bool IsEntitySortSetParameter(this ApiParameterDescription description)
-        => description.ParameterDescriptor.ParameterType.GetCustomAttribute<EntitySortSetAttribute>() != null;
-
-    public static List<string> GetSortPropertyNames(this Type sortedType)
-    {
-        var entityFilterAttribute = sortedType.GetCustomAttribute<FilterEntityAttribute>();
-        var sortableProperties = sortedType
-            .GetSortableProperties()
-            .Select(property => property.GetSortParameterName(entityFilterAttribute?.Prefix))
-            .ToList();
-
-        return sortableProperties;
     }
 }

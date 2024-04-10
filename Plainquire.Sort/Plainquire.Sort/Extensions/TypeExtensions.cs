@@ -52,10 +52,9 @@ internal static class TypeExtensions
     private static bool IsPropertySortable(this PropertyInfo member)
     {
         var isEnumerable = member.PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(member.PropertyType);
-        var isFilterEntity = member.PropertyType.GetCustomAttribute<FilterEntityAttribute>() != null;
         var filterAttribute = member.GetCustomAttribute<FilterAttribute>();
 
-        return (isEnumerable || isFilterEntity)
+        return isEnumerable
             ? filterAttribute?.Sortable == true
             : filterAttribute?.Sortable != false;
     }

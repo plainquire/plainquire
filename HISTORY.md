@@ -18,6 +18,7 @@
 * `SortConfiguration` removed from `QueryableExtensions.OrderBy`. Use `EntitySort.Configuration` instead
 * Static `DefaultInterceptor` removed from `Entity(Filter|Sort|Page)`. Use DI / static variables from your application instead
 * Serialized filters are incompatible between 4.x and 5.x. If you have stored filters and need to convert it, open an issue
+* `FilterEntityAttribute.SortByParameter` removed. Parameter name is taken from controller action parameter name or `IFromQueryMetadata.Name` (`[FromQuery(Name = "sortBy")]`)
 
 ### Namespaces simplified
 

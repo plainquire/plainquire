@@ -1,13 +1,14 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Plainquire.Sort.Abstractions;
+using Plainquire.Sort.Swashbuckle.Filters;
 using Plainquire.Sort.Tests.Models;
-using Plainquire.Sort.Tests.Services;
+using Plainquire.Swashbuckle.TestSupport.Services;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -16,21 +17,23 @@ namespace Plainquire.Sort.Tests.Tests.OpenApiFilter;
 [TestClass, ExcludeFromCodeCoverage]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
-public class EntitySortParameterReplacerTests
+public class EntitySortParameterPositionTests
 {
     [DataTestMethod]
-    [DataRow(nameof(EntitySortController.SingleSort))]
-    [DataRow(nameof(EntitySortController.SingleSortAtStart))]
-    [DataRow(nameof(EntitySortController.SingleSortAtEnd))]
-    [DataRow(nameof(EntitySortController.SingleSortBetween))]
+    [DataRow(nameof(EntitySortPositionController.SingleSort))]
+    [DataRow(nameof(EntitySortPositionController.SingleSortAtStart))]
+    [DataRow(nameof(EntitySortPositionController.SingleSortAtEnd))]
+    [DataRow(nameof(EntitySortPositionController.SingleSortBetween))]
     public void WhenSingleEntitySortIsGiven_ItIsReplacedBySingleSortParameter(string actionName)
     {
         // Arrange
         var serviceProvider = A.Fake<IServiceProvider>();
         A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
 
+        var operationFilters = CreateOperationFilters(serviceProvider);
+        var swaggerGenerator = SwaggerGeneratorFactory.Create<EntitySortPositionController>(actionName, operationFilters);
+
         // Act
-        var swaggerGenerator = SwaggerGeneratorFactory.Create<EntitySortController>(actionName, serviceProvider);
         var openApiDocument = swaggerGenerator.GetSwagger("v1");
 
         // Assert   
@@ -40,28 +43,28 @@ public class EntitySortParameterReplacerTests
         orderBy.Should().NotBeNull();
         orderBy.Description.Should().Be("Sorts the result by the given property in ascending (-asc) or descending (-desc) order.");
         orderBy.Schema.Type.Should().Be("array");
-        orderBy.Schema.Items.Pattern.Should().Be(@"^(asc-|asc\ |\+|desc-|desc\ |dsc-|dsc\ |-|~)?(fullName|birthday)(-asc|\ asc|\+|-desc|\ desc|-dsc|\ dsc|-|~)?$");
+        orderBy.Schema.Items.Pattern.Should().Be(@"^(asc-|asc\ |\+|desc-|desc\ |dsc-|dsc\ |-|~)?(fullName|birthday|address)(\..+)?(-asc|\ asc|\+|-desc|\ desc|-dsc|\ dsc|-|~)?$");
 
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
     }
 
     [DataTestMethod]
-    [DataRow(nameof(EntitySortController.MultipleSort), 0)]
-    [DataRow(nameof(EntitySortController.MultipleSortAtStart), 0)]
-    [DataRow(nameof(EntitySortController.MultipleSortAtEnd), 1)]
-    [DataRow(nameof(EntitySortController.MultipleSortBetween), 1)]
-    [DataRow(nameof(EntitySortController.MultipleSortAround), 0)]
-    [DataRow(nameof(EntitySortController.MultipleSortSpread), 1)]
-    public void WhenMultipleEntitySortWithSingleConfigurationAreGiven_TheyAreReplacedBySingleSortParameter(string actionName, int expectedIndex)
+    [DataRow(nameof(EntitySortPositionController.MultipleSortSameParameter), 0)]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortAtStartSameParameter), 0)]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortAtEndSameParameter), 1)]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortBetweenSameParameter), 1)]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortAroundSameParameter), 0)]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortSpreadSameParameter), 1)]
+    public void WhenMultipleEntitySortWithSameParameterNameAreGiven_TheyAreReplacedBySingleSortParameter(string actionName, int expectedIndex)
     {
         // Arrange
         var serviceProvider = A.Fake<IServiceProvider>();
-        A.CallTo(() => serviceProvider.GetService(typeof(IOptions<SortConfiguration>))).Returns(Options.Create(new SortConfiguration()));
-        A.CallTo(() => serviceProvider.GetService(typeof(EntitySort<TestPerson>))).Returns(null);
-        A.CallTo(() => serviceProvider.GetService(typeof(EntitySort<TestAddress>))).Returns(null);
+        A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
+
+        var operationFilters = CreateOperationFilters(serviceProvider);
+        var swaggerGenerator = SwaggerGeneratorFactory.Create<EntitySortPositionController>(actionName, operationFilters);
 
         // Act
-        var swaggerGenerator = SwaggerGeneratorFactory.Create<EntitySortController>(actionName, serviceProvider);
         var openApiDocument = swaggerGenerator.GetSwagger("v1");
 
         // Assert   
@@ -74,28 +77,28 @@ public class EntitySortParameterReplacerTests
         var orderBy = parameters[orderByIndex];
         orderBy.Description.Should().Be("Sorts the result by the given property in ascending (-asc) or descending (-desc) order.");
         orderBy.Schema.Type.Should().Be("array");
-        orderBy.Schema.Items.Pattern.Should().Be(@"^(asc-|asc\ |\+|desc-|desc\ |dsc-|dsc\ |-|~)?(fullName|birthday|addressStreet|addressCountry)(-asc|\ asc|\+|-desc|\ desc|-dsc|\ dsc|-|~)?$");
+        orderBy.Schema.Items.Pattern.Should().Be(@"^(asc-|asc\ |\+|desc-|desc\ |dsc-|dsc\ |-|~)?(fullName|birthday|address|addressStreet|addressCountry)(\..+)?(-asc|\ asc|\+|-desc|\ desc|-dsc|\ dsc|-|~)?$");
 
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
     }
 
     [DataTestMethod]
-    [DataRow(nameof(EntitySortController.MultipleSort), 0, 1)]
-    [DataRow(nameof(EntitySortController.MultipleSortAtStart), 0, 1)]
-    [DataRow(nameof(EntitySortController.MultipleSortAtEnd), 1, 2)]
-    [DataRow(nameof(EntitySortController.MultipleSortBetween), 1, 2)]
-    [DataRow(nameof(EntitySortController.MultipleSortAround), 0, 2)]
-    [DataRow(nameof(EntitySortController.MultipleSortSpread), 1, 3)]
-    public void WhenMultipleEntitySortWithMultipleConfigurationsAreGiven_TheyAreReplacedByMultipleSortParameter(string actionName, int expectedOrderByIndex, int expectedSortByIndex)
+    [DataRow(nameof(EntitySortPositionController.MultipleSortSeparateParameter), 0, 1)]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortAtStartSeparateParameter), 0, 1)]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortAtEndSeparateParameter), 1, 2)]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortBetweenSeparateParameter), 1, 2)]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortAroundSeparateParameter), 0, 2)]
+    [DataRow(nameof(EntitySortPositionController.MultipleSortSpreadSeparateParameter), 1, 3)]
+    public void WhenMultipleEntitySortWithSeparateParameterNamesAreGiven_TheyAreReplacedByMultipleSortParameter(string actionName, int expectedOrderByIndex, int expectedSortByIndex)
     {
         // Arrange
         var serviceProvider = A.Fake<IServiceProvider>();
-        A.CallTo(() => serviceProvider.GetService(typeof(IOptions<SortConfiguration>))).Returns(Options.Create(new SortConfiguration()));
-        A.CallTo(() => serviceProvider.GetService(typeof(EntitySort<TestPerson>))).Returns(null);
-        A.CallTo(() => serviceProvider.GetService(typeof(EntitySort<TestAddress>))).Returns(new EntitySort<TestAddress> { Configuration = new SortConfiguration { HttpQueryParameterName = "sortBy" } });
+        A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
+
+        var operationFilters = CreateOperationFilters(serviceProvider);
+        var swaggerGenerator = SwaggerGeneratorFactory.Create<EntitySortPositionController>(actionName, operationFilters);
 
         // Act
-        var swaggerGenerator = SwaggerGeneratorFactory.Create<EntitySortController>(actionName, serviceProvider);
         var openApiDocument = swaggerGenerator.GetSwagger("v1");
 
         // Assert
@@ -108,7 +111,7 @@ public class EntitySortParameterReplacerTests
         var orderBy = parameters[orderByIndex];
         orderBy.Description.Should().Be("Sorts the result by the given property in ascending (-asc) or descending (-desc) order.");
         orderBy.Schema.Type.Should().Be("array");
-        orderBy.Schema.Items.Pattern.Should().Be(@"^(asc-|asc\ |\+|desc-|desc\ |dsc-|dsc\ |-|~)?(fullName|birthday)(-asc|\ asc|\+|-desc|\ desc|-dsc|\ dsc|-|~)?$");
+        orderBy.Schema.Items.Pattern.Should().Be(@"^(asc-|asc\ |\+|desc-|desc\ |dsc-|dsc\ |-|~)?(fullName|birthday|address)(\..+)?(-asc|\ asc|\+|-desc|\ desc|-dsc|\ dsc|-|~)?$");
 
         var sortByIndex = parameters.FindIndex(parameter => parameter.Name == "sortBy");
         sortByIndex.Should().Be(expectedSortByIndex);
@@ -116,8 +119,15 @@ public class EntitySortParameterReplacerTests
         var sortBy = parameters[sortByIndex];
         sortBy.Description.Should().Be("Sorts the result by the given property in ascending (-asc) or descending (-desc) order.");
         sortBy.Schema.Type.Should().Be("array");
-        sortBy.Schema.Items.Pattern.Should().Be(@"^(asc-|asc\ |\+|desc-|desc\ |dsc-|dsc\ |-|~)?(addressStreet|addressCountry)(-asc|\ asc|\+|-desc|\ desc|-dsc|\ dsc|-|~)?$");
+        sortBy.Schema.Items.Pattern.Should().Be(@"^(asc-|asc\ |\+|desc-|desc\ |dsc-|dsc\ |-|~)?(addressStreet|addressCountry)(\..+)?(-asc|\ asc|\+|-desc|\ desc|-dsc|\ dsc|-|~)?$");
 
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
     }
+
+    private static List<IOperationFilter> CreateOperationFilters(IServiceProvider serviceProvider)
+        =>
+        [
+            new EntitySortParameterReplacer(serviceProvider),
+            new EntitySortSetParameterReplacer(serviceProvider)
+        ];
 }

@@ -5,9 +5,11 @@
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8604 // Possible null reference argument.
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Collections.Generic;
@@ -171,6 +173,7 @@ namespace Swashbuckle.AspNetCore.TestSupport
                 Name = parameterInfo.Name,
                 ParameterInfo = parameterInfo,
                 ParameterType = parameterInfo.ParameterType,
+                BindingInfo = BindingInfo.GetBindingInfo([parameterInfo.GetCustomAttribute<FromQueryAttribute>()])
             };
         }
     }

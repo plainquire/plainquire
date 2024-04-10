@@ -1,19 +1,29 @@
 ﻿using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
-using Plainquire.Sort.Swashbuckle.Filters;
+using Plainquire.Filter.Abstractions;
 using Plainquire.Sort.Swashbuckle.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Plainquire.Sort.Swashbuckle;
 
+/// <summary>
+/// Extension methods for <see cref="OpenApiOperation"/>.
+/// </summary>
 public static class OpenApiOperationExtensions
 {
     private const string ENTITY_SORT_EXTENSION = "x-entity-sort";
     private const string ENTITY_DELETE_EXTENSION = "x-entity-sort-delete";
 
+    /// <summary>
+    /// Replaces <see cref="EntitySort{TEntity}"/> and with the sort parameters.
+    /// </summary>
+    /// <param name="operation">The <see cref="OpenApiOperation"/> to operate on.</param>
+    /// <param name="parametersToReplace">The parameters to replace.</param>
     public static void ReplaceSortParameters(this OpenApiOperation operation, List<SortParameterReplacement> parametersToReplace)
     {
         MarkExistingParametersForDeletion(parametersToReplace);
@@ -54,7 +64,12 @@ public static class OpenApiOperationExtensions
 
     private static Dictionary<string, List<SortParameterReplacement>> GroupByHttpQueryParameterName(List<SortParameterReplacement> parametersToReplace)
         => parametersToReplace
-            .GroupBy(parameter => parameter.Configuration.HttpQueryParameterName)
+            .GroupBy(parameter =>
+            {
+                var bindingParameterName = parameter.OpenApiDescription.ParameterDescriptor.BindingInfo?.BinderModelName;
+                var actionParameterName = parameter.OpenApiDescription.ParameterDescriptor.Name;
+                return bindingParameterName ?? actionParameterName;
+            })
             .ToDictionary(
                 group => group.Key,
                 group => group.ToList()
@@ -96,7 +111,7 @@ public static class OpenApiOperationExtensions
     {
         var sortablePropertyNames = GetSortablePropertyNames(parameters);
 
-        var allowedPropertyNamePattern = $"^({string.Join("|", prefixes)})?({string.Join("|", sortablePropertyNames)})({string.Join("|", postfixes)})?$";
+        var allowedPropertyNamePattern = $"^({string.Join("|", prefixes)})?({string.Join("|", sortablePropertyNames)})(\\..+)?({string.Join("|", postfixes)})?$";
         return allowedPropertyNamePattern;
     }
 
@@ -107,4 +122,16 @@ public static class OpenApiOperationExtensions
             .Distinct()
             .Select(Regex.Escape)
             .ToList();
+
+    private static List<string> GetSortPropertyNames(this Type sortedType)
+    {
+        var entityFilterAttribute = sortedType.GetCustomAttribute<FilterEntityAttribute>();
+
+        var sortableProperties = sortedType
+            .GetSortableProperties()
+            .Select(property => property.GetSortParameterName(entityFilterAttribute?.Prefix))
+            .ToList();
+
+        return sortableProperties;
+    }
 }

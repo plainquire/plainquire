@@ -29,13 +29,15 @@ public class EntitySortModelBinder : IModelBinder
         var serviceProvider = bindingContext.ActionContext.HttpContext.RequestServices;
 
         var sortedType = bindingContext.ModelType.GetGenericArguments()[0];
-        var entitySort = ResolveEntitySort(serviceProvider, sortedType);
+        var entitySort = CreateEntitySort(sortedType, serviceProvider);
 
         var entitySortConfiguration = entitySort.Configuration;
         var defaultConfiguration = serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value;
         var configuration = entitySortConfiguration ?? defaultConfiguration ?? new SortConfiguration();
 
-        var sortByParameterName = configuration.HttpQueryParameterName;
+        var sortByParameterName = bindingContext.ModelMetadata.BinderModelName
+            ?? bindingContext.ModelMetadata.ParameterName
+            ?? throw new InvalidOperationException($"Unable to get parameter name for {bindingContext.ModelMetadata.Name} ");
 
         var sortByParameterValues = bindingContext.HttpContext.Request.Query.Keys
             .Where(queryParameter => IsSortByParameter(queryParameter, sortByParameterName))
@@ -54,7 +56,7 @@ public class EntitySortModelBinder : IModelBinder
     private static ValueProviderResult GetParameterValues(string queryParameter, ModelBindingContext bindingContext)
         => bindingContext.ValueProvider.GetValue(queryParameter);
 
-    private static EntitySort ResolveEntitySort(IServiceProvider serviceProvider, Type sortedType)
+    private static EntitySort CreateEntitySort(Type sortedType, IServiceProvider serviceProvider)
     {
         var entitySortType = typeof(EntitySort<>).MakeGenericType(sortedType);
         var entitySort = (EntitySort)Activator.CreateInstance(entitySortType)!;

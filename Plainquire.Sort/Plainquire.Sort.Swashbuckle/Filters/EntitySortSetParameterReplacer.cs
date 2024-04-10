@@ -1,12 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Plainquire.Filter.Abstractions;
 using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Swashbuckle.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 
 namespace Plainquire.Sort.Swashbuckle.Filters;
 
@@ -39,25 +42,27 @@ public class EntitySortSetParameterReplacer : IOperationFilter
                 context.ApiDescription.ParameterDescriptions,
                 (parameter, description) => (Parameter: parameter, Description: description)
             )
-            .Where(openApi => openApi.Description.IsEntitySortSetParameter())
+            .Where(openApi => IsEntitySortSetParameter(openApi.Description))
             .SelectMany(openApi =>
                 openApi.Description.ParameterDescriptor
                     .ParameterType
                     .GetProperties()
                     .Select(x => x.PropertyType)
                     .Where(type => type.IsGenericEntitySort())
-                    .Select(entitySortType => new SortParameterReplacement
-                    {
-                        OpenApiParameter = openApi.Parameter,
-                        OpenApiDescription = openApi.Description,
-                        SortedType = entitySortType.GenericTypeArguments[0],
-                        Configuration = GetConfiguration(entitySortType)
-                    })
+                    .Select(entitySortType => new SortParameterReplacement(
+                        OpenApiParameter: openApi.Parameter,
+                        OpenApiDescription: openApi.Description,
+                        SortedType: entitySortType.GenericTypeArguments[0],
+                        Configuration: GetConfiguration(entitySortType))
+                    )
             )
             .ToList();
 
         operation.ReplaceSortParameters(parametersToReplace);
     }
+
+    private static bool IsEntitySortSetParameter(ApiParameterDescription description)
+        => description.ParameterDescriptor.ParameterType.GetCustomAttribute<EntitySortSetAttribute>() != null;
 
     private SortConfiguration GetConfiguration(Type entitySortType)
     {
