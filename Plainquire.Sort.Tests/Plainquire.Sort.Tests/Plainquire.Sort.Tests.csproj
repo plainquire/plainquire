@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Plainquire.Filter.Tests\Plainquire.Swashbuckle.TestSupport\Plainquire.Swashbuckle.TestSupport.csproj" />
     <ProjectReference Include="..\..\Plainquire.Sort\Plainquire.Sort.Abstractions\Plainquire.Sort.Abstractions.csproj" />
     <ProjectReference Include="..\..\Plainquire.Sort\Plainquire.Sort.Mvc.Newtonsoft\Plainquire.Sort.Mvc.Newtonsoft.csproj" />
     <ProjectReference Include="..\..\Plainquire.Sort\Plainquire.Sort.Mvc\Plainquire.Sort.Mvc.csproj" />

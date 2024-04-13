@@ -68,6 +68,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainquire.Page.Newtonsoft"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainquire.Page.Mvc.Newtonsoft", "Plainquire.Page\Plainquire.Page.Mvc.Newtonsoft\Plainquire.Page.Mvc.Newtonsoft.csproj", "{5772204F-EECF-49C6-9015-565C502EA347}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainquire.Swashbuckle.TestSupport", "Plainquire.Filter.Tests\Plainquire.Swashbuckle.TestSupport\Plainquire.Swashbuckle.TestSupport.csproj", "{1D931D72-0DA9-40B3-966D-A5970F9D5B01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -162,6 +164,10 @@ Global
 		{5772204F-EECF-49C6-9015-565C502EA347}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5772204F-EECF-49C6-9015-565C502EA347}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5772204F-EECF-49C6-9015-565C502EA347}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D931D72-0DA9-40B3-966D-A5970F9D5B01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D931D72-0DA9-40B3-966D-A5970F9D5B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D931D72-0DA9-40B3-966D-A5970F9D5B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D931D72-0DA9-40B3-966D-A5970F9D5B01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -188,6 +194,7 @@ Global
 		{B1DBCDC7-AB39-4620-8E29-7531CDF13E71} = {9E60F790-8B09-4D29-9935-AA1D9448382A}
 		{9C6E70AD-F808-4957-8D3C-D75E1088D1E5} = {D7F2AA6A-721D-4E69-9AC3-59186F1C407A}
 		{5772204F-EECF-49C6-9015-565C502EA347} = {D7F2AA6A-721D-4E69-9AC3-59186F1C407A}
+		{1D931D72-0DA9-40B3-966D-A5970F9D5B01} = {7C5B8FDE-6D71-4103-9035-753D41B88421}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6D896BF2-BA48-420C-9664-AB7DC7D38A33}

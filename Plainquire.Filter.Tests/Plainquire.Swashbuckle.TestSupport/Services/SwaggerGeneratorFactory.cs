@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.OpenApi.Models;
-using Plainquire.Sort.Swashbuckle.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerGen.Test;
 using Swashbuckle.AspNetCore.TestSupport;
@@ -14,12 +13,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
-namespace Plainquire.Sort.Tests.Services;
+namespace Plainquire.Swashbuckle.TestSupport.Services;
 
 [ExcludeFromCodeCoverage]
 public static class SwaggerGeneratorFactory
 {
-    public static SwaggerGenerator Create<TController>(string actionName, IServiceProvider serviceProvider) where TController : new()
+    public static SwaggerGenerator Create<TController>(string actionName, List<IOperationFilter> operationFilters) where TController : new()
     {
         var apiDescription = GetApiDescription<TController>(actionName);
 
@@ -30,11 +29,7 @@ public static class SwaggerGeneratorFactory
                 {
                     ["v1"] = new OpenApiInfo { Version = "v1", Title = "Test API" }
                 },
-                OperationFilters =
-                [
-                    new EntitySortParameterReplacer(serviceProvider),
-                    new EntitySortSetParameterReplacer(serviceProvider)
-                ]
+                OperationFilters = operationFilters
             },
 
             new FakeApiDescriptionGroupCollectionProvider([apiDescription]),
