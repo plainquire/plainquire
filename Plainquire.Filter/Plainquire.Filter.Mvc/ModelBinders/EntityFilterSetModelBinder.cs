@@ -36,14 +36,17 @@ public class EntityFilterSetModelBinder : IModelBinder
         foreach (var entityFilter in entityFilterProperties)
         {
             var (modelMetadata, modelBinder) = _entityFilterBinders[entityFilter.PropertyType];
-            var newBindingContext = DefaultModelBindingContext.CreateBindingContext(
+
+            var filterBindingContext = DefaultModelBindingContext.CreateBindingContext(
                 bindingContext.ActionContext,
                 bindingContext.ValueProvider,
                 modelMetadata,
                 bindingInfo: null,
-                bindingContext.ModelName);
-            await modelBinder.BindModelAsync(newBindingContext);
-            entityFilter.SetValue(entityFilterSet, newBindingContext.Result.Model);
+                bindingContext.OriginalModelName);
+
+            await modelBinder.BindModelAsync(filterBindingContext);
+
+            entityFilter.SetValue(entityFilterSet, filterBindingContext.Result.Model);
         }
 
         bindingContext.Result = ModelBindingResult.Success(entityFilterSet);

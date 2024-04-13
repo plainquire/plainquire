@@ -35,10 +35,7 @@ public class EntitySortModelBinder : IModelBinder
         var defaultConfiguration = serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value;
         var configuration = entitySortConfiguration ?? defaultConfiguration ?? new SortConfiguration();
 
-        var sortByParameterName = bindingContext.ModelMetadata.BinderModelName
-            ?? bindingContext.ModelMetadata.ParameterName
-            ?? throw new InvalidOperationException($"Unable to get parameter name for {bindingContext.ModelMetadata.Name} ");
-
+        var sortByParameterName = bindingContext.OriginalModelName;
         var sortByParameterValues = bindingContext.HttpContext.Request.Query.Keys
             .Where(queryParameter => IsSortByParameter(queryParameter, sortByParameterName))
             .SelectMany(queryParameter => GetParameterValues(queryParameter, bindingContext))
