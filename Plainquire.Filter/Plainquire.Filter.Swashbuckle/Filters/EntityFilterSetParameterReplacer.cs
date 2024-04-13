@@ -43,9 +43,11 @@ public class EntityFilterSetParameterReplacer : IOperationFilter
     private static List<FilterParameterReplaceInfo> GetEntityFilterReplacements(OpenApiOperation operation, OperationFilterContext context)
     {
         var parameterReplacements = operation.Parameters
-            .Zip(
+            .Join(
                 context.ApiDescription.ParameterDescriptions,
-                (parameter, description) => new { Parameter = parameter, Description = description }
+                parameter => parameter.Name,
+                description => description.Name,
+                (parameter, description) => (Parameter: parameter, Description: description)
             )
             .Where(openApi => openApi.Description.IsEntityFilterSetParameter())
             .GroupBy(x => x.Description.ParameterDescriptor.ParameterType)

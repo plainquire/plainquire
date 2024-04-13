@@ -36,8 +36,10 @@ public class EntityPageSetParameterReplacer : IOperationFilter
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         var parametersToReplace = operation.Parameters
-            .Zip(
+            .Join(
                 context.ApiDescription.ParameterDescriptions,
+                parameter => parameter.Name,
+                description => description.Name,
                 (parameter, description) => (Parameter: parameter, Description: description)
             )
             .Where(openApi => IsEntityPageSetParameter(openApi.Description))
