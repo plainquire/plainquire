@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Plainquire.Filter.Abstractions;
+using Plainquire.Page.Abstractions;
+using Plainquire.Page.Swashbuckle.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Plainquire.Page.Swashbuckle.Filters;
 
@@ -18,7 +17,18 @@ namespace Plainquire.Page.Swashbuckle.Filters;
 /// <seealso cref="IOperationFilter" />
 public class EntityPageParameterReplacer : IOperationFilter
 {
-    private const string ENTITY_EXTENSION = "x-entity-page";
+    private readonly IServiceProvider _serviceProvider;
+    private readonly PageConfiguration _defaultConfiguration;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EntityPageParameterReplacer"/> class.
+    /// </summary>
+    /// <param name="serviceProvider"></param>
+    public EntityPageParameterReplacer(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+        _defaultConfiguration = _serviceProvider.GetService<IOptions<PageConfiguration>>()?.Value ?? new PageConfiguration();
+    }
 
     /// <summary>
     /// Replaces all parameters of type <see cref="EntityPage{TEntity}"/> with their applicable page properties.
@@ -27,129 +37,36 @@ public class EntityPageParameterReplacer : IOperationFilter
     /// <param name="context">The context.</param>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        var entityPageParameters = GetEntityPageParameters(operation, context);
-        ReplacePageNumberParameters(operation, entityPageParameters);
-        ReplacePageSizeParameters(operation, entityPageParameters);
-    }
-
-    /// <summary>
-    /// Return all parameters of type <see cref="EntityPage{TEntity}"/> from the given context.
-    /// </summary>
-    /// <param name="operation">The API operation.</param>
-    /// <param name="context">The operation filter context.</param>
-    protected virtual List<EntityPageParameter> GetEntityPageParameters(OpenApiOperation operation, OperationFilterContext context)
-    {
-        var operationParameters = new List<OpenApiParameter>(operation.Parameters);
-
-        return context
-            .ApiDescription
-            .ParameterDescriptions
-            .Where(IsEntityPageParameter)
-            .Select(description =>
+        var parametersToReplace = operation.Parameters
+            .Zip(
+                context.ApiDescription.ParameterDescriptions,
+                (parameter, description) => (Parameter: parameter, Description: description)
+            )
+            .Where(openApi => IsEntityPageParameter(openApi.Description))
+            .Select(openApi =>
             {
-                var operationParameter = operationParameters.First(parameter => parameter.Name == description.Name);
-                operationParameters.Remove(operationParameter);
-
-                var parameterType = description.ParameterDescriptor.ParameterType;
-                var pagedType = parameterType.IsGenericType ? parameterType.GetGenericArguments().First() : null;
-
-                return new EntityPageParameter(Parameter: operationParameter, PagedType: pagedType);
+                var entityPageType = openApi.Description.ParameterDescriptor.ParameterType;
+                var configuration = GetConfiguration(entityPageType);
+                return new PageParameterReplacement(
+                    OpenApiParameter: openApi.Parameter,
+                    OpenApiDescription: openApi.Description,
+                    PagedType: entityPageType.IsGenericType ? entityPageType.GenericTypeArguments[0] : null,
+                    Configuration: configuration);
             })
             .ToList();
+
+        operation.ReplacePageParameters(parametersToReplace);
     }
 
     private static bool IsEntityPageParameter(ApiParameterDescription description)
         => description.ParameterDescriptor.ParameterType.IsAssignableTo(typeof(EntityPage));
 
-    private static void ReplacePageNumberParameters(OpenApiOperation operation, List<EntityPageParameter> entityPageParameters)
+    private PageConfiguration GetConfiguration(Type entityPageType)
     {
-        var entityPageNumberParameters = entityPageParameters
-            .Where(x => x.Parameter.Name == nameof(EntityPage.PageNumber))
-            .ToList();
+        if (!entityPageType.IsEntityPage())
+            throw new ArgumentException("Type is not an EntityPage", nameof(entityPageType));
 
-        foreach (var entityPageNumberParameter in entityPageNumberParameters)
-            ReplaceOpenApiPageNumberParameter(operation, entityPageNumberParameter);
+        var entityTypeConfiguration = ((EntityPage?)_serviceProvider.GetService(entityPageType))?.Configuration;
+        return entityTypeConfiguration ?? _defaultConfiguration;
     }
-
-    private static void ReplaceOpenApiPageNumberParameter(OpenApiOperation operation, EntityPageParameter pageParameter)
-    {
-        var parameterIndex = operation.Parameters.IndexOf(pageParameter.Parameter);
-        operation.Parameters.RemoveAt(parameterIndex);
-
-        var entityFilterAttribute = pageParameter.PagedType?.GetCustomAttribute<FilterEntityAttribute>();
-        var pageNumberParameterName = entityFilterAttribute?.PageNumberParameter ?? FilterEntityAttribute.DEFAULT_PAGE_NUMBER_PARAMETER_NAME;
-
-        var openApiParameter = operation.Parameters.FirstOrDefault(x => x.Name == pageNumberParameterName);
-        if (openApiParameter != null)
-            return;
-
-        openApiParameter = new OpenApiParameter
-        {
-            Name = pageNumberParameterName,
-            Description = "Pages the result by the given page number.",
-            Schema = new OpenApiSchema
-            {
-                Type = "integer",
-                Format = "int32"
-            },
-            In = ParameterLocation.Query,
-            Extensions = new Dictionary<string, IOpenApiExtension>
-            {
-                [ENTITY_EXTENSION] = new OpenApiBoolean(true)
-            }
-        };
-
-        operation.Parameters.Insert(parameterIndex, openApiParameter);
-    }
-
-    private static void ReplacePageSizeParameters(OpenApiOperation operation, List<EntityPageParameter> entityPageParameters)
-    {
-        var entityPageSizeParameters = entityPageParameters
-            .Where(x => x.Parameter.Name == nameof(EntityPage.PageSize))
-            .ToList();
-
-        foreach (var entityPageSizeParameter in entityPageSizeParameters)
-            ReplaceOpenApiPageSizeParameter(operation, entityPageSizeParameter);
-    }
-
-    private static void ReplaceOpenApiPageSizeParameter(OpenApiOperation operation, EntityPageParameter pageParameter)
-    {
-        var parameterIndex = operation.Parameters.IndexOf(pageParameter.Parameter);
-        operation.Parameters.RemoveAt(parameterIndex);
-
-        var entityFilterAttribute = pageParameter.PagedType?.GetCustomAttribute<FilterEntityAttribute>();
-        var pageSizeParameterName = entityFilterAttribute?.PageSizeParameter ?? FilterEntityAttribute.DEFAULT_PAGE_SIZE_PARAMETER_NAME;
-
-        var openApiParameter = operation.Parameters.FirstOrDefault(x => x.Name == pageSizeParameterName);
-        if (openApiParameter != null)
-            return;
-
-        openApiParameter = new OpenApiParameter
-        {
-            Name = pageSizeParameterName,
-            Description = "Pages the result by the given page size.",
-            Schema = new OpenApiSchema
-            {
-                Type = "integer",
-                Format = "int32"
-            },
-            In = ParameterLocation.Query,
-            Extensions = new Dictionary<string, IOpenApiExtension>
-            {
-                [ENTITY_EXTENSION] = new OpenApiBoolean(true)
-            }
-        };
-
-        operation.Parameters.Insert(parameterIndex, openApiParameter);
-    }
-
-    /// <summary>
-    /// A single page parameter.
-    /// </summary>
-    /// <remarks>
-    /// Initializes a new instance of the <see cref="EntityPageParameterReplacer"/> class.
-    /// </remarks>
-    /// <param name="Parameter">Gets the OpenAPI parameter.</param>
-    /// <param name="PagedType">Gets the type of the entity to page.</param>
-    protected record EntityPageParameter(OpenApiParameter Parameter, Type? PagedType);
 }

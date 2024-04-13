@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿
+
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Plainquire.Filter.Abstractions;
 using System;
 using System.Linq;
@@ -20,18 +22,17 @@ public class EntityPageModelBinder : IModelBinder
         if (bindingContext == null)
             throw new ArgumentNullException(nameof(bindingContext));
 
-        var pageType = (Type?)null;
-        var pageParameterName = FilterEntityAttribute.DEFAULT_PAGE_NUMBER_PARAMETER_NAME;
-        var pageSizeParameterName = FilterEntityAttribute.DEFAULT_PAGE_SIZE_PARAMETER_NAME;
+        var serviceProvider = bindingContext.ActionContext.HttpContext.RequestServices;
 
         var isGenericPage = bindingContext.ModelType.IsGenericType;
-        if (isGenericPage)
-        {
-            pageType = bindingContext.ModelType.GetGenericArguments()[0];
-            var entityFilterAttribute = pageType.GetCustomAttribute<FilterEntityAttribute>();
-            pageParameterName = entityFilterAttribute?.PageNumberParameter ?? FilterEntityAttribute.DEFAULT_PAGE_NUMBER_PARAMETER_NAME;
-            pageSizeParameterName = entityFilterAttribute?.PageSizeParameter ?? FilterEntityAttribute.DEFAULT_PAGE_SIZE_PARAMETER_NAME;
-        }
+        var pageType = isGenericPage ? bindingContext.ModelType.GenericTypeArguments[0] : null;
+        var entityPage = CreateEntityPage(pageType, serviceProvider);
+
+        if (bindingContext.ModelMetadata.ParameterName == null)
+            throw new InvalidOperationException("Unable to get original parameter name.");
+
+        var (pageParameterName, pageSizeParameterName) = ParameterExtensions
+            .GetPageParameterNames(bindingContext.ModelMetadata.ParameterName, bindingContext.OriginalModelName);
 
         var pageParameterValue = bindingContext.HttpContext.Request.Query.Keys
             .Where(queryParameter => queryParameter == pageParameterName)
@@ -43,37 +44,31 @@ public class EntityPageModelBinder : IModelBinder
             .Select(queryParameter => GetParameterValue(queryParameter, bindingContext))
             .FirstOrDefault();
 
-        var entityPage = CreateEntityPage(pageType, pageParameterValue, pageSizeParameterValue);
+        var pageSizeFromFilterAttribute = pageType?
+            .GetCustomAttribute<FilterEntityAttribute>()?
+            .PageSize
+            .ToString();
+
+        entityPage.PageNumberValue = pageParameterValue ?? string.Empty;
+        entityPage.PageSizeValue = pageSizeParameterValue ?? pageSizeFromFilterAttribute ?? string.Empty;
+
         bindingContext.Result = ModelBindingResult.Success(entityPage);
+
         return Task.CompletedTask;
     }
 
     private static string? GetParameterValue(string queryParameter, ModelBindingContext bindingContext)
         => bindingContext.ValueProvider.GetValue(queryParameter).FirstValue;
 
-    private static EntityPage CreateEntityPage(Type? pageType, string? page, string? pageSize)
+    private static EntityPage CreateEntityPage(Type? pageType, IServiceProvider serviceProvider)
     {
         if (pageType == null)
-        {
-            return new EntityPage
-            {
-                PageNumberValue = page ?? string.Empty,
-                PageSizeValue = pageSize ?? string.Empty
-            };
-        }
-
-        if (string.IsNullOrEmpty(pageSize))
-        {
-            var entityFilterAttribute = pageType.GetCustomAttribute<FilterEntityAttribute>();
-            if (entityFilterAttribute?.PageSize != 0)
-                pageSize = entityFilterAttribute?.PageSize.ToString();
-        }
+            return new EntityPage();
 
         var entityPageType = typeof(EntityPage<>).MakeGenericType(pageType);
         var entityPage = (EntityPage)Activator.CreateInstance(entityPageType)!;
-        entityPage.PageNumberValue = page ?? string.Empty;
-        entityPage.PageSizeValue = pageSize ?? string.Empty;
-
+        var prototype = (EntityPage?)serviceProvider.GetService(entityPageType);
+        entityPage.Configuration = prototype?.Configuration;
         return entityPage;
     }
 }

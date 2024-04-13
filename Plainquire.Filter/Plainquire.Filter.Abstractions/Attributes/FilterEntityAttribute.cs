@@ -12,16 +12,6 @@ namespace Plainquire.Filter.Abstractions;
 public class FilterEntityAttribute : Attribute
 {
     /// <summary>
-    /// The default name for the page selection parameter.
-    /// </summary>
-    public const string DEFAULT_PAGE_NUMBER_PARAMETER_NAME = "page";
-
-    /// <summary>
-    /// The default name for the page size parameter.
-    /// </summary>
-    public const string DEFAULT_PAGE_SIZE_PARAMETER_NAME = "pageSize";
-
-    /// <summary>
     /// Specify the prefix to use when using <see><cref>EntityFilter{TEntity}</cref></see> or <see><cref>EntitySort{TEntity}</cref></see> from MVC controllers.
     /// Default is the name of the filtered class (e.g. for <c>EntityFilter&lt;Person&gt;</c> the prefix is <c>Person)</c>.
     /// </summary>
@@ -31,14 +21,4 @@ public class FilterEntityAttribute : Attribute
     /// Page size taken when not overriden by HTTP query parameter.
     /// </summary>
     public int PageSize { get; set; }
-
-    /// <summary>
-    /// The name of the query parameter used to sort the entities.
-    /// </summary>
-    public string PageNumberParameter { get; set; } = DEFAULT_PAGE_NUMBER_PARAMETER_NAME;
-
-    /// <summary>
-    /// The name of the query parameter used to sort the entities.
-    /// </summary>
-    public string PageSizeParameter { get; set; } = DEFAULT_PAGE_SIZE_PARAMETER_NAME;
 }

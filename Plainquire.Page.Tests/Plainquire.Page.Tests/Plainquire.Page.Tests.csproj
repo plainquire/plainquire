@@ -9,13 +9,16 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Plainquire.Filter.Tests\Plainquire.Swashbuckle.TestSupport\Plainquire.Swashbuckle.TestSupport.csproj" />
     <ProjectReference Include="..\..\Plainquire.Filter\Plainquire.Filter.Abstractions\Plainquire.Filter.Abstractions.csproj" />
     <ProjectReference Include="..\..\Plainquire.Page\Plainquire.Page.Mvc.Newtonsoft\Plainquire.Page.Mvc.Newtonsoft.csproj" />
     <ProjectReference Include="..\..\Plainquire.Page\Plainquire.Page.Mvc\Plainquire.Page.Mvc.csproj" />
     <ProjectReference Include="..\..\Plainquire.Page\Plainquire.Page.Newtonsoft\Plainquire.Page.Newtonsoft.csproj" />
+    <ProjectReference Include="..\..\Plainquire.Page\Plainquire.Page.Swashbuckle\Plainquire.Page.Swashbuckle.csproj" />
     <ProjectReference Include="..\..\Plainquire.Page\Plainquire.Page\Plainquire.Page.csproj" />
   </ItemGroup>
 
