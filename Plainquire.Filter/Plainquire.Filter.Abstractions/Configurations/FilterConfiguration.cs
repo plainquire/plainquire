@@ -9,11 +9,15 @@ namespace Plainquire.Filter.Abstractions;
 public class FilterConfiguration
 {
     /// <summary>
+    /// Default configuration used when no other configuration is provided.
+    /// </summary>
+    public static FilterConfiguration? Default { get; set; }
+
+    /// <summary>
     /// The culture used for paring in the format languagecode2-country/regioncode2 (e.g. 'en-US').
     /// </summary>
     public string CultureName { get; set; } = CultureInfo.CurrentCulture.Name;
 
-    // TODO: Think about to handle "Unable to parse given filter value"        
     /// <summary>
     /// Return <c>x => true</c> in case of any exception while parsing the value
     /// </summary>

@@ -400,7 +400,7 @@ public class EntityFilter : ICloneable
     /// <inheritdoc cref="EntityFilter{TEntity}.CreateFilter" />
     protected internal Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(IFilterInterceptor? interceptor = null)
     {
-        var configuration = Configuration ?? new FilterConfiguration();
+        var configuration = Configuration ?? FilterConfiguration.Default ?? new FilterConfiguration();
 
         var properties = typeof(TEntity)
             .GetProperties();

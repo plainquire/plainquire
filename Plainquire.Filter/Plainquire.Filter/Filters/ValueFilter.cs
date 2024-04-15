@@ -93,7 +93,7 @@ public class ValueFilter
     /// <inheritdoc />
     public override string? ToString()
     {
-        var configuration = _configuration ?? new FilterConfiguration();
+        var configuration = _configuration ?? FilterConfiguration.Default ?? new FilterConfiguration();
         var operatorSyntax = configuration.FilterOperatorMap.FirstOrDefault(x => x.Value == Operator).Key;
         if (string.IsNullOrEmpty(operatorSyntax) && Value == null)
             return null;
@@ -116,7 +116,7 @@ public class ValueFilter
 
     private static (FilterOperator, string?) ExtractFilterOperator(string? filter, FilterConfiguration? configuration)
     {
-        configuration ??= new FilterConfiguration();
+        configuration ??= FilterConfiguration.Default ?? new FilterConfiguration();
 
         if (filter == null)
             return (FilterOperator.Default, null);
