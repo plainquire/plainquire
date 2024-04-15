@@ -401,6 +401,7 @@ public class EntityFilter : ICloneable
     protected internal Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(IFilterInterceptor? interceptor = null)
     {
         var configuration = Configuration ?? FilterConfiguration.Default ?? new FilterConfiguration();
+        interceptor ??= IFilterInterceptor.Default;
 
         var properties = typeof(TEntity)
             .GetProperties();

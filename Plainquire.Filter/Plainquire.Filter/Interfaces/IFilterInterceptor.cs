@@ -12,6 +12,11 @@ namespace Plainquire.Filter;
 public interface IFilterInterceptor
 {
     /// <summary>
+    /// Default filter interceptor used when no other interceptor is provided.
+    /// </summary>
+    public static IFilterInterceptor? Default { get; set; }
+
+    /// <summary>
     /// Returns the value for 'now' when parsing relative date/time values (e.g. one-week-ago).
     /// </summary>
     Func<DateTimeOffset> Now { get; }
