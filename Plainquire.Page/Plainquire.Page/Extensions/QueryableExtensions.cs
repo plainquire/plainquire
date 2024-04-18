@@ -39,6 +39,8 @@ public static class QueryableExtensions
     /// <param name="interceptor">An interceptor to manipulate the generated page.</param>
     public static IQueryable<TEntity> Page<TEntity>(this IQueryable<TEntity> source, EntityPage page, IPageInterceptor? interceptor = null)
     {
+        interceptor ??= IPageInterceptor.Default;
+
         var result = interceptor?.Page(source, page);
         if (result != null)
             return result;
