@@ -29,7 +29,7 @@ public class EntitySortParameterReplacer : IOperationFilter
     public EntitySortParameterReplacer(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        _defaultConfiguration = _serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value ?? new SortConfiguration();
+        _defaultConfiguration = _serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value ?? SortConfiguration.Default ?? new SortConfiguration();
     }
 
     /// <summary>

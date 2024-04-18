@@ -1,6 +1,5 @@
 ﻿using Plainquire.Sort.Abstractions;
 using System;
-using System.Linq;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
@@ -80,7 +79,7 @@ public class PropertySort
     /// <inheritdoc />
     public override string ToString()
     {
-        var configuration = _configuration ?? new SortConfiguration();
+        var configuration = _configuration ?? SortConfiguration.Default ?? new SortConfiguration();
 
         var directionPostfix = Direction == SortDirection.Ascending
             ? configuration.PrimaryAscendingPostfix
@@ -91,7 +90,7 @@ public class PropertySort
 
     private static (string PropertyPath, SortDirection Direction) ParseSortSyntax(string sortSyntax, SortConfiguration? configuration)
     {
-        configuration ??= new SortConfiguration();
+        configuration ??= SortConfiguration.Default ?? new SortConfiguration();
 
         var sortSyntaxPattern = $"^(?<prefix>{configuration.SortDirectionPrefixPattern})(?<propertyPath>.*?)(?<postfix>{configuration.SortDirectionPostfixPattern})$";
         var match = Regex.Match(sortSyntax, sortSyntaxPattern, RegexOptions.IgnoreCase);

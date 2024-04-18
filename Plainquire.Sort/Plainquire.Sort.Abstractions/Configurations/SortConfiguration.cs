@@ -15,6 +15,11 @@ public class SortConfiguration
     private List<string> _descendingPostfixes = ["-desc", " desc", "-dsc", " dsc", "-", "~"];
 
     /// <summary>
+    /// Default configuration used when no other configuration is provided.
+    /// </summary>
+    public static SortConfiguration? Default { get; set; }
+
+    /// <summary>
     /// Prefixes used to identify an ascending sort order.
     /// </summary>
     public List<string> AscendingPrefixes { get => _ascendingPrefixes; set => SetAscendingPrefixes(value); }

@@ -32,8 +32,8 @@ public class EntitySortModelBinder : IModelBinder
         var entitySort = CreateEntitySort(sortedType, serviceProvider);
 
         var entitySortConfiguration = entitySort.Configuration;
-        var defaultConfiguration = serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value;
-        var configuration = entitySortConfiguration ?? defaultConfiguration ?? new SortConfiguration();
+        var diConfiguration = serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value;
+        var configuration = entitySortConfiguration ?? diConfiguration ?? SortConfiguration.Default ?? new SortConfiguration();
 
         var sortByParameterName = bindingContext.OriginalModelName;
         var sortByParameterValues = bindingContext.HttpContext.Request.Query.Keys

@@ -31,7 +31,7 @@ public static class QueryableExtensions
         if (!propertySorts.Any())
             return (IOrderedQueryable<TEntity>)source.Provider.CreateQuery<TEntity>(source.Expression);
 
-        var configuration = sort.Configuration ?? new SortConfiguration();
+        var configuration = sort.Configuration ?? SortConfiguration.Default ?? new SortConfiguration();
 
         var first = propertySorts.First();
         var result = interceptor?.OrderBy(source, first);
