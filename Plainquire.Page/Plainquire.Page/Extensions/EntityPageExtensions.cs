@@ -15,7 +15,7 @@ public static class EntityPageExtensions
     /// <exception cref="InvalidOperationException"></exception>
     public static (int? Skip, int? Take) GetSkipAndTake(this EntityPage page)
     {
-        var configuration = page.Configuration ?? new PageConfiguration();
+        var configuration = page.Configuration ?? PageConfiguration.Default ?? new PageConfiguration();
 
         var pageNumber = ParsePageNumber(page, configuration);
         var pageSize = ParsePageSize(page, configuration);

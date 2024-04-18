@@ -29,7 +29,7 @@ public class EntityPageSetParameterReplacer : IOperationFilter
     public EntityPageSetParameterReplacer(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        _defaultConfiguration = _serviceProvider.GetService<IOptions<PageConfiguration>>()?.Value ?? new PageConfiguration();
+        _defaultConfiguration = _serviceProvider.GetService<IOptions<PageConfiguration>>()?.Value ?? PageConfiguration.Default ?? new PageConfiguration();
     }
 
     /// <inheritdoc />
