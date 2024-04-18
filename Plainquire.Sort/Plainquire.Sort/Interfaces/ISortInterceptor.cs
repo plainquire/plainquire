@@ -10,6 +10,11 @@ namespace Plainquire.Sort;
 public interface ISortInterceptor
 {
     /// <summary>
+    /// Default sort interceptor used when no other interceptor is provided.
+    /// </summary>
+    public static ISortInterceptor? Default { get; set; }
+
+    /// <summary>
     /// Sorts the elements of a sequence according to the given <paramref name="sort"/>.
     /// </summary>
     /// <typeparam name="TEntity">The type of the sorted entity.</typeparam>
