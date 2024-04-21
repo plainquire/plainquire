@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -18,6 +19,9 @@ public class TestModel<TValue>
     public TestModelNested? NestedObject { get; init; }
 
     public List<TestModelNested>? NestedList { get; init; }
+
+    [Filter(Name = "ValueC")]
+    public string? ValueRenamed { get; set; }
 
     [ExcludeFromCodeCoverage]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

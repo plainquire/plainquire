@@ -10,7 +10,9 @@
     <ProjectReference Include="..\..\Plainquire.Filter\Plainquire.Filter.Abstractions\Plainquire.Filter.Abstractions.csproj" />
     <ProjectReference Include="..\..\Plainquire.Filter\Plainquire.Filter.Mvc\Plainquire.Filter.Mvc.csproj" />
     <ProjectReference Include="..\..\Plainquire.Filter\Plainquire.Filter.Newtonsoft\Plainquire.Filter.Newtonsoft.csproj" />
+    <ProjectReference Include="..\..\Plainquire.Filter\Plainquire.Filter.Swashbuckle\Plainquire.Filter.Swashbuckle.csproj" />
     <ProjectReference Include="..\..\Plainquire.Filter\Plainquire.Filter\Plainquire.Filter.csproj" />
+    <ProjectReference Include="..\Plainquire.Swashbuckle.TestSupport\Plainquire.Swashbuckle.TestSupport.csproj" />
   </ItemGroup>
 
 </Project>
