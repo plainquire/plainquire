@@ -13,6 +13,6 @@ internal static class MemberInfoExtensions
     public static string GetSortParameterName(this MemberInfo member, string? prefix = null)
     {
         var filterAttribute = member.GetCustomAttribute<FilterAttribute>();
-        return $"{prefix ?? member.ReflectedType?.Name}{filterAttribute?.Name ?? member.Name}".LowercaseFirstChar();
+        return $"{prefix ?? member.ReflectedType.ExpandTypeName()}{filterAttribute?.Name ?? member.Name}".LowercaseFirstChar();
     }
 }

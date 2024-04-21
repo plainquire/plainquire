@@ -20,10 +20,10 @@ namespace Plainquire.Sort.Tests.Tests.OpenApiFilter;
 public class EntitySortSetParameterPositionTests
 {
     [DataTestMethod]
-    [DataRow(nameof(EntitySortPositionSetController.SingleSortSet))]
-    [DataRow(nameof(EntitySortPositionSetController.SingleSortSetAtStart))]
-    [DataRow(nameof(EntitySortPositionSetController.SingleSortSetAtEnd))]
-    [DataRow(nameof(EntitySortPositionSetController.SingleSortSetBetween))]
+    [DataRow(nameof(EntitySortSetPositionController.SingleSortSet))]
+    [DataRow(nameof(EntitySortSetPositionController.SingleSortSetAtStart))]
+    [DataRow(nameof(EntitySortSetPositionController.SingleSortSetAtEnd))]
+    [DataRow(nameof(EntitySortSetPositionController.SingleSortSetBetween))]
     public void WhenSingleEntitySortSetIsGiven_ItIsReplacedBySingleSortParameter(string actionName)
     {
         // Arrange
@@ -31,7 +31,7 @@ public class EntitySortSetParameterPositionTests
         A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
 
         var operationFilters = CreateOperationFilters(serviceProvider);
-        var swaggerGenerator = SwaggerGeneratorFactory.Create<EntitySortPositionSetController>(actionName, operationFilters);
+        var swaggerGenerator = SwaggerGeneratorFactory.Create<EntitySortSetPositionController>(actionName, operationFilters);
 
         // Act
         var openApiDocument = swaggerGenerator.GetSwagger("v1");
@@ -49,12 +49,12 @@ public class EntitySortSetParameterPositionTests
     }
 
     [DataTestMethod]
-    [DataRow(nameof(EntitySortPositionSetController.MixedSortAndSet), 0, 1)]
-    [DataRow(nameof(EntitySortPositionSetController.MixedSortAndSetAtStart), 0, 1)]
-    [DataRow(nameof(EntitySortPositionSetController.MixedSortAndSetAtEnd), 1, 2)]
-    [DataRow(nameof(EntitySortPositionSetController.MixedSortAndSetBetween), 1, 2)]
-    [DataRow(nameof(EntitySortPositionSetController.MixedSortAndSetAround), 0, 2)]
-    [DataRow(nameof(EntitySortPositionSetController.MixedSortAndSetSpread), 1, 3)]
+    [DataRow(nameof(EntitySortSetPositionController.MixedSortAndSet), 0, 1)]
+    [DataRow(nameof(EntitySortSetPositionController.MixedSortAndSetAtStart), 0, 1)]
+    [DataRow(nameof(EntitySortSetPositionController.MixedSortAndSetAtEnd), 1, 2)]
+    [DataRow(nameof(EntitySortSetPositionController.MixedSortAndSetBetween), 1, 2)]
+    [DataRow(nameof(EntitySortSetPositionController.MixedSortAndSetAround), 0, 2)]
+    [DataRow(nameof(EntitySortSetPositionController.MixedSortAndSetSpread), 1, 3)]
     public void WhenMixedEntitySortAndSetAreGiven_TheyAreReplacedBySingleSortParameter(string actionName, int expectedOrderByIndex, int expectedSortByIndex)
     {
         // Arrange
@@ -62,7 +62,7 @@ public class EntitySortSetParameterPositionTests
         A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
 
         var operationFilters = CreateOperationFilters(serviceProvider);
-        var swaggerGenerator = SwaggerGeneratorFactory.Create<EntitySortPositionSetController>(actionName, operationFilters);
+        var swaggerGenerator = SwaggerGeneratorFactory.Create<EntitySortSetPositionController>(actionName, operationFilters);
 
         // Act
         var openApiDocument = swaggerGenerator.GetSwagger("v1");
