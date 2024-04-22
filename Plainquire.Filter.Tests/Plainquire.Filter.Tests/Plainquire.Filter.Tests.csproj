@@ -13,6 +13,7 @@
     <ProjectReference Include="..\..\Plainquire.Filter\Plainquire.Filter.Swashbuckle\Plainquire.Filter.Swashbuckle.csproj" />
     <ProjectReference Include="..\..\Plainquire.Filter\Plainquire.Filter\Plainquire.Filter.csproj" />
     <ProjectReference Include="..\Plainquire.Swashbuckle.TestSupport\Plainquire.Swashbuckle.TestSupport.csproj" />
+    <ProjectReference Include="..\Plainquire.TestSupport\Plainquire.TestSupport.csproj" />
   </ItemGroup>
 
 </Project>

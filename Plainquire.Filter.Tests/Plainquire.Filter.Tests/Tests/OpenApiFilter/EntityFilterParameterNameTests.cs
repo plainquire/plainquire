@@ -41,10 +41,10 @@ public class EntityFilterParameterNameTests
             .Select(x => x.Name)
             .Should()
             .Equal([
-                "testModelStringId",
-                "testModelStringValueA",
-                "testModelStringValueB",
-                "testModelStringValueC"
+                "testModelDateTimeId",
+                "testModelDateTimeValueA",
+                "testModelDateTimeValueB",
+                "testModelDateTimeValueC"
             ]);
 
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);

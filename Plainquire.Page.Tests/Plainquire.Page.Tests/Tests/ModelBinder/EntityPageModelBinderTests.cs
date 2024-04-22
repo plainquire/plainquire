@@ -1,20 +1,13 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Plainquire.Page.Mvc.ModelBinders;
 using Plainquire.Page.Tests.Models;
+using Plainquire.TestSupport.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Plainquire.Page.Tests.Tests.ModelBinder;
@@ -35,7 +28,7 @@ public class EntityPageModelBinderTests
 
         var binder = new EntityPageModelBinder();
         const string actionName = nameof(EntityPageNameController.ParameterUnnamed);
-        var pageBindingContext = CreateBindingContext<EntityPageNameController>(actionName, "page", queryParameters, serviceProvider);
+        var pageBindingContext = BindingExtensions.CreateBindingContext<EntityPageNameController>(actionName, "page", queryParameters, serviceProvider);
 
         // Act
         await binder.BindModelAsync(pageBindingContext);
@@ -61,7 +54,7 @@ public class EntityPageModelBinderTests
 
         var binder = new EntityPageModelBinder();
         const string actionName = nameof(EntityPageNameController.ParameterNumberNamed);
-        var pageBindingContext = CreateBindingContext<EntityPageNameController>(actionName, "page", queryParameters, serviceProvider);
+        var pageBindingContext = BindingExtensions.CreateBindingContext<EntityPageNameController>(actionName, "page", queryParameters, serviceProvider);
 
         // Act
         await binder.BindModelAsync(pageBindingContext);
@@ -87,7 +80,7 @@ public class EntityPageModelBinderTests
 
         var binder = new EntityPageModelBinder();
         const string actionName = nameof(EntityPageNameController.ParameterSizeNamed);
-        var pageBindingContext = CreateBindingContext<EntityPageNameController>(actionName, "page", queryParameters, serviceProvider);
+        var pageBindingContext = BindingExtensions.CreateBindingContext<EntityPageNameController>(actionName, "page", queryParameters, serviceProvider);
 
         // Act
         await binder.BindModelAsync(pageBindingContext);
@@ -113,7 +106,7 @@ public class EntityPageModelBinderTests
 
         var binder = new EntityPageModelBinder();
         const string actionName = nameof(EntityPageNameController.ParameterBothNamed);
-        var pageBindingContext = CreateBindingContext<EntityPageNameController>(actionName, "page", queryParameters, serviceProvider);
+        var pageBindingContext = BindingExtensions.CreateBindingContext<EntityPageNameController>(actionName, "page", queryParameters, serviceProvider);
 
         // Act
         await binder.BindModelAsync(pageBindingContext);
@@ -139,8 +132,8 @@ public class EntityPageModelBinderTests
 
         var binder = new EntityPageModelBinder();
         const string actionName = nameof(EntityPageNameController.ParameterMixedNamed);
-        var page1BindingContext = CreateBindingContext<EntityPageNameController>(actionName, "page1", queryParameters, serviceProvider);
-        var page2BindingContext = CreateBindingContext<EntityPageNameController>(actionName, "page2", queryParameters, serviceProvider);
+        var page1BindingContext = BindingExtensions.CreateBindingContext<EntityPageNameController>(actionName, "page1", queryParameters, serviceProvider);
+        var page2BindingContext = BindingExtensions.CreateBindingContext<EntityPageNameController>(actionName, "page2", queryParameters, serviceProvider);
 
         // Act
         await binder.BindModelAsync(page1BindingContext);
@@ -172,7 +165,7 @@ public class EntityPageModelBinderTests
 
         var binder = new EntityPageModelBinder();
         const string actionName = nameof(EntityPageNameController.PageSizeByFilterAttribute);
-        var pageBindingContext = CreateBindingContext<EntityPageNameController>(actionName, "page", queryParameters, serviceProvider);
+        var pageBindingContext = BindingExtensions.CreateBindingContext<EntityPageNameController>(actionName, "page", queryParameters, serviceProvider);
 
         // Act
         await binder.BindModelAsync(pageBindingContext);
@@ -185,41 +178,5 @@ public class EntityPageModelBinderTests
         var page = (Page.EntityPage)pageBindingContext.Result.Model!;
         page.PageNumber.Should().Be(1);
         page.PageSize.Should().Be(10);
-    }
-
-    private static ModelBindingContext CreateBindingContext<TController>(string actionName, string parameterName, Dictionary<string, string> queryParameters, IServiceProvider serviceProvider)
-    {
-        var actionContext = new ActionContext
-        {
-            HttpContext = new DefaultHttpContext
-            {
-                Request = { QueryString = new QueryBuilder(queryParameters).ToQueryString() },
-                RequestServices = serviceProvider
-            }
-        };
-
-        var bindingSource = new BindingSource("Query", "Query", false, true);
-        var routeValueDictionary = new RouteValueDictionary(queryParameters!);
-        var valueProvider = new RouteValueProvider(bindingSource, routeValueDictionary);
-
-        var parameterInfo = typeof(TController)
-            .GetMethod(actionName)?
-            .GetParameters()
-            .FirstOrDefault(parameter => parameter.Name == parameterName)
-            ?? throw new ArgumentException("Method or parameter not found", nameof(actionName));
-
-        var modelMetadata = (DefaultModelMetadata)new EmptyModelMetadataProvider().GetMetadataForParameter(parameterInfo, parameterInfo.ParameterType);
-        var binderModelName = parameterInfo.GetCustomAttribute<FromQueryAttribute>()?.Name;
-
-        var bindingContext = DefaultModelBindingContext
-            .CreateBindingContext(
-                actionContext,
-                valueProvider,
-                modelMetadata,
-                bindingInfo: null,
-                binderModelName ?? parameterInfo.Name ?? throw new InvalidOperationException("Parameter name not found")
-            );
-
-        return bindingContext;
     }
 }

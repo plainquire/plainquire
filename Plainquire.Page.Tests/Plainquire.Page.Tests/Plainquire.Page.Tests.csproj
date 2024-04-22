@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Plainquire.Filter.Tests\Plainquire.Swashbuckle.TestSupport\Plainquire.Swashbuckle.TestSupport.csproj" />
+    <ProjectReference Include="..\..\Plainquire.Filter.Tests\Plainquire.TestSupport\Plainquire.TestSupport.csproj" />
     <ProjectReference Include="..\..\Plainquire.Filter\Plainquire.Filter.Abstractions\Plainquire.Filter.Abstractions.csproj" />
     <ProjectReference Include="..\..\Plainquire.Page\Plainquire.Page.Mvc.Newtonsoft\Plainquire.Page.Mvc.Newtonsoft.csproj" />
     <ProjectReference Include="..\..\Plainquire.Page\Plainquire.Page.Mvc\Plainquire.Page.Mvc.csproj" />

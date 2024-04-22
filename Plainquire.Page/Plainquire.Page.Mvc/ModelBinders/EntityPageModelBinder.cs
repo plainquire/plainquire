@@ -1,7 +1,10 @@
 ﻿
 
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Plainquire.Filter.Abstractions;
+using Plainquire.Page.Abstractions;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -67,8 +70,11 @@ public class EntityPageModelBinder : IModelBinder
 
         var entityPageType = typeof(EntityPage<>).MakeGenericType(pageType);
         var entityPage = (EntityPage)Activator.CreateInstance(entityPageType)!;
-        var prototype = (EntityPage?)serviceProvider.GetService(entityPageType);
-        entityPage.Configuration = prototype?.Configuration;
+
+        var prototypeConfiguration = ((EntityPage?)serviceProvider.GetService(entityPageType))?.Configuration;
+        var injectedConfiguration = serviceProvider.GetService<IOptions<PageConfiguration>>()?.Value;
+        entityPage.Configuration = prototypeConfiguration ?? injectedConfiguration;
+
         return entityPage;
     }
 }

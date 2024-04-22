@@ -1,20 +1,14 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Plainquire.Sort.Mvc.ModelBinders;
 using Plainquire.Sort.Tests.Models;
+using Plainquire.TestSupport.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Plainquire.Sort.Tests.Tests.ModelBinder;
@@ -35,7 +29,7 @@ public class EntitySortModelBinderTests
 
         var binder = new EntitySortModelBinder();
         const string actionName = nameof(EntitySortNameController.SingleSort);
-        var sortBindingContext = CreateBindingContext<EntitySortNameController>(actionName, "orderBy", queryParameters, serviceProvider);
+        var sortBindingContext = BindingExtensions.CreateBindingContext<EntitySortNameController>(actionName, "orderBy", queryParameters, serviceProvider);
 
         // Act
         await binder.BindModelAsync(sortBindingContext);
@@ -67,7 +61,7 @@ public class EntitySortModelBinderTests
         var queryParameters = new Dictionary<string, string> { ["orderBy"] = "fullname, birthday" };
 
         var binder = new EntitySortModelBinder();
-        var personBindingContext = CreateBindingContext<EntitySortPositionController>(actionName, "orderBy", queryParameters, serviceProvider);
+        var personBindingContext = BindingExtensions.CreateBindingContext<EntitySortPositionController>(actionName, "orderBy", queryParameters, serviceProvider);
 
         // Act
         await binder.BindModelAsync(personBindingContext);
@@ -101,8 +95,8 @@ public class EntitySortModelBinderTests
         var queryParameters = new Dictionary<string, string> { ["orderBy"] = "fullname, birthday, addressStreet" };
 
         var binder = new EntitySortModelBinder();
-        var personBindingContext = CreateBindingContext<EntitySortPositionController>(actionName, "orderBy", queryParameters, serviceProvider);
-        var addressBindingContext = CreateBindingContext<EntitySortPositionController>(actionName, "addressOrderBy", queryParameters, serviceProvider);
+        var personBindingContext = BindingExtensions.CreateBindingContext<EntitySortPositionController>(actionName, "orderBy", queryParameters, serviceProvider);
+        var addressBindingContext = BindingExtensions.CreateBindingContext<EntitySortPositionController>(actionName, "addressOrderBy", queryParameters, serviceProvider);
 
         // Act
         await binder.BindModelAsync(personBindingContext);
@@ -145,8 +139,8 @@ public class EntitySortModelBinderTests
         };
 
         var binder = new EntitySortModelBinder();
-        var personBindingContext = CreateBindingContext<EntitySortPositionController>(actionName, "orderBy", queryParameters, serviceProvider);
-        var addressBindingContext = CreateBindingContext<EntitySortPositionController>(actionName, "sortBy", queryParameters, serviceProvider);
+        var personBindingContext = BindingExtensions.CreateBindingContext<EntitySortPositionController>(actionName, "orderBy", queryParameters, serviceProvider);
+        var addressBindingContext = BindingExtensions.CreateBindingContext<EntitySortPositionController>(actionName, "sortBy", queryParameters, serviceProvider);
 
         // Act
         await binder.BindModelAsync(personBindingContext);
@@ -171,41 +165,5 @@ public class EntitySortModelBinderTests
             .Select(propertySort => propertySort.PropertyPath)
             .Should()
             .ContainInOrder("Street");
-    }
-
-    private static ModelBindingContext CreateBindingContext<TController>(string actionName, string parameterName, Dictionary<string, string> queryParameters, IServiceProvider serviceProvider)
-    {
-        var actionContext = new ActionContext
-        {
-            HttpContext = new DefaultHttpContext
-            {
-                Request = { QueryString = new QueryBuilder(queryParameters).ToQueryString() },
-                RequestServices = serviceProvider
-            }
-        };
-
-        var bindingSource = new BindingSource("Query", "Query", false, true);
-        var routeValueDictionary = new RouteValueDictionary(queryParameters!);
-        var valueProvider = new RouteValueProvider(bindingSource, routeValueDictionary);
-
-        var parameterInfo = typeof(TController)
-            .GetMethod(actionName)?
-            .GetParameters()
-            .FirstOrDefault(parameter => parameter.Name == parameterName)
-            ?? throw new ArgumentException("Method or parameter not found", nameof(actionName));
-
-        var modelMetadata = (DefaultModelMetadata)new EmptyModelMetadataProvider().GetMetadataForParameter(parameterInfo, parameterInfo.ParameterType);
-        var binderModelName = parameterInfo.GetCustomAttribute<FromQueryAttribute>()?.Name;
-
-        var bindingContext = DefaultModelBindingContext
-            .CreateBindingContext(
-                actionContext,
-                valueProvider,
-                modelMetadata,
-                bindingInfo: null,
-                binderModelName ?? parameterInfo.Name ?? throw new InvalidOperationException("Parameter name not found")
-            );
-
-        return bindingContext;
     }
 }

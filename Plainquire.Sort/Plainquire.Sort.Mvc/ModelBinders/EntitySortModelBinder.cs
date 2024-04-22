@@ -32,8 +32,7 @@ public class EntitySortModelBinder : IModelBinder
         var entitySort = CreateEntitySort(sortedType, serviceProvider);
 
         var entitySortConfiguration = entitySort.Configuration;
-        var diConfiguration = serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value;
-        var configuration = entitySortConfiguration ?? diConfiguration ?? SortConfiguration.Default ?? new SortConfiguration();
+        var configuration = entitySortConfiguration ?? SortConfiguration.Default ?? new SortConfiguration();
 
         var sortByParameterName = bindingContext.OriginalModelName;
         var sortByParameterValues = bindingContext.HttpContext.Request.Query.Keys
@@ -57,8 +56,11 @@ public class EntitySortModelBinder : IModelBinder
     {
         var entitySortType = typeof(EntitySort<>).MakeGenericType(sortedType);
         var entitySort = (EntitySort)Activator.CreateInstance(entitySortType)!;
-        var prototype = (EntitySort?)serviceProvider.GetService(entitySortType);
-        entitySort.Configuration = prototype?.Configuration;
+
+        var prototypeConfiguration = ((EntitySort?)serviceProvider.GetService(entitySortType))?.Configuration;
+        var injectedConfiguration = serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value;
+        entitySort.Configuration = prototypeConfiguration ?? injectedConfiguration;
+
         return entitySort;
     }
 }
@@ -80,7 +82,7 @@ file static class Extensions
 
         var propertySorts = sortParameters
             .Select(parameter => MapToPropertyPath(parameter, sortablePropertyNameToParameterMap, configuration))
-            .Select((propertyPath, index) => propertyPath != null ? PropertySort.Create(propertyPath, index) : null)
+            .Select((propertyPath, index) => propertyPath != null ? PropertySort.Create(propertyPath, index, configuration) : null)
             .WhereNotNull()
             .ToList();
 

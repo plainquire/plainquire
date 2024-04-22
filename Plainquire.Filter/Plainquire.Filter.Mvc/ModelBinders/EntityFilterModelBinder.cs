@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Plainquire.Filter.Abstractions;
 using System;
 using System.Reflection;
@@ -19,12 +21,12 @@ public class EntityFilterModelBinder : IModelBinder
         if (bindingContext == null)
             throw new ArgumentNullException(nameof(bindingContext));
 
+        var serviceProvider = bindingContext.ActionContext.HttpContext.RequestServices;
         var filteredType = bindingContext.ModelType.GetGenericArguments()[0];
-        var entityFilterType = typeof(EntityFilter<>).MakeGenericType(filteredType);
 
         var filterableProperties = filteredType.GetFilterableProperties();
         var entityFilterAttribute = filteredType.GetCustomAttribute<FilterEntityAttribute>();
-        var entityFilter = (EntityFilter)Activator.CreateInstance(entityFilterType)!;
+        var entityFilter = CreateEntityFilter(filteredType, serviceProvider);
 
         foreach (var property in filterableProperties)
         {
@@ -36,5 +38,20 @@ public class EntityFilterModelBinder : IModelBinder
 
         bindingContext.Result = ModelBindingResult.Success(entityFilter);
         return Task.CompletedTask;
+    }
+
+    private static EntityFilter CreateEntityFilter(Type? type, IServiceProvider serviceProvider)
+    {
+        if (type == null)
+            return new EntityFilter();
+
+        var entityPageType = typeof(EntityFilter<>).MakeGenericType(type);
+        var entityPage = (EntityFilter)Activator.CreateInstance(entityPageType)!;
+
+        var prototypeConfiguration = ((EntityFilter?)serviceProvider.GetService(entityPageType))?.Configuration;
+        var injectedConfiguration = serviceProvider.GetService<IOptions<FilterConfiguration>>()?.Value;
+        entityPage.Configuration = prototypeConfiguration ?? injectedConfiguration;
+
+        return entityPage;
     }
 }
