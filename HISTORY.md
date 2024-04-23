@@ -40,6 +40,7 @@
 
 | 4.x class / method / property name                | 5.x class / method / property name                 |
 | ------------------------------------------------- | -------------------------------------------------- |
+| `FilterEntityAttribute`                           | `EntityFilterAttribute`                            |
 | `FilterAttribute.Visible`                         | `FilterAttribute.Filterable`                       |
 | `AddFilterExpressionSupport`                      | `AddFilterSupport`                                 |
 | `AddFilterExpressionNewtonsoftSupport`            | `AddFilterNewtonsoftSupport`                       |

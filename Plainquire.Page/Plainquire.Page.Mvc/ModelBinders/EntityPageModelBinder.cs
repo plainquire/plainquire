@@ -48,7 +48,7 @@ public class EntityPageModelBinder : IModelBinder
             .FirstOrDefault();
 
         var pageSizeFromFilterAttribute = pageType?
-            .GetCustomAttribute<FilterEntityAttribute>()?
+            .GetCustomAttribute<EntityFilterAttribute>()?
             .PageSize
             .ToString();
 

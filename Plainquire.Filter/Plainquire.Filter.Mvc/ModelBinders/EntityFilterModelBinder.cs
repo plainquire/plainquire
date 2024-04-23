@@ -25,7 +25,7 @@ public class EntityFilterModelBinder : IModelBinder
         var filteredType = bindingContext.ModelType.GetGenericArguments()[0];
 
         var filterableProperties = filteredType.GetFilterableProperties();
-        var entityFilterAttribute = filteredType.GetCustomAttribute<FilterEntityAttribute>();
+        var entityFilterAttribute = filteredType.GetCustomAttribute<EntityFilterAttribute>();
         var entityFilter = CreateEntityFilter(filteredType, serviceProvider);
 
         foreach (var property in filterableProperties)

@@ -186,7 +186,7 @@ public static class EntityFilterExtensions
     {
         var filteredType = typeof(TEntity);
         var filterableProperties = filteredType.GetFilterableProperties();
-        var entityFilterAttribute = filteredType.GetCustomAttribute<FilterEntityAttribute>();
+        var entityFilterAttribute = filteredType.GetCustomAttribute<EntityFilterAttribute>();
 
         var queryParams = new List<string>();
         foreach (var property in filterableProperties)

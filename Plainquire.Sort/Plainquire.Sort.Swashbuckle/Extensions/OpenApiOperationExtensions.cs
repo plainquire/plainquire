@@ -125,7 +125,7 @@ public static class OpenApiOperationExtensions
 
     private static List<string> GetSortPropertyNames(this Type sortedType)
     {
-        var entityFilterAttribute = sortedType.GetCustomAttribute<FilterEntityAttribute>();
+        var entityFilterAttribute = sortedType.GetCustomAttribute<EntityFilterAttribute>();
 
         var sortableProperties = sortedType
             .GetSortableProperties()

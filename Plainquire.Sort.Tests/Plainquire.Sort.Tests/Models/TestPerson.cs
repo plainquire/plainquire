@@ -6,7 +6,7 @@ namespace Plainquire.Sort.Tests.Models;
 
 [ExcludeFromCodeCoverage]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-[FilterEntity(Prefix = "")]
+[EntityFilter(Prefix = "")]
 public class TestPerson
 {
     [Filter(Name = "FullName")]

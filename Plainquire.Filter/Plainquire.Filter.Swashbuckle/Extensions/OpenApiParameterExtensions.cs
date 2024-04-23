@@ -50,7 +50,7 @@ internal static class OpenApiParameterExtensions
     private static List<OpenApiParameter> ExpandToPropertyParameters(this Type filteredType, IReadOnlyCollection<DocXmlReader> docXmlReaders)
     {
         var filterableProperties = filteredType.GetFilterableProperties();
-        var entityFilterAttribute = filteredType.GetCustomAttribute<FilterEntityAttribute>();
+        var entityFilterAttribute = filteredType.GetCustomAttribute<EntityFilterAttribute>();
 
         return filterableProperties
             .Select(property => new OpenApiParameter

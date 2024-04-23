@@ -143,7 +143,7 @@ public class EntityFilterExtensionsTests
     [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
     [SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
     [ExcludeFromCodeCoverage]
-    [FilterEntity(Prefix = "Test")]
+    [EntityFilter(Prefix = "Test")]
     private class FilterAttributeTestModel
     {
         public string? FirstName { get; }

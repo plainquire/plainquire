@@ -70,7 +70,7 @@ file static class Extensions
     public static EntitySort Apply(this EntitySort entitySort, IEnumerable<string> sortParameters, SortConfiguration configuration)
     {
         var sortedType = entitySort.GetType().GenericTypeArguments[0];
-        var entityFilterAttribute = sortedType.GetCustomAttribute<FilterEntityAttribute>();
+        var entityFilterAttribute = sortedType.GetCustomAttribute<EntityFilterAttribute>();
 
         var sortablePropertyNameToParameterMap = sortedType
             .GetSortableProperties()

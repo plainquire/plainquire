@@ -8,7 +8,7 @@ namespace Plainquire.Demo.Models;
 /// <summary>
 /// Freelancer.
 /// </summary>
-[FilterEntity(Prefix = "", PageSize = 10)]
+[EntityFilter(Prefix = "", PageSize = 10)]
 [SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
 public class Freelancer
 {

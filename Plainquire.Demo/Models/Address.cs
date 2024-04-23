@@ -6,7 +6,7 @@ namespace Plainquire.Demo.Models;
 /// <summary>
 /// Address.
 /// </summary>
-[FilterEntity]
+[EntityFilter]
 [SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by EF")]
 public class Address
