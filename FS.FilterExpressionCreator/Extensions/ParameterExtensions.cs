@@ -2,7 +2,6 @@
 using FS.FilterExpressionCreator.Filters;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -11,7 +10,6 @@ namespace FS.FilterExpressionCreator.Extensions;
 /// <summary>
 /// Extension methods used to handle MVC controller action parameters
 /// </summary>
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 public static class ParameterExtensions
 {
     /// <summary>

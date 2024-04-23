@@ -1,7 +1,6 @@
 ﻿using FS.FilterExpressionCreator.Filters;
 using Newtonsoft.Json;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Newtonsoft.JsonConverters;
 
@@ -10,7 +9,6 @@ namespace FS.FilterExpressionCreator.Newtonsoft.JsonConverters;
 /// Implements <see cref="JsonConverter{T}" />
 /// </summary>
 /// <seealso cref="JsonConverter{T}" />
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [Obsolete("Not needed anymore.")]
 public class ValueFilterConverter : JsonConverter<ValueFilter>
 {

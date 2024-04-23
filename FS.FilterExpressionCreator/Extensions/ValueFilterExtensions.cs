@@ -2,7 +2,6 @@
 using FS.FilterExpressionCreator.Filters;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace FS.FilterExpressionCreator.Extensions;
@@ -10,7 +9,6 @@ namespace FS.FilterExpressionCreator.Extensions;
 /// <summary>
 /// Extension methods for <see cref="ValueFilter"/>.
 /// </summary>
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 public static class ValueFilterExtensions
 {
     /// <inheritdoc cref="ValueFiltersFactory.Create"/>

@@ -3,11 +3,9 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace FS.FilterExpressionCreator.Demo.Routing;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 internal class V1ApiController : ControllerAttribute, IApiBehaviorMetadata, IRouteTemplateProvider, IApiDescriptionGroupNameProvider
 {

@@ -11,7 +11,6 @@ using System.Globalization;
 
 namespace FS.FilterExpressionCreator.Tests.Tests.EntityFilter;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [TestClass, ExcludeFromCodeCoverage]
 public class FilterConfigurationTests : TestBase
 {

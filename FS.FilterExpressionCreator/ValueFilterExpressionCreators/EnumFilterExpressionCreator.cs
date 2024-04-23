@@ -4,7 +4,6 @@ using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,7 +11,6 @@ using System.Linq.Expressions;
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators;
 
 /// <inheritdoc cref="IEnumFilterExpressionCreator"/>
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [Obsolete("Use 'Plainquire.Filter.ValueFilterExpression.EnumFilterExpression' instead.")]
 public class EnumFilterExpressionCreator : DefaultFilterExpressionCreator, IEnumFilterExpressionCreator
 {

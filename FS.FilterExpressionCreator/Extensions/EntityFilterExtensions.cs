@@ -3,7 +3,6 @@ using FS.FilterExpressionCreator.Enums;
 using FS.FilterExpressionCreator.Filters;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -14,7 +13,7 @@ namespace FS.FilterExpressionCreator.Extensions;
 /// <summary>
 /// Extension methods for <see cref="EntityFilter{TEntity}"/>
 /// </summary>
-[SuppressMessage("ReSharper", "InconsistentNaming")]
+
 [Obsolete("Use 'Plainquire.Filter' instead.")]
 public static class EntityFilterExtensions
 {

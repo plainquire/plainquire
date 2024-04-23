@@ -12,7 +12,6 @@ using System.Linq.Expressions;
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators;
 
 /// <inheritdoc cref="INumericFilterExpressionCreator"/>
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
 [Obsolete("Use 'Plainquire.Filter.ValueFilterExpression.NumericFilterExpression' instead.")]
 public class NumericFilterExpressionCreator : DefaultFilterExpressionCreator, INumericFilterExpressionCreator

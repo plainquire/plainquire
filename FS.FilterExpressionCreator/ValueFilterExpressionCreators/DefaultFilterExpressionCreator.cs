@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 namespace FS.FilterExpressionCreator.ValueFilterExpressionCreators;
 
 /// <inheritdoc />
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
 [SuppressMessage("ReSharper", "MemberCanBeProtected.Global", Justification = "Provided as library, can be used from outside")]
 [Obsolete("Use 'Plainquire.Filter.ValueFilterExpression.DateTimeFilterExpression' instead.")]

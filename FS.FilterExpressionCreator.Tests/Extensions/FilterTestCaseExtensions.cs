@@ -10,7 +10,6 @@ using System.Linq;
 
 namespace FS.FilterExpressionCreator.Tests.Extensions;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [ExcludeFromCodeCoverage]
 public static class FilterTestCaseExtensions
 {

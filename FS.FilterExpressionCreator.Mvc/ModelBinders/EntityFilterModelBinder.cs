@@ -3,7 +3,6 @@ using FS.FilterExpressionCreator.Extensions;
 using FS.FilterExpressionCreator.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -14,7 +13,6 @@ namespace FS.FilterExpressionCreator.Mvc.ModelBinders;
 /// Implements <see cref="IModelBinder" />
 /// </summary>
 /// <seealso cref="IModelBinder" />
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 [Obsolete("Use 'Plainquire.Filter.Mvc.ModelBinders.EntityFilterModelBinder' instead.")]
 public class EntityFilterModelBinder : IModelBinder
 {

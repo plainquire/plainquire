@@ -6,12 +6,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace FS.FilterExpressionCreator.Demo.Startup;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 internal static class OpenApi
 {
     private const string OPEN_API_UI_ROUTE = "openapi/";
