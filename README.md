@@ -17,14 +17,14 @@ Dynamically creates required expressions to filter, sort and page enumerable and
 
 ## Demo
 
-[https://filterexpressioncreator.schick-software.de/demo](https://filterexpressioncreator.schick-software.de/demo)
+[https://www.plainquire.com/demo](https://www.plainquire.com/demo)
 
 ## Overview
 
 **HTTP request** (Syntax: [Filter Operators / Syntax](#filter-operators--syntax))
 
 ```bash
-BASE_URL=https://plainquire.com/api/Freelancer
+BASE_URL=https://www.plainquire.com/api/Freelancer
 curl -O "$BASE_URL/GetFreelancers?firstName=Joe&orderBy=lastName&page=3&pageSize=5"
 ```
 

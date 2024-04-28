@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Product>Plainquire</Product>
     <Title>$(Product)</Title>
-    <Description>Library to dynamically create lambda expressions to filter lists and database queries</Description>
+    <Description>Easy filtering, sorting and paging for ASP.NET Core.</Description>
     <Authors>Florian Schick</Authors>
     <Company>Schick Software Entwicklung</Company>
     <Copyright>© Florian Schick, 2021-2024 all rights reserved</Copyright>
@@ -17,11 +17,11 @@
     <PackageDescription>$(Description)</PackageDescription>
     <PackageIcon>Plainquire.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageProjectUrl>https://github.com/fschick/Plainquire</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/plainquire/plainquire</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>Filter, dynamic, Expression, Function, Queryable, Enumerable, Entity, C#, aspnetcore, webapi</PackageTags>
+    <PackageTags>filtering, sorting, paging, aps-net-core, webapi, swagger, swagger-ui, openapi, linq-expressions, expression-engine, csharp-library</PackageTags>
 
-    <RepositoryUrl>https://github.com/fschick/Plainquire.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/plainquire/plainquire.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
