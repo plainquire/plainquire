@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
     - name: Build
@@ -21,9 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
     - name: Test
@@ -34,20 +34,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
     - name: Publish
       run: |
         VERSION=`echo ${GITHUB_REF} | perl -pe 's/^refs\/tags\/(.*)$/\1/'`
         FILE_VERSION=`echo ${GITHUB_REF} | perl -pe 's/^refs\/tags\/(\d+(?:\.\d+)*)(.*)$/\1/'`
-        dotnet publish Schick.Plainquire.Demo --configuration Release --output dotnetcorewebapp -p:Version=$VERSION -p:FileVersion=$FILE_VERSION
+        dotnet publish Plainquire.Demo --configuration Release --output dotnetcorewebapp -p:Version=$VERSION -p:FileVersion=$FILE_VERSION
     - name: Deploy to Azure
       uses: azure/webapps-deploy@v2
       env:
-        AZURE_WEBAPP_NAME: filterexpressioncreator
+        AZURE_WEBAPP_NAME: plainquire
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.PUBLISH_PROFILE }}
