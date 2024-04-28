@@ -87,6 +87,7 @@ LIMIT 5 OFFSET 10
   - [Default configuration and interception](#default-configuration-and-interception)
   - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
   - [Advanced Scenarios](#advanced-scenarios)
+- [Upgrade from FilterExpressionCreator](#upgrade-from-filterexpressioncreator)
 
 # Getting started
 
@@ -1249,3 +1250,16 @@ using Plainquire.Page.Newtonsoft;
 var json = JsonConvert.SerializeObject(page, JsonConverterExtensions.NewtonsoftConverters);
 sort = JsonConvert.DeserializeObject<EntityPage<Order>>(json, JsonConverterExtensions.NewtonsoftConverters);
 ```
+
+# Upgrade from FilterExpressionCreator
+
+* Install `Schick.FilterExpressionCreator*` 4.7.x.
+
+* Fix all warnings. This can largely be done by sear and replacing with regular expressions
+  * Search for: `FS.FilterExpressionCreator(\.Abstractions|Mvc|Mvc\.Newtonsoft|Newtonsoft)?(\.\w+)?`
+  * Replace with: `Plainquire.Filter$1`
+  * Search for: `\[FilterEntity(\(.*\))]`
+  * Replace with: `[EntityFilter$1]`
+* Fix remaining errors and warnings following description of [breaking changes](https://github.com/plainquire/plainquire/blob/main/HISTORY.md#breaking-changes)
+* Uninstall all `Schick.FilterExpressionCreator*` stuff
+* Install corresponding `Plainquire.*` packages

@@ -9,14 +9,23 @@ Support for pagination
 ### Common
 
 Obsolete methods removed
+
 `FilterConfiguration` removed from `EntityFilter.CreateFilter`. Use `EntityFilter.Configuration` instead
+
 `SortConfiguration` removed from `QueryableExtensions.OrderBy`. Use `EntitySort.Configuration` instead
+
 `FilterEntityAttribute.SortByParameter` removed. Parameter name is taken from controller action parameter name or `IFromQueryMetadata.Name` (`[FromQuery(Name = "sortBy")]`)
+
 Static `EntityFilter.DefaultConfiguration` replaced by `FilterConfiguration.Default`
+
 Static `EntitySort.DefaultConfiguration` replaced by `SortConfiguration.Default`
+
 `FilterConfiguration.Now` moved to `IFilterInterceptor.Now`
+
 Static `EntityFilter.DefaultInterceptor` replaced by `IFilterInterceptor.Default`
+
 Static `EntitySort.DefaultInterceptor` replaced by `ISortInterceptor.Default`
+
 Serialized filters are incompatible between 4.x and 5.x. If you have stored filters and need to convert it, open an issue
 
 ### Namespaces simplified
