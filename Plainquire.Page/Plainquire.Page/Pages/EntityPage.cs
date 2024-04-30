@@ -17,8 +17,16 @@ public class EntityPage<TEntity> : EntityPage
     public EntityPage() { }
 
     /// <inheritdoc />
+    public EntityPage(PageConfiguration configuration)
+        : base(configuration) { }
+
+    /// <inheritdoc />
     public EntityPage(int? pageNumber, int? pageSize)
         : base(pageNumber, pageSize) { }
+
+    /// <inheritdoc />
+    public EntityPage(int? pageNumber, int? pageSize, PageConfiguration configuration)
+        : base(pageNumber, pageSize, configuration) { }
 
     /// <summary>
     /// Creates a deep clone of this page.
@@ -72,12 +80,33 @@ public class EntityPage : ICloneable
     /// <summary>
     /// Creates a new instance of <see cref="EntityPage"/>.
     /// </summary>
+    /// <param name="configuration">The configuration to use.</param>
+    public EntityPage(PageConfiguration configuration)
+        : this()
+        => Configuration = configuration;
+
+    /// <summary>
+    /// Creates a new instance of <see cref="EntityPage"/>.
+    /// </summary>
     /// <param name="pageNumber">Page number.</param>
     /// <param name="pageSize">Page size.</param>
     public EntityPage(int? pageNumber, int? pageSize)
     {
         PageNumber = pageNumber;
         PageSize = pageSize;
+    }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="EntityPage"/>.
+    /// </summary>
+    /// <param name="pageNumber">Page number.</param>
+    /// <param name="pageSize">Page size.</param>
+    /// <param name="configuration">The configuration to use.</param>
+    public EntityPage(int? pageNumber, int? pageSize, PageConfiguration configuration)
+    {
+        PageNumber = pageNumber;
+        PageSize = pageSize;
+        Configuration = configuration;
     }
 
     /// <inheritdoc />
