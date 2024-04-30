@@ -28,7 +28,19 @@ internal static class Program
     }
 
     private static IHostBuilder CreateHostBuilder(string[] args)
-        => CreateHostBuilderInternal(args, builder => builder.AddConfigurationFromEnvironment(args));
+    {
+        return Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration(builder =>
+            {
+                builder.ClearConfiguration();
+                builder.AddConfigurationFromEnvironment(args);
+            })
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.ConfigureServices(ConfigureServerServices);
+                webBuilder.Configure((builder, app) => ConfigureServerApplication(app, builder.HostingEnvironment));
+            });
+    }
 
     private static void AddConfigurationFromEnvironment(this IConfigurationBuilder configurationBuilder, string[] commandLineArgs)
     {
@@ -38,19 +50,6 @@ internal static class Program
             .AddEnvironmentVariables()
             .AddCommandLine(commandLineArgs);
     }
-
-    private static IHostBuilder CreateHostBuilderInternal(string[] args, Action<IConfigurationBuilder> configurationBuilder)
-        => Host.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration(builder =>
-            {
-                builder.ClearConfiguration();
-                configurationBuilder(builder);
-            })
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.ConfigureServices(ConfigureServerServices);
-                webBuilder.Configure((builder, app) => ConfigureServerApplication(app, builder.HostingEnvironment));
-            });
 
     private static void ClearConfiguration(this IConfigurationBuilder configurationBuilder)
     {
@@ -80,9 +79,9 @@ internal static class Program
 #if DEBUG
             applicationBuilder.UseDeveloperExceptionPage();
             applicationBuilder.UseCors(policy => policy
-                                           .AllowAnyOrigin()
-                                           .AllowAnyMethod()
-                                           .AllowAnyHeader()
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
             );
 #endif
         }

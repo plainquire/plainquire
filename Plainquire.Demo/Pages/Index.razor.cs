@@ -1,5 +1,6 @@
 ﻿#pragma warning disable 1591
 using Microsoft.AspNetCore.Components;
+using Plainquire.Demo.Startup;
 using System;
 using System.Threading.Tasks;
 
@@ -17,6 +18,6 @@ public class IndexPage : ComponentBase
         await base.OnInitializedAsync();
         var uri = new Uri(NavigationManager.BaseUri);
         DemoAppLink = $"{uri.Scheme}://{uri.Authority}/demo";
-        OpeApiLink = $"{uri.Scheme}://{uri.Authority}/openapi";
+        OpeApiLink = $"{uri.Scheme}://{uri.Authority}/{OpenApi.API_UI_ROUTE}".TrimEnd('/');
     }
 }

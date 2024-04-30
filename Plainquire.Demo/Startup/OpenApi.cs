@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Plainquire.Demo.Extensions;
@@ -13,15 +14,26 @@ namespace Plainquire.Demo.Startup;
 
 internal static class OpenApi
 {
-    private const string OPEN_API_UI_ROUTE = "openapi/";
+    public const string API_UI_ROUTE = "api/";
+    private const string OPEN_API_UI_ROUTE = "/openapi";
+    private const string SWAGGER_UI_ROUTE = "/swagger";
     private const string OPEN_API_SPEC = "openapi.json";
 
     internal static IApplicationBuilder RegisterOpenApiRoutes(this IApplicationBuilder applicationBuilder)
-        => applicationBuilder
-            .UseSwagger(c => c.RouteTemplate = $"{OPEN_API_UI_ROUTE}{{documentName}}/{OPEN_API_SPEC}")
+    {
+        applicationBuilder.Use(async (context, next) =>
+        {
+            if (context.Request.Method == HttpMethods.Get && context.Request.Path.RedirectRequired())
+                context.Response.Redirect($"/{API_UI_ROUTE}");
+
+            await next();
+        });
+
+        return applicationBuilder
+            .UseSwagger(c => c.RouteTemplate = $"{API_UI_ROUTE}{{documentName}}/{OPEN_API_SPEC}")
             .UseSwaggerUI(c =>
             {
-                c.RoutePrefix = OPEN_API_UI_ROUTE.Trim('/');
+                c.RoutePrefix = API_UI_ROUTE.Trim('/');
                 c.SwaggerEndpoint($"{V1ApiController.API_VERSION}/{OPEN_API_SPEC}", $"API version {V1ApiController.API_VERSION}");
                 c.DisplayRequestDuration();
                 c.EnableDeepLinking();
@@ -29,6 +41,7 @@ internal static class OpenApi
                 c.ConfigObject.AdditionalItems.Add("requestSnippetsEnabled", true);
                 c.InjectStylesheet("/css/swagger-ui/custom.css");
             });
+    }
 
     internal static IServiceCollection RegisterOpenApiController(this IServiceCollection services)
     {
@@ -51,4 +64,7 @@ internal static class OpenApi
                 c.IncludeXmlComments(plainquireDemoDoc);
             });
     }
+
+    private static bool RedirectRequired(this PathString path) =>
+        path.StartsWithSegments(SWAGGER_UI_ROUTE) || path.StartsWithSegments(OPEN_API_UI_ROUTE);
 }

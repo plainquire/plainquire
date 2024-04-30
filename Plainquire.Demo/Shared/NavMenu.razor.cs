@@ -1,5 +1,6 @@
 ﻿#pragma warning disable 1591
 using Microsoft.AspNetCore.Components;
+using Plainquire.Demo.Startup;
 using System;
 using System.Threading.Tasks;
 
@@ -16,7 +17,6 @@ public class NavMenuComponent : ComponentBase
         await base.OnInitializedAsync();
 
         var uri = new Uri(NavigationManager.BaseUri);
-        // ReSharper disable once StringLiteralTypo
-        OpeApiLink = $"{uri.Scheme}://{uri.Authority}/openapi";
+        OpeApiLink = $"{uri.Scheme}://{uri.Authority}/{OpenApi.API_UI_ROUTE}".TrimEnd('/');
     }
 }
