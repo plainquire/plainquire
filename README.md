@@ -1,23 +1,26 @@
 # Plainquire
 
-Easy Filtering, Sorting and Pagination for ASP.NET Core.
+Easy filtering, sorting and paging for ASP.NET Core.
 
 Dynamically creates required expressions to filter, sort and page enumerable and database queries using LINQ.
 
 ## Features
 
 * Filtering, sorting and pagination for ASP.NET Core
-* HTTP query parameter binding
-* Customizable syntax via configuration
-* Swagger / OpenAPI supported via [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
-* ORM mapper (e.g. Entity Framework and other) supported via `IQueryable<T>`
-* In-memory lists and arrays supported via `IEnumerable<T>`
+* Customizable syntax 
+* Support for Swagger / OpenUI and code generators via [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
+* Support for Entity Framework an other ORM mapper using `IQueryable<T>`
+* Support for In-memory lists / arrays via `IEnumerable<T>`
+* Binding for HTTP query parameters
+* Natural language date/time interpretation (e.g. yesterday, last week Tuesday, ...)
 * Filters, sorts and pages are serializable, e.g. to persist user defined filters
-* Interceptors allow expressions to be customized
+* Customizable expressions via interceptors
 
 ## Demo
 
 [https://www.plainquire.com/demo](https://www.plainquire.com/demo)
+
+[https://www.plainquire.com/api](https://www.plainquire.com/api)
 
 ## Overview
 
@@ -56,7 +59,6 @@ LIMIT 5 OFFSET 10
 
 # Table of content
 
-- [Overview](#overview)
 - [Getting started](#getting-started)
 - [Filter entities](#filter-entities)
   - [Basic usage](#basic-usage)
@@ -378,6 +380,23 @@ services.AddSwaggerGen(options =>
 });
 ```
 
+## Support for Newtonsoft.Json
+
+By default `System.Text.Json` is used to serialize/convert Plainquire specific stuff. If you like to use Newtonsoft.Json you must register it:
+
+```
+Package Manager : Install-Package Plainquire.Filter.Mvc.Newtonsoft
+CLI : dotnet add package Plainquire.Filter.Mvc.Newtonsoft
+```
+
+```csharp
+using Plainquire.Filter.Mvc.Newtonsoft;
+
+// Register support for Newtonsoft by calling
+// 'AddFilterNewtonsoftSupport()' on IMvcBuilder instance
+services.AddControllers().AddFilterNewtonsoftSupport();
+```
+
 ## Filter operators / syntax
 
 The filter micro syntax consists of a comma separated list of an operator shortcut and a value (e.g. `~Joe,=Doe`). When a value contains a comma itself, it must be escaped by a backslash.
@@ -606,55 +625,41 @@ ValueFilter[] filterValues = filter.GetPropertyFilterValues(x => x.Customer);
 
 ## Configuration
 
-Creation of filter expression can be configured via `FilterConfiguration`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply a configuration
+Creation of filter expression can be configured via `FilterConfiguration`.
 
 ```csharp
 using Plainquire.Filter;
 
 // Parse filter values using german locale (e.g. "5,5" => 5.5f).
 var configuration = new FilterConfiguration { CultureInfo = new CultureInfo("de-DE") };
+```
 
-// Explicit filter conversion
-var filterExpression = filter.CreateFilter(configuration);
+The configuration can be provided as follows and is used according to the listed order of precedence
 
-// Filter IEnumerable<T> by compiling filter expression
-var filteredOrders = orders.Where(filterExpression.Compile()).ToList();
+```csharp
+// For MVC model binding via dependency injection
+services.Configure<FilterConfiguration>(c => c.IgnoreParseExceptions = true);
+
+// Via constructor
+new EntityFilter<Order>(configuration);
+
+// Via static default
+FilterConfiguration.Default
 ```
 
 ## Interception
 
 Creation of filter expression can be intercepted via `IFilterInterceptor`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply an interceptor.
 
-An example can be found in the test code [InterceptorTests](https://github.com/fschick/Plainquire/blob/main/Schick.Plainquire.Filter.Tests/Tests/EntityFilter/InterceptorTests.cs)
-
-## Default configuration and interception
-
-`EntityFilter` has static properties to provide a system-wide configuration and/or interceptors
-
-```c#
-public class EntityFilter
-{
-    public static FilterConfiguration DefaultConfiguration { get; set; } = new FilterConfiguration();
-    public static IFilterInterceptor? DefaultInterceptor { get; set; }
-}
-```
-
-## Support for Newtonsoft.Json
-
-By default `System.Text.Json` is used to serialize/convert Plainquire specific stuff. If you like to use Newtonsoft.Json you must register it:
-
-```
-Package Manager : Install-Package Plainquire.Filter.Mvc.Newtonsoft
-CLI : dotnet add package Plainquire.Filter.Mvc.Newtonsoft
-```
-
 ```csharp
-using Plainquire.Filter.Mvc.Newtonsoft;
-
-// Register support for Newtonsoft by calling
-// 'AddFilterNewtonsoftSupport()' on IMvcBuilder instance
-services.AddControllers().AddFilterNewtonsoftSupport();
+var filter = new EntityFilter<Order>();
+var interceptor = new FilterStringsCaseInsensitiveInterceptor();
+var filterExpression = filter.CreateFilter(interceptor) ?? (x => true);
+var filteredList = orders.Where(filterExpression.Compile());
+var filteredDb = _dbContext.Orders.Where(filterExpression);
 ```
+
+A default interceptor can be provided via static `IFilterInterceptor.Default`.
 
 ## Advanced scenarios
 
@@ -837,7 +842,7 @@ using Plainquire.Filter.Abstractions;
 
 // Remove prefix, e.g. property 'Number' is mapped from 'number', not 'orderNumber'
 // Use 'sortBy' as query parameter name instead of default 'orderBy'
-[FilterEntity(Prefix = "", SortByParameter = "sortBy")]
+[FilterEntity(Prefix = "")]
 public class Order
 {
      // 'Number' is removed from sort and will be ignored
@@ -891,6 +896,23 @@ services.AddSwaggerGen(options =>
     // Register filters used to modify swagger.json
     options.AddSortSupport();
 });
+```
+
+## Support for Newtonsoft.Json
+
+By default, `System.Text.Json` is used to serialize/convert Plainquire specific stuff. If you like to use Newtonsoft.Json you must register it.
+
+```
+Package Manager : Install-Package Plainquire.Sort.Mvc.Newtonsoft
+CLI : dotnet add package Plainquire.Sort.Mvc.Newtonsoft
+```
+
+```csharp
+using Plainquire.Sort.Mvc.Newtonsoft;
+
+// Register support for Newtonsoft by calling
+// 'AddSortNewtonsoftSupport()' on IMvcBuilder instance
+services.AddControllers().AddSortNewtonsoftSupport();
 ```
 
 ## Sort operators / syntax
@@ -986,44 +1008,36 @@ Creation of sort expression can be configured via `SortConfiguration`.
 ```csharp
 using Plainquire.Sort.Abstractions;
 
-var configuration = new SortConfiguration { IgnoreParseExceptions = true };
-var sortedOrders = orders.OrderBy(sort, configuration).ToList();
+var configuration = new SortConfiguration();
+configuration.AscendingPostfixes.Add("^");
+var sort = new EntitySort<Order>(configuration);
+var sortedOrders = orders.OrderBy(sort);
+```
+
+The configuration can be provided as follows and is used according to the listed order of precedence
+
+```csharp
+// For MVC model binding via dependency injection
+services.Configure<SortConfiguration>(c => c.IgnoreParseExceptions = true);
+
+// Via constructor
+new EntitySort<Order>(configuration);
+
+// Via static default
+SortConfiguration.Default
 ```
 
 ## Interception
 
 Creation of sort expression can be intercepted via `ISortInterceptor`.
 
-An example can be found in the test code [InterceptorTests](https://github.com/fschick/Plainquire/blob/main/Schick.Plainquire.Sort.Tests/Tests/EntitySort/InterceptorTests.cs)
-
-## Default configuration and interception
-
-`EntitySort` has static properties to provide a system-wide configuration and/or interceptors
-
-```c#
-public class EntitySort
-{
-    public static SortConfiguration DefaultConfiguration { get; set; } = new SortConfiguration();
-    public static ISortInterceptor? DefaultInterceptor { get; set; }
-}
-```
-
-## Support for Newtonsoft.Json
-
-By default, `System.Text.Json` is used to serialize/convert Plainquire specific stuff. If you like to use Newtonsoft.Json you must register it.
-
-```
-Package Manager : Install-Package Plainquire.Sort.Mvc.Newtonsoft
-CLI : dotnet add package Plainquire.Sort.Mvc.Newtonsoft
-```
-
 ```csharp
-using Plainquire.Sort.Mvc.Newtonsoft;
-
-// Register support for Newtonsoft by calling
-// 'AddSortNewtonsoftSupport()' on IMvcBuilder instance
-services.AddControllers().AddSortNewtonsoftSupport();
+var sort = new EntitySort<Order>();
+var interceptor = new CaseInsensitiveSortInterceptor();
+var filtered = orders.OrderBy(sort, interceptor);
 ```
+
+A default interceptor can be provided via static `ISortInterceptor.Default`.
 
 ## Advanced scenarios
 
@@ -1168,35 +1182,6 @@ services.AddSwaggerGen(options =>
 });
 ```
 
-## Configuration
-
-Creation of page expression can be configured via `PageConfiguration`.
-
-```csharp
-using Plainquire.Page.Abstractions;
-
-var configuration = new PageConfiguration { IgnoreParseExceptions = true };
-var pagedOrders = orders.Page(page, configuration).ToList();
-```
-
-## Interception
-
-Creation of page expression can be intercepted via `IPageInterceptor`.
-
-An example can be found in the test code [InterceptorTests](https://github.com/fschick/Plainquire/blob/main/Schick.Plainquire.Page.Tests/Tests/EntityPage/InterceptorTests.cs)
-
-## Default configuration and interception
-
-`EntityPage` has static properties to provide a system-wide configuration and/or interceptors
-
-```c#
-public class EntityPage
-{
-    public static PageConfiguration DefaultConfiguration { get; set; } = new PageConfiguration();
-    public static IPageInterceptor? DefaultInterceptor { get; set; }
-}
-```
-
 ## Support for Newtonsoft.Json
 
 By default, `System.Text.Json` is used to serialize/convert Plainquire specific stuff. If you like to use Newtonsoft.Json you must register it.
@@ -1213,6 +1198,43 @@ using Plainquire.Page.Mvc.Newtonsoft;
 // 'AddPageNewtonsoftSupport()' on IMvcBuilder instance
 services.AddControllers().AddPageNewtonsoftSupport();
 ```
+
+## Configuration
+
+Creation of page expression can be configured via `PageConfiguration`.
+
+```csharp
+using Plainquire.Page.Abstractions;
+
+var configuration = new PageConfiguration() { IgnoreParseExceptions = true };
+var page = new EntityPage<Order>(configuration);
+var pagedOrders = orders.Page(page);
+```
+
+The configuration can be provided as follows and is used according to the listed order of precedence
+
+```csharp
+// For MVC model binding via dependency injection
+services.Configure<PageConfiguration>(c => c.IgnoreParseExceptions = true);
+
+// Via constructor
+new EntityPage<Order>(configuration);
+
+// Via static default
+PageConfiguration.Default
+```
+
+## Interception
+
+Creation of page expression can be intercepted via `IPageInterceptor`.
+
+```csharp
+var page = new EntityPage();
+var interceptor = new PageBackwardInterceptor();
+var paged = orders.Page(page, interceptor);
+```
+
+A default interceptor can be provided via static `IPageInterceptor.Default`.
 
 ## Advanced Scenarios
 
