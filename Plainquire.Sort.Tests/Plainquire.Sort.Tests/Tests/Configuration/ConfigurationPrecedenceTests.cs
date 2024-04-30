@@ -102,7 +102,7 @@ public class ConfigurationPrecedenceTests
 
     [TestMethod]
     [DoNotParallelize]
-    public async Task WhenDefaultSortConfigurationIsSet_StaticDefaultConfigurationsIsUsedAsFirstPrecedence()
+    public async Task WhenStaticDefaultSortConfigurationIsSet_StaticDefaultConfigurationsIsUsedAsFirstPrecedence()
     {
         // Arrange
         var serviceProvider = A.Fake<IServiceProvider>();
