@@ -133,7 +133,7 @@ using Plainquire.Filter;
 using Plainquire.Page;
 using Plainquire.Sort;
 
-[FilterEntity]
+[EntityFilter]
 public record Order(int Number, string Customer);
 
 [HttpGet(Name = "GetOrders")]
@@ -161,7 +161,7 @@ using Plainquire.Filter;
 using Plainquire.Sort;
 using Plainquire.Page;
 
-[FilterEntity]
+[EntityFilter]
 public record Order(int Number, string Customer);
 
 public IEnumerable<Order> GetOrders()
@@ -237,7 +237,7 @@ var filteredOrders = orders.Where(filter).ToList();
 var filteredOrders = dbContext.Orders.Where(filter).ToList();
 // Output: new[] { new Order { Customer = "Joe Smith", Number = 300 } };
 
-[FilterEntity]
+[EntityFilter]
 public class Order
 {
     public int Number { get; set; }
@@ -259,7 +259,7 @@ public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order)
 
 ## REST / MVC
 
-To filter an entity via model binding, the entity must be marked with `FilterEntityAttribute`
+To filter an entity via model binding, the entity must be marked with `EntityFilterAttribute`
 
 ### Register model binders
 
@@ -303,7 +303,7 @@ public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> filter)
 
 By default, parameters for properties of filtered entity are named `{Entity}{Property}`.
 By default, all public non-complex properties (`string`, `int`, `DateTime`, ...) are recognized.
-Parameters can be renamed or removed using  `FilterAttribute` and `FilterEntityAttribute`.
+Parameters can be renamed or removed using  `FilterAttribute` and `EntityFilterAttribute`.
 
 For the code below `Number` is not mapped anymore and `Customer` becomes `CustomerName`:
 
@@ -311,7 +311,7 @@ For the code below `Number` is not mapped anymore and `Customer` becomes `Custom
 using Plainquire.Filter.Abstractions;
 
 // Remove prefix, e.g. property 'Number' is mapped from 'number', not 'orderNumber'
-[FilterEntity(Prefix = "")]
+[EntityFilter(Prefix = "")]
 public class Order
 {
      // 'Number' is removed from filter and will be ignored
@@ -769,7 +769,7 @@ var sortedOrders = orders.OrderBy(sort).ToList();
 // Or queryables (e.g. Entity Framework)
 var sortedOrders = dbContext.Orders.OrderBy(sort).ToList();
 
-[FilterEntity]
+[EntityFilter]
 public class Order
 {
     public int Number { get; set; }
@@ -791,7 +791,7 @@ public Task<List<Order>> GetOrders([FromQuery] EntitySort<Order> sort)
 
 ## REST / MVC
 
-To sort an entity via model binding, the entity must be marked with `FilterEntityAttribute`
+To sort an entity via model binding, the entity must be marked with `EntityFilterAttribute`
 
 ### Register model binders
 
@@ -833,7 +833,7 @@ public Task<List<Order>> GetOrders([FromQuery] EntitySort<Order> sort)
 
 By default, parameters for properties of sorted entity are named `{Entity}{Property}`.
 By default, all public non-complex properties (`string`, `int`, `DateTime`, ...) are recognized.
-Parameters can be renamed or removed using  `FilterAttribute` and `FilterEntityAttribute`.
+Parameters can be renamed or removed using  `FilterAttribute` and `EntityFilterAttribute`.
 
 For the code below `Number` is not mapped anymore and `Customer` becomes `CustomerName`.
 
@@ -842,7 +842,7 @@ using Plainquire.Filter.Abstractions;
 
 // Remove prefix, e.g. property 'Number' is mapped from 'number', not 'orderNumber'
 // Use 'sortBy' as query parameter name instead of default 'orderBy'
-[FilterEntity(Prefix = "")]
+[EntityFilter(Prefix = "")]
 public class Order
 {
      // 'Number' is removed from sort and will be ignored
@@ -1117,7 +1117,7 @@ var pagedOrders = dbContext.Orders.Page(page).ToList();
 
 ## REST / MVC
 
-To page an entity via model binding, the entity must be marked with `FilterEntityAttribute`
+To page an entity via model binding, the entity must be marked with `EntityFilterAttribute`
 
 ### Register model binders
 
@@ -1151,14 +1151,14 @@ public Task<List<Order>> GetOrders([FromQuery] EntityPage<Order> page)
 
 ### Configure model binding
 
-Parameters can be renamed `FilterEntityAttribute`.
+Parameters can be renamed `EntityFilterAttribute`.
 
 For the code below page number is taken from query parameter `pageNumber` and page size from `size`.
 
 ```csharp
 using Plainquire.Filter.Abstractions;
 
-[FilterEntity(PageNumberParameter = "pageNumber", PageSizeParameter = "size")]
+[EntityFilter(PageNumberParameter = "pageNumber", PageSizeParameter = "size")]
 public class Order
 {
     public string Customer { get; set; }
