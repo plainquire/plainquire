@@ -62,15 +62,15 @@ public class FilterTestCase
     protected FilterTestCase(int id)
         => Id = id;
 
-    public static FilterTestCase<TFilterValue, TModelValue?> Create<TFilterValue, TModelValue>(int id, FilterOperator filterOperator, TFilterValue[] values, Func<TModelValue?, bool>? expectedTestItemsExpression, FilterConfiguration? syntaxConfiguration = null, IFilterInterceptor? interceptor = null)
-        => FilterTestCase<TFilterValue, TModelValue?>.Create(id, filterOperator, values, expectedTestItemsExpression, syntaxConfiguration, interceptor);
+    public static FilterTestCase<TFilterValue?, TModelValue?> Create<TFilterValue, TModelValue>(int id, FilterOperator filterOperator, TFilterValue[] values, Func<TModelValue?, bool>? expectedTestItemsExpression, FilterConfiguration? syntaxConfiguration = null, IFilterInterceptor? interceptor = null)
+        => FilterTestCase<TFilterValue?, TModelValue?>.Create(id, filterOperator, values, expectedTestItemsExpression, syntaxConfiguration, interceptor);
 
-    public static FilterTestCase<TFilterAndModelValue, TFilterAndModelValue> Create<TFilterAndModelValue>(int id, FilterOperator filterOperator, TFilterAndModelValue[] values, Exception? expectedException = null, FilterConfiguration? syntaxConfiguration = null, IFilterInterceptor? interceptor = null)
-        => FilterTestCase<TFilterAndModelValue, TFilterAndModelValue>.Create(id, filterOperator, values, expectedException, syntaxConfiguration, interceptor);
+    public static FilterTestCase<TFilterAndModelValue?, TFilterAndModelValue?> Create<TFilterAndModelValue>(int id, FilterOperator filterOperator, TFilterAndModelValue[] values, Exception? expectedException = null, FilterConfiguration? syntaxConfiguration = null, IFilterInterceptor? interceptor = null)
+        => FilterTestCase<TFilterAndModelValue?, TFilterAndModelValue?>.Create(id, filterOperator, values, expectedException, syntaxConfiguration, interceptor);
 
-    public static FilterTestCase<TFilterAndModelValue, TFilterAndModelValue> Create<TFilterAndModelValue>(int id, string filterSyntax, Func<TFilterAndModelValue?, bool>? expectedTestItemsExpression, FilterConfiguration? syntaxConfiguration = null, IFilterInterceptor? interceptor = null)
-        => FilterTestCase<TFilterAndModelValue, TFilterAndModelValue>.Create(id, filterSyntax, expectedTestItemsExpression, syntaxConfiguration, interceptor);
+    public static FilterTestCase<TFilterAndModelValue?, TFilterAndModelValue?> Create<TFilterAndModelValue>(int id, string filterSyntax, Func<TFilterAndModelValue?, bool>? expectedTestItemsExpression, FilterConfiguration? syntaxConfiguration = null, IFilterInterceptor? interceptor = null)
+        => FilterTestCase<TFilterAndModelValue?, TFilterAndModelValue?>.Create(id, filterSyntax, expectedTestItemsExpression, syntaxConfiguration, interceptor);
 
-    public static FilterTestCase<TFilterAndModelValue, TFilterAndModelValue> Create<TFilterAndModelValue>(int id, string filterSyntax, Exception? expectedException = null, FilterConfiguration? syntaxConfiguration = null, IFilterInterceptor? interceptor = null)
-        => FilterTestCase<TFilterAndModelValue, TFilterAndModelValue>.Create(id, filterSyntax, expectedException, syntaxConfiguration, interceptor);
+    public static FilterTestCase<TFilterAndModelValue?, TFilterAndModelValue?> Create<TFilterAndModelValue>(int id, string filterSyntax, Exception? expectedException = null, FilterConfiguration? syntaxConfiguration = null, IFilterInterceptor? interceptor = null)
+        => FilterTestCase<TFilterAndModelValue?, TFilterAndModelValue?>.Create(id, filterSyntax, expectedException, syntaxConfiguration, interceptor);
 }

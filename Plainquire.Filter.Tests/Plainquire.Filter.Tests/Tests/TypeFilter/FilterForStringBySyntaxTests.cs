@@ -23,7 +23,7 @@ public class FilterForStringBySyntaxTests
     ];
 
     // ReSharper disable ReplaceWithStringIsNullOrEmpty
-    private static readonly FilterTestCase<string, string>[] _testCases =
+    private static readonly FilterTestCase<string?, string?>[] _testCases =
     [
         FilterTestCase.Create<string>(1101, "", x => x is "" or "Hello" or "HelloWorld"),
         FilterTestCase.Create<string>(1102, "Hello", x => x is "Hello" or "HelloWorld"),
