@@ -57,37 +57,33 @@ ORDER BY "LastName"
 LIMIT 5 OFFSET 10
 ```
 
-# Table of content
+# Table of contents
 
 - [Getting started](#getting-started)
+- [Syntax](#syntax)
 - [Filter entities](#filter-entities)
   - [Basic usage](#basic-usage)
   - [REST / MVC](#rest--mvc)
   - [Swagger / OpenAPI](#swagger--openapi)
-  - [Filter operators / syntax](#filter-operators--syntax)
+  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
   - [Configuration](#configuration)
   - [Interception](#interception)
-  - [Default configuration and interception](#default-configuration-and-interception)
-  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
   - [Advanced scenarios](#advanced-scenarios)
 - [Sort entities](#sort-entities)
   - [Basic usage](#basic-usage)
   - [REST / MVC](#rest--mvc)
   - [Swagger / OpenAPI](#swagger--openapi)
-  - [Sort operators / syntax](#sort-operators--syntax)
+  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
   - [Configuration](#configuration)
   - [Interception](#interception)
-  - [Default configuration and interception](#default-configuration-and-interception)
-  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
   - [Advanced scenarios](#advanced-scenarios)
 - [Page Entities](#page-entities)
   - [Basic usage](#basic-usage)
   - [REST / MVC](#rest--mvc)
   - [Swagger / OpenAPI](#swagger--openapi)
+  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
   - [Configuration](#configuration)
   - [Interception](#interception)
-  - [Default configuration and interception](#default-configuration-and-interception)
-  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
   - [Advanced Scenarios](#advanced-scenarios)
 - [Upgrade from FilterExpressionCreator](#upgrade-from-filterexpressioncreator)
 
@@ -200,6 +196,65 @@ private static List<Order> GenerateOrders()
         .ToList();
 }
 ```
+
+# Syntax
+
+## Filter
+
+The filter micro syntax consists of a comma separated list of an operator and value (e.g. `~Joe,=Doe`). Commas within a value can be escaped with a backslash.
+
+Comma separated values are combined with logical `OR`. To combine values with logical `AND`, specify the filter multiple times.
+
+**HTTP query parameter samples**
+
+| Query parameter         | Description                                   |
+| ----------------------- | --------------------------------------------- |
+| `gender=male,female`    | Gender equals `male` OR `female`              |
+| `gender=~male`          | Gender contains `male` (fetches `female` too) |
+| `size=<100`             | Size is lower than `100`                      |
+| `size=>100&size<200`    | Size is between `100` and `200`               |
+| `created=>two-days-ago` | Created within the last `2 days`              |
+| `created=yesterday`     | Created `yesterday`                           |
+| `created=>2020-03`      | Created after `Sunday, March 1, 2020`         |
+| `created=2020`          | Crated in the year `2020`                     |
+
+**Reference**
+
+| Operator             | Micro syntax | Description                                                  |
+| -------------------- | ------------ | ------------------------------------------------------------ |
+| Default              |              | Selects the operator according to the filtered type. When filtering `string` the default is `Contains`; otherwise `EqualCaseInsensitive` |
+| Contains             | ~            | Hits when the filtered property contains the filter value    |
+| EqualCaseInsensitive | =            | Hits when the filtered property equals the filter value (case-insensitive) |
+| EqualCaseSensitive   | ==           | Hits when the filtered property equals the filter value (case-sensitive) |
+| NotEqual             | !            | Negates the `Default` operator. Operators other than `Default` cannot be negated (currently) |
+| LessThan             | <            | Hits when the filtered property is less than the filter value |
+| LessThanOrEqual      | <=           | Hits when the filtered property is less than or equal to the filter value |
+| GreaterThan          | >            | Hits when the filtered property is greater than the filter value |
+| GreaterThanOrEqual   | >=           | Hits when the filtered property is greater than or equals the filter value |
+| IsNull               | ISNULL       | Hits when the filtered property is `null`                    |
+| NotNull              | NOTNULL      | Hits when the filtered property is not `null`                |
+
+## Sort
+
+The sort micro syntax consists of a property name to sort with an optional sort direction marker before or after (e.g. `customer-asc`). For the HTTP query parameter, a comma separated list of properties is allowed (`orderBy=customer,number-desc`).
+
+**HTTP query parameter samples**
+
+| Query parameter               | Description                                                  |
+| ----------------------------- | ------------------------------------------------------------ |
+| `orderBy=lastName`            | Sort by `lastName` ascending                                 |
+| `orderBy=lastName-`           | Sort by `lastName` descending                                |
+| `orderBy=lastName,-firstName` | Sort by `lastName` ascending, than by `firstName` descending |
+| `orderBy=lastName.length`     | Sort by `length of lastName` ascending                       |
+
+**Reference**
+
+| Position | Direction  | Values                                       |
+| -------- | ---------- | -------------------------------------------- |
+| prefix   | ascending  | `+`, `asc-`, `asc `                          |
+| postfix  | ascending  | `+`, `-asc`, `  asc`                         |
+| prefix   | descending | `-`, `~`, `desc-`, `dsc-`, `desc `, `dsc `   |
+| postfix  | descending | `-`, `~`, `-desc`, `-dsc`, `  desc`, `  dsc` |
 
 # Filter entities
 
@@ -396,24 +451,6 @@ using Plainquire.Filter.Mvc.Newtonsoft;
 // 'AddFilterNewtonsoftSupport()' on IMvcBuilder instance
 services.AddControllers().AddFilterNewtonsoftSupport();
 ```
-
-## Filter operators / syntax
-
-The filter micro syntax consists of a comma separated list of an operator shortcut and a value (e.g. `~Joe,=Doe`). When a value contains a comma itself, it must be escaped by a backslash.
-
-| Operator             | Micro syntax | Description                                                  |
-| -------------------- | ------------ | ------------------------------------------------------------ |
-| Default              |              | Selects the operator according to the filtered type. When filtering `string` the default is `Contains`; otherwise `EqualCaseInsensitive` |
-| Contains             | ~            | Hits when the filtered property contains the filter value    |
-| EqualCaseInsensitive | =            | Hits when the filtered property equals the filter value (case-insensitive) |
-| EqualCaseSensitive   | ==           | Hits when the filtered property equals the filter value (case-sensitive) |
-| NotEqual             | !            | Negates the `Default` operator. Operators other than `Default` cannot be negated (currently) |
-| LessThan             | <            | Hits when the filtered property is less than the filter value |
-| LessThanOrEqual      | <=           | Hits when the filtered property is less than or equal to the filter value |
-| GreaterThan          | >            | Hits when the filtered property is greater than the filter value |
-| GreaterThanOrEqual   | >=           | Hits when the filtered property is greater than or equals the filter value |
-| IsNull               | ISNULL       | Hits when the filtered property is `null`                    |
-| NotNull              | NOTNULL      | Hits when the filtered property is not `null`                |
 
 ### Add/Replace filter using logical OR
 
@@ -914,19 +951,6 @@ using Plainquire.Sort.Mvc.Newtonsoft;
 // 'AddSortNewtonsoftSupport()' on IMvcBuilder instance
 services.AddControllers().AddSortNewtonsoftSupport();
 ```
-
-## Sort operators / syntax
-
-The sort micro syntax consists of a property to sort with an optional sort direction marker before or after (e.g. `customer-asc`). For the HTTP query parameter, a comma separated list of properties is allowed (`orderBy=customer,number-desc`).
-
-Allowed sort direction markers are:
-
-Ascending prefix: `+`, `asc-`, `asc ` (with trailing space)
-Ascending postfix: `+`, `-asc`, ` asc` (with leading space)
-Descending prefix: `-`, `~`, `desc-`, `desc ` (with trailing space)
-Descending postfix: `-`, `~`, `-desc`, `-dsc`, ` desc`, ` dsc` (with leading space)
-
-When no sort marker is given, sort is done in ascending order.
 
 ### Add sorting
 
