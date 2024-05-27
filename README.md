@@ -199,13 +199,9 @@ private static List<Order> GenerateOrders()
 
 # Syntax
 
-## Filter
+## Filter syntax
 
-The filter micro syntax consists of a comma separated list of an operator and value (e.g. `~Joe,=Doe`). Commas within a value can be escaped with a backslash.
-
-Comma separated values are combined with logical `OR`. To combine values with logical `AND`, specify the filter multiple times.
-
-**HTTP query parameter samples**
+**Samples (HTTP query parameter)**
 
 | Query parameter         | Description                                   |
 | ----------------------- | --------------------------------------------- |
@@ -219,6 +215,10 @@ Comma separated values are combined with logical `OR`. To combine values with lo
 | `created=2020`          | Crated in the year `2020`                     |
 
 **Reference**
+
+The filter micro syntax consists of a comma separated list of an operator and value (e.g. `~Joe,=Doe`). Commas within a value can be escaped with a backslash.
+
+Comma separated values are combined with logical `OR`. To combine values with logical `AND`, specify the filter multiple times.
 
 | Operator             | Micro syntax | Description                                                  |
 | -------------------- | ------------ | ------------------------------------------------------------ |
@@ -234,11 +234,9 @@ Comma separated values are combined with logical `OR`. To combine values with lo
 | IsNull               | ISNULL       | Hits when the filtered property is `null`                    |
 | NotNull              | NOTNULL      | Hits when the filtered property is not `null`                |
 
-## Sort
+## Sort syntax
 
-The sort micro syntax consists of a property name to sort with an optional sort direction marker before or after (e.g. `customer-asc`). For the HTTP query parameter, a comma separated list of properties is allowed (`orderBy=customer,number-desc`).
-
-**HTTP query parameter samples**
+**Samples (HTTP query parameter)**
 
 | Query parameter               | Description                                                  |
 | ----------------------------- | ------------------------------------------------------------ |
@@ -248,6 +246,8 @@ The sort micro syntax consists of a property name to sort with an optional sort 
 | `orderBy=lastName.length`     | Sort by `length of lastName` ascending                       |
 
 **Reference**
+
+The sort micro syntax consists of a property name to sort with an optional sort direction marker before or after (e.g. `customer-asc`). For the HTTP query parameter, a comma separated list of properties is allowed (`orderBy=customer,number-desc`).
 
 | Position | Direction  | Values                                       |
 | -------- | ---------- | -------------------------------------------- |
