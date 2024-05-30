@@ -1,24 +1,34 @@
 ﻿@inherits MainLayoutPage
 
-<header class="container-fluid fixed-top px-0 bg-primary">
-    <NavMenu></NavMenu>
+<header>
+    <NavMenu Theme="@Theme" ToggleTheme="ToggleTheme"></NavMenu>
 </header>
 
-<main role="main" class="container pb-3" style="padding-top: 5rem;">
-    @Body
+<main role="main" class="container pt-md-5 pb-3">
+    <CascadingValue Value="@Theme">
+        @Body
+    </CascadingValue>
 </main>
 
-<footer class="d-flex flex-column bg-white">
-    <hr class="m-0" />
-    <div class="row mx-0 h-100 align-items-center">
-        <div class="col p-0 text-center">
+<footer class="d-flex flex-column justify-content-evenly border-top">
+    <div class="row mx-0 align-items-center">
+        <div class="col text-center">
             <small class="text-muted">
-                @ProductName, Version @ProductVersion | @Copyright |
-                <a class="text-muted" href="https://www.schick-software.de/#!imprint" target="_blank">Imprint</a> |
-                <a class="text-muted" href="https://www.schick-software.de/#!privacy" target="_blank">Privacy&nbsp;Policy</a> |
-                <a class="text-muted" href="https://github.com/plainquire/plainquire" target="_blank">Source&nbsp;code&nbsp;on&nbsp;GitHub</a>
+                <span class="text-uppercase">@ProductName</span>
+                <span class="me-3">Version @ProductVersion</span>
+                <div class="d-sm-none d-block"></div>
+                <span class="">@Copyright</span>
+            </small>
+        </div>
+    </div>
+
+    <div class="row mx-0 align-items-center">
+        <div class="col text-center">
+            <small class="text-muted fw-bold">
+                <a class="text-muted px-sm-3 px-1 text-decoration-none" href="https://github.com/plainquire/plainquire" target="_blank">Source&nbsp;code&nbsp;on&nbsp;GitHub</a>
+                <a class="text-muted px-sm-3 px-1 text-decoration-none" href="https://www.schick-software.de/" target="_blank">Legal Notice</a>
+                <a class="text-muted px-sm-3 px-1 text-decoration-none" href="https://www.schick-software.de/" target="_blank">Privacy&nbsp;Policy</a>
             </small>
         </div>
     </div>
 </footer>
-

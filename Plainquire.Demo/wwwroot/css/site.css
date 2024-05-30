@@ -1,17 +1,17 @@
-@import url('bootstrap/bootstrap.cosmo.min.css');
+@import url('bootstrap/bootstrap.min.css');
+@import url('bootstrap/bootstrap.fonts.css');
 @import url('github-corners/github-corner.css');
+@import url('theme/plainquire.theme.css');
 
 /* ----------------------------------------- */
 /* Page
 /* ----------------------------------------- */
-html, .navbar {
-    /* Fix flickering after modal dialog is opened and (page) scrollbar disappears. */
-    /*See https://stackoverflow.com/a/59407573/1271211, https://aykevl.nl/2014/09/fix-jumping-scrollbar */
-    margin-left: calc(100vw - 100%);
-}
-
 a {
     cursor: pointer;
+}
+
+.w-fitcontent {
+    width: fit-content;
 }
 
 /* ----------------------------------------- */
@@ -24,14 +24,14 @@ html {
 
 body {
     /* Margin bottom == footer height */
-    margin-bottom: 3rem !important;
+    margin-bottom: 6rem !important;
 }
 
 footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 3rem;
+    height: 6rem;
 }
 
 /* ReSharper disable All */

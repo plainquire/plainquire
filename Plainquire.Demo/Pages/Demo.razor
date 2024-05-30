@@ -74,7 +74,7 @@
             <div class="col-md-3">
                 <label for="seed" class="form-label">Seed</label>
                 <input id="seed" type="number" class="form-control" @bind="QueryModel.Seed" @bind:event="oninput" />
-                <div id="seedHelp" class="form-text">Using the same seed returns predictable result</div>
+                <div id="seedHelp" class="form-text">Using seed returns predictable result</div>
             </div>
 
             <!-- Sort by -->
@@ -161,14 +161,14 @@
             </div>
             <div class="col-12 m-0">
                 <button type="submit" class="btn btn-primary">Update</button>
-                <button type="button" class="btn btn-primary" @onclick="@ClearQuery">Clear</button>
-                <button type="button" class="btn btn-primary" @onclick="@ChangeSeed">Change Seed</button>
+                <button type="button" class="btn btn-outline-primary" @onclick="@ClearQuery">Clear</button>
+                <button type="button" class="btn btn-outline-primary" @onclick="@ChangeSeed">Change Seed</button>
             </div>
         </form>
     </div>
 </div>
 
-<div class="card">
+<div class="card mb-4">
     <h6 class="card-header">
         @{
             var resultDescription = (QueryResult.ErrorMessage != null)
@@ -181,7 +181,7 @@
                 Query Result (@resultDescription)
             </div>
 
-            <nav aria-label="Page navigation example">
+            <nav aria-label="Result page navigation">
                 <ul class="pagination m-0">
                     <li class="page-item">
                         <a class="page-link" @onclick="() => SetPage(Math.Max(QueryModel.PageNumber - 1, 1))" aria-label="Previous page">

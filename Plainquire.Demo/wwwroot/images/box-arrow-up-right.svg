@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-  <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;">
+  <g transform="matrix(1,0,0,1,-2753.39,-596.98)">
+	<g transform="matrix(1,0,0,2.08654,-138.654,0)">
+		<g transform="matrix(0.777778,0,0,0.37276,2890.29,285.272)">
+			<path d="M13.5,6L5.25,6C4.016,6 3,7.016 3,8.25L3,18.75C3,19.984 4.016,21 5.25,21L15.75,21C16.984,21 18,19.984 18,18.75L18,10.5M7.5,16.5L21,3M21,3L15.75,3M21,3L21,8.25" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1.5px;"/>
+		</g>
+	</g>
+  </g>
 </svg>

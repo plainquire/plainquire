@@ -7,8 +7,8 @@ internal static class Services
 {
     public static IServiceCollection RegisterApplicationServices(this IServiceCollection services)
     {
-        services.AddDbContext<FreelancerDbContext>();
         services.AddHttpClient();
+        services.AddDbContext<FreelancerDbContext>();
         return services;
     }
 }

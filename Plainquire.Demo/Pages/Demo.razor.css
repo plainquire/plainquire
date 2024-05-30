@@ -11,12 +11,7 @@
 }
 
 .page-size {
-    background-color: white;
     line-height: 1.2;
-}
-
-.page-size:hover {
-    background-color: #2780e3;
 }
 
 .sql {

@@ -10,6 +10,8 @@ public class IndexPage : ComponentBase
 {
     [Inject] private NavigationManager NavigationManager { get; set; } = default!;
 
+    [CascadingParameter] protected string? Theme { get; set; } = default!;
+
     protected string DemoAppLink = string.Empty;
     protected string OpeApiLink = string.Empty;
 

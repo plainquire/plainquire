@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Plainquire.Demo.Models.Configuration;
 using Plainquire.Demo.Startup;
-using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;

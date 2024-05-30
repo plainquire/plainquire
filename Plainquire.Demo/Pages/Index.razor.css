@@ -1,9 +1,59 @@
-﻿.overview-img {
-    width: 30rem;
-    display: block;
+﻿.lead-text {
+    background-position: center;
+    background-repeat: no-repeat;
+    font-weight: bold;
+    color: red;
+    color: transparent;
+    font-size: 4.2rem;
 }
 
-.cta-button {
-    width: 7rem;
-    margin-right: 0.5rem;
+    .lead-text div {
+        line-height: 1;
+        letter-spacing: -0.15rem;
+    }
+
+@media (max-width: 767.98px /* md */ ) {
+    .lead-text {
+        font-size: 3.3rem;
+    }
+}
+
+@media (max-width: 575.98px /* sm */ ) {
+    .lead-text {
+        font-size: 2.3rem;
+    }
+}
+
+.btn-success img {
+    filter: invert(83%) sepia(85%) saturate(3%) hue-rotate(333deg) brightness(111%) contrast(101%);
+}
+
+.btn-outline-success img {
+    filter: invert(58%) sepia(25%) saturate(1085%) hue-rotate(61deg) brightness(92%) contrast(93%);
+}
+
+.btn-outline-success:hover img {
+    filter: invert(83%) sepia(85%) saturate(3%) hue-rotate(333deg) brightness(111%) contrast(101%);
+}
+
+.logo {
+    height: 1.25em;
+}
+
+.browser, .code, .sql {
+    margin-top: -1.2rem;
+    margin-left: -2.2rem;
+}
+
+@media (max-width: 1199.98px) /* lg */ {
+    .browser, .code, .sql {
+        margin-left: -1.6rem;
+    }
+}
+
+@media (max-width: 767.98px /* sm */ ) {
+    .browser, .code, .sql {
+        margin-top: -.8rem;
+        margin-left: -1rem;
+    }
 }

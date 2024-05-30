@@ -1,0 +1,9 @@
+[data-bs-theme=light] footer {
+    background-image: linear-gradient(#FBFDF6, #EAF5DF);
+    border-bottom: 3px solid #9ED317;
+}
+
+[data-bs-theme=dark] footer {
+    background-image: linear-gradient(#32352B, #34402B);
+    border-bottom: 3px solid #208D4F;
+}

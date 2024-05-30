@@ -47,7 +47,7 @@ public class FreelancerController : Controller
     /// <param name="filter">The freelancer/project filter set.</param>
     /// <param name="orderBy">The freelancer/address sort order set.</param>
     /// <param name="page">The freelancer pagination set.</param>
-    /// <param name="seed">A seed. Using the same seed returns predictable result.</param>
+    /// <param name="seed">A seed. Using seed returns predictable result.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
     [HttpGet]
     public async Task<FreelancerDto> GetFreelancers([FromQuery] FreelancerFilterSet filter, [FromQuery] FreelancerSortSet orderBy, [FromQuery] EntityPage<Freelancer> page, int seed = 0, CancellationToken cancellationToken = default)
@@ -101,7 +101,7 @@ public class FreelancerController : Controller
     /// </summary>
     /// <param name="amount">The amount of records to generate.</param>
     /// <param name="locale">The locale to use. Available locales can be found here: https://github.com/bchavez/Bogus#locales</param>
-    /// <param name="seed">A seed. Using the same seed returns predictable data.</param>
+    /// <param name="seed">A seed. Using seed returns predictable data.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
     [HttpPut]
     public Task<List<Freelancer>> GenerateFreelancers(int amount = 12, string locale = "en_US", int seed = 0, CancellationToken cancellationToken = default)

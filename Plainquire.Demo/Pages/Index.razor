@@ -1,34 +1,81 @@
 ﻿@page "/"
 @inherits IndexPage
 
-<h1>Plainquire</h1>
-<p>Easy filtering, sorting and paging for ASP.NET Core.</p>
+<div class="row mt-5 pb-md-5">
+    <div class="col m-auto">
+        <div class="text-center text-nowrap lead-text" style="@($"background-image: url('images/headline_{Theme}.svg')")">
+            <div>
+                Easy filtering, sorting <br /> and paging for <br /> ASP.NET Core
+            </div>
+        </div>
+    </div>
+</div>
 
-<a class="btn btn-outline-secondary cta-button" href="@DemoAppLink">
-    <img src="images/box-arrow-up-right.svg" alt="Live Demo" class="logo-send me-1">
-    Demo
-</a>
+<div class="row py-5">
+    <div class="col-lg-8 col-md-10 col mx-auto text-center">
+        <div class="row justify-content-center">
+            <div class="col-md-auto col-12">
+                <a class="btn btn-success me-md-4 mb-md-0 mb-3" href="demo">
+                    <img src="images/box-arrow-up-right.svg" alt="Demo" class="me-2" />
+                    Demo
+                </a>
+            </div>
+            <div class="col-md-auto col-12">
+                <a class="btn btn-outline-success" href="https://github.com/plainquire/plainquire" target="_blank">
+                    <img src="images/github.svg" alt="Demo" class="me-2" />
+                    GitHub
+                </a>
+            </div>
+        </div>
 
-<a class="btn btn-outline-secondary cta-button" href="@OpeApiLink">
-    <img src="images/send-fill.svg" alt="Live Demo" class="logo-send me-1">
-    API
-</a>
 
-<a class="btn btn-outline-secondary cta-button" href="https://github.com/plainquire/plainquire">
-    <img src="images/github.svg" alt="Live Demo" class="logo-send me-1">
-    GitHub
-</a>
+    </div>
+</div>
 
-<h2 class="mt-4">Overview</h2>
-<p class="lead">
-    <span>From your browser</span>
-    <img class="overview-img" src="images/browser.svg" alt="Browser" />
-</p>
-<p class="lead">
-    <span>Mapped to queries</span>
-    <img class="overview-img" src="images/code.svg" alt="Code" />
-</p>
-<p class="lead">
-    <span>Results in generated SQL</span>
-    <img class="overview-img" src="images/sql.svg" alt="SQL" />
-</p>
+<div class="row pt-4">
+    <div class="col-lg-8 col-md-10 col mx-auto">
+        <h3>
+            <img src="images/browser_logo.svg" alt="Browser Logo" class="me-2 logo" />
+            From browser
+        </h3>
+        <div>
+            <img src="@($"images/browser_{Theme}.svg")" alt="Browser" class="browser" />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 col-md-10 col mx-auto">
+        <div class="border-start border-2 ms-3" style="height: 3rem"></div>
+    </div>
+</div>
+
+<div class="row pt-4">
+    <div class="col-lg-8 col-md-10 col mx-auto">
+        <h3>
+            <img src="images/code_logo.svg" alt="Code Logo" class="me-2 logo" />
+            Mapped to queries
+        </h3>
+        <div>
+            <img src="@($"images/code_{Theme}.svg")" alt="C# Sourcecode" class="code" />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 col-md-10 col mx-auto">
+        <div class="border-start border-2 ms-3" style="height: 3rem"></div>
+    </div>
+</div>
+
+<div class="row pt-4">
+    <div class="col-lg-8 col-md-10 col mx-auto">
+        <h3>
+            <img src="images/sql_logo.svg" alt="SQL Logo" class="me-2 logo" />
+            Results in SQL
+        </h3>
+        <div>
+            <img src="@($"images/sql_{Theme}.svg")" alt="SQL Statement" class="sql" />
+        </div>
+    </div>
+</div>
