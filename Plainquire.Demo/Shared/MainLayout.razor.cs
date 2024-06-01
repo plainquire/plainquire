@@ -14,7 +14,7 @@ public class MainLayoutPage : LayoutComponentBase
 
     [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
 
-    protected string? Theme;
+    protected string Theme = "light";
 
     protected override async Task OnInitializedAsync()
     {
