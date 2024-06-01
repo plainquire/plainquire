@@ -1,6 +1,8 @@
 ﻿:root {
     --bs-body-font-family: 'Poppins';
     --bs-border-radius: var(--bs-border-radius-lg) 0;
+    --bs-link-color: #89C720;
+    --bs-link-color-rgb: 137, 199, 32;
 }
 
 .page-link {
