@@ -1,3 +1,11 @@
+[data-bs-theme=light] main.demo {
+    background-color: #FFFFFF;
+}
+
+[data-bs-theme=dark] main.demo {
+    background-color: #3E3F3A;
+}
+
 [data-bs-theme=light] footer {
     background-image: linear-gradient(#FBFDF6, #EAF5DF);
     border-bottom: 3px solid #9ED317;

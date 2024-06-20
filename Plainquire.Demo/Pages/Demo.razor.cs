@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
+using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using Plainquire.Demo.DTOs;
 using Plainquire.Filter;
@@ -19,6 +20,7 @@ public class DemoPage : ComponentBase
 {
     [Inject] private HttpClient HttpClient { get; set; } = default!;
     [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
 
     private readonly Random _randomizer = new();
 
@@ -41,6 +43,13 @@ public class DemoPage : ComponentBase
         await base.OnInitializedAsync();
         SetQueryModelFromUrl(NavigationManager.Uri);
         await LoadData();
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        await JsRuntime.InvokeVoidAsync("addTooltips");
     }
 
     protected async Task LoadPredefined(string identifier)
@@ -93,9 +102,6 @@ public class DemoPage : ComponentBase
         await UpdateQuery();
     }
 
-    protected async Task FormatSql()
-        => QueryResult.SqlQuery = await FormatSql(QueryResult.SqlQuery!);
-
     private int GetPageCount()
     {
         if (QueryResult.FilteredCount == 0)
@@ -140,6 +146,13 @@ public class DemoPage : ComponentBase
             var json = await response.Content.ReadAsStringAsync();
             QueryResult = JsonConvert.DeserializeObject<FreelancerDto>(json) ?? new();
 
+            _ = FormatSql(QueryResult.SqlQuery)
+                .ContinueWith(task =>
+                {
+                    QueryResult.SqlQuery = task.Result;
+                    InvokeAsync(StateHasChanged);
+                });
+
             if (QueryModel.PageNumber > 1 && QueryModel.PageNumber > PageCount)
             {
                 await SetPage(PageCount);
@@ -153,8 +166,11 @@ public class DemoPage : ComponentBase
         }
     }
 
-    private async Task<string?> FormatSql(string sql)
+    private async Task<string?> FormatSql(string? sql)
     {
+        if (sql == null)
+            return null;
+
         var requestUri = "https://sqlformat.org/api/v1/format";
         requestUri = QueryHelpers.AddQueryString(requestUri, "sql", sql);
         // ReSharper disable once StringLiteralTypo

@@ -1,48 +1,78 @@
 ﻿:root {
     --bs-body-font-family: 'Poppins';
     --bs-border-radius: var(--bs-border-radius-lg) 0;
-    --bs-link-color: #89C720;
-    --bs-link-color-rgb: 137, 199, 32;
+    --bs-tertiary-color: #7B7B7B;
+    --bs-success-rgb: 83, 170, 56;
 }
 
-.page-link {
-    --bs-pagination-color: #89C720;
-    --bs-pagination-hover-color: #53AA38;
-    --bs-pagination-active-bg: #89C720;
-    --bs-pagination-active-border-color: #89C720;
+[data-bs-theme=light] {
+    --bs-info-bg-subtle: #EBF5DF;
+    --bs-info-bg-subtle: rgba(255, 255, 255, 0.75);
+    --bs-body-color: #333333;
+}
+
+[data-bs-theme=dark] {
+    --bs-info-bg-subtle: #333B2B;
+    --bs-info-bg-subtle: rgba(35, 35, 35, 0.75);
+    --bs-body-color: #F2F2F2;
+    --bs-body-bg: #3E3F3A;
 }
 
 .navbar-nav {
     --bs-nav-link-font-weight: bold;
 }
 
-[data-bs-theme=light] {
-    --bs-info-bg-subtle: #EBF5DF;
-    --bs-body-color: #333333;
+.page-link {
+    --bs-pagination-color: rgb(var(--bs-success-rgb));
+    --bs-pagination-hover-color: rgb(var(--bs-success-rgb));
+    --bs-pagination-active-bg: rgb(var(--bs-success-rgb));
+    --bs-pagination-active-border-color: rgb(var(--bs-success-rgb));
 }
 
-[data-bs-theme=dark] {
-    --bs-info-bg-subtle: #333B2B;
-    --bs-body-color: #F2F2F2;
-    --bs-body-bg: #3E3F3A;
+[data-bs-theme=light] body {
+    background: linear-gradient(to bottom, #FFFFFF, #FAFAFA);
 }
+
+[data-bs-theme=dark] body {
+    background: linear-gradient(to bottom, #001008, #3E3F3A);
+}
+
+header {
+    position: relative;
+}
+
+    header:after {
+        content: "";
+        display: block;
+        height: 600px;
+        width: 80%;
+        background: linear-gradient(to right, #9dd318, #29bc65);
+        border-radius: 50%;
+        position: absolute;
+        top: -150px;
+        left: 10%;
+        z-index: -1;
+        filter: blur(100px);
+        opacity: .25;
+        transform: rotate(5deg);
+    }
 
 .btn-primary {
-    --bs-btn-bg: #89C720;
-    --bs-btn-active-bg: #53AA38;
-    --bs-btn-hover-bg: #53AA38;
-    --bs-btn-border-color: #89C720;
-    --bs-btn-hover-border-color: #53AA38;
-    --bs-btn-active-border-color: #53AA38;
+    --bs-btn-bg: rgb(var(--bs-success-rgb));
+    --bs-btn-active-bg: rgb(var(--bs-success-rgb));
+    --bs-btn-hover-bg: rgb(var(--bs-success-rgb));
+    --bs-btn-border-color: rgb(var(--bs-success-rgb));
+    --bs-btn-hover-border-color: rgb(var(--bs-success-rgb));
+    --bs-btn-active-border-color: rgb(var(--bs-success-rgb));
 }
 
 .btn-outline-primary {
-    --bs-btn-color: #89C720;
-    --bs-btn-hover-bg: #89C720;
-    --bs-btn-active-bg: #89C720;
-    --bs-btn-border-color: #53AA38;
-    --bs-btn-hover-border-color: #53AA38;
-    --bs-btn-active-border-color: #53AA38;
+    --bs-btn-color: rgb(var(--bs-success-rgb));
+    --bs-btn-hover-bg: rgb(var(--bs-success-rgb));
+    --bs-btn-active-bg: rgb(var(--bs-success-rgb));
+    --bs-btn-border-color: rgb(var(--bs-success-rgb));
+    --bs-btn-hover-border-color: rgb(var(--bs-success-rgb));
+    --bs-btn-active-border-color: rgb(var(--bs-success-rgb));
 }
 
 [data-bs-theme=light] .btn-outline-primary {
@@ -55,12 +85,10 @@
 
 .btn-success {
     --bs-btn-font-weight: bold;
-    --bs-btn-padding-x: 2.25rem;
-    --bs-btn-padding-y: 0.75rem;
     --bs-border-width: 0;
     --bs-btn-bg: #89C720;
-    --bs-btn-active-bg: #53AA38;
-    --bs-btn-hover-bg: #53AA38;
+    --bs-btn-active-bg: rgb(var(--bs-success-rgb));
+    --bs-btn-hover-bg: rgb(var(--bs-success-rgb));
     background-image: linear-gradient(90deg, #9ED317, #208D4F);
 }
 
@@ -70,12 +98,10 @@
 
 .btn-outline-success {
     --bs-btn-font-weight: bold;
-    --bs-btn-padding-x: 2.1875rem;
-    --bs-btn-padding-y: 0.6875rem;
-    --bs-btn-color: #53AA38;
-    --bs-btn-border-color: #53AA38;
-    --bs-btn-active-border-color: #53AA38;
-    --bs-btn-hover-border-color: #53AA38;
-    --bs-btn-active-bg: #53AA38;
-    --bs-btn-hover-bg: #53AA38;
+    --bs-btn-color: rgb(var(--bs-success-rgb));
+    --bs-btn-border-color: rgb(var(--bs-success-rgb));
+    --bs-btn-active-border-color: rgb(var(--bs-success-rgb));
+    --bs-btn-hover-border-color: rgb(var(--bs-success-rgb));
+    --bs-btn-active-bg: rgb(var(--bs-success-rgb));
+    --bs-btn-hover-bg: rgb(var(--bs-success-rgb));
 }

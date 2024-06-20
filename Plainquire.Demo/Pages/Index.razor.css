@@ -24,6 +24,16 @@
     }
 }
 
+.btn-success {
+    --bs-btn-padding-x: 2.25rem;
+    --bs-btn-padding-y: 0.75rem;
+}
+
+.btn-outline-success {
+    --bs-btn-padding-x: 2.1875rem;
+    --bs-btn-padding-y: 0.6875rem;
+}
+
 .btn-success img {
     filter: invert(83%) sepia(85%) saturate(3%) hue-rotate(333deg) brightness(111%) contrast(101%);
 }

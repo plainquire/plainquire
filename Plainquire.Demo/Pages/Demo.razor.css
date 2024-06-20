@@ -1,4 +1,35 @@
-﻿.description {
+﻿::placeholder {
+    color: var(--bs-tertiary-color);
+    font-size: .9em;
+    opacity: 1; /* Firefox */
+}
+
+.form-label {
+    color: var(--bs-secondary-text-emphasis);
+}
+
+[data-bs-theme=dark] .input-group .input-group-text {
+    background-color: transparent;
+}
+
+    [data-bs-theme=dark] .input-group .input-group-text img {
+        filter: invert(100%) sepia(5%) saturate(21%) hue-rotate(234deg) brightness(106%) contrast(108%);
+    }
+
+.semibold {
+    font-weight: 600;
+}
+
+.trash {
+    height: 1em;
+    margin-top: -.25rem;
+}
+
+th {
+    color: var(--bs-secondary-text-emphasis);
+}
+
+.projects {
     text-overflow: ellipsis;
     width: 20%;
     max-width: 1px;
@@ -6,13 +37,14 @@
     overflow: hidden;
 }
 
-.semibold {
-    font-weight: 600;
+.url {
+    background-color: var(--bs-card-cap-bg);
+    background-color: rgba(var(--bs-body-color-rgb), 0.03);
 }
 
-.page-size {
-    line-height: 1.2;
-}
+    .url img {
+        height: 1em;
+    }
 
 .sql {
     white-space: pre-wrap;

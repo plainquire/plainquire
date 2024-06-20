@@ -21,12 +21,11 @@
 <body>
     @{
         HttpContext.Response
-            .Cookies
-            .Append(
-                CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(
-                new RequestCulture(CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture))
-            );
+        .Cookies
+        .Append(
+        CookieRequestCultureProvider.DefaultCookieName,
+        CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture))
+        );
     }
 
     <component type="typeof(App)" render-mode="Server" />
@@ -47,8 +46,16 @@
     <script src="js/bootstrap/bootstrap.theme.toggler.js"></script>
 
     <script>
-        <!-- Prevent blazor from scrolling to top on navigation, see https://github.com/dotnet/aspnetcore/issues/40190#issuecomment-1203857906 -->
+        <!--Prevent blazor from scrolling to top on navigation, see https://github.com/dotnet/aspnetcore/issues/40190#issuecomment-1203857906 -->
         window.scrollTo = undefined;
+
+        function addTooltips() {
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => {
+                bootstrap.Tooltip.getInstance(tooltipTriggerEl)?.dispose()
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        }
     </script>
 </body>
 </html>

@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="35.4.0" />
+    <PackageReference Include="ExpressionTreeToString" Version="3.4.71" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.10.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

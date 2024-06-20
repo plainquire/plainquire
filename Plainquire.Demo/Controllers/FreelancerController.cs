@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using Bogus.DataSets;
+using ExpressionTreeToString;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Plainquire.Demo.Database;
@@ -17,6 +18,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using ZSpitz.Util;
 using Address = Plainquire.Demo.Models.Address;
 
 namespace Plainquire.Demo.Controllers;
@@ -89,7 +91,7 @@ public class FreelancerController : Controller
             FilteredCount = filteredCount,
             UnfilteredCount = unfilteredCount,
             SqlQuery = GetSqlQuery(query),
-            FilterExpression = freelancerFilter.ToString(),
+            FilterExpression = freelancerFilter.CreateFilter()?.ToString("C#"),
             HttpQuery = WebUtility.UrlDecode(HttpContext.Request.Path.Value + HttpContext.Request.QueryString.Value)
         };
 

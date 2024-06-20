@@ -4,10 +4,12 @@
     <NavMenu Theme="@Theme" ToggleTheme="ToggleTheme"></NavMenu>
 </header>
 
-<main role="main" class="container pt-md-5 pb-3">
-    <CascadingValue Value="@Theme">
-        @Body
-    </CascadingValue>
+<main role="main" class="@GetRoute()">
+    <div class="container pt-md-5 pb-3">
+        <CascadingValue Value="@Theme">
+            @Body
+        </CascadingValue>
+    </div>
 </main>
 
 <footer class="d-flex flex-column justify-content-evenly border-top">

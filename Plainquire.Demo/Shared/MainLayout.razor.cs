@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Plainquire.Demo.Extensions;
+using System;
 using System.Threading.Tasks;
 
 namespace Plainquire.Demo.Shared;
@@ -13,6 +14,7 @@ public class MainLayoutPage : LayoutComponentBase
     protected string Copyright = string.Empty;
 
     [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
 
     protected string Theme = "light";
 
@@ -23,6 +25,12 @@ public class MainLayoutPage : LayoutComponentBase
         ProductVersion = AssemblyExtensions.GetProgramProductVersion() ?? string.Empty;
         Copyright = AssemblyExtensions.GetProgramCopyright() ?? string.Empty;
         Theme = await JsRuntime.InvokeAsync<string>("getTheme");
+    }
+
+    protected string? GetRoute()
+    {
+        var uri = new Uri(NavigationManager.Uri);
+        return uri.AbsolutePath.Trim('/');
     }
 
     protected async Task ToggleTheme()

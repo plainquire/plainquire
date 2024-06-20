@@ -1,89 +1,131 @@
 ﻿@page "/demo"
 @using Plainquire.Demo.Components
-@using Plainquire.Demo.Models
 @using Plainquire.Filter
 @inherits DemoPage
 
-<div class="card mb-4">
-    <h6 class="card-header">
-        Refine Query (<a target="_blank" href="https://www.plainquire.com/syntax">Syntax</a>)
-    </h6>
-    <div class="card-body">
-        <form class="row g-3" @onsubmit="@UpdateQuery" novalidate>
+<div class="row">
+    <div class="col-12">
+        <h1>
+            <img src="images/query.svg" alt="Query" width="32" class="me-2 logo" />
+            Query
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <form class="row g-3" onsubmit="" novalidate>
             <!-- Predefined samples -->
-            <div class="col-md-12 semibold">Predefined samples</div>
+            <div class="col-md-12 pt-4 semibold">Predefined samples</div>
             <div class="col-auto">
-                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Older-than-40"))">Older than 40</button>
+                <button type="button" class="btn btn-outline-success border-2" @onclick="@(() => LoadPredefined("Older-than-40"))">Older than 40</button>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Unknown-Age"))">Unknown Age</button>
+                <button type="button" class="btn btn-outline-success border-2" @onclick="@(() => LoadPredefined("Unknown-Age"))">Unknown Age</button>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Known-Age"))">Known Age</button>
+                <button type="button" class="btn btn-outline-success border-2" @onclick="@(() => LoadPredefined("Known-Age"))">Known Age</button>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Gender-Contains"))">Gender contains 'male'</button>
+                <button type="button" class="btn btn-outline-success border-2" @onclick="@(() => LoadPredefined("Gender-Contains"))">Gender contains 'male'</button>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Address-Street"))">Street contains 'A'</button>
+                <button type="button" class="btn btn-outline-success border-2" @onclick="@(() => LoadPredefined("Address-Street"))">Street contains 'A'</button>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-outline-secondary" @onclick="@(() => LoadPredefined("Project-Contains"))">Project contains 'Z'</button>
+                <button type="button" class="btn btn-outline-success border-2" @onclick="@(() => LoadPredefined("Project-Contains"))">Project contains 'Z'</button>
             </div>
 
             <!-- Filter -->
-            <div class="col-md-12 m-0">
-                <hr />
+            <div class="col-8 m-0 pt-5 semibold">Filter</div>
+            <div class="col-4 m-0 pt-5 text-end">
+                <a class="text-success text-decoration-none" @onclick="@ClearQuery">
+                    <img class="trash" src="images/trash.svg" alt="Clear all" />
+                    Clear all
+                </a>
             </div>
-            <div class="col-md-12 m-0 semibold">Filter</div>
             <div class="col-md-3">
                 <label for="firstName" class="form-label">First Name</label>
-                <input id="firstName" class="form-control" @bind="QueryModel.Filter.FirstName" @bind:event="oninput" />
-                <div id="firstNameHelp" class="form-text">@(QueryModel.Filter.FirstName.HumanizeFilterSyntax<string>("'FirstName'"))</div>
+                <div class="input-group">
+                    <input id="firstName" class="form-control" placeholder="type to filter" @bind="QueryModel.Filter.FirstName" @bind:event="oninput" @onblur="@UpdateQuery" />
+                    <span id="firstNameHelp" class="input-group-text" data-bs-toggle="tooltip" data-bs-title="@(QueryModel.Filter.FirstName.HumanizeFilterSyntax<string>("'FirstName'"))">
+                        <img src="/images/info-circle.svg" alt="info" />
+                    </span>
+                </div>
             </div>
             <div class="col-md-3">
                 <label for="lastName" class="form-label">Last Name</label>
-                <input id="lastName" class="form-control" @bind="QueryModel.Filter.LastName" @bind:event="oninput" />
-                <div id="lastNameHelp" class="form-text">@(QueryModel.Filter.LastName.HumanizeFilterSyntax<string>("'LastName'"))</div>
+                <div class="input-group">
+                    <input id="lastName" class="form-control" placeholder="type to filter" @bind="QueryModel.Filter.LastName" @bind:event="oninput" @onblur="@UpdateQuery" />
+                    <span id="lastNameHelp" class="input-group-text" data-bs-toggle="tooltip" data-bs-title="@(QueryModel.Filter.LastName.HumanizeFilterSyntax<string>("'LastName'"))">
+                        <img src="/images/info-circle.svg" alt="info" />
+                    </span>
+                </div>
             </div>
             <div class="col-md-3">
                 <label for="gender" class="form-label">Gender</label>
-                <input id="gender" class="form-control" @bind="QueryModel.Filter.Gender" @bind:event="oninput" />
-                <div id="genderHelp" class="form-text">@(QueryModel.Filter.Gender.HumanizeFilterSyntax<Gender>("'Gender'"))</div>
+                <div class="input-group">
+                    <input id="gender" class="form-control" placeholder="type to filter" @bind="QueryModel.Filter.Gender" @bind:event="oninput" @onblur="@UpdateQuery" />
+                    <span id="genderHelp" class="input-group-text" data-bs-toggle="tooltip" data-bs-title="@(QueryModel.Filter.Gender.HumanizeFilterSyntax<string>("'Gender'"))">
+                        <img src="/images/info-circle.svg" alt="info" />
+                    </span>
+                </div>
             </div>
             <div class="col-md-3">
                 <label for="birthday" class="form-label">Birthday</label>
-                <input id="birthday" class="form-control" @bind="QueryModel.Filter.Birthday" @bind:event="oninput" />
-                <div id="birthdayHelp" class="form-text">@(QueryModel.Filter.Birthday.HumanizeFilterSyntax<DateTime>("'Birthday'"))</div>
+                <div class="input-group">
+                    <input id="birthday" class="form-control" placeholder="type to filter" @bind="QueryModel.Filter.Birthday" @bind:event="oninput" @onblur="@UpdateQuery" />
+                    <span id="birthdayHelp" class="input-group-text" data-bs-toggle="tooltip" data-bs-title="@(QueryModel.Filter.Birthday.HumanizeFilterSyntax<string>("'Birthday'"))">
+                        <img src="/images/info-circle.svg" alt="info" />
+                    </span>
+                </div>
             </div>
             <div class="col-md-3">
                 <label for="hourlyRate" class="form-label">Hourly Rate</label>
-                <input id="hourlyRate" class="form-control" @bind="QueryModel.Filter.HourlyRate" @bind:event="oninput" />
-                <div id="hourlyRateHelp" class="form-text">@(QueryModel.Filter.HourlyRate.HumanizeFilterSyntax<double>("'HourlyRate'"))</div>
+                <div class="input-group">
+                    <input id="hourlyRate" class="form-control" placeholder="type to filter" @bind="QueryModel.Filter.HourlyRate" @bind:event="oninput" @onblur="@UpdateQuery" />
+                    <span id="hourlyRateHelp" class="input-group-text" data-bs-toggle="tooltip" data-bs-title="@(QueryModel.Filter.HourlyRate.HumanizeFilterSyntax<string>("'HourlyRate'"))">
+                        <img src="/images/info-circle.svg" alt="info" />
+                    </span>
+                </div>
             </div>
             <div class="col-md-3">
                 <label for="experience" class="form-label">Street</label>
-                <input id="experience" class="form-control" @bind="QueryModel.Filter.AddressStreet" @bind:event="oninput" />
-                <div id="experienceHelp" class="form-text">@(QueryModel.Filter.AddressStreet.HumanizeFilterSyntax<string>("'AddressStreet'"))</div>
+                <div class="input-group">
+                    <input id="experience" class="form-control" placeholder="type to filter" @bind="QueryModel.Filter.AddressStreet" @bind:event="oninput" @onblur="@UpdateQuery" />
+                    <span id="experienceHelp" class="input-group-text" data-bs-toggle="tooltip" data-bs-title="@(QueryModel.Filter.AddressStreet.HumanizeFilterSyntax<string>("'AddressStreet'"))">
+                        <img src="/images/info-circle.svg" alt="info" />
+                    </span>
+                </div>
             </div>
             <div class="col-md-3">
                 <label for="project" class="form-label">Project</label>
-                <input id="project" class="form-control" @bind="QueryModel.Filter.ProjectTitle" @bind:event="oninput" />
-                <div id="projectHelp" class="form-text">@(QueryModel.Filter.ProjectTitle.HumanizeFilterSyntax<string>("'ProjectTitle'"))</div>
+                <div class="input-group">
+                    <input id="project" class="form-control" placeholder="type to filter" @bind="QueryModel.Filter.ProjectTitle" @bind:event="oninput" @onblur="@UpdateQuery" />
+                    <span id="projectHelp" class="input-group-text" data-bs-toggle="tooltip" data-bs-title="@(QueryModel.Filter.ProjectTitle.HumanizeFilterSyntax<string>("'ProjectTitle'"))">
+                        <img src="/images/info-circle.svg" alt="info" />
+                    </span>
+                </div>
             </div>
             <div class="col-md-3">
                 <label for="seed" class="form-label">Seed</label>
-                <input id="seed" type="number" class="form-control" @bind="QueryModel.Seed" @bind:event="oninput" />
-                <div id="seedHelp" class="form-text">Using seed returns predictable result</div>
+                <div class="input-group">
+                    <span id="changeSeed" class="input-group-text" data-bs-toggle="tooltip" data-bs-title="Change Seed">
+                        <a @onclick="ChangeSeed">
+                            <img src="/images/arrow-clockwise.svg" alt="Change Seed" />
+                        </a>
+                    </span>
+                    <input id="seed" class="form-control" placeholder="type to filter" @bind="QueryModel.Seed" @bind:event="oninput" @onblur="@UpdateQuery" />
+                    <span id="seedHelp" class="input-group-text" data-bs-toggle="tooltip" data-bs-title="Use seed for predictable results">
+                        <img src="/images/info-circle.svg" alt="Info" />
+                    </span>
+                </div>
             </div>
 
             <!-- Sort by -->
-            <div class="col-md-12 m-0">
-                <hr />
-            </div>
-            <div class="col-md-12 m-0 semibold">Sort</div>
+            <div class="col-md-12 m-0 pt-5 semibold">Sort</div>
             <div class="col-md-3">
-                <label for="sortOrder1" class="form-label">1st level</label>
+                <label for="sortOrder1" class="form-label">First Level</label>
                 <select id="sortOrder1" class="form-select" aria-label="1st level sorting" @bind="QueryModel.Sort[0]" @bind:after="@UpdateQuery">
                     <option selected></option>
                     <option value="lastName-asc">Last Name 🡑</option>
@@ -101,7 +143,7 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <label for="sortOrder2" class="form-label">2nd level</label>
+                <label for="sortOrder2" class="form-label">Second Level</label>
                 <select id="sortOrder2" class="form-select" aria-label="2nd level sorting" @bind="QueryModel.Sort[1]" @bind:after="@UpdateQuery">
                     <option selected></option>
                     <option value="lastName-asc">Last Name 🡑</option>
@@ -119,7 +161,7 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <label for="sortOrder3" class="form-label">3rd level</label>
+                <label for="sortOrder3" class="form-label">Third Level</label>
                 <select id="sortOrder3" class="form-select" aria-label="3rd level sorting" @bind="QueryModel.Sort[2]" @bind:after="@UpdateQuery">
                     <option selected></option>
                     <option value="lastName-asc">Last Name 🡑</option>
@@ -137,7 +179,7 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <label for="sortOrder4" class="form-label">4th level</label>
+                <label for="sortOrder4" class="form-label">Fourth Level</label>
                 <select id="sortOrder4" class="form-select" aria-label="4th level sorting" @bind="QueryModel.Sort[3]" @bind:after="@UpdateQuery">
                     <option selected></option>
                     <option value="lastName-asc">Last Name 🡑</option>
@@ -154,33 +196,24 @@
                     <option value="addressStreet-desc">Street 🡓</option>
                 </select>
             </div>
-
-            <!-- Action -->
-            <div class="col-md-12 m-0">
-                <hr />
-            </div>
-            <div class="col-12 m-0">
-                <button type="submit" class="btn btn-primary">Update</button>
-                <button type="button" class="btn btn-outline-primary" @onclick="@ClearQuery">Clear</button>
-                <button type="button" class="btn btn-outline-primary" @onclick="@ChangeSeed">Change Seed</button>
-            </div>
         </form>
     </div>
 </div>
 
-<div class="card mb-4">
-    <h6 class="card-header">
+<div class="row pt-5">
+    <div class="col">
         @{
-            var resultDescription = (QueryResult.ErrorMessage != null)
+            var queryResultCount = (QueryResult.ErrorMessage != null)
             ? "Error"
             : QueryResult.Data != null ? QueryResult.FilteredCount + "/" + QueryResult.UnfilteredCount : "";
         }
-
+        <h1>
+            <img src="images/result.svg" alt="Result" width="32" class="me-2 logo" />
+            Result <span class="fs-5">(@queryResultCount)</span>
+        </h1>
+    </div>
+    <div class="col-auto">
         <div class="d-flex align-items-center">
-            <div class="flex-grow-1">
-                Query Result (@resultDescription)
-            </div>
-
             <nav aria-label="Result page navigation">
                 <ul class="pagination m-0">
                     <li class="page-item">
@@ -216,60 +249,83 @@
                 </ul>
             </div>
         </div>
-    </h6>
-    <ul class="list-group list-group-flush">
-        @if (QueryResult.ErrorMessage != null)
-        {
-            <li class="list-group-item">
-                <p>@QueryResult.ErrorMessage</p>
-            </li>
-        }
-        else if (QueryResult.Data == null)
-        {
-            <li class="list-group-item">
-                <p>Loading</p>...
-            </li>
-        }
-        else
-        {
-            <li class="list-group-item">
-                <SimpleTable Items="QueryResult.Data">
-                    <HeaderTemplate>
-                        <tr>
-                            <th class="text-nowrap">First Name</th>
-                            <th class="text-nowrap">Last Name</th>
-                            <th class="text-nowrap">Gender</th>
-                            <th class="text-nowrap">Birthday</th>
-                            <th class="text-nowrap">Hourly Rate</th>
-                            <th class="text-nowrap">Street</th>
-                            <th class="text-nowrap">Projects</th>
-                        </tr>
-                    </HeaderTemplate>
-                    <RowTemplate Context="freelancer">
-                        <tr>
-                            <td>@freelancer.FirstName</td>
-                            <td>@freelancer.LastName</td>
-                            <td>@freelancer.Gender</td>
-                            <td>@freelancer.Birthday?.ToString("d")</td>
-                            <td>@freelancer.HourlyRate.ToString("c", NumberFormat)</td>
-                            <td>@freelancer.Address.Street</td>
-                            <td class="description">@string.Join(", ", freelancer.Projects.Select(x => x.Title))</td>
-                        </tr>
-                    </RowTemplate>
-                </SimpleTable>
-            </li>
-            <li class="list-group-item">
-                <h6>URL</h6>
-                <pre>@QueryResult.HttpQuery</pre>
-            </li>
-            <li class="list-group-item">
-                <h6>Expression</h6>
-                <pre>@QueryResult.FilterExpression</pre>
-            </li>
-            <li class="list-group-item">
-                <h6>SQL (SQLite) <button type="button" class="btn btn-outline-secondary btn-sm" @onclick="FormatSql">Beautify</button></h6>
-                <pre class="sql">@QueryResult.SqlQuery</pre>
-            </li>
-        }
-    </ul>
+    </div>
 </div>
+
+@if (QueryResult.ErrorMessage != null)
+{
+    <p>@QueryResult.ErrorMessage</p>
+}
+else if (QueryResult.Data == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <SimpleTable Items="QueryResult.Data">
+        <HeaderTemplate>
+            <tr>
+                <th class="text-nowrap">First Name</th>
+                <th class="text-nowrap">Last Name</th>
+                <th class="text-nowrap">Gender</th>
+                <th class="text-nowrap">Birthday</th>
+                <th class="text-nowrap">Hourly Rate</th>
+                <th class="text-nowrap">Street</th>
+                <th class="text-nowrap">Projects</th>
+            </tr>
+        </HeaderTemplate>
+        <RowTemplate Context="freelancer">
+            <tr>
+                <td>@freelancer.FirstName</td>
+                <td>@freelancer.LastName</td>
+                <td>@freelancer.Gender</td>
+                <td>@freelancer.Birthday?.ToString("d")</td>
+                <td>@freelancer.HourlyRate.ToString("c", NumberFormat)</td>
+                <td>@freelancer.Address.Street</td>
+                <td class="projects">@string.Join(", ", freelancer.Projects.Select(x => x.Title))</td>
+            </tr>
+        </RowTemplate>
+    </SimpleTable>
+
+    <div class="row pt-5">
+        <div class="col-12">
+            <h1>
+                <img src="images/magic.svg" alt="Magic" width="32" class="me-2 logo" />
+                The Magic
+            </h1>
+        </div>
+    </div>
+
+    <div class="my-3 border rounded-2 url">
+        <pre class="mx-3 my-2 text-wrap"><img src="images/lock.svg" alt="Lock" class="me-3" />@QueryResult.HttpQuery</pre>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="card my-3">
+                <div class="card-header">
+                    C# Expression
+                </div>
+                <div class="card-body">
+                    <pre class="text-wrap">@QueryResult.FilterExpression</pre>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-auto col-12 text-center">
+            <div class="my-3 fs-1 text-success">&#10095;</div>
+        </div>
+        <div class="col">
+            <div class="card my-3">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">SQL Query</div>
+                        <div class="col-auto text-body-secondary">SQLite</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <pre class="sql">@QueryResult.SqlQuery</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+}
