@@ -4,7 +4,7 @@
   <Import Project="../../Build/build_xml_documentation.props" />
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
