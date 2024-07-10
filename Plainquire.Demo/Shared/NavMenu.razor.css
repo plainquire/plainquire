@@ -4,6 +4,7 @@
     top: 10px;
     left: 6px;
 }
+
 [data-bs-theme=dark] .theme-filter {
     filter: invert(83%) sepia(8%) saturate(43%) hue-rotate(47deg) brightness(91%) contrast(88%);
 }
