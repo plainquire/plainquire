@@ -63,6 +63,10 @@ LIMIT 5 OFFSET 10
 - [Syntax](#syntax)
 - [Filter entities](#filter-entities)
   - [Basic usage](#basic-usage)
+  - [Filter by special values](#filter-by-special-values)
+  - [Logical Operators](#logical-operators)
+  - [Nested filters](#nested-filters)
+  - [Retrieve syntax and filter values](#retrieve-syntax-and-filter-values)
   - [REST / MVC](#rest--mvc)
   - [Swagger / OpenAPI](#swagger--openapi)
   - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
@@ -71,6 +75,9 @@ LIMIT 5 OFFSET 10
   - [Advanced scenarios](#advanced-scenarios)
 - [Sort entities](#sort-entities)
   - [Basic usage](#basic-usage)
+  - [Add sorting](#add-sorting)
+  - [Nested sorting](#nested-sorting)
+  - [Retrieve syntax and sort direction](#retrieve-syntax-and-sort-direction)
   - [REST / MVC](#rest--mvc)
   - [Swagger / OpenAPI](#swagger--openapi)
   - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
@@ -86,7 +93,6 @@ LIMIT 5 OFFSET 10
   - [Interception](#interception)
   - [Advanced Scenarios](#advanced-scenarios)
 - [Upgrade from FilterExpressionCreator](#upgrade-from-filterexpressioncreator)
-
 # Getting started
 
 ## Web / MVC application
@@ -213,6 +219,7 @@ private static List<Order> GenerateOrders()
 | `created=yesterday`     | Created `yesterday`                           |
 | `created=>2020-03`      | Created after `Sunday, March 1, 2020`         |
 | `created=2020`          | Crated in the year `2020`                     |
+| `name=`                 | Name equals ""                                |
 
 **Reference**
 
@@ -310,6 +317,233 @@ public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order)
 {
     return dbContext.Orders.Where(filter).ToList();
 }
+```
+
+## Filter by special values
+
+### Filter by `== null` / `!= null`
+
+```csharp
+// For 'Customer is null'
+filter.Add(x => x.Customer, FilterOperator.IsNull);
+// Output: x => (x.Customer == null)
+
+// For 'Customer is not null'
+filter.Add(x => x.Customer, FilterOperator.NotNull);
+// Output: x => (x.Customer != null)
+
+// via query parameter
+var getOrdersUrl = "/GetOrders?customer=ISNULL"
+var getOrdersUrl = "/GetOrders?customer=NOTNULL"
+```
+
+While filtered for `== null` / `!= null`, (accidently) given values are ignored:
+
+```csharp
+filter.Add(x => x.Customer, FilterOperator.NotNull, "values", "are", "ignored");
+```
+
+### Filter by `""` / `string.Empty`
+
+```csharp
+// For 'Customer == ""'
+filter.Add(x => x.Customer, string.Empty);
+// Output: x => (x.Customer == "")
+
+// For 'Customer is not null'
+filter.Add(x => x.Customer, FilterOperator.NotEqual, string.Empty);
+// Output: x => (x.Customer != "")
+
+// via query parameter
+var getOrdersUrl = "/GetOrders?customer="
+```
+
+### Filter by Date/Time
+
+Date/Time values can be given in the form of a fault-tolerant [round-trip date/time pattern](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings#Roundtrip)
+
+```csharp
+// Date
+filter.Add(x => x.Created, ">2020/01/01");
+// Output: x => (x.Created > 01.01.2020 00:00:00)
+
+// Date/Time
+filter.Add(x => x.Created, ">2020-01-01-12-30");
+// Output: x => (x.Created > 01.01.2020 12:30:00)
+
+// Partial values are supported too
+filter.Add(x => x.Created, "2020-01");
+// Output: x => ((x.Created >= 01.01.2020 00:00:00) AndAlso (x.Created < 01.02.2020 00:00:00))
+```
+
+### Filter by Date/Time with natural language
+
+Thanks to [nChronic.Core](https://github.com/robbell/nChronic.Core) natural language for date/time is supported.
+
+```csharp
+// This
+filter.Add(x => x.Created, ">yesterday");
+
+// works as well as
+filter.Add(x => x.Created, ">3-months-ago-saturday-at-5-pm");
+```
+
+Details can be found here: [https://github.com/mojombo/chronic](https://github.com/mojombo/chronic#simple)
+
+### Filter by enum
+
+`Enum` values can be filtered by its name as well as by it's numeric representation.
+
+```csharp
+// Equals by name
+filter.Add(x => x.Gender, "=divers");
+// Output: x => (x.Gender == Divers)
+
+// Equals by numeric value
+filter.Add(x => x.Gender, "=1");
+// Output: x => (Convert(x.Gender, Int64) == 1)
+
+// Contains, value is expanded
+filter.Add(x => x.Gender, "~male");
+// Output: x => ((x.Gender == Male) OrElse (x.Gender == Female))
+
+enum Gender { Divers, Male, Female }
+```
+
+### Filter by numbers
+
+Filter for numbers support `contains` operator but may be less performant.
+
+```csharp
+// Equals
+filter.Add(x => x.Number, "1");
+// Output: x => (x.Number == 1)
+
+// Contains
+filter.Add(x => x.Number, "~1");
+// Output: x => x.Number.ToString().ToUpper().Contains("1")
+```
+
+### Syntax examples
+
+| Syntax        | Description                                                  |
+| ------------- | ------------------------------------------------------------ |
+| Joe           | For `string` filtered value contains 'Joe', for `Enum` filtered value is 'Joe' |
+| ~Joe          | Filtered value contains 'Joe', even for `Enum`               |
+| ~1,~2         | Filtered value contains `1` or `2`                           |
+| =1\\,2        | Filtered value equals `1,2`                                  |
+| ~Joe,=Doe     | Filtered value contains `Joe` or equals `Doe`                |
+| <4,>10        | Filtered value is less than 4 or greater than 10             |
+| ISNULL        | Filtered value is `null`                                     |
+| >one-week-ago | For `DateTime` filtered value is greater than one week ago   |
+| 2020          | For `DateTime` filtered value is between 01/01/2020 and 12/31/2020 |
+| 2020-01       | For `DateTime` filtered value is between 01/01/2020 and 1/31/2020 |
+
+## Logical Operators
+
+### Add/Replace filter using logical OR
+
+Multiple values given to one call are combined using conditional `OR`.
+
+```csharp
+// Customer contains `Joe` || `Doe`
+
+var filter = new EntityFilter<Order>();
+
+// via operator
+filter.Add(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
+filter.Replace(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
+
+// via syntax
+filter.Add(x => x.Customer, "~Joe,~Doe");
+filter.Replace(x => x.Customer, "~Joe,~Doe");
+
+// via query parameter
+var getOrdersUrl = "/GetOrders?customer=~Joe,~Doe"
+```
+
+### Add/Replace filter using logical AND
+
+Multiple calls are combined using conditional `AND`.
+
+```csharp
+// Customer contains `Joe` && `Doe`
+
+var filter = new EntityFilter<Order>();
+
+// via operator
+filter
+    .Add(x => x.Customer, FilterOperator.Contains, "Joe")
+    .Add(x => x.Customer, FilterOperator.Contains, "Doe");
+
+// via syntax
+filter
+    .Add(x => x.Customer, "~Joe")
+    .Add(x => x.Customer, "~Doe");
+
+// via query parameter
+var getOrdersUrl = "/GetOrders?customer=~Joe&customer=~Doe"
+```
+
+## Nested filters
+
+Nested objects are filtered directly (`x => x.Address.City == "Berlin"`)
+
+Nested lists are filtered using `.Any()` (`x => x.Items.Any(item => (item.Article == "Laptop"))`)
+
+```csharp
+// Create filters
+var addressFilter = new EntityFilter<Address>()
+    .Add(x => x.City, "==Berlin");
+
+var itemFilter = new EntityFilter<OrderItem>()
+    .Add(x => x.Article, "==Laptop");
+
+var orderFilter = new EntityFilter<Order>()
+    .AddNested(x => x.Address, addressFilter)
+    .AddNested(x => x.Items, itemFilter);
+
+// Print filter
+Console.WriteLine(orderFilter);
+// Output:
+// x => ((x.Address != null) AndAlso (x.Address.City == "Berlin"))
+// x => ((x.Items != null) AndAlso x.Items.Any(x => (x.Article == "Laptop")))
+
+public class Order
+{
+    public int Number { get; set; }
+    public string Customer { get; set; }
+
+    public Address Address { get; set; }
+    public List<OrderItem> Items { get; set; }
+}
+
+public record Address(string Street, string City);
+public record OrderItem(int Position, string Article);
+```
+
+## Retrieve syntax and filter values
+
+```csharp
+var filter = new EntityFilter<Order>()
+    .Add(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
+
+// Retrive filter syntax
+string filterSytax = filter.GetPropertyFilterSyntax(x => x.Customer);
+// Output: ~Joe,~Doe
+
+// Retrive filter values
+ValueFilter[] filterValues = filter.GetPropertyFilterValues(x => x.Customer);
+// Output:
+// [{
+//   "Operator": "Contains",
+//   "Value": "Joe",
+//   "IsEmpty": false
+// }, {
+//   "Operator": "Contains",
+//   "Value": "Doe",
+//   "IsEmpty": false
+// }]
 ```
 
 ## REST / MVC
@@ -451,214 +685,6 @@ using Plainquire.Filter.Mvc.Newtonsoft;
 // 'AddFilterNewtonsoftSupport()' on IMvcBuilder instance
 services.AddControllers().AddFilterNewtonsoftSupport();
 ```
-
-### Add/Replace filter using logical OR
-
-Multiple values given to one call are combined using conditional `OR`.
-
-```csharp
-// Customer contains `Joe` || `Doe`
-
-var filter = new EntityFilter<Order>();
-
-// via operator
-filter.Add(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
-filter.Replace(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
-
-// via syntax
-filter.Add(x => x.Customer, "~Joe,~Doe");
-filter.Replace(x => x.Customer, "~Joe,~Doe");
-
-// via query parameter
-var getOrdersUrl = "/GetOrders?customer=~Joe,~Doe"
-```
-
-### Add/Replace filter using logical AND
-
-Multiple calls are combined using conditional `AND`.
-
-```csharp
-// Customer contains `Joe` && `Doe`
-
-var filter = new EntityFilter<Order>();
-
-// via operator
-filter
-    .Add(x => x.Customer, FilterOperator.Contains, "Joe")
-    .Add(x => x.Customer, FilterOperator.Contains, "Doe");
-
-// via syntax
-filter
-    .Add(x => x.Customer, "~Joe")
-    .Add(x => x.Customer, "~Doe");
-
-// via query parameter
-var getOrdersUrl = "/GetOrders?customer=~Joe&customer=~Doe"
-```
-
-### Filter to `== null` / `!= null`
-
-```csharp
-// For 'Customer is null'
-filter.Add(x => x.Customer, FilterOperator.IsNull);
-// Output: x => (x.Customer == null)
-
-// For 'Customer is not null'
-filter.Add(x => x.Customer, FilterOperator.NotNull);
-// Output: x => (x.Customer != null)
-
-// via query parameter
-var getOrdersUrl = "/GetOrders?customer=ISNULL"
-var getOrdersUrl = "/GetOrders?customer=NOTNULL"
-```
-
-While filtered for `== null` / `!= null`, (accidently) given values are ignored:
-
-```csharp
-filter.Add(x => x.Customer, FilterOperator.NotNull, "values", "are", "ignored");
-```
-
-### Filter to Date/Time
-
-Date/Time values can be given in the form of a fault-tolerant [round-trip date/time pattern](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings#Roundtrip)
-
-```csharp
-// Date
-filter.Add(x => x.Created, ">2020/01/01");
-// Output: x => (x.Created > 01.01.2020 00:00:00)
-
-// Date/Time
-filter.Add(x => x.Created, ">2020-01-01-12-30");
-// Output: x => (x.Created > 01.01.2020 12:30:00)
-
-// Partial values are supported too
-filter.Add(x => x.Created, "2020-01");
-// Output: x => ((x.Created >= 01.01.2020 00:00:00) AndAlso (x.Created < 01.02.2020 00:00:00))
-```
-
-### Date/Time with natural language
-
-Thanks to [nChronic.Core](https://github.com/robbell/nChronic.Core) natural language for date/time is supported.
-
-```csharp
-// This
-filter.Add(x => x.Created, ">yesterday");
-
-// works as well as
-filter.Add(x => x.Created, ">3-months-ago-saturday-at-5-pm");
-```
-
-Details can be found here: [https://github.com/mojombo/chronic](https://github.com/mojombo/chronic#simple)
-
-### Enum
-
-`Enum` values can be filtered by its name as well as by it's numeric representation.
-
-```csharp
-// Equals by name
-filter.Add(x => x.Gender, "=divers");
-// Output: x => (x.Gender == Divers)
-
-// Equals by numeric value
-filter.Add(x => x.Gender, "=1");
-// Output: x => (Convert(x.Gender, Int64) == 1)
-
-// Contains, value is expanded
-filter.Add(x => x.Gender, "~male");
-// Output: x => ((x.Gender == Male) OrElse (x.Gender == Female))
-
-enum Gender { Divers, Male, Female }
-```
-
-### Numbers
-
-Filter for numbers support `contains` operator but may be less performant.
-
-```csharp
-// Equals
-filter.Add(x => x.Number, "1");
-// Output: x => (x.Number == 1)
-
-// Contains
-filter.Add(x => x.Number, "~1");
-// Output: x => x.Number.ToString().ToUpper().Contains("1")
-```
-
-### Nested filters
-
-Nested objects are filtered directly (`x => x.Address.City == "Berlin"`)
-
-Nested lists are filtered using `.Any()` (`x => x.Items.Any(item => (item.Article == "Laptop"))`)
-
-```csharp
-// Create filters
-var addressFilter = new EntityFilter<Address>()
-    .Add(x => x.City, "==Berlin");
-
-var itemFilter = new EntityFilter<OrderItem>()
-    .Add(x => x.Article, "==Laptop");
-
-var orderFilter = new EntityFilter<Order>()
-    .AddNested(x => x.Address, addressFilter)
-    .AddNested(x => x.Items, itemFilter);
-
-// Print filter
-Console.WriteLine(orderFilter);
-// Output:
-// x => ((x.Address != null) AndAlso (x.Address.City == "Berlin"))
-// x => ((x.Items != null) AndAlso x.Items.Any(x => (x.Article == "Laptop")))
-
-public class Order
-{
-    public int Number { get; set; }
-    public string Customer { get; set; }
-
-    public Address Address { get; set; }
-    public List<OrderItem> Items { get; set; }
-}
-
-public record Address(string Street, string City);
-public record OrderItem(int Position, string Article);
-```
-
-### Retrieve syntax and filter values
-
-```csharp
-var filter = new EntityFilter<Order>()
-    .Add(x => x.Customer, FilterOperator.Contains, "Joe", "Doe");
-
-// Retrive filter syntax
-string filterSytax = filter.GetPropertyFilterSyntax(x => x.Customer);
-// Output: ~Joe,~Doe
-
-// Retrive filter values
-ValueFilter[] filterValues = filter.GetPropertyFilterValues(x => x.Customer);
-// Output:
-// [{
-//   "Operator": "Contains",
-//   "Value": "Joe",
-//   "IsEmpty": false
-// }, {
-//   "Operator": "Contains",
-//   "Value": "Doe",
-//   "IsEmpty": false
-// }]
-```
-
-### Syntax examples
-
-| Syntax        | Description                                                  |
-| ------------- | ------------------------------------------------------------ |
-| Joe           | For `string` filtered value contains 'Joe', for `Enum` filtered value is 'Joe' |
-| ~Joe          | Filtered value contains 'Joe', even for `Enum`               |
-| ~1,~2         | Filtered value contains `1` or `2`                           |
-| =1\\,2        | Filtered value equals `1,2`                                  |
-| ~Joe,=Doe     | Filtered value contains `Joe` or equals `Doe`                |
-| <4,>10        | Filtered value is less than 4 or greater than 10             |
-| ISNULL        | Filtered value is `null`                                     |
-| >one-week-ago | For `DateTime` filtered value is greater than one week ago   |
-| 2020          | For `DateTime` filtered value is between 01/01/2020 and 12/31/2020 |
-| 2020-01       | For `DateTime` filtered value is between 01/01/2020 and 1/31/2020 |
 
 ## Configuration
 
@@ -826,6 +852,76 @@ public Task<List<Order>> GetOrders([FromQuery] EntitySort<Order> sort)
 }
 ```
 
+## Add sorting
+
+```csharp
+// Order is sorted by `Address` ascending.
+var sort = new EntitySort<Order>();
+
+// via operator
+sort.Add(x => x.Address, SortDirection.Ascending);
+
+// via syntax
+sort.Add("Address-asc")
+
+// via query parameter
+var getOrdersUrl = "/GetOrders?orderBy=customer-asc"
+```
+
+## Nested sorting
+
+Nested objects are sorted directly (`x=> x.OrderBy(order => order.Customer)`).
+Deep property paths (e.g. `order => order.Customer.Length`) are supported.
+Methods calls (e.g. `order => order.Customer.SubString(1)`) are not supported for security reasons.
+
+Nested lists cannot be sorted directly. You can create an own `EntitySort` for it and sort the nested list by.
+
+```csharp
+// Create sort
+var addressSort = new EntitySort<Address>()
+    .Add(x => x.City);
+
+// AddNested() is equivalent to adding the paths directly
+var orderSort = new EntitySort<Order>()
+    .AddNested(x => x.Address, addressSort);
+
+// Is equivalent to AddNested() above
+var orderSort = new EntitySort<Order>()
+    .Add(x => x.Address.City, SortDirection.Ascending);
+
+// Print sort
+Console.WriteLine(orders.OrderBy(orderSort).ToString());
+// Output:
+// orders => orders.OrderBy(x => IIF((IIF((x == null), null, x.Address) == null), null, x.Address.City))
+
+public class Order
+{
+    public int Number { get; set; }
+    public string Customer { get; set; }
+    public Address Address { get; set; }
+}
+
+public record Address(string Street, string City);
+```
+
+## Retrieve syntax and sort direction
+
+```csharp
+var orderSort = new EntitySort<Order>()
+    .Add(x => x.Customer, SortDirection.Ascending);
+
+// Retrive sort syntax
+var syntax = orderSort.GetPropertySortSyntax(x => x.Customer);
+// Output: Customer-asc
+
+// Retrive sort direction
+var direction = orderSort.GetPropertySortDirection(x => x.Customer);
+// Output: Ascending
+
+// Retrive sort expression string:
+var orderExpression = orders.OrderBy(orderSort).ToString()
+```
+
 ## REST / MVC
 
 To sort an entity via model binding, the entity must be marked with `EntityFilterAttribute`
@@ -950,79 +1046,6 @@ using Plainquire.Sort.Mvc.Newtonsoft;
 // Register support for Newtonsoft by calling
 // 'AddSortNewtonsoftSupport()' on IMvcBuilder instance
 services.AddControllers().AddSortNewtonsoftSupport();
-```
-
-### Add sorting
-
-Multiple values given to one call are combined using conditional `OR`.
-
-```csharp
-// Order is sorted by `Address` ascending.
-
-var sort = new EntitySort<Order>();
-
-// via operator
-sort.Add(x => x.Address, SortDirection.Ascending);
-
-// via syntax
-sort.Add("Address-asc")
-
-// via query parameter
-var getOrdersUrl = "/GetOrders?orderBy=customer-asc"
-```
-
-### Nested sorting
-
-Nested objects are sorted directly (`x=> x.OrderBy(order => order.Customer)`).
-Deep property paths (e.g. `order => order.Customer.Length`) are supported.
-Methods calls (e.g. `order => order.Customer.SubString(1)`) are not supported for security reasons.
-
-Nested lists cannot be sorted directly. You can create an own `EntitySort` for it and sort the nested list by.
-
-```csharp
-// Create sort
-var addressSort = new EntitySort<Address>()
-    .Add(x => x.City);
-
-// AddNested() is equivalent to adding the paths directly
-var orderSort = new EntitySort<Order>()
-    .AddNested(x => x.Address, addressSort);
-
-// Is equivalent to AddNested() above
-var orderSort = new EntitySort<Order>()
-    .Add(x => x.Address.City, SortDirection.Ascending);
-
-// Print sort
-Console.WriteLine(orders.OrderBy(orderSort).ToString());
-// Output:
-// orders => orders.OrderBy(x => IIF((IIF((x == null), null, x.Address) == null), null, x.Address.City))
-
-public class Order
-{
-    public int Number { get; set; }
-    public string Customer { get; set; }
-    public Address Address { get; set; }
-}
-
-public record Address(string Street, string City);
-```
-
-### Retrieve syntax and sort direction
-
-```csharp
-var orderSort = new EntitySort<Order>()
-    .Add(x => x.Customer, SortDirection.Ascending);
-
-// Retrive sort syntax
-var syntax = orderSort.GetPropertySortSyntax(x => x.Customer);
-// Output: Customer-asc
-
-// Retrive sort direction
-var direction = orderSort.GetPropertySortDirection(x => x.Customer);
-// Output: Ascending
-
-// Retrive sort expression string:
-var orderExpression = orders.OrderBy(orderSort).ToString()
 ```
 
 ## Configuration
