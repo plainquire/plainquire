@@ -74,4 +74,23 @@ public static class PropertyFilterExpression
             throw ex.InnerException;
         }
     }
+
+    /// <summary>
+    /// Creates a lambda expression for the given property and <see cref="ValueFilter"/>.
+    /// </summary>
+    /// <param name="propertyInfo">The property to filter.</param>
+    /// <param name="filters">The filters to use.</param>
+    /// <param name="configuration">The filter configuration.</param>
+    /// <param name="interceptor">An interceptor to manipulate the generated filters.</param>
+    public static Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(PropertyInfo propertyInfo, ValueFilter[] filters, FilterConfiguration configuration, IFilterInterceptor? interceptor)
+    {
+        var propertySelector = typeof(TEntity).CreatePropertySelector(propertyInfo.Name);
+        return CreateFilter<TEntity>(propertyInfo.PropertyType, propertySelector, filters, configuration, interceptor);
+    }
+
+    /// <summary>
+    /// Creates no-operation filter.
+    /// </summary>
+    public static Expression<Func<TEntity, bool>> EmptyFilter<TEntity>()
+        => x => true;
 }

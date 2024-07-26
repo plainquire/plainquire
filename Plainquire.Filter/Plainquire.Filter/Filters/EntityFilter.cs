@@ -415,11 +415,9 @@ public class EntityFilter : ICloneable
                 (propertyInfo, propertyFilter) => new { Property = propertyInfo, propertyFilter.ValueFilters }
             )
             .Select(x =>
-            {
-                var propertySelector = typeof(TEntity).CreatePropertySelector(x.Property.Name);
-                return interceptor?.CreatePropertyFilter<TEntity>(x.Property, x.ValueFilters, configuration)
-                    ?? PropertyFilterExpression.PropertyFilterExpression.CreateFilter<TEntity>(x.Property.PropertyType, propertySelector, x.ValueFilters, configuration, interceptor);
-            })
+                interceptor?.CreatePropertyFilter<TEntity>(x.Property, x.ValueFilters, configuration)
+                ?? PropertyFilterExpression.PropertyFilterExpression.CreateFilter<TEntity>(x.Property, x.ValueFilters, configuration, interceptor)
+            )
             .ToList();
 
         var nestedObjectFilters = properties
