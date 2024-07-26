@@ -43,7 +43,7 @@ public class InterceptorTests
     {
         Func<DateTimeOffset> IFilterInterceptor.Now => throw new NotImplementedException();
 
-        public Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, Filter.ValueFilter[] filters, FilterConfiguration configuration)
+        public Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, IEnumerable<Filter.ValueFilter> filters, FilterConfiguration configuration)
         {
             var filteredPropertyIsTypeOfString = propertyInfo.PropertyType == typeof(string);
             if (!filteredPropertyIsTypeOfString)

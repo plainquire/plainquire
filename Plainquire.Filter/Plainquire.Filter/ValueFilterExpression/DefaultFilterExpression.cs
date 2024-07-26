@@ -39,15 +39,16 @@ public class DefaultFilterExpression : IValueFilterExpression
         => true;
 
     /// <inheritdoc />
-    public Expression? CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[]? filters, FilterConfiguration configuration, IFilterInterceptor? interceptor)
+    public Expression? CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, IEnumerable<ValueFilter>? filters, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
-        if (filters == null || filters.Length == 0)
+        var filterCollection = filters?.ToList();
+        if (filterCollection == null || filterCollection.Count == 0)
             return null;
 
         var propertyType = typeof(TProperty);
         var propertyCanBeNull = !propertyType.IsValueType || Nullable.GetUnderlyingType(propertyType) != null;
 
-        var filterExpressions = filters
+        var filterExpressions = filterCollection
             .Select(filter =>
             {
                 if (!SupportedFilterOperators.Contains(filter.Operator))

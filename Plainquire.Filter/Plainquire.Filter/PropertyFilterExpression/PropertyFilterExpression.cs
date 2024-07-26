@@ -1,6 +1,7 @@
 ﻿using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.ValueFilterExpression;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -41,7 +42,7 @@ public static class PropertyFilterExpression
     /// <param name="valueFilters">The filters to use.</param>
     /// <param name="configuration">The filter configuration to use.</param>
     /// <param name="interceptor">An interceptor to manipulate the generated filters.</param>
-    public static Expression<Func<TEntity, bool>>? CreateFilter<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[] valueFilters, FilterConfiguration configuration, IFilterInterceptor? interceptor)
+    public static Expression<Func<TEntity, bool>>? CreateFilter<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, IEnumerable<ValueFilter> valueFilters, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
         var valueFilterExpressionCreator = _valueFilterExpressionCreators.FirstOrDefault(x => x.CanCreateExpressionFor<TProperty>()) ?? _defaultValueFilterExpressionCreator;
         var propertyExpression = valueFilterExpressionCreator.CreateExpression(propertySelector, valueFilters, configuration, interceptor);
@@ -61,7 +62,7 @@ public static class PropertyFilterExpression
     /// <param name="valueFilters">The filters to use.</param>
     /// <param name="configuration">The filter configuration.</param>
     /// <param name="interceptor">An interceptor to manipulate the generated filters.</param>
-    public static Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(Type propertyType, LambdaExpression propertySelector, ValueFilter[] valueFilters, FilterConfiguration configuration, IFilterInterceptor? interceptor)
+    public static Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(Type propertyType, LambdaExpression propertySelector, IEnumerable<ValueFilter> valueFilters, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
         try
         {
@@ -82,7 +83,7 @@ public static class PropertyFilterExpression
     /// <param name="filters">The filters to use.</param>
     /// <param name="configuration">The filter configuration.</param>
     /// <param name="interceptor">An interceptor to manipulate the generated filters.</param>
-    public static Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(PropertyInfo propertyInfo, ValueFilter[] filters, FilterConfiguration configuration, IFilterInterceptor? interceptor)
+    public static Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(PropertyInfo propertyInfo, IEnumerable<ValueFilter> filters, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
         var propertySelector = typeof(TEntity).CreatePropertySelector(propertyInfo.Name);
         return CreateFilter<TEntity>(propertyInfo.PropertyType, propertySelector, filters, configuration, interceptor);

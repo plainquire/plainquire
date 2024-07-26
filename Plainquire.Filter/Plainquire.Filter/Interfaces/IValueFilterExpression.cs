@@ -1,5 +1,6 @@
 ﻿using Plainquire.Filter.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Plainquire.Filter;
@@ -30,5 +31,5 @@ public interface IValueFilterExpression
     /// <param name="filters">The filters to create the expression for.</param>
     /// <param name="configuration">The filter configuration to use.</param>
     /// <param name="interceptor">An interceptor to manipulate the generated filters.</param>
-    Expression? CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, ValueFilter[] filters, FilterConfiguration configuration, IFilterInterceptor? interceptor);
+    Expression? CreateExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, IEnumerable<ValueFilter> filters, FilterConfiguration configuration, IFilterInterceptor? interceptor);
 }

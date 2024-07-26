@@ -1,5 +1,6 @@
 ﻿using Plainquire.Filter.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -29,5 +30,5 @@ public interface IFilterInterceptor
     /// <param name="filters">The filter values.</param>
     /// <param name="configuration">The filter configuration to use.</param>
     /// <returns>An expression to used to filter the given property or <c>null</c> to use the default filter creator.</returns>
-    Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, ValueFilter[] filters, FilterConfiguration configuration);
+    Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, IEnumerable<ValueFilter> filters, FilterConfiguration configuration);
 }
