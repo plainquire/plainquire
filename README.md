@@ -722,7 +722,33 @@ var filteredList = orders.Where(filterExpression.Compile());
 var filteredDb = _dbContext.Orders.Where(filterExpression);
 ```
 
+### Default interceptor
+
 A default interceptor can be provided via static `IFilterInterceptor.Default`.
+
+### Sample interceptor
+
+Interceptor to omit filter values having an empty value. Allows to omit filters added by empty query parameters (`&birthday=`) but prevents filtering for empty strings (`&name=`).
+
+```csharp
+public class OmitEmptyFilterInterceptor : IFilterInterceptor
+{
+    public Expression<Func<TEntity, bool>>? CreatePropertyFilter<TEntity>(PropertyInfo propertyInfo, IEnumerable<ValueFilter> filters, FilterConfiguration configuration)
+    {
+        var nonEmptyFilters = filters.Where(ValueIsNotNullOrEmpty).ToList();
+
+        var noFilterRequired = nonEmptyFilters.Count == 0;
+        return noFilterRequired
+            ? PropertyFilterExpression.EmptyFilter<TEntity>()
+            : PropertyFilterExpression.CreateFilter<TEntity>(propertyInfo, nonEmptyFilters, configuration, this);
+    }
+
+    private static bool ValueIsNotNullOrEmpty(ValueFilter valueFilter)
+        => !string.IsNullOrEmpty(valueFilter.Value);
+
+    Func<DateTimeOffset> IFilterInterceptor.Now => () => DateTimeOffset.Now;
+}
+```
 
 ## Advanced scenarios
 
