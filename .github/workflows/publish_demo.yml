@@ -47,7 +47,7 @@ jobs:
     - name: Deploy to Azure
       uses: azure/webapps-deploy@v2
       env:
-        AZURE_WEBAPP_NAME: plainquire
+        AZURE_WEBAPP_NAME: plainquire-lib
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.PUBLISH_PROFILE }}
