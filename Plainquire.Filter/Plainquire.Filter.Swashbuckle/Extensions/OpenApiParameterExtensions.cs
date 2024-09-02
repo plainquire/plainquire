@@ -7,6 +7,7 @@ using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Swashbuckle.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -16,11 +17,13 @@ internal static class OpenApiParameterExtensions
 {
     internal const string ENTITY_EXTENSION_PREFIX = "x-entity-filter-";
 
+    [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract", Justification = "ParameterDescriptor can be null")]
     public static bool IsEntityFilterParameter(this ApiParameterDescription description)
-        => description.ParameterDescriptor.ParameterType.IsGenericEntityFilter();
+        => description.ParameterDescriptor != null && description.ParameterDescriptor.ParameterType.IsGenericEntityFilter();
 
+    [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract", Justification = "ParameterDescriptor can be null")]
     public static bool IsEntityFilterSetParameter(this ApiParameterDescription description)
-        => description.ParameterDescriptor.ParameterType.GetCustomAttribute<EntityFilterSetAttribute>() != null;
+        => description.ParameterDescriptor?.ParameterType.GetCustomAttribute<EntityFilterSetAttribute>() != null;
 
     public static void ReplaceFilterParameters(this IList<OpenApiParameter> parameters, List<FilterParameterReplaceInfo> parameterReplacements, IReadOnlyCollection<DocXmlReader> docXmlReaders)
     {

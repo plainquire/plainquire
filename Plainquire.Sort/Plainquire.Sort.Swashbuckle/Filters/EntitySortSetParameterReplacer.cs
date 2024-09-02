@@ -63,8 +63,9 @@ public class EntitySortSetParameterReplacer : IOperationFilter
         operation.ReplaceSortParameters(parametersToReplace);
     }
 
+    [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract", Justification = "ParameterDescriptor can be null")]
     private static bool IsEntitySortSetParameter(ApiParameterDescription description)
-        => description.ParameterDescriptor.ParameterType.GetCustomAttribute<EntitySortSetAttribute>() != null;
+        => description.ParameterDescriptor?.ParameterType.GetCustomAttribute<EntitySortSetAttribute>() != null;
 
     private SortConfiguration GetConfiguration(Type entitySortType)
     {

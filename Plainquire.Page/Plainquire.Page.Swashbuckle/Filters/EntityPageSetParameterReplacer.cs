@@ -7,6 +7,7 @@ using Plainquire.Page.Abstractions;
 using Plainquire.Page.Swashbuckle.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -61,8 +62,9 @@ public class EntityPageSetParameterReplacer : IOperationFilter
         operation.ReplacePageParameters(parametersToReplace);
     }
 
+    [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract", Justification = "ParameterDescriptor can be null")]
     private static bool IsEntityPageSetParameter(ApiParameterDescription description)
-        => description.ParameterDescriptor.ParameterType.GetCustomAttribute<EntityPageSetAttribute>() != null;
+        => description.ParameterDescriptor?.ParameterType.GetCustomAttribute<EntityPageSetAttribute>() != null;
 
     private PageConfiguration GetConfiguration(Type entityPageType)
     {

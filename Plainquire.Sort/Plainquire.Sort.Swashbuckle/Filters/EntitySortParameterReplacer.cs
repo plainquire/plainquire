@@ -62,8 +62,9 @@ public class EntitySortParameterReplacer : IOperationFilter
         operation.ReplaceSortParameters(parametersToReplace);
     }
 
+    [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract", Justification = "ParameterDescriptor can be null")]
     private static bool IsEntitySortParameter(ApiParameterDescription description)
-        => description.ParameterDescriptor.ParameterType.IsGenericEntitySort();
+        => description.ParameterDescriptor != null && description.ParameterDescriptor.ParameterType.IsGenericEntitySort();
 
     private SortConfiguration GetConfiguration(Type entitySortType)
     {

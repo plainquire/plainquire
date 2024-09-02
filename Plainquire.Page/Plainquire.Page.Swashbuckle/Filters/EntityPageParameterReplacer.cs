@@ -6,6 +6,7 @@ using Plainquire.Page.Abstractions;
 using Plainquire.Page.Swashbuckle.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Page.Swashbuckle.Filters;
@@ -60,8 +61,9 @@ public class EntityPageParameterReplacer : IOperationFilter
         operation.ReplacePageParameters(parametersToReplace);
     }
 
+    [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract", Justification = "ParameterDescriptor can be null")]
     private static bool IsEntityPageParameter(ApiParameterDescription description)
-        => description.ParameterDescriptor.ParameterType.IsAssignableTo(typeof(EntityPage));
+        => description.ParameterDescriptor != null && description.ParameterDescriptor.ParameterType.IsAssignableTo(typeof(EntityPage));
 
     private PageConfiguration GetConfiguration(Type entityPageType)
     {
