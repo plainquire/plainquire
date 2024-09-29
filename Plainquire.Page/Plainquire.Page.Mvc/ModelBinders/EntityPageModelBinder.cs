@@ -39,12 +39,12 @@ public class EntityPageModelBinder : IModelBinder
             .GetPageParameterNames(parameterOrPropertyName, bindingContext.OriginalModelName);
 
         var pageParameterValue = bindingContext.HttpContext.Request.Query.Keys
-            .Where(queryParameter => queryParameter == pageParameterName)
+            .Where(queryParameter => queryParameter.Equals(pageParameterName, StringComparison.OrdinalIgnoreCase))
             .Select(queryParameter => GetParameterValue(queryParameter, bindingContext))
             .FirstOrDefault();
 
         var pageSizeParameterValue = bindingContext.HttpContext.Request.Query.Keys
-            .Where(queryParameter => queryParameter == pageSizeParameterName)
+            .Where(queryParameter => queryParameter.Equals(pageSizeParameterName, StringComparison.OrdinalIgnoreCase))
             .Select(queryParameter => GetParameterValue(queryParameter, bindingContext))
             .FirstOrDefault();
 

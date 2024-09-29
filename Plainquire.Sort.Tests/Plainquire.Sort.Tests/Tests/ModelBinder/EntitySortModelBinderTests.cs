@@ -53,7 +53,7 @@ public class EntitySortModelBinderTests
         var serviceProvider = A.Fake<IServiceProvider>();
         A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
 
-        var queryParameters = new Dictionary<string, string> { ["OrderBy"] = "TestModelStringValue" };
+        var queryParameters = new Dictionary<string, string> { ["orderBy"] = "TestModelStringValue" };
 
         var binder = new EntitySortModelBinder();
         var sortBindingContext = BindingExtensions.CreateBindingContext<EntitySortNamePageModel>("OrderBy", queryParameters, serviceProvider);

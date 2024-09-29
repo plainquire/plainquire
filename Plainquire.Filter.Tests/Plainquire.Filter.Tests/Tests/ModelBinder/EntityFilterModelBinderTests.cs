@@ -51,7 +51,7 @@ public class EntityFilterModelBinderTests
         var serviceProvider = A.Fake<IServiceProvider>();
         A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
 
-        var queryParameters = new Dictionary<string, string> { ["TestModelDateTimeValueC"] = "Hello" };
+        var queryParameters = new Dictionary<string, string> { ["testModelDateTimeValueC"] = "Hello" };
 
         var binder = new EntityFilterModelBinder();
         var filterBindingContext = BindingExtensions.CreateBindingContext<EntityFilterPageModel>("TestModel", queryParameters, serviceProvider);

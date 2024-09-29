@@ -187,7 +187,7 @@ public class EntityPageModelBinderTests
         var serviceProvider = A.Fake<IServiceProvider>();
         A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
 
-        var queryParameters = new Dictionary<string, string> { ["PageUnnamed"] = "1", ["PageUnnamedSize"] = "2" };
+        var queryParameters = new Dictionary<string, string> { ["pageUnnamed"] = "1", ["pageUnnamedSize"] = "2" };
 
         var binder = new EntityPageModelBinder();
         var pageBindingContext = BindingExtensions.CreateBindingContext<EntityPageNamePageModel>("PageUnnamed", queryParameters, serviceProvider);
@@ -237,7 +237,7 @@ public class EntityPageModelBinderTests
         var serviceProvider = A.Fake<IServiceProvider>();
         A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
 
-        var queryParameters = new Dictionary<string, string> { ["PageSizeNamed"] = "1", ["myPageSize"] = "2" };
+        var queryParameters = new Dictionary<string, string> { ["pageSizeNamed"] = "1", ["MyPageSize"] = "2" };
 
         var binder = new EntityPageModelBinder();
         var pageBindingContext = BindingExtensions.CreateBindingContext<EntityPageNamePageModel>("PageSizeNamed", queryParameters, serviceProvider);

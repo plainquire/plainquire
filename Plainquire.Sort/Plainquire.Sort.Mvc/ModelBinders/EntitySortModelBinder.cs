@@ -47,7 +47,7 @@ public class EntitySortModelBinder : IModelBinder
     }
 
     private static bool IsSortByParameter(string queryParameterName, string sortByParameterName)
-        => Regex.IsMatch(queryParameterName, @$"{sortByParameterName}(\[\d*\])?");
+        => Regex.IsMatch(queryParameterName, @$"{sortByParameterName}(\[\d*\])?", RegexOptions.IgnoreCase);
 
     private static ValueProviderResult GetParameterValues(string queryParameter, ModelBindingContext bindingContext)
         => bindingContext.ValueProvider.GetValue(queryParameter);
