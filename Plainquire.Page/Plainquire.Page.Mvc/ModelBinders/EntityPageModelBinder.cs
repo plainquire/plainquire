@@ -31,11 +31,12 @@ public class EntityPageModelBinder : IModelBinder
         var pageType = isGenericPage ? bindingContext.ModelType.GenericTypeArguments[0] : null;
         var entityPage = CreateEntityPage(pageType, serviceProvider);
 
-        if (bindingContext.ModelMetadata.ParameterName == null)
+        var parameterOrPropertyName = bindingContext.ModelMetadata.ParameterName ?? bindingContext.ModelMetadata.PropertyName;
+        if (parameterOrPropertyName == null)
             throw new InvalidOperationException("Unable to get original parameter name.");
 
         var (pageParameterName, pageSizeParameterName) = ParameterExtensions
-            .GetPageParameterNames(bindingContext.ModelMetadata.ParameterName, bindingContext.OriginalModelName);
+            .GetPageParameterNames(parameterOrPropertyName, bindingContext.OriginalModelName);
 
         var pageParameterValue = bindingContext.HttpContext.Request.Query.Keys
             .Where(queryParameter => queryParameter == pageParameterName)

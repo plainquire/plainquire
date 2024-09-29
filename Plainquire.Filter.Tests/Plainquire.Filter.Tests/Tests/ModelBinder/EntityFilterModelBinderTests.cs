@@ -19,7 +19,7 @@ namespace Plainquire.Filter.Tests.Tests.ModelBinder;
 public class EntityFilterModelBinderTests
 {
     [TestMethod]
-    public async Task WhenGenericEntityFilterIsGiven_ParameterBoundAsExpected()
+    public async Task WhenGenericEntityFilterParameterIsGiven_ParameterBoundAsExpected()
     {
         // Arrange
         var serviceProvider = A.Fake<IServiceProvider>();
@@ -30,6 +30,31 @@ public class EntityFilterModelBinderTests
         var binder = new EntityFilterModelBinder();
         const string actionName = nameof(EntityFilterController.SingleFilter);
         var filterBindingContext = BindingExtensions.CreateBindingContext<EntityFilterController>(actionName, "testModel", queryParameters, serviceProvider);
+
+        // Act
+        await binder.BindModelAsync(filterBindingContext);
+
+        // Assert
+        using var _ = new AssertionScope();
+
+        var filter = (Filter.EntityFilter)filterBindingContext.Result.Model!;
+        var propertyFilter = filter.PropertyFilters.Single();
+
+        filterBindingContext.Result.IsModelSet.Should().BeTrue();
+        propertyFilter.ValueFilters.Select(x => x.Value).Should().Equal(["Hello"]);
+    }
+
+    [TestMethod]
+    public async Task WhenGenericEntityFilterPropertyIsGiven_ParameterBoundAsExpected()
+    {
+        // Arrange
+        var serviceProvider = A.Fake<IServiceProvider>();
+        A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
+
+        var queryParameters = new Dictionary<string, string> { ["TestModelDateTimeValueC"] = "Hello" };
+
+        var binder = new EntityFilterModelBinder();
+        var filterBindingContext = BindingExtensions.CreateBindingContext<EntityFilterPageModel>("TestModel", queryParameters, serviceProvider);
 
         // Act
         await binder.BindModelAsync(filterBindingContext);

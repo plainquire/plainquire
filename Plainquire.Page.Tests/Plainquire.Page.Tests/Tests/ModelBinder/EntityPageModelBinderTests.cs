@@ -179,4 +179,104 @@ public class EntityPageModelBinderTests
         page.PageNumber.Should().Be(1);
         page.PageSize.Should().Be(10);
     }
+
+    [TestMethod]
+    public async Task WhenUnnamedPagePropertyIsGiven_PagePropertyMatchesExpected()
+    {
+        // Arrange
+        var serviceProvider = A.Fake<IServiceProvider>();
+        A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
+
+        var queryParameters = new Dictionary<string, string> { ["PageUnnamed"] = "1", ["PageUnnamedSize"] = "2" };
+
+        var binder = new EntityPageModelBinder();
+        var pageBindingContext = BindingExtensions.CreateBindingContext<EntityPageNamePageModel>("PageUnnamed", queryParameters, serviceProvider);
+
+        // Act
+        await binder.BindModelAsync(pageBindingContext);
+
+        // Assert
+        using var _ = new AssertionScope();
+
+        pageBindingContext.Result.IsModelSet.Should().BeTrue();
+
+        var page = (Page.EntityPage)pageBindingContext.Result.Model!;
+        page.PageNumber.Should().Be(1);
+        page.PageSize.Should().Be(2);
+    }
+
+    [TestMethod]
+    public async Task WhenNumberNamedPagePropertyIsGiven_PagePropertyMatchesExpected()
+    {
+        // Arrange
+        var serviceProvider = A.Fake<IServiceProvider>();
+        A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
+
+        var queryParameters = new Dictionary<string, string> { ["defaultPage"] = "1", ["defaultPageSize"] = "2" };
+
+        var binder = new EntityPageModelBinder();
+        var pageBindingContext = BindingExtensions.CreateBindingContext<EntityPageNamePageModel>("PageNumberNamed", queryParameters, serviceProvider);
+
+        // Act
+        await binder.BindModelAsync(pageBindingContext);
+
+        // Assert
+        using var _ = new AssertionScope();
+
+        pageBindingContext.Result.IsModelSet.Should().BeTrue();
+
+        var page = (Page.EntityPage)pageBindingContext.Result.Model!;
+        page.PageNumber.Should().Be(1);
+        page.PageSize.Should().Be(2);
+    }
+
+    [TestMethod]
+    public async Task WheSizeNamedPagePropertyIsGiven_PagePropertyMatchesExpected()
+    {
+        // Arrange
+        var serviceProvider = A.Fake<IServiceProvider>();
+        A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
+
+        var queryParameters = new Dictionary<string, string> { ["PageSizeNamed"] = "1", ["myPageSize"] = "2" };
+
+        var binder = new EntityPageModelBinder();
+        var pageBindingContext = BindingExtensions.CreateBindingContext<EntityPageNamePageModel>("PageSizeNamed", queryParameters, serviceProvider);
+
+        // Act
+        await binder.BindModelAsync(pageBindingContext);
+
+        // Assert
+        using var _ = new AssertionScope();
+
+        pageBindingContext.Result.IsModelSet.Should().BeTrue();
+
+        var page = (Page.EntityPage)pageBindingContext.Result.Model!;
+        page.PageNumber.Should().Be(1);
+        page.PageSize.Should().Be(2);
+    }
+
+    [TestMethod]
+    public async Task WhenBothNamedPagePropertyIsGiven_PagePropertyMatchesExpected()
+    {
+        // Arrange
+        var serviceProvider = A.Fake<IServiceProvider>();
+        A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
+
+        var queryParameters = new Dictionary<string, string> { ["defaultPage"] = "1", ["myPageSize"] = "2" };
+
+        var binder = new EntityPageModelBinder();
+        var pageBindingContext = BindingExtensions.CreateBindingContext<EntityPageNamePageModel>("PageBothNamed", queryParameters, serviceProvider);
+
+        // Act
+        await binder.BindModelAsync(pageBindingContext);
+
+        // Assert
+        using var _ = new AssertionScope();
+
+        pageBindingContext.Result.IsModelSet.Should().BeTrue();
+
+        var page = (Page.EntityPage)pageBindingContext.Result.Model!;
+        page.PageNumber.Should().Be(1);
+        page.PageSize.Should().Be(2);
+    }
 }

@@ -19,7 +19,7 @@ namespace Plainquire.Sort.Tests.Tests.ModelBinder;
 public class EntitySortModelBinderTests
 {
     [TestMethod]
-    public async Task WhenGenericEntitySortIsGiven_ParameterBoundAsExpected()
+    public async Task WhenGenericEntitySortParameterIsGiven_ParameterBoundAsExpected()
     {
         // Arrange
         var serviceProvider = A.Fake<IServiceProvider>();
@@ -30,6 +30,33 @@ public class EntitySortModelBinderTests
         var binder = new EntitySortModelBinder();
         const string actionName = nameof(EntitySortNameController.SingleSort);
         var sortBindingContext = BindingExtensions.CreateBindingContext<EntitySortNameController>(actionName, "orderBy", queryParameters, serviceProvider);
+
+        // Act
+        await binder.BindModelAsync(sortBindingContext);
+
+        // Assert
+        using var _ = new AssertionScope();
+
+        sortBindingContext.Result.IsModelSet.Should().BeTrue();
+
+        var personSort = (EntitySort<TestModel<string>>)sortBindingContext.Result.Model!;
+        personSort.PropertySorts
+            .OrderBy(propertySort => propertySort.Position)
+            .Select(propertySort => propertySort.PropertyPath)
+            .Should()
+            .ContainInOrder("Value");
+    }
+    [TestMethod]
+    public async Task WhenGenericEntitySortPageIsGiven_ParameterBoundAsExpected()
+    {
+        // Arrange
+        var serviceProvider = A.Fake<IServiceProvider>();
+        A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
+
+        var queryParameters = new Dictionary<string, string> { ["OrderBy"] = "TestModelStringValue" };
+
+        var binder = new EntitySortModelBinder();
+        var sortBindingContext = BindingExtensions.CreateBindingContext<EntitySortNamePageModel>("OrderBy", queryParameters, serviceProvider);
 
         // Act
         await binder.BindModelAsync(sortBindingContext);
