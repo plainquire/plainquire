@@ -137,7 +137,7 @@ public static class ExpressionExtensions
     /// <typeparam name="TProperty">The type of the property.</typeparam>
     /// <param name="property">The property to check for <c>null</c>.</param>
     public static Expression IsNotNull<TEntity, TProperty>(this Expression<Func<TEntity, TProperty>> property)
-        => Expression.NotEqual(property.Body, Expression.Constant(null, typeof(TProperty)));
+        => IsNotNull(property, typeof(TProperty));
 
     /// <summary>
     /// Creates an expression indicates whether the specified property not equals <c>null</c>

@@ -68,7 +68,7 @@ public class NestedFilterTests
     }
 
     [TestMethod]
-    public void WhenNestedObjectOfFilterIsNull_ThenValidFilterIsCreated()
+    public void WhenNestedObjectToFilterIsNull_ThenValidFilterIsCreated()
     {
         var nestedFilter = new EntityFilter<TestModelNested?>()
             .Replace(x => x!.Value, "=NestedA");
@@ -83,7 +83,7 @@ public class NestedFilterTests
     }
 
     [TestMethod]
-    public void WhenNestedListOfFilterIsNull_ThenValidFilterIsCreated()
+    public void WhenNestedListToFilterIsNull_ThenValidFilterIsCreated()
     {
         var nestedFilter = new EntityFilter<TestModelNested>()
             .Replace(x => x.Value, "=NestedA");
@@ -99,7 +99,7 @@ public class NestedFilterTests
 
     [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
-    public void WhenNestedGivenNestedFilterIsNull_ThenEmptyNestedFilterIsCreated(EntityFilterFunc<TestModel<string>> filterFunc)
+    public void WhenNestedFilterIsNull_ThenEmptyNestedFilterIsCreated(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var outerFilter = new EntityFilter<TestModel<string>>()
             .Add(x => x.ValueA, "A")
