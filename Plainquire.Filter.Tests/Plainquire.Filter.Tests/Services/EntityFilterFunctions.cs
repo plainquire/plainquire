@@ -16,14 +16,23 @@ public delegate List<TEntity> EntityFilterFunc<TEntity>(ICollection<TEntity> tes
 public static class EntityFilterFunctions
 {
     public static IEnumerable<EntityFilterFunc<TEntity>> GetEntityFilterFunctions<TEntity>() where TEntity : class
-        => [
+    {
+        List<EntityFilterFunc<TEntity>> linqFilterFunctions =
+        [
             FilterDirectByLinq,
             FilterNetCloneByLinq,
-            FilterNewtonCloneByLinq,
+            FilterNewtonCloneByLinq
+        ];
+
+        List<EntityFilterFunc<TEntity>> efFilterFunctions =
+        [
             FilterDirectByEF,
             FilterNetCloneByEF,
             FilterNewtonCloneByEF
         ];
+
+        return [.. linqFilterFunctions, .. efFilterFunctions];
+    }
 
     public static IEnumerable<object> GetEntityFilterFunctions(Type entityType)
         => (IEnumerable<object>)typeof(EntityFilterFunctions)

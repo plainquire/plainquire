@@ -12,12 +12,14 @@ namespace Plainquire.Filter.Tests.Services;
 public class FilterFuncDataSourceAttribute<TEntity> : Attribute, ITestDataSource where TEntity : class
 {
     public IEnumerable<object?[]> GetData(MethodInfo methodInfo)
-        => EntityFilterFunctions.GetEntityFilterFunctions<TEntity>().Select(filterFunc => new[] { filterFunc });
+        => EntityFilterFunctions
+            .GetEntityFilterFunctions<TEntity>()
+            .Select(filterFunc => new[] { filterFunc });
 
     public string GetDisplayName(MethodInfo methodInfo, object?[]? data)
     {
         var filterFunctionName = ((Delegate?)data?[0])?.Method.Name
-                                 ?? throw new InvalidOperationException("Unable to get filter method name.");
+            ?? throw new InvalidOperationException("Unable to get filter method name.");
 
         return $"{filterFunctionName}: {methodInfo.Name}";
     }
