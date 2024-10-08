@@ -24,15 +24,15 @@ public class FilterExpressionCreationExceptionTests
             FilterOperator = FilterOperator.EqualCaseInsensitive,
             Value = string.Empty,
             ValueType = typeof(string),
-            SupportedFilterOperators = new[]
-            {
+            SupportedFilterOperators =
+            [
                 FilterOperator.Default,
                 FilterOperator.EqualCaseSensitive,
                 FilterOperator.EqualCaseInsensitive,
                 FilterOperator.NotEqual,
                 FilterOperator.IsNull,
                 FilterOperator.NotNull
-            }
+            ]
         };
 
         Action filterItems = () => filter.CreateFilter();

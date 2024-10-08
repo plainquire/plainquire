@@ -15,18 +15,18 @@ public class PropertySortExpressionTests
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
     private readonly TestModel<string>[] _testItems =
     [
-        new TestModel<string> { Value = "Sorting", NestedObject = new TestModelNested<string> { Value = "Sorting" } },
-        new TestModel<string> { Value = "Třídění", NestedObject = new TestModelNested<string> { Value = "Třídění" } },
-        new TestModel<string> { Value = "Razvrščanje", NestedObject = new TestModelNested<string> { Value = "Razvrščanje" } },
-        new TestModel<string> { Value = "Sortierung", NestedObject = new TestModelNested<string> { Value = "Sortierung" } },
-        new TestModel<string> { Value = "100", NestedObject = new TestModelNested<string> { Value = "100" } },
-        new TestModel<string> { Value = "10", NestedObject = new TestModelNested<string> { Value = "10" } },
-        new TestModel<string> { Value = "20", NestedObject = new TestModelNested<string> { Value = "20" } },
-        new TestModel<string> { Value = "ソート", NestedObject = new TestModelNested<string> { Value = "ソート" } },
-        new TestModel<string> { Value = "정렬", NestedObject = new TestModelNested<string> { Value = "정렬" } },
-        new TestModel<string> { Value = "分类", NestedObject = new TestModelNested<string> { Value = "分类" } },
-        new TestModel<string> { Value = "Über", NestedObject = new TestModelNested<string> { Value = "Über" } },
-        new TestModel<string> { Value = "Unter", NestedObject = new TestModelNested<string> { Value = "Unter" } },
+        new() { Value = "Sorting", NestedObject = new TestModelNested<string> { Value = "Sorting" } },
+        new() { Value = "Třídění", NestedObject = new TestModelNested<string> { Value = "Třídění" } },
+        new() { Value = "Razvrščanje", NestedObject = new TestModelNested<string> { Value = "Razvrščanje" } },
+        new() { Value = "Sortierung", NestedObject = new TestModelNested<string> { Value = "Sortierung" } },
+        new() { Value = "100", NestedObject = new TestModelNested<string> { Value = "100" } },
+        new() { Value = "10", NestedObject = new TestModelNested<string> { Value = "10" } },
+        new() { Value = "20", NestedObject = new TestModelNested<string> { Value = "20" } },
+        new() { Value = "ソート", NestedObject = new TestModelNested<string> { Value = "ソート" } },
+        new() { Value = "정렬", NestedObject = new TestModelNested<string> { Value = "정렬" } },
+        new() { Value = "分类", NestedObject = new TestModelNested<string> { Value = "分类" } },
+        new() { Value = "Über", NestedObject = new TestModelNested<string> { Value = "Über" } },
+        new() { Value = "Unter", NestedObject = new TestModelNested<string> { Value = "Unter" } },
     ];
 
     private static readonly SortTestcase<TestModel<string>>[] _ownPropertyTestCases = CreateOwnPropertyTestcases<string>();

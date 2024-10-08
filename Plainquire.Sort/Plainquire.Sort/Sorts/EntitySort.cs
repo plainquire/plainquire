@@ -139,6 +139,7 @@ public class EntitySort<TEntity> : EntitySort
 /// <inheritdoc cref="EntitySort{TEntity}" />
 [JsonConverter(typeof(EntitySortConverter))]
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
+[SuppressMessage("ReSharper", "MemberCanBeProtected.Global", Justification = "Provided as library, can be used from outside")]
 public class EntitySort
 {
     internal List<PropertySort> PropertySorts;

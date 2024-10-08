@@ -16,8 +16,8 @@ public class DefaultFilterExpression : IValueFilterExpression
     /// Gets the supported filter operators.
     /// </summary>
     public virtual ICollection<FilterOperator> SupportedFilterOperators
-        => new[]
-        {
+        =>
+        [
             FilterOperator.Default,
             FilterOperator.EqualCaseSensitive,
             FilterOperator.EqualCaseInsensitive,
@@ -28,7 +28,7 @@ public class DefaultFilterExpression : IValueFilterExpression
             FilterOperator.GreaterThan,
             FilterOperator.IsNull,
             FilterOperator.NotNull
-        };
+        ];
 
     /// <inheritdoc />
     public bool CanCreateExpressionFor<TType>()

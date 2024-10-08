@@ -9,8 +9,8 @@ namespace Plainquire.Demo.Extensions;
 /// <summary>
 /// Extensions methods for type <see cref="Assembly"></see>
 /// </summary>
-[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Class has library style and can be shared between projects")]
-[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Class has library style and can be shared between projects")]
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Provided as library, can be used from outside")]
 public static class AssemblyExtensions
 {
     #region Path

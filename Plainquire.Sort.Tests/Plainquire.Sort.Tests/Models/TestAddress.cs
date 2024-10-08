@@ -5,7 +5,8 @@ using System.Globalization;
 namespace Plainquire.Sort.Tests.Models;
 
 [ExcludeFromCodeCoverage]
-[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Required by model binders")]
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Required by model binders")]
 [EntityFilter(Prefix = "Address")]
 public class TestAddress
 {

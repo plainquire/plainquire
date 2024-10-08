@@ -3,12 +3,6 @@
   <Import Project="../Build/build_version.props" />
   <Import Project="../Build/build_xml_documentation.props" />
 
-  <ItemGroup>
-    <None Include="..\LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
-    <None Include="..\README.md" Pack="true" PackagePath="README.md" />
-    <None Include="..\Plainquire.png" Pack="true" PackagePath="Plainquire.png" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <IsPackable>false</IsPackable>

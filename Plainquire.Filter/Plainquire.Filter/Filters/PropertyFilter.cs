@@ -11,6 +11,6 @@ internal class PropertyFilter
     public PropertyFilter(string propertyName, ValueFilter[]? valueFilters)
     {
         PropertyName = propertyName ?? throw new ArgumentNullException(nameof(propertyName));
-        ValueFilters = valueFilters ?? Array.Empty<ValueFilter>();
+        ValueFilters = valueFilters ?? [];
     }
 }

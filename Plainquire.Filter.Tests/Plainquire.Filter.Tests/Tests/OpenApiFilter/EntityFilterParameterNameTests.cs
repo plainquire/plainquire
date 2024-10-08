@@ -40,12 +40,12 @@ public class EntityFilterParameterNameTests
         parameters
             .Select(x => x.Name)
             .Should()
-            .Equal([
+            .Equal(
                 "testModelDateTimeId",
                 "testModelDateTimeValueA",
                 "testModelDateTimeValueB",
                 "testModelDateTimeValueC"
-            ]);
+            );
 
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
     }

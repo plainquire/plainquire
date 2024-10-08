@@ -74,7 +74,7 @@ public class FilterSerializationTests
         };
 
         var filteredItems = items.Where(netFilter1).ToList();
-        filteredItems.Should().BeEquivalentTo(new[] { items[1] });
+        filteredItems.Should().BeEquivalentTo([items[1]]);
     }
 
     [TestMethod]
@@ -95,7 +95,7 @@ public class FilterSerializationTests
         };
 
         var filteredItems = items.Where(netFilter1).ToList();
-        filteredItems.Should().BeEquivalentTo(new[] { items[1] });
+        filteredItems.Should().BeEquivalentTo([items[1]]);
     }
 
     [TestMethod]
@@ -115,7 +115,7 @@ public class FilterSerializationTests
         };
 
         var filteredItems = items.Where(netFilter).ToList();
-        filteredItems.Should().BeEquivalentTo(new[] { items[2] });
+        filteredItems.Should().BeEquivalentTo([items[2]]);
     }
 
     private static (T NetFilter, T NewtonFilter) Deserialize<T>(string json)

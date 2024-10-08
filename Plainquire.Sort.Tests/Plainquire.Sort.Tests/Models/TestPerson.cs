@@ -5,7 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 namespace Plainquire.Sort.Tests.Models;
 
 [ExcludeFromCodeCoverage]
-[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Required by model binders")]
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Required by model binders")]
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by EF")]
 [EntityFilter(Prefix = "")]
 public class TestPerson
 {

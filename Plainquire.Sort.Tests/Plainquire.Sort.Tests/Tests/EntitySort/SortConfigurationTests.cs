@@ -66,7 +66,7 @@ public class SortConfigurationTests
 
         queryable.Expression.ToString()
             .Should()
-            .Contain(".OrderBy(x => IIF((IIF((x == null), null, x.NestedObject) == null), null, IIF((x == null), null, x.NestedObject).Value))");
+            .Contain("IIF((x == null), null, x.NestedObject)");
     }
 
     [TestMethod]

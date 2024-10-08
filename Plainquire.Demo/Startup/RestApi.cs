@@ -17,7 +17,7 @@ internal static class RestApi
         => applicationBuilder
             .UseEndpoints(endpoints => endpoints.MapControllers());
 
-    public static IServiceCollection RegisterRestApiController(this IServiceCollection services)
+    public static void RegisterRestApiController(this IServiceCollection services)
     {
         services
             .AddControllers(options =>
@@ -34,7 +34,5 @@ internal static class RestApi
             .AddSortNewtonsoftSupport()
             .AddPageSupport()
             .AddPageNewtonsoftSupport();
-
-        return services;
     }
 }

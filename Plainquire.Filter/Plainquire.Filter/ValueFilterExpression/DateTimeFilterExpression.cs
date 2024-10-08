@@ -14,8 +14,8 @@ public class DateTimeFilterExpression : DefaultFilterExpression, IDateTimeFilter
 {
     /// <inheritdoc />
     public override ICollection<FilterOperator> SupportedFilterOperators
-        => new[]
-        {
+        =>
+        [
             FilterOperator.Default,
             FilterOperator.Contains,
             FilterOperator.EqualCaseInsensitive,
@@ -27,7 +27,7 @@ public class DateTimeFilterExpression : DefaultFilterExpression, IDateTimeFilter
             FilterOperator.GreaterThanOrEqual,
             FilterOperator.IsNull,
             FilterOperator.NotNull
-        };
+        ];
 
     /// <inheritdoc />
     public override bool CanCreateExpressionFor(Type type)

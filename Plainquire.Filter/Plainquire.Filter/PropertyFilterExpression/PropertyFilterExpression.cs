@@ -2,6 +2,7 @@
 using Plainquire.Filter.ValueFilterExpression;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -11,6 +12,7 @@ namespace Plainquire.Filter.PropertyFilterExpression;
 /// <summary>
 /// Converter to create lambda filter expressions for a given property and a <see cref="ValueFilter"/>.
 /// </summary>
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Provided as library, can be used from outside")]
 public static class PropertyFilterExpression
 {
     private static readonly IValueFilterExpression _defaultValueFilterExpressionCreator = new DefaultFilterExpression();

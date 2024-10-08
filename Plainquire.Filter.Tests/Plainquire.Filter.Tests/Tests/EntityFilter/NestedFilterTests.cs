@@ -32,7 +32,7 @@ public class NestedFilterTests
 
         var filteredEntities = filterFunc(testItems, outerFilter);
 
-        filteredEntities.Should().BeEquivalentTo(new[] { testItems[0] });
+        filteredEntities.Should().BeEquivalentTo([testItems[0]]);
     }
 
     [DataTestMethod]
@@ -56,7 +56,7 @@ public class NestedFilterTests
 
         var filteredEntities = filterFunc(testItems, outerFilter);
 
-        filteredEntities.Should().BeEquivalentTo(new[] { testItems[0], testItems[2] });
+        filteredEntities.Should().BeEquivalentTo([testItems[0], testItems[2]]);
     }
 
     [TestMethod]
@@ -68,7 +68,7 @@ public class NestedFilterTests
     }
 
     [TestMethod]
-    public void WhenNestedObjectOfFilterIsNull_ThenValidFilterIsCreated()
+    public void WhenNestedObjectToFilterIsNull_ThenValidFilterIsCreated()
     {
         var nestedFilter = new EntityFilter<TestModelNested?>()
             .Replace(x => x!.Value, "=NestedA");
@@ -83,7 +83,7 @@ public class NestedFilterTests
     }
 
     [TestMethod]
-    public void WhenNestedListOfFilterIsNull_ThenValidFilterIsCreated()
+    public void WhenNestedListToFilterIsNull_ThenValidFilterIsCreated()
     {
         var nestedFilter = new EntityFilter<TestModelNested>()
             .Replace(x => x.Value, "=NestedA");
@@ -99,7 +99,7 @@ public class NestedFilterTests
 
     [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
-    public void WhenNestedGivenNestedFilterIsNull_ThenEmptyNestedFilterIsCreated(EntityFilterFunc<TestModel<string>> filterFunc)
+    public void WhenNestedFilterIsNull_ThenEmptyNestedFilterIsCreated(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var outerFilter = new EntityFilter<TestModel<string>>()
             .Add(x => x.ValueA, "A")
@@ -108,6 +108,6 @@ public class NestedFilterTests
         var testItems = new TestModel<string>[] { new() { ValueA = "A" } };
 
         var filteredEntities = filterFunc(testItems, outerFilter);
-        filteredEntities.Should().BeEquivalentTo(new[] { testItems[0] });
+        filteredEntities.Should().BeEquivalentTo([testItems[0]]);
     }
 }

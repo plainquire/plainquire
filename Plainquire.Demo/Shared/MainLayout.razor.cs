@@ -27,7 +27,7 @@ public class MainLayoutPage : LayoutComponentBase
         Theme = await JsRuntime.InvokeAsync<string>("getTheme");
     }
 
-    protected string? GetRoute()
+    protected string GetRoute()
     {
         var uri = new Uri(NavigationManager.Uri);
         return uri.AbsolutePath.Trim('/');

@@ -5,6 +5,7 @@ namespace Plainquire.Sort.Tests.Models;
 
 [ExcludeFromCodeCoverage]
 [EntitySortSet]
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Required by model binders")]
 public class TestEntitySortSet
 {
     public EntitySort<TestPerson> Person { get; set; } = new();

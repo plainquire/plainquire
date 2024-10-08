@@ -6,7 +6,7 @@ namespace Plainquire.Filter.Abstractions;
 /// <summary>
 /// Extension methods for <see cref="Range"/>.
 /// </summary>
-[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Class has library style and can be shared between projects")]
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
 public static class RangeExtensions
 {
     /// <summary>

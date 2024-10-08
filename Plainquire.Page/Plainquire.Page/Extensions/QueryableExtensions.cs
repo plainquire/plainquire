@@ -7,7 +7,7 @@ namespace Plainquire.Page;
 /// <summary>
 /// Extension methods for <see cref="IQueryable{TEntity}"/>
 /// </summary>
-[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Class has library style and can be shared between projects")]
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
 public static class QueryableExtensions
 {
     /// <inheritdoc cref="Page{TEntity}(IQueryable{TEntity}, int?, int?, IPageInterceptor?)"/>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -7,6 +8,7 @@ namespace Plainquire.Sort.Abstractions;
 /// <summary>
 /// Holds sort order specific configuration.
 /// </summary>
+[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 public class SortConfiguration
 {
     /// <summary>

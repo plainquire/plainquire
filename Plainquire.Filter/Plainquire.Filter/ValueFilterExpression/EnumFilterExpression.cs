@@ -12,8 +12,8 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
 {
     /// <inheritdoc />
     public override ICollection<FilterOperator> SupportedFilterOperators
-        => new[]
-        {
+        =>
+        [
             FilterOperator.Default,
             FilterOperator.Contains,
             FilterOperator.EqualCaseSensitive,
@@ -25,7 +25,7 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
             FilterOperator.GreaterThanOrEqual,
             FilterOperator.IsNull,
             FilterOperator.NotNull
-        };
+        ];
 
     /// <inheritdoc />
     public override bool CanCreateExpressionFor(Type type)

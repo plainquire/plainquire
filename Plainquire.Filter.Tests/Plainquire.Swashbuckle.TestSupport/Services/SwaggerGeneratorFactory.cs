@@ -27,7 +27,7 @@ public static class SwaggerGeneratorFactory
             {
                 SwaggerDocs = new Dictionary<string, OpenApiInfo>
                 {
-                    ["v1"] = new OpenApiInfo { Version = "v1", Title = "Test API" }
+                    ["v1"] = new() { Version = "v1", Title = "Test API" }
                 },
                 OperationFilters = operationFilters
             },
