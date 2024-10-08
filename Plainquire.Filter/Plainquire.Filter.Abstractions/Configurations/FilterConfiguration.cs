@@ -19,6 +19,12 @@ public class FilterConfiguration
     public string CultureName { get; set; } = CultureInfo.CurrentCulture.Name;
 
     /// <summary>
+    /// Omit null checks for properties in filter expressions (x => x?.Contains(...) -> x => x.Contains(...)).
+    /// Used when query translation doesn't support it (e.g. NHibernate ORM).
+    /// </summary>
+    public bool OmitPropertyNullChecks { get; set; }
+
+    /// <summary>
     /// Return <c>x => true</c> in case of any exception while parsing the value
     /// </summary>
     public bool IgnoreParseExceptions { get; set; }

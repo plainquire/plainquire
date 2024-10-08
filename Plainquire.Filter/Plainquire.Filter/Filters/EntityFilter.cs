@@ -437,10 +437,13 @@ public class EntityFilter : ICloneable
                     return null;
 
                 var propertySelector = typeof(TEntity).CreatePropertySelector(x.Property.Name);
+                var propertyMatchesNested = (Expression<Func<TEntity, bool>>)nestedFilterExpression.ReplaceParameter(propertySelector);
+
+                if (configuration.OmitPropertyNullChecks)
+                    return propertyMatchesNested;
+
                 var propertyIsNotNull = propertySelector.IsNotNull(x.Property.PropertyType);
                 var propertyIsNotNullLambda = propertySelector.CreateLambda<TEntity, bool>(propertyIsNotNull);
-
-                var propertyMatchesNested = (Expression<Func<TEntity, bool>>)nestedFilterExpression.ReplaceParameter(propertySelector);
 
                 var filterExpression = new[] { propertyIsNotNullLambda, propertyMatchesNested }.CombineWithConditionalAnd();
                 return filterExpression;
@@ -465,10 +468,13 @@ public class EntityFilter : ICloneable
                     return null;
 
                 var propertySelector = typeof(TEntity).CreatePropertySelector(x.Property.Name);
+                var propertyHasAnyNested = (Expression<Func<TEntity, bool>>)propertySelector.EnumerableAny(propertyType, nestedFilterExpression);
+
+                if (configuration.OmitPropertyNullChecks)
+                    return propertyHasAnyNested;
+
                 var propertyIsNotNull = propertySelector.IsNotNull(x.Property.PropertyType);
                 var propertyIsNotNullLambda = propertySelector.CreateLambda<TEntity, bool>(propertyIsNotNull);
-
-                var propertyHasAnyNested = (Expression<Func<TEntity, bool>>)propertySelector.EnumerableAny(propertyType, nestedFilterExpression);
 
                 var filterExpression = new[] { propertyIsNotNullLambda, propertyHasAnyNested }.CombineWithConditionalAnd();
                 return filterExpression;
