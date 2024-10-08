@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Plainquire.Page;
 
 /// <summary>
 /// Interceptor to provide custom page logic.
 /// </summary>
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Provided as library, can be used from outside")]
 public interface IPageInterceptor
 {
     /// <summary>

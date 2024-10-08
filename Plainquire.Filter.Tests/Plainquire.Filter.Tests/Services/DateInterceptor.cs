@@ -8,6 +8,7 @@ using System.Reflection;
 namespace Plainquire.Filter.Tests.Services;
 
 [ExcludeFromCodeCoverage]
+[SuppressMessage("ReSharper", "PropertyCanBeMadeInitOnly.Global", Justification = "Provided as library, can be used from outside")]
 internal class DateInterceptor : IFilterInterceptor
 {
     public Func<DateTimeOffset> Now { get; set; } = () => DateTimeOffset.Now;

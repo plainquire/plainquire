@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Plainquire.Page.Newtonsoft;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Page.Mvc.Newtonsoft;
 
 /// <summary>
 /// Extensions to register entity page extensions to MVC
 /// </summary>
+[SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global", Justification = "Provided as library, can be used from outside")]
 public static class MvcBuilderExtensions
 {
     /// <summary>

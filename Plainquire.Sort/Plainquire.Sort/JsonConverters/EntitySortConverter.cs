@@ -1,6 +1,7 @@
 ﻿using Plainquire.Sort.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -114,6 +115,7 @@ internal class EntitySortConverterData
     public SortConfiguration? Configuration { get; set; }
 }
 
+[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global", Justification = "Required by serializers")]
 internal class PropertySortConverterData
 {
     public string PropertyPath { get; set; }

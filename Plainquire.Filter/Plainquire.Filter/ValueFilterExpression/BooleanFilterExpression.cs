@@ -11,15 +11,15 @@ public class BooleanFilterExpression : DefaultFilterExpression, IBooleanFilterEx
 {
     /// <inheritdoc />
     public override ICollection<FilterOperator> SupportedFilterOperators
-        => new[]
-        {
+        =>
+        [
             FilterOperator.Default,
             FilterOperator.EqualCaseSensitive,
             FilterOperator.EqualCaseInsensitive,
             FilterOperator.NotEqual,
             FilterOperator.IsNull,
             FilterOperator.NotNull
-        };
+        ];
 
     /// <inheritdoc />
     public override bool CanCreateExpressionFor(Type type)

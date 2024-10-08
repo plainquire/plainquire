@@ -70,7 +70,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainquire.Page.Mvc.Newtons
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainquire.Swashbuckle.TestSupport", "Plainquire.Filter.Tests\Plainquire.Swashbuckle.TestSupport\Plainquire.Swashbuckle.TestSupport.csproj", "{1D931D72-0DA9-40B3-966D-A5970F9D5B01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plainquire.TestSupport", "Plainquire.Filter.Tests\Plainquire.TestSupport\Plainquire.TestSupport.csproj", "{DED43145-88B8-4B34-A77B-973DDA9A290C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainquire.TestSupport", "Plainquire.Filter.Tests\Plainquire.TestSupport\Plainquire.TestSupport.csproj", "{DED43145-88B8-4B34-A77B-973DDA9A290C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

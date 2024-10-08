@@ -6,6 +6,7 @@ namespace Plainquire.Filter.Tests.Models;
 [ExcludeFromCodeCoverage]
 [SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Required by EF")]
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Required by EF")]
 public class TestModelNested
 {
     public Guid Id { get; set; } = Guid.NewGuid();

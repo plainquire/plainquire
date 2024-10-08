@@ -17,7 +17,7 @@ public static class ExpressionExtensions
     private static readonly ConstantExpression _emptyString = Expression.Constant(string.Empty, typeof(string));
     private static readonly MethodInfo _stringToUpperMethodInfo = typeof(string).GetMethod(nameof(string.ToUpper), Type.EmptyTypes)!;
     private static readonly MethodInfo _stringContainsMethodInfo = typeof(string).GetMethod(nameof(string.Contains), [typeof(string)])!;
-    private static readonly MethodInfo _enumerableAnyMethodInfo = typeof(Enumerable).GetMethods().First(method => method.Name == nameof(Enumerable.Any) && method.GetParameters().Select(x => x.Name).SequenceEqual(new[] { "source", "predicate" }));
+    private static readonly MethodInfo _enumerableAnyMethodInfo = typeof(Enumerable).GetMethods().First(method => method.Name == nameof(Enumerable.Any) && method.GetParameters().Select(x => x.Name).SequenceEqual(["source", "predicate"]));
     private static readonly MethodInfo _objectToStringMethodInfo = typeof(object).GetMethods().First(method => method.Name == nameof(ToString));
 
     /// <summary>
@@ -137,7 +137,7 @@ public static class ExpressionExtensions
     /// <typeparam name="TProperty">The type of the property.</typeparam>
     /// <param name="property">The property to check for <c>null</c>.</param>
     public static Expression IsNotNull<TEntity, TProperty>(this Expression<Func<TEntity, TProperty>> property)
-        => Expression.NotEqual(property.Body, Expression.Constant(null, typeof(TProperty)));
+        => IsNotNull(property, typeof(TProperty));
 
     /// <summary>
     /// Creates an expression indicates whether the specified property not equals <c>null</c>

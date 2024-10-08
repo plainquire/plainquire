@@ -41,6 +41,6 @@ public class EntityFilterModelBinderTests
         var propertyFilter = filter.PropertyFilters.Single();
 
         filterBindingContext.Result.IsModelSet.Should().BeTrue();
-        propertyFilter.ValueFilters.Select(x => x.Value).Should().Equal(["Hello"]);
+        propertyFilter.ValueFilters.Select(x => x.Value).Should().Equal("Hello");
     }
 }

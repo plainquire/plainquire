@@ -31,7 +31,7 @@ public class EntityFilterTests
         };
 
         var filteredEntitiesLinq = filterFunc(testItems, testItemsFilter);
-        filteredEntitiesLinq.Should().BeEquivalentTo(new[] { testItems[1], testItems[2] });
+        filteredEntitiesLinq.Should().BeEquivalentTo([testItems[1], testItems[2]]);
     }
 
     [DataTestMethod]
@@ -49,7 +49,7 @@ public class EntityFilterTests
         };
 
         var filteredEntities = filterFunc(testItems, testItemsFilter).ToList();
-        filteredEntities.Should().BeEquivalentTo(new[] { testItems[1] });
+        filteredEntities.Should().BeEquivalentTo([testItems[1]]);
     }
 
     [DataTestMethod]
@@ -68,7 +68,7 @@ public class EntityFilterTests
         };
 
         var filteredEntities = filterFunc(testItems, testItemsFilter).ToList();
-        filteredEntities.Should().BeEquivalentTo(new[] { testItems[0] });
+        filteredEntities.Should().BeEquivalentTo([testItems[0]]);
     }
 
     [TestMethod]
@@ -145,10 +145,10 @@ public class EntityFilterTests
         var isNullItemsReplaced = filterFunc(testItems, isNullFilterReplaced).ToList();
         var notNullItemsReplaced = filterFunc(testItems, isNotNullFilterReplaced).ToList();
 
-        isNullItemsAdded.Should().BeEquivalentTo(new[] { testItems[1] });
-        notNullItemsAdded.Should().BeEquivalentTo(new[] { testItems[0] });
-        isNullItemsReplaced.Should().BeEquivalentTo(new[] { testItems[1] });
-        notNullItemsReplaced.Should().BeEquivalentTo(new[] { testItems[0] });
+        isNullItemsAdded.Should().BeEquivalentTo([testItems[1]]);
+        notNullItemsAdded.Should().BeEquivalentTo([testItems[0]]);
+        isNullItemsReplaced.Should().BeEquivalentTo([testItems[1]]);
+        notNullItemsReplaced.Should().BeEquivalentTo([testItems[0]]);
     }
 
     [DataTestMethod]
@@ -180,10 +180,10 @@ public class EntityFilterTests
         var isNullItemsReplaced = filterFunc(testItems, isNullFilterReplaced).ToList();
         var notNullItemsReplaced = filterFunc(testItems, isNotNullFilterReplaced).ToList();
 
-        isNullItemsAdded.Should().BeEquivalentTo(new[] { testItems[1] });
-        notNullItemsAdded.Should().BeEquivalentTo(new[] { testItems[0] });
-        isNullItemsReplaced.Should().BeEquivalentTo(new[] { testItems[1] });
-        notNullItemsReplaced.Should().BeEquivalentTo(new[] { testItems[0] });
+        isNullItemsAdded.Should().BeEquivalentTo([testItems[1]]);
+        notNullItemsAdded.Should().BeEquivalentTo([testItems[0]]);
+        isNullItemsReplaced.Should().BeEquivalentTo([testItems[1]]);
+        notNullItemsReplaced.Should().BeEquivalentTo([testItems[0]]);
     }
 
     [DataTestMethod]
@@ -202,7 +202,7 @@ public class EntityFilterTests
 
         var filteredItems = filterFunc(testItems, filter).ToList();
 
-        filteredItems.Should().BeEquivalentTo(new[] { testItems[1] });
+        filteredItems.Should().BeEquivalentTo([testItems[1]]);
     }
 
     [DataTestMethod]

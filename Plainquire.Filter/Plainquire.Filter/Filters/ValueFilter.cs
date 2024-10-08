@@ -9,6 +9,7 @@ namespace Plainquire.Filter;
 /// <summary>
 /// Defines a single filter.
 /// </summary>
+[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Provided as library, can be used from outside")]
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class ValueFilter
 {

@@ -15,8 +15,8 @@ public class NumericFilterExpression : DefaultFilterExpression, INumericFilterEx
 
     /// <inheritdoc />
     public override ICollection<FilterOperator> SupportedFilterOperators
-        => new[]
-        {
+        =>
+        [
             FilterOperator.Default,
             FilterOperator.Contains,
             FilterOperator.EqualCaseInsensitive,
@@ -28,7 +28,7 @@ public class NumericFilterExpression : DefaultFilterExpression, INumericFilterEx
             FilterOperator.GreaterThanOrEqual,
             FilterOperator.IsNull,
             FilterOperator.NotNull
-        };
+        ];
 
     /// <inheritdoc />
     public override bool CanCreateExpressionFor(Type type)

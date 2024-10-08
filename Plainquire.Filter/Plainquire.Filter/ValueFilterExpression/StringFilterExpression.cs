@@ -12,8 +12,8 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
 {
     /// <inheritdoc />
     public override ICollection<FilterOperator> SupportedFilterOperators
-        => new[]
-        {
+        =>
+        [
             FilterOperator.Default,
             FilterOperator.Contains,
             FilterOperator.EqualCaseSensitive,
@@ -21,7 +21,7 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
             FilterOperator.NotEqual,
             FilterOperator.IsNull,
             FilterOperator.NotNull
-        };
+        ];
 
     /// <inheritdoc />
     public override bool CanCreateExpressionFor(Type type)

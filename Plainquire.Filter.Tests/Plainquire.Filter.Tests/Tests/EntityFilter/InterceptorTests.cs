@@ -36,7 +36,7 @@ public class InterceptorTests
         var interceptor = new FilterStringsCaseInsensitiveInterceptor();
         var filteredEntities = filterFunc(testItems, filter, interceptor);
 
-        filteredEntities.Should().BeEquivalentTo(new[] { testItems[1], testItems[2] });
+        filteredEntities.Should().BeEquivalentTo([testItems[1], testItems[2]]);
     }
 
     private class FilterStringsCaseInsensitiveInterceptor : IFilterInterceptor
@@ -49,7 +49,9 @@ public class InterceptorTests
             if (!filteredPropertyIsTypeOfString)
                 return null;
 
-            var filterToModify = filters
+            var filtersList = filters.ToList();
+
+            var filterToModify = filtersList
                 .Where(x => x.Operator == FilterOperator.EqualCaseSensitive)
                 .ToArray();
 
@@ -65,7 +67,7 @@ public class InterceptorTests
             var modifiedFilterLambda = propertySelector
                 .CreateLambda<TEntity, string, bool>(modifiedFilterExpr);
 
-            var unmodifiedFilters = filters
+            var unmodifiedFilters = filtersList
                 .Where(x => x.Operator != FilterOperator.EqualCaseSensitive)
                 .ToArray();
 

@@ -21,7 +21,7 @@ public class TestModel<TValue>
     public List<TestModelNested>? NestedList { get; init; }
 
     [Filter(Name = "ValueC")]
-    public string? ValueRenamed { get; set; }
+    public string? ValueRenamed { get; init; }
 
     [ExcludeFromCodeCoverage]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

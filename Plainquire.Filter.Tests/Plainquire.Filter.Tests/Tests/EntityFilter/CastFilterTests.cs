@@ -53,9 +53,10 @@ public class CastFilterTests
         };
 
         var filteredItems = filterFunc(testItems, dtoFilter);
-        filteredItems.Should().BeEquivalentTo(new[] { testItems[0] });
+        filteredItems.Should().BeEquivalentTo([testItems[0]]);
     }
 
+    [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Required my EF")]
     public class ModelDto
     {
         public Guid Id { get; set; }

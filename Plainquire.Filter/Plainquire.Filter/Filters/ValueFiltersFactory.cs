@@ -24,7 +24,7 @@ public static class ValueFiltersFactory
     private static IEnumerable<string> SplitValues(string? filterSyntax)
     {
         if (filterSyntax == null)
-            return Enumerable.Empty<string>();
+            return [];
 
         return Regex
             .Split(filterSyntax, @"(?<!\\)[\|,;]")
