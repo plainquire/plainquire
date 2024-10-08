@@ -15,7 +15,7 @@ public delegate List<TEntity> EntityFilterFunc<TEntity>(ICollection<TEntity> tes
 [ExcludeFromCodeCoverage]
 public static class EntityFilterFunctions
 {
-    public static IEnumerable<EntityFilterFunc<TEntity>> GetEntityFilterFunctions<TEntity>(EntityFilterFunctionType filterTypes = EntityFilterFunctionType.All) where TEntity : class
+    public static IEnumerable<EntityFilterFunc<TEntity>> GetEntityFilterFunctions<TEntity>() where TEntity : class
     {
         List<EntityFilterFunc<TEntity>> linqFilterFunctions =
         [
@@ -31,19 +31,14 @@ public static class EntityFilterFunctions
             FilterNewtonCloneByEF
         ];
 
-        var result = new List<EntityFilterFunc<TEntity>>();
-        if (filterTypes.HasFlag(EntityFilterFunctionType.Linq))
-            result.AddRange(linqFilterFunctions);
-        if (filterTypes.HasFlag(EntityFilterFunctionType.EntityFramework))
-            result.AddRange(efFilterFunctions);
-        return result;
+        return [.. linqFilterFunctions, .. efFilterFunctions];
     }
 
     public static IEnumerable<object> GetEntityFilterFunctions(Type entityType)
         => (IEnumerable<object>)typeof(EntityFilterFunctions)
-            .GetMethod(nameof(GetEntityFilterFunctions), BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly, [typeof(EntityFilterFunctionType)])!
+            .GetMethod(nameof(GetEntityFilterFunctions), BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly, [])!
             .MakeGenericMethod(entityType)
-            .Invoke(null, [EntityFilterFunctionType.All])!;
+            .Invoke(null, [])!;
 
     private static List<TEntity> FilterDirectByLinq<TEntity>(this IEnumerable<TEntity> testItems, EntityFilter<TEntity> filter, IFilterInterceptor? interceptor)
     {

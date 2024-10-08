@@ -11,11 +11,9 @@ namespace Plainquire.Filter.Tests.Services;
 [AttributeUsage(AttributeTargets.Method)]
 public class FilterFuncDataSourceAttribute<TEntity> : Attribute, ITestDataSource where TEntity : class
 {
-    public EntityFilterFunctionType FilterTypes { get; set; } = EntityFilterFunctionType.All;
-
     public IEnumerable<object?[]> GetData(MethodInfo methodInfo)
         => EntityFilterFunctions
-            .GetEntityFilterFunctions<TEntity>(FilterTypes)
+            .GetEntityFilterFunctions<TEntity>()
             .Select(filterFunc => new[] { filterFunc });
 
     public string GetDisplayName(MethodInfo methodInfo, object?[]? data)
