@@ -213,22 +213,23 @@ public class EntityFilter<TEntity> : EntityFilter
     /// Creates the filter expression. Returns <c>null</c> when filter is empty.
     /// </summary>
     /// <param name="interceptor">An interceptor to manipulate the generated filters.</param>
-    public Expression<Func<TEntity, bool>>? CreateFilter(IFilterInterceptor? interceptor = null)
-        => CreateFilter<TEntity>(interceptor);
+    /// <param name="useAsCompiledExpression">Whether the generated expression will be compiled later. Used to determine conditional property access when <c>FilterConfiguration.UseConditionalAccess</c> = <c>ConditionalAccess.WhenCompiled</c>.</param>
+    public Expression<Func<TEntity, bool>>? CreateFilter(IFilterInterceptor? interceptor = null, bool useAsCompiledExpression = true)
+        => CreateFilter<TEntity>(interceptor, useAsCompiledExpression);
 
     /// <summary>
     /// Performs an implicit conversion from <see cref="EntityFilter{TEntity}"/> to <see cref="Expression{TDelegate}"/> where <c>TDelegate</c> is <see cref="Func{T, TResult}"/>.
     /// </summary>
     /// <param name="filter">The filter to convert.</param>
     public static implicit operator Expression<Func<TEntity, bool>>(EntityFilter<TEntity> filter)
-        => filter.CreateFilter() ?? (x => true);
+        => filter.CreateFilter(useAsCompiledExpression: false) ?? (x => true);
 
     /// <summary>
     /// Performs an implicit conversion from <see cref="EntityFilter{TEntity}"/> to <see cref="Func{T, TResult}"/>.
     /// </summary>
     /// <param name="filter">The filter to convert.</param>
     public static implicit operator Func<TEntity, bool>(EntityFilter<TEntity> filter)
-        => (filter.CreateFilter() ?? (x => true)).Compile();
+        => (filter.CreateFilter(useAsCompiledExpression: true) ?? (x => true)).Compile();
 
     /// <inheritdoc />
     public override string ToString()
@@ -398,10 +399,12 @@ public class EntityFilter : ICloneable
         => PropertyFilters.Clear();
 
     /// <inheritdoc cref="EntityFilter{TEntity}.CreateFilter" />
-    protected internal Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(IFilterInterceptor? interceptor = null)
+    protected internal Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(IFilterInterceptor? interceptor, bool useAsCompiledExpression)
     {
         var configuration = Configuration ?? FilterConfiguration.Default ?? new FilterConfiguration();
         interceptor ??= IFilterInterceptor.Default;
+
+        var useConditionalAccess = UseConditionalAccess(configuration, useAsCompiledExpression);
 
         var properties = typeof(TEntity)
             .GetProperties();
@@ -432,15 +435,18 @@ public class EntityFilter : ICloneable
             .Select(x =>
             {
                 var createFilterExpression = _createFilterMethod.MakeGenericMethod(x.Property.PropertyType);
-                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, [interceptor]);
+                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, [interceptor, useAsCompiledExpression]);
                 if (nestedFilterExpression == null)
                     return null;
 
                 var propertySelector = typeof(TEntity).CreatePropertySelector(x.Property.Name);
+                var propertyMatchesNested = (Expression<Func<TEntity, bool>>)nestedFilterExpression.ReplaceParameter(propertySelector);
+
+                if (!useConditionalAccess)
+                    return propertyMatchesNested;
+
                 var propertyIsNotNull = propertySelector.IsNotNull(x.Property.PropertyType);
                 var propertyIsNotNullLambda = propertySelector.CreateLambda<TEntity, bool>(propertyIsNotNull);
-
-                var propertyMatchesNested = (Expression<Func<TEntity, bool>>)nestedFilterExpression.ReplaceParameter(propertySelector);
 
                 var filterExpression = new[] { propertyIsNotNullLambda, propertyMatchesNested }.CombineWithConditionalAnd();
                 return filterExpression;
@@ -460,15 +466,18 @@ public class EntityFilter : ICloneable
             {
                 var propertyType = x.Property.PropertyType.GetGenericArguments()[0];
                 var createFilterExpression = _createFilterMethod.MakeGenericMethod(propertyType);
-                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, [interceptor]);
+                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, [interceptor, useAsCompiledExpression]);
                 if (nestedFilterExpression == null)
                     return null;
 
                 var propertySelector = typeof(TEntity).CreatePropertySelector(x.Property.Name);
+                var propertyHasAnyNested = (Expression<Func<TEntity, bool>>)propertySelector.EnumerableAny(propertyType, nestedFilterExpression);
+
+                if (!useConditionalAccess)
+                    return propertyHasAnyNested;
+
                 var propertyIsNotNull = propertySelector.IsNotNull(x.Property.PropertyType);
                 var propertyIsNotNullLambda = propertySelector.CreateLambda<TEntity, bool>(propertyIsNotNull);
-
-                var propertyHasAnyNested = (Expression<Func<TEntity, bool>>)propertySelector.EnumerableAny(propertyType, nestedFilterExpression);
 
                 var filterExpression = new[] { propertyIsNotNullLambda, propertyHasAnyNested }.CombineWithConditionalAnd();
                 return filterExpression;
@@ -480,4 +489,12 @@ public class EntityFilter : ICloneable
             .Concat(nestedListsFilters)
             .CombineWithConditionalAnd();
     }
+
+    private static bool UseConditionalAccess(FilterConfiguration configuration, bool usedAsCompiledExpression)
+        => configuration.UseConditionalAccess switch
+        {
+            ConditionalAccess.Always => true,
+            ConditionalAccess.Never => false,
+            _ => usedAsCompiledExpression
+        };
 }

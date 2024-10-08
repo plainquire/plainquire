@@ -688,6 +688,8 @@ services.AddControllers().AddFilterNewtonsoftSupport();
 
 ## Configuration
 
+**Usage**
+
 Creation of filter expression can be configured via `FilterConfiguration`.
 
 ```csharp
@@ -709,6 +711,15 @@ new EntityFilter<Order>(configuration);
 // Via static default
 FilterConfiguration.Default
 ```
+
+**Reference**
+
+| Configuration            | Description                                                  |
+| ------------------------ | ------------------------------------------------------------ |
+| `CultureName`            | Culture used for paring in the format languagecode2-country/regioncode2 (e.g. 'en-US'). |
+| `OmitPropertyNullChecks` | Omit null checks for properties in filter expressions (x => x?.Contains(...) -> x => x.Contains(...)). Can be used when query translation doesn't support it (e.g. NHibernate ORM). |
+| `IgnoreParseExceptions`  | Return <c>x => true</c> in case of any exception while parsing the value. |
+| `FilterOperatorMap`      | Map between micro syntax and filter operator. Micro syntax is case-sensitive. |
 
 ## Interception
 
