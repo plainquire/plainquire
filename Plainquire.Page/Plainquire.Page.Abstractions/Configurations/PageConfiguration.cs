@@ -14,7 +14,7 @@ public class PageConfiguration
     public static PageConfiguration? Default { get; set; }
 
     /// <summary>
-    /// Omit paging in case of any exception while parsing the value
+    /// Omit paging in case of any exception while parsing the value.
     /// </summary>
     public bool IgnoreParseExceptions { get; set; }
 }

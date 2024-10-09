@@ -17,7 +17,7 @@ public class FilterConfiguration
     public static FilterConfiguration? Default { get; set; }
 
     /// <summary>
-    /// The culture used for paring in the format languagecode2-country/regioncode2 (e.g. 'en-US').
+    /// Culture used for parsing of values, formatted as languagecode2-country/regioncode2 (e.g. 'en-US').
     /// </summary>
     public string CultureName { get; set; } = CultureInfo.CurrentCulture.Name;
 
