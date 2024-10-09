@@ -291,4 +291,21 @@ public class EntityFilterTests
             .GetNestedFilter<List<TestModelNested>, TestModelNested>(x => x.NestedList);
         retrievedListFilter.Should().BeEquivalentTo(nestedFilter);
     }
+
+    [DataTestMethod]
+    [FilterFuncDataSource<TestModel<string>>]
+    public void EscapedValuesInMicroSyntax_AreHandled(EntityFilterFunc<TestModel<string>> filterFunc)
+    {
+        var testItemsFilter = new EntityFilter<TestModel<string>>()
+            .Add(x => x.ValueA, @"=\=\A\\B");
+
+        var testItems = new List<TestModel<string>>
+        {
+            new() { ValueA = "=a\\b" },
+            new() { ValueA = "A" }
+        };
+
+        var filteredEntities = filterFunc(testItems, testItemsFilter).ToList();
+        filteredEntities.Should().BeEquivalentTo([testItems[0]]);
+    }
 }
