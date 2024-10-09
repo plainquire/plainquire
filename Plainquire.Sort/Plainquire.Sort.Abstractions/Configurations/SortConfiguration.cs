@@ -45,7 +45,7 @@ public class SortConfiguration
     public ConditionalAccess UseConditionalAccess { get; set; } = ConditionalAccess.WhenEnumerableQuery;
 
     /// <summary>
-    /// Gets or sets a value indicating whether to use case-insensitive property matching.
+    /// Indicates whether to use case-insensitive property matching.
     /// </summary>
     public bool CaseInsensitivePropertyMatching { get; set; } = true;
 
