@@ -1,13 +1,145 @@
 # Plainquire
 
-Easy filtering, sorting and paging for ASP.NET Core.
+Unlock seamless **filtering**, **sorting**, and **paging** in .NET Standard 2.1 with Plainquire. Fully customizable, model binding support and Swagger UI  integration.
 
-Dynamically creates required expressions to filter, sort and page enumerable and database queries using LINQ.
+## Demo
 
-## Features
+Application: [https://www.plainquire.com/demo](https://www.plainquire.com/demo)
+
+Swagger UI: [https://www.plainquire.com/api](https://www.plainquire.com/api)
+
+## Usage for ASP.NET Core
+
+### 1. Install NuGet packages
+
+```cmd
+dotnet add package Plainquire.Filter
+dotnet add package Plainquire.Filter.Mvc
+dotnet add package Plainquire.Filter.Swashbuckle
+```
+
+### 2. Register services
+
+```csharp
+using Plainquire.Filter.Mvc;
+using Plainquire.Filter.Swashbuckle;
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers().AddFilterSupport();
+builder.Services.AddSwaggerGen(options => options.AddFilterSupport());
+```
+
+### 3. Setup entity
+
+```csharp
+using Plainquire.Filter;
+
+[EntityFilter(Prefix = "")]
+public class Freelancer
+{
+    public Guid Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+}
+```
+
+### 4. Create HTTP endpoint
+
+```csharp
+using Plainquire.Filter;
+
+[HttpGet]
+public IEnumerable<Freelancer> GetFreelancers([FromQuery] EntityFilter<Freelancer> filter
+{
+    var freelancers = GetFreelancersFromDatabase();
+    var filteredFreelancers = freelancers.Where(filter);
+    return filteredFreelancers;
+}
+```
+
+### 5. Send HTTP request
+
+```bash
+BASE_URL=https://www.plainquire.com/api/Freelancer
+curl -O "$BASE_URL/GetFreelancers?firstName=Joe"
+```
+
+### 6. **Results in SQL statement**
+
+```sql
+SELECT *
+FROM "Freelancer"
+WHERE instr(upper("FirstName"), 'JOE') > 0
+```
+
+## Usage for non-web applications
+
+### 1. Install NuGet package
+
+```cmd
+dotnet add package Plainquire.Filter
+```
+
+### 2. Setup entity
+
+See [setup entity](#3-setup-entity) from above.
+
+### 3. Create repository
+
+```cs
+public IEnumerable<Freelancer> GetFreelancers()
+{
+    var filter = new EntityFilter<Freelancer>().Add(x => x.FirstName, "~Joe");
+    
+    var freelancers = GetFreelancersFromDatabase();
+    var filteredFreelancers = freelancers.Where(filter);
+    return filteredFreelancers;
+}
+```
+
+# Table of contents
+
+- [Features](#features)
+- [Syntax overview](#syntax-overview)
+  - [Filter syntax](#filter-syntax)
+  - [Sort syntax](#sort-syntax)
+- [Filter entities](#filter-entities)
+  - [Basic usage](#basic-usage)
+  - [Configure filters](#configure-filters)
+  - [Filter by special values](#filter-by-special-values)
+  - [Logical Operators](#logical-operators)
+  - [Nested filters](#nested-filters)
+  - [Retrieve syntax and filter values](#retrieve-syntax-and-filter-values)
+  - [REST / MVC](#rest--mvc)
+  - [Swagger / OpenAPI](#swagger--openapi)
+  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
+  - [Interception](#interception)
+  - [Advanced scenarios](#advanced-scenarios)
+- [Sort entities](#sort-entities)
+  - [Basic usage](#basic-usage)
+  - [Configure sorting](#configure-sorting)
+  - [Sort entities](#sort-entities)
+  - [Sort nested entities](#sort-nested-entities)
+  - [Retrieve syntax and sort direction](#retrieve-syntax-and-sort-direction)
+  - [REST / MVC](#rest--mvc)
+  - [Swagger / OpenAPI](#swagger--openapi)
+  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
+  - [Interception](#interception)
+  - [Advanced scenarios](#advanced-scenarios)
+- [Page Entities](#page-entities)
+  - [Basic usage](#basic-usage)
+  - [Configure pagination](#configure-pagination)
+  - [REST / MVC](#rest--mvc)
+  - [Swagger / OpenAPI](#swagger--openapi)
+  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
+  - [Interception](#interception)
+  - [Advanced Scenarios](#advanced-scenarios)
+- [Upgrade from FilterExpressionCreator](#upgrade-from-filterexpressioncreator)
+
+# Features
 
 * Filtering, sorting and pagination for ASP.NET Core
-* Customizable syntax 
+* Customizable syntax
 * Support for Swagger / OpenUI and code generators via [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
 * Support for Entity Framework an other ORM mapper using `IQueryable<T>`
 * Support for In-memory lists / arrays via `IEnumerable<T>`
@@ -16,194 +148,7 @@ Dynamically creates required expressions to filter, sort and page enumerable and
 * Filters, sorts and pages are serializable, e.g. to persist user defined filters
 * Customizable expressions via interceptors
 
-## Demo
-
-[https://www.plainquire.com/demo](https://www.plainquire.com/demo)
-
-[https://www.plainquire.com/api](https://www.plainquire.com/api)
-
-## Overview
-
-**HTTP request** (Syntax: [Filter Operators / Syntax](#filter-operators--syntax))
-
-```bash
-BASE_URL=https://www.plainquire.com/api/Freelancer
-curl -O "$BASE_URL/GetFreelancers?firstName=Joe&orderBy=lastName&page=3&pageSize=5"
-```
-
-**MVC action**
-
-```csharp
-[HttpGet]
-public List<FreelancerDto> GetFreelancers(
-    [FromQuery] EntityFilter<Freelancer> filter,
-    [FromQuery] EntitySort<Freelancer> sort,
-    [FromQuery] EntityPage page)
-{
-    return dbContext.Freelancers
-        .Where(filter)
-        .OrderBy(sort)
-        .Page(page);
-}
-```
-
-**Results in SQL statement** (SQLite syntax)
-
-```sql
-SELECT *
-FROM "Freelancer"
-WHERE instr(upper("FirstName"), 'JOE') > 0
-ORDER BY "LastName"
-LIMIT 5 OFFSET 10
-```
-
-# Table of contents
-
-- [Getting started](#getting-started)
-- [Syntax](#syntax)
-- [Filter entities](#filter-entities)
-  - [Basic usage](#basic-usage)
-  - [Filter by special values](#filter-by-special-values)
-  - [Logical Operators](#logical-operators)
-  - [Nested filters](#nested-filters)
-  - [Retrieve syntax and filter values](#retrieve-syntax-and-filter-values)
-  - [REST / MVC](#rest--mvc)
-  - [Swagger / OpenAPI](#swagger--openapi)
-  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
-  - [Configuration](#configuration)
-  - [Interception](#interception)
-  - [Advanced scenarios](#advanced-scenarios)
-- [Sort entities](#sort-entities)
-  - [Basic usage](#basic-usage)
-  - [Add sorting](#add-sorting)
-  - [Nested sorting](#nested-sorting)
-  - [Retrieve syntax and sort direction](#retrieve-syntax-and-sort-direction)
-  - [REST / MVC](#rest--mvc)
-  - [Swagger / OpenAPI](#swagger--openapi)
-  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
-  - [Configuration](#configuration)
-  - [Interception](#interception)
-  - [Advanced scenarios](#advanced-scenarios)
-- [Page Entities](#page-entities)
-  - [Basic usage](#basic-usage)
-  - [REST / MVC](#rest--mvc)
-  - [Swagger / OpenAPI](#swagger--openapi)
-  - [Support for Newtonsoft.Json](#support-for-newtonsoftjson)
-  - [Configuration](#configuration)
-  - [Interception](#interception)
-  - [Advanced Scenarios](#advanced-scenarios)
-- [Upgrade from FilterExpressionCreator](#upgrade-from-filterexpressioncreator)
-# Getting started
-
-## Web / MVC application
-
-```cmd
-dotnet add package Plainquire.Filter
-dotnet add package Plainquire.Filter.Mvc
-dotnet add package Plainquire.Filter.Swashbuckle
-dotnet add package Plainquire.Page
-dotnet add package Plainquire.Page.Mvc
-dotnet add package Plainquire.Page.Swashbuckle
-dotnet add package Plainquire.Sort
-dotnet add package Plainquire.Sort.Mvc
-dotnet add package Plainquire.Sort.Swashbuckle
-```
-
-```csharp
-using Plainquire.Filter.Mvc;
-using Plainquire.Filter.Swashbuckle;
-using Plainquire.Page.Mvc;
-using Plainquire.Page.Swashbuckle;
-using Plainquire.Sort.Mvc;
-using Plainquire.Sort.Swashbuckle;
-
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddControllers()
-    .AddFilterSupport()
-    .AddSortSupport()
-    .AddPageSupport();
-
-builder.Services.AddSwaggerGen(options => options
-    .AddFilterSupport()
-    .AddSortSupport()
-    .AddPageSupport());
-```
-
-```csharp
-using Plainquire.Filter;
-using Plainquire.Page;
-using Plainquire.Sort;
-
-[EntityFilter]
-public record Order(int Number, string Customer);
-
-[HttpGet(Name = "GetOrders")]
-public IEnumerable<Order> GetOrders(
-    [FromQuery] EntityFilter<Order> filter,
-    [FromQuery] EntitySort<Order> sort,
-    [FromQuery] EntityPage page)
-{
-    var orders = GenerateOrders(); // See code below
-    var requestedOrders = orders.Where(filter).OrderBy(sort).Page(page);
-    return requestedOrders;
-}
-```
-
-## Non-web application
-
-```cmd
-dotnet add package Plainquire.Filter
-dotnet add package Plainquire.Sort
-dotnet add package Plainquire.Page
-```
-
-```cs
-using Plainquire.Filter;
-using Plainquire.Sort;
-using Plainquire.Page;
-
-[EntityFilter]
-public record Order(int Number, string Customer);
-
-public IEnumerable<Order> GetOrders()
-{
-    var orders = GenerateOrders(); // See code below
-
-    var filter = new EntityFilter<Order>().Add(x => x.Customer, "~Santos");
-    var sort = new EntitySort<Order>().Add(x => x.Customer, SortDirection.Ascending);
-    var page = new EntityPage { PageNumber = 2, PageSize = 3 };
-
-    var requestedOrders = orders.Where(filter).OrderBy(sort).Page(page);
-    return requestedOrders;
-}
-```
-
-## Generate sample orders
-
-```csharp
-private static readonly string[] _customerNames =
-[
-    "Brock Luettgen",
-    "Santos Rath",
-    "Camden Goldner",
-    "Santos Marks"
-];
-
-private static List<Order> GenerateOrders()
-{
-    return Enumerable
-        .Range(1, 5)
-        .Select(index => new Order
-        (
-            Number: index,
-            Customer: _customerNames[Random.Shared.Next(_customerNames.Length)]
-        ))
-        .ToList();
-}
-```
-
-# Syntax
+# Syntax overview
 
 ## Filter syntax
 
@@ -221,9 +166,17 @@ private static List<Order> GenerateOrders()
 | `created=2020`          | Crated in the year `2020`                     |
 | `name=`                 | Name equals ""                                |
 
-**Reference**
+**Escape filter value**
 
-The filter micro syntax consists of a comma separated list of an operator and value (e.g. `~Joe,=Doe`). Commas within a value can be escaped with a backslash.
+The backslash (`\`) is used as escape character within values. To filter for a backslash itself, double it (`\\`).
+
+Characters used by filter operators as well as characters used to separate values (see below) must be escaped to search for them themselves. 
+
+Sample: Use `=\=A\;B` to do a case insensitive search (`=`) for value `=A;B`.
+
+**Syntax reference**
+
+The filter micro syntax consists of a list of operator/value pairs separated by comma (`,`), semicolon (`;`) or a pipe (`|`).
 
 Comma separated values are combined with logical `OR`. To combine values with logical `AND`, specify the filter multiple times.
 
@@ -252,7 +205,7 @@ Comma separated values are combined with logical `OR`. To combine values with lo
 | `orderBy=lastName,-firstName` | Sort by `lastName` ascending, than by `firstName` descending |
 | `orderBy=lastName.length`     | Sort by `length of lastName` ascending                       |
 
-**Reference**
+**Syntax reference**
 
 The sort micro syntax consists of a property name to sort with an optional sort direction marker before or after (e.g. `customer-asc`). For the HTTP query parameter, a comma separated list of properties is allowed (`orderBy=customer,number-desc`).
 
@@ -273,7 +226,19 @@ The sort micro syntax consists of a property name to sort with an optional sort 
 Package Manager : Install-Package Plainquire.Filter
 CLI : dotnet add package Plainquire.Filter
 ```
-**Create a filter**
+**Bind filter from query-parameters**
+
+```csharp
+using Plainquire.Filter;
+
+[HttpGet]
+public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order)
+{
+    return dbContext.Orders.Where(filter).ToList();
+}
+```
+
+**Create filter from code**
 
  ```csharp
 using Plainquire.Filter;
@@ -293,31 +258,47 @@ var filter = new EntityFilter<Order>()
 Console.WriteLine(filter);
 // Output: x => (((x.Customer != null) AndAlso x.Customer.ToUpper().Contains("JOE")) AndAlso (x.Number > 250))
 
-// Use filter with LINQ
-var filteredOrders = orders.Where(filter).ToList();
-// Or queryables (e.g. Entity Framework)
+// Filter using queryables (e.g. Entity Framework)
 var filteredOrders = dbContext.Orders.Where(filter).ToList();
-// Output: new[] { new Order { Customer = "Joe Smith", Number = 300 } };
 
-[EntityFilter]
-public class Order
-{
-    public int Number { get; set; }
-    public string Customer { get; set; }
-}
+// Filter using LINQ
+var filteredOrders = orders.Where(filter).ToList();
  ```
 
-**Or bind sort from query-parameters**
+## Configure filters
+
+Generated filter expressions can be configured via `FilterConfiguration`.
+
+### Create configuration
 
 ```csharp
 using Plainquire.Filter;
 
-[HttpGet]
-public Task<List<Order>> GetOrders([FromQuery] EntityFilter<Order> order)
-{
-    return dbContext.Orders.Where(filter).ToList();
-}
+// Parse filter values using german locale (e.g. "5,5" => 5.5f).
+var configuration = new FilterConfiguration { CultureInfo = new CultureInfo("de-DE") };
 ```
+
+### Provide configuration
+
+```csharp
+// For MVC model binding via dependency injection
+services.Configure<FilterConfiguration>(c => c.IgnoreParseExceptions = true);
+
+// Via constructor
+new EntityFilter<Order>(configuration);
+
+// Via static default
+FilterConfiguration.Default
+```
+
+### **Configuration reference**
+
+| Configuration           | Description                                                  |
+| ----------------------- | ------------------------------------------------------------ |
+| `CultureName`           | Culture used for paring in the format languagecode2-country/regioncode2 (e.g. 'en-US'). |
+| `UseConditionalAccess`  | Controls the use of conditional access to navigation properties. |
+| `IgnoreParseExceptions` | Return `x => true` in case of any exception while parsing the value. |
+| `FilterOperatorMap`     | Map between micro syntax and filter operator. Micro syntax is case-sensitive. |
 
 ## Filter by special values
 
@@ -686,41 +667,6 @@ using Plainquire.Filter.Mvc.Newtonsoft;
 services.AddControllers().AddFilterNewtonsoftSupport();
 ```
 
-## Configuration
-
-**Usage**
-
-Creation of filter expression can be configured via `FilterConfiguration`.
-
-```csharp
-using Plainquire.Filter;
-
-// Parse filter values using german locale (e.g. "5,5" => 5.5f).
-var configuration = new FilterConfiguration { CultureInfo = new CultureInfo("de-DE") };
-```
-
-The configuration can be provided as follows and is used according to the listed order of precedence
-
-```csharp
-// For MVC model binding via dependency injection
-services.Configure<FilterConfiguration>(c => c.IgnoreParseExceptions = true);
-
-// Via constructor
-new EntityFilter<Order>(configuration);
-
-// Via static default
-FilterConfiguration.Default
-```
-
-**Reference**
-
-| Configuration            | Description                                                  |
-| ------------------------ | ------------------------------------------------------------ |
-| `CultureName`            | Culture used for paring in the format languagecode2-country/regioncode2 (e.g. 'en-US'). |
-| `OmitPropertyNullChecks` | Omit null checks for properties in filter expressions (x => x?.Contains(...) -> x => x.Contains(...)). Can be used when query translation doesn't support it (e.g. NHibernate ORM). |
-| `IgnoreParseExceptions`  | Return <c>x => true</c> in case of any exception while parsing the value. |
-| `FilterOperatorMap`      | Map between micro syntax and filter operator. Micro syntax is case-sensitive. |
-
 ## Interception
 
 Creation of filter expression can be intercepted via `IFilterInterceptor`. While implicit conversions to `Func<TEntity, bool>` and `Expression<Func<TEntity, bool>>` exists, explicit filter conversion is required to apply an interceptor.
@@ -889,7 +835,45 @@ public Task<List<Order>> GetOrders([FromQuery] EntitySort<Order> sort)
 }
 ```
 
-## Add sorting
+## Configure sorting
+
+Generated sort expression can be configured via `SortConfiguration`.
+
+### Create configuration
+
+```csharp
+using Plainquire.Sort.Abstractions;
+
+var configuration = new SortConfiguration();
+configuration.AscendingPostfixes.Add("^");
+```
+
+### Provide configuration
+
+```csharp
+// For MVC model binding via dependency injection
+services.Configure<SortConfiguration>(c => c.IgnoreParseExceptions = true);
+
+// Via constructor
+new EntitySort<Order>(configuration);
+
+// Via static default
+SortConfiguration.Default
+```
+
+### **Configuration reference**
+
+| Configuration                     | Description                                                  |
+| --------------------------------- | ------------------------------------------------------------ |
+| `AscendingPrefixes`               | Prefixes used to identify an ascending sort order            |
+| `AscendingPostfixes`              | Postfixes used to identify an ascending sort order           |
+| `DescendingPrefixes`              | Prefixes used to identify a descending sort order            |
+| `DescendingPostfixes`             | Postfixes used to identify a descending sort order           |
+| `IgnoreParseExceptions`           | Return `source.OrderBy(x => 0)` in case of any exception while parsing the value |
+| `UseConditionalAccess`            | Controls the use of conditional access to navigation properties (e.g. `person => person?.Name`) |
+| `CaseInsensitivePropertyMatching` | Indicates whether to use case-insensitive property matching  |
+
+## Sort entities
 
 ```csharp
 // Order is sorted by `Address` ascending.
@@ -905,7 +889,7 @@ sort.Add("Address-asc")
 var getOrdersUrl = "/GetOrders?orderBy=customer-asc"
 ```
 
-## Nested sorting
+## Sort nested entities
 
 Nested objects are sorted directly (`x=> x.OrderBy(order => order.Customer)`).
 Deep property paths (e.g. `order => order.Customer.Length`) are supported.
@@ -1085,32 +1069,6 @@ using Plainquire.Sort.Mvc.Newtonsoft;
 services.AddControllers().AddSortNewtonsoftSupport();
 ```
 
-## Configuration
-
-Creation of sort expression can be configured via `SortConfiguration`.
-
-```csharp
-using Plainquire.Sort.Abstractions;
-
-var configuration = new SortConfiguration();
-configuration.AscendingPostfixes.Add("^");
-var sort = new EntitySort<Order>(configuration);
-var sortedOrders = orders.OrderBy(sort);
-```
-
-The configuration can be provided as follows and is used according to the listed order of precedence
-
-```csharp
-// For MVC model binding via dependency injection
-services.Configure<SortConfiguration>(c => c.IgnoreParseExceptions = true);
-
-// Via constructor
-new EntitySort<Order>(configuration);
-
-// Via static default
-SortConfiguration.Default
-```
-
 ## Interception
 
 Creation of sort expression can be intercepted via `ISortInterceptor`.
@@ -1199,6 +1157,35 @@ var pagedOrders = dbContext.Orders.Page(page).ToList();
 
  ```
 
+## Configure pagination
+
+### Create configuration
+
+```csharp
+using Plainquire.Page.Abstractions;
+
+var configuration = new PageConfiguration() { IgnoreParseExceptions = true };
+```
+
+### Provide configuration
+
+```csharp
+// For MVC model binding via dependency injection
+services.Configure<PageConfiguration>(c => c.IgnoreParseExceptions = true);
+
+// Via constructor
+new EntityPage<Order>(configuration);
+
+// Via static default
+PageConfiguration.Default
+```
+
+### **Configuration reference**
+
+| Configuration           | Description                                                  |
+| ----------------------- | ------------------------------------------------------------ |
+| `IgnoreParseExceptions` | Omit paging in case of any exception while parsing the value |
+
 ## REST / MVC
 
 To page an entity via model binding, the entity must be marked with `EntityFilterAttribute`
@@ -1281,31 +1268,6 @@ using Plainquire.Page.Mvc.Newtonsoft;
 // Register support for Newtonsoft by calling
 // 'AddPageNewtonsoftSupport()' on IMvcBuilder instance
 services.AddControllers().AddPageNewtonsoftSupport();
-```
-
-## Configuration
-
-Creation of page expression can be configured via `PageConfiguration`.
-
-```csharp
-using Plainquire.Page.Abstractions;
-
-var configuration = new PageConfiguration() { IgnoreParseExceptions = true };
-var page = new EntityPage<Order>(configuration);
-var pagedOrders = orders.Page(page);
-```
-
-The configuration can be provided as follows and is used according to the listed order of precedence
-
-```csharp
-// For MVC model binding via dependency injection
-services.Configure<PageConfiguration>(c => c.IgnoreParseExceptions = true);
-
-// Via constructor
-new EntityPage<Order>(configuration);
-
-// Via static default
-PageConfiguration.Default
 ```
 
 ## Interception
