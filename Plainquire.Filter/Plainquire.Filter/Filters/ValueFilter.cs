@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Plainquire.Filter;
 
@@ -133,6 +134,9 @@ public class ValueFilter
         filter = hasFilterOperator ? trimmedFilter : filter;
 
         var filterValue = filter[filterSyntax.Length..];
+
+        var escapedCharClass = @"(?<!\\)\\(.)";
+        filterValue = Regex.Replace(filterValue, escapedCharClass, "$1");
 
         return (filterOperator, filterValue);
     }
