@@ -3,7 +3,7 @@
   <Import Project="../../Build/build_version.props" />
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.10" />
   </ItemGroup>
 
   <ItemGroup>
