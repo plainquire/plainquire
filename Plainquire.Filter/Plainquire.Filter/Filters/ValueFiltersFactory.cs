@@ -32,7 +32,6 @@ public static class ValueFiltersFactory
                 .Replace(@"\|", @"|")
                 .Replace(@"\,", @",")
                 .Replace(@"\;", @";")
-                .Replace(@"\\", @"\")
             )
             .ToArray();
     }
