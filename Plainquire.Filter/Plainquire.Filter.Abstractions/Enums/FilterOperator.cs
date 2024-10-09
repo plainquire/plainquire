@@ -7,12 +7,7 @@ public enum FilterOperator
 {
     /// <summary>
     /// Default filter operator.
-    /// For string values the default is <see cref="Contains"/>
-    /// For boolean values  the default is <see cref="EqualCaseInsensitive"/>
-    /// For date/time values the default is <see cref="EqualCaseInsensitive"/>
-    /// For enumerations the default is <see cref="EqualCaseInsensitive"/>
-    /// For GUID values the default is <see cref="EqualCaseInsensitive"/>
-    /// For numeric values the default is <see cref="EqualCaseInsensitive"/>
+    /// For filtered <c>string</c> the default is <see cref="Contains"/>. For all other types the default is <see cref="EqualCaseInsensitive"/>
     /// </summary>
     Default,
 
