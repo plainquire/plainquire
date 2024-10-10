@@ -58,6 +58,11 @@ public class FilterConfiguration
     };
 
     /// <summary>
+    /// Characters used to split values in micro syntax.
+    /// </summary>
+    public List<char> ValueSeparatorChars { get; set; } = [',', ';', '|'];
+
+    /// <summary>
     /// Character used as escape character in micro syntax.
     /// </summary>
     public char EscapeCharacter { get; set; } = '\\';
