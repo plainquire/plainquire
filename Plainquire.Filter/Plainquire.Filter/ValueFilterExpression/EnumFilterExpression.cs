@@ -16,6 +16,8 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
         [
             FilterOperator.Default,
             FilterOperator.Contains,
+            FilterOperator.StartsWith,
+            FilterOperator.EndsWith,
             FilterOperator.EqualCaseSensitive,
             FilterOperator.EqualCaseInsensitive,
             FilterOperator.NotEqual,
@@ -34,7 +36,12 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
     /// <inheritdoc />
     protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
-        if (long.TryParse(value, NumberStyles.Any, new CultureInfo(configuration.CultureName), out var numericValue))
+        var operatorImpliesMatchByName = filterOperator is FilterOperator.StartsWith or FilterOperator.EndsWith;
+        if (operatorImpliesMatchByName)
+            return CreateEnumFromStringExpression(propertySelector, filterOperator, value, configuration, interceptor);
+
+        var valueIsNumeric = long.TryParse(value, NumberStyles.Any, new CultureInfo(configuration.CultureName), out var numericValue);
+        if (valueIsNumeric)
             return CreateEnumExpressionByFilterOperator(propertySelector, filterOperator, numericValue);
 
         return CreateEnumFromStringExpression(propertySelector, filterOperator, value, configuration, interceptor);
@@ -62,6 +69,8 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
         {
             case FilterOperator.Default:
             case FilterOperator.Contains:
+            case FilterOperator.StartsWith:
+            case FilterOperator.EndsWith:
             case FilterOperator.EqualCaseInsensitive:
             case FilterOperator.EqualCaseSensitive:
                 return CreateEqualExpression(propertySelector, value);
@@ -94,6 +103,8 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
         var stringFilterOperator = filterOperator switch
         {
             FilterOperator.Contains => FilterOperator.Contains,
+            FilterOperator.StartsWith => FilterOperator.StartsWith,
+            FilterOperator.EndsWith => FilterOperator.EndsWith,
             FilterOperator.EqualCaseInsensitive => FilterOperator.EqualCaseInsensitive,
             FilterOperator.EqualCaseSensitive => FilterOperator.EqualCaseSensitive,
             _ => FilterOperator.EqualCaseInsensitive

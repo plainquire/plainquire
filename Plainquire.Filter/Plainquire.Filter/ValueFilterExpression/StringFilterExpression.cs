@@ -16,6 +16,8 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
         [
             FilterOperator.Default,
             FilterOperator.Contains,
+            FilterOperator.StartsWith,
+            FilterOperator.EndsWith,
             FilterOperator.EqualCaseSensitive,
             FilterOperator.EqualCaseInsensitive,
             FilterOperator.NotEqual,
@@ -28,7 +30,7 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
         => type.GetUnderlyingType() == typeof(string);
 
     /// <inheritdoc />
-    protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration, IFilterInterceptor? interceptor)
+    protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
         var strFilter = value?.Trim();
         switch (filterOperator)
@@ -36,6 +38,10 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
             case FilterOperator.Default:
             case FilterOperator.Contains:
                 return CreateStringContainsExpression(propertySelector, strFilter);
+            case FilterOperator.StartsWith:
+                return CreateStringStartsWithExpression(propertySelector, strFilter);
+            case FilterOperator.EndsWith:
+                return CreateStringEndsWithExpression(propertySelector, strFilter);
             case FilterOperator.EqualCaseSensitive:
                 return CreateStringCaseSensitiveEqualExpression(propertySelector, strFilter);
             case FilterOperator.EqualCaseInsensitive:
@@ -104,6 +110,40 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
         var propertyIsNotNull = propertySelector.IsNotNull();
         var propertyIsNotNullAndEqualsValue = Expression.AndAlso(propertyIsNotNull, propertyEqualsValue);
         return propertyIsNotNullAndEqualsValue;
+    }
+
+    /// <summary>
+    /// Creates a string starts with expression.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <param name="propertySelector">The property selector.</param>
+    /// <param name="value">The value.</param>
+    public static Expression? CreateStringStartsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string? value)
+    {
+        var valueToUpper = Expression.Constant(value?.ToUpper(), typeof(TProperty));
+        var propertyToUpper = propertySelector.Body.StringToUpper();
+        var propertyStartsWithValue = propertyToUpper.StringStartsWith(valueToUpper);
+        var propertyIsNotNull = propertySelector.IsNotNull();
+        var propertyIsNotNullAndStartsWithValue = Expression.AndAlso(propertyIsNotNull, propertyStartsWithValue);
+        return propertyIsNotNullAndStartsWithValue;
+    }
+
+    /// <summary>
+    /// Creates a string ends with expression.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <param name="propertySelector">The property selector.</param>
+    /// <param name="value">The value.</param>
+    public static Expression? CreateStringEndsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string? value)
+    {
+        var valueToUpper = Expression.Constant(value?.ToUpper(), typeof(TProperty));
+        var propertyToUpper = propertySelector.Body.StringToUpper();
+        var propertyEndsWithValue = propertyToUpper.StringEndsWith(valueToUpper);
+        var propertyIsNotNull = propertySelector.IsNotNull();
+        var propertyIsNotNullAndEndsWithValue = Expression.AndAlso(propertyIsNotNull, propertyEndsWithValue);
+        return propertyIsNotNullAndEndsWithValue;
     }
 
     /// <summary>

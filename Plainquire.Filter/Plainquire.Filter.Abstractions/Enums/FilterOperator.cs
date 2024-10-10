@@ -22,6 +22,16 @@ public enum FilterOperator
     Contains,
 
     /// <summary>
+    /// Filter for elements starting with a value
+    /// </summary>
+    StartsWith,
+
+    /// <summary>
+    /// Filter for elements ending with a value
+    /// </summary>
+    EndsWith,
+
+    /// <summary>
     /// Filter for elements equal to a value
     /// </summary>
     EqualCaseSensitive,
