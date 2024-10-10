@@ -327,4 +327,25 @@ public class EntityFilterTests
         var filteredEntities = filterFunc(testItems, testItemsFilter).ToList();
         filteredEntities.Should().BeEquivalentTo([testItems[0]]);
     }
+
+    [DataTestMethod]
+    [FilterFuncDataSource<TestModel<string>>]
+    public void CustomSeparatorCharsForMicroSyntax_WorksAsExpected(EntityFilterFunc<TestModel<string>> filterFunc)
+    {
+        var configuration = new FilterConfiguration { ValueSeparatorChars = ['+', ':'] };
+
+        var testItemsFilter = new EntityFilter<TestModel<string>>(configuration)
+            .Add(x => x.ValueA, "A+B:C");
+
+        var testItems = new List<TestModel<string>>
+        {
+            new() { ValueA = "a" },
+            new() { ValueA = "b" },
+            new() { ValueA = "c" },
+            new() { ValueA = "Z" }
+        };
+
+        var filteredEntities = filterFunc(testItems, testItemsFilter).ToList();
+        filteredEntities.Should().BeEquivalentTo([testItems[0], testItems[1], testItems[2]]);
+    }
 }
