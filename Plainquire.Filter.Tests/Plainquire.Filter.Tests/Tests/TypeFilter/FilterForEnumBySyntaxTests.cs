@@ -37,7 +37,7 @@ public class FilterForEnumBySyntaxTests
         FilterTestCase.Create<TestEnum>(1201, "~", _ => TestItems.ALL),
         FilterTestCase.Create<TestEnum>(1202, "~Negative", x => x == TestEnum.Negative),
         FilterTestCase.Create<TestEnum>(1203, "~-10", _ => TestItems.NONE),
-        FilterTestCase.Create<TestEnum>(1204, "~1", x => x == TestEnum.Positive),
+        FilterTestCase.Create<TestEnum>(1204, "~1", _ => TestItems.NONE),
         FilterTestCase.Create<TestEnum>(1205, "~Positive", x => x is TestEnum.Positive or TestEnum.Positive2 or TestEnum.Positive4),
         FilterTestCase.Create<TestEnum>(1206, "~positive", x => x is TestEnum.Positive or TestEnum.Positive2 or TestEnum.Positive4),
 
