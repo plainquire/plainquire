@@ -294,7 +294,7 @@ public class EntityFilterTests
 
     [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
-    public void EscapedValuesInMicroSyntax_AreHandled(EntityFilterFunc<TestModel<string>> filterFunc)
+    public void EscapedValuesInMicroSyntax_AreRecognized(EntityFilterFunc<TestModel<string>> filterFunc)
     {
         var testItemsFilter = new EntityFilter<TestModel<string>>()
             .Add(x => x.ValueA, @"=\=\A\\B");
