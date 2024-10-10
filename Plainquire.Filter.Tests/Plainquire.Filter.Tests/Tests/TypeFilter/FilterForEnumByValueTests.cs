@@ -55,8 +55,8 @@ public class FilterForEnumByValueTests
 
         FilterTestCase.Create(1200, FilterOperator.Contains, [TestEnum.Negative], (TestEnum x) => x == TestEnum.Negative),
         FilterTestCase.Create(1201, FilterOperator.Contains, [-10], (TestEnum _) => TestItems.NONE),
-        FilterTestCase.Create(1202, FilterOperator.Contains, [(int)TestEnum.Positive], (TestEnum x) => x == TestEnum.Positive),
-        FilterTestCase.Create(1203, FilterOperator.Contains, [(short)TestEnum.Positive], (TestEnum x) => x == TestEnum.Positive),
+        FilterTestCase.Create(1202, FilterOperator.Contains, [(int)TestEnum.Positive], (TestEnum _) => TestItems.NONE),
+        FilterTestCase.Create(1203, FilterOperator.Contains, [(short)TestEnum.Positive], (TestEnum _) => TestItems.NONE),
         FilterTestCase.Create(1204, FilterOperator.Contains, ["Positive"], (TestEnum x) => x is TestEnum.Positive or TestEnum.Positive2 or TestEnum.Positive4),
         FilterTestCase.Create(1205, FilterOperator.Contains, ["positive"], (TestEnum x) => x is TestEnum.Positive or TestEnum.Positive2 or TestEnum.Positive4),
 

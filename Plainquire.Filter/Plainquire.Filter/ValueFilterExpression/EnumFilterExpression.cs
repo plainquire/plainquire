@@ -36,7 +36,7 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
     /// <inheritdoc />
     protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
-        var operatorImpliesMatchByName = filterOperator is FilterOperator.StartsWith or FilterOperator.EndsWith;
+        var operatorImpliesMatchByName = filterOperator is FilterOperator.Contains or FilterOperator.StartsWith or FilterOperator.EndsWith;
         if (operatorImpliesMatchByName)
             return CreateEnumFromStringExpression(propertySelector, filterOperator, value, configuration, interceptor);
 
