@@ -302,7 +302,26 @@ public class EntityFilterTests
         var testItems = new List<TestModel<string>>
         {
             new() { ValueA = "=a\\b" },
-            new() { ValueA = "A" }
+            new() { ValueA = "Z" }
+        };
+
+        var filteredEntities = filterFunc(testItems, testItemsFilter).ToList();
+        filteredEntities.Should().BeEquivalentTo([testItems[0]]);
+    }
+
+    [DataTestMethod]
+    [FilterFuncDataSource<TestModel<string>>]
+    public void CustomEscapeCharacterForMicroSyntax_WorksAsExpected(EntityFilterFunc<TestModel<string>> filterFunc)
+    {
+        var configuration = new FilterConfiguration { EscapeCharacter = ':' };
+
+        var testItemsFilter = new EntityFilter<TestModel<string>>(configuration)
+            .Add(x => x.ValueA, "=:=A::B:,=C");
+
+        var testItems = new List<TestModel<string>>
+        {
+            new() { ValueA = "=a:b,=c" },
+            new() { ValueA = "Z" }
         };
 
         var filteredEntities = filterFunc(testItems, testItemsFilter).ToList();

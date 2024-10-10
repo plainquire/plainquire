@@ -135,7 +135,8 @@ public class ValueFilter
 
         var filterValue = filter[filterSyntax.Length..];
 
-        var escapedCharClass = @"(?<!\\)\\(.)";
+        var escapeEscapeCharacter = Regex.Escape(configuration.EscapeCharacter.ToString());
+        var escapedCharClass = @$"(?<!{escapeEscapeCharacter}){escapeEscapeCharacter}(.)";
         filterValue = Regex.Replace(filterValue, escapedCharClass, "$1");
 
         return (filterOperator, filterValue);
