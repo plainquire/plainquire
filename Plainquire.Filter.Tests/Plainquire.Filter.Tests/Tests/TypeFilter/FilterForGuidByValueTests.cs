@@ -30,23 +30,27 @@ public class FilterForGuidByValueTests
 
         FilterTestCase.Create(1200, FilterOperator.Contains, [Guid.Parse("df72ce74-686c-4c0f-a11f-5c8e50a213ab")], (Guid x) => x == Guid.Parse("df72ce74-686c-4c0f-a11f-5c8e50a213ab")),
 
-        FilterTestCase.Create(1300, FilterOperator.EqualCaseInsensitive, [Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")], (Guid x) => x == Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")),
+        FilterTestCase.Create(1300, FilterOperator.StartsWith, [Guid.Parse("df72ce74-686c-4c0f-a11f-5c8e50a213ab")], (Guid x) => x == Guid.Parse("df72ce74-686c-4c0f-a11f-5c8e50a213ab")),
 
-        FilterTestCase.Create(1400, FilterOperator.EqualCaseSensitive, [Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")], (Guid x) => x == Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")),
+        FilterTestCase.Create(1400, FilterOperator.EndsWith, [Guid.Parse("df72ce74-686c-4c0f-a11f-5c8e50a213ab")], (Guid x) => x == Guid.Parse("df72ce74-686c-4c0f-a11f-5c8e50a213ab")),
 
-        FilterTestCase.Create(1500, FilterOperator.NotEqual, [Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")], (Guid x) => x != Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")),
+        FilterTestCase.Create(1500, FilterOperator.EqualCaseInsensitive, [Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")], (Guid x) => x == Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")),
 
-        FilterTestCase.Create(1600, FilterOperator.LessThan, [Guid.Empty], new FilterExpressionException("Filter operator 'LessThan' not allowed for property type 'System.Guid'")),
+        FilterTestCase.Create(1600, FilterOperator.EqualCaseSensitive, [Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")], (Guid x) => x == Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")),
 
-        FilterTestCase.Create(1700, FilterOperator.LessThanOrEqual, [Guid.Empty], new FilterExpressionException("Filter operator 'LessThanOrEqual' not allowed for property type 'System.Guid'")),
+        FilterTestCase.Create(1700, FilterOperator.NotEqual, [Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")], (Guid x) => x != Guid.Parse("6cda682c-e7ff-43e8-b4d9-f8b27a7d62f2")),
 
-        FilterTestCase.Create(1800, FilterOperator.GreaterThan, [Guid.Empty], new FilterExpressionException("Filter operator 'GreaterThan' not allowed for property type 'System.Guid'")),
+        FilterTestCase.Create(1800, FilterOperator.LessThan, [Guid.Empty], new FilterExpressionException("Filter operator 'LessThan' not allowed for property type 'System.Guid'")),
 
-        FilterTestCase.Create(1900, FilterOperator.GreaterThanOrEqual, [Guid.Empty], new FilterExpressionException("Filter operator 'GreaterThanOrEqual' not allowed for property type 'System.Guid'")),
+        FilterTestCase.Create(1900, FilterOperator.LessThanOrEqual, [Guid.Empty], new FilterExpressionException("Filter operator 'LessThanOrEqual' not allowed for property type 'System.Guid'")),
 
-        FilterTestCase.Create(2000, FilterOperator.IsNull, new Guid[] { default }, new FilterExpressionException("Filter operator 'IsNull' not allowed for property type 'System.Guid'")),
+        FilterTestCase.Create(2000, FilterOperator.GreaterThan, [Guid.Empty], new FilterExpressionException("Filter operator 'GreaterThan' not allowed for property type 'System.Guid'")),
 
-        FilterTestCase.Create(2100, FilterOperator.NotNull, new Guid[] { default }, new FilterExpressionException("Filter operator 'NotNull' not allowed for property type 'System.Guid'"))
+        FilterTestCase.Create(2100, FilterOperator.GreaterThanOrEqual, [Guid.Empty], new FilterExpressionException("Filter operator 'GreaterThanOrEqual' not allowed for property type 'System.Guid'")),
+
+        FilterTestCase.Create(2200, FilterOperator.IsNull, new Guid[] { default }, new FilterExpressionException("Filter operator 'IsNull' not allowed for property type 'System.Guid'")),
+
+        FilterTestCase.Create(2300, FilterOperator.NotNull, new Guid[] { default }, new FilterExpressionException("Filter operator 'NotNull' not allowed for property type 'System.Guid'"))
     ];
     // ReSharper restore RedundantExplicitArrayCreation
 }

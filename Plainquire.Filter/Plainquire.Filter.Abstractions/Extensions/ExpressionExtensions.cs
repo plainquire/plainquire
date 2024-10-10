@@ -17,6 +17,8 @@ public static class ExpressionExtensions
     private static readonly ConstantExpression _emptyString = Expression.Constant(string.Empty, typeof(string));
     private static readonly MethodInfo _stringToUpperMethodInfo = typeof(string).GetMethod(nameof(string.ToUpper), Type.EmptyTypes)!;
     private static readonly MethodInfo _stringContainsMethodInfo = typeof(string).GetMethod(nameof(string.Contains), [typeof(string)])!;
+    private static readonly MethodInfo _stringStartsWithMethodInfo = typeof(string).GetMethod(nameof(string.StartsWith), [typeof(string)])!;
+    private static readonly MethodInfo _stringEndsWithMethodInfo = typeof(string).GetMethod(nameof(string.EndsWith), [typeof(string)])!;
     private static readonly MethodInfo _enumerableAnyMethodInfo = typeof(Enumerable).GetMethods().First(method => method.Name == nameof(Enumerable.Any) && method.GetParameters().Select(x => x.Name).SequenceEqual(["source", "predicate"]));
     private static readonly MethodInfo _objectToStringMethodInfo = typeof(object).GetMethods().First(method => method.Name == nameof(ToString));
 
@@ -120,6 +122,22 @@ public static class ExpressionExtensions
     /// <param name="value">The value expression to seek</param>
     public static Expression StringContains(this Expression expression, Expression value)
         => Expression.Call(expression, _stringContainsMethodInfo, value);
+
+    /// <summary>
+    /// Applies a call to <see cref="string.StartsWith(string)"/> to the given expression.
+    /// </summary>
+    /// <param name="expression">The expression to add the call.</param>
+    /// <param name="value">The value expression to seek</param>
+    public static Expression StringStartsWith(this Expression expression, Expression value)
+        => Expression.Call(expression, _stringStartsWithMethodInfo, value);
+
+    /// <summary>
+    /// Applies a call to <see cref="string.EndsWith(string)"/> to the given expression.
+    /// </summary>
+    /// <param name="expression">The expression to add the call.</param>
+    /// <param name="value">The value expression to seek</param>
+    public static Expression StringEndsWith(this Expression expression, Expression value)
+        => Expression.Call(expression, _stringEndsWithMethodInfo, value);
 
     /// <summary>
     /// Creates an expression indicates whether the specified property equals <c>null</c>
