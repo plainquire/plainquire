@@ -56,4 +56,9 @@ public class FilterConfiguration
         {"YES", true},
         {"1", true},
     };
+
+    /// <summary>
+    /// Character used as escape character in micro syntax.
+    /// </summary>
+    public char EscapeCharacter { get; set; } = '\\';
 }

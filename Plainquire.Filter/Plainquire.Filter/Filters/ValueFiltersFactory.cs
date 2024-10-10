@@ -17,22 +17,28 @@ public static class ValueFiltersFactory
     /// <param name="configuration">The filter configuration to use.</param>
     public static ValueFilter[] Create(string filterSyntax, FilterConfiguration? configuration = null)
     {
-        var filters = SplitValues(filterSyntax);
+        var filters = SplitValues(filterSyntax, configuration);
         return filters.Select(filter => ValueFilter.Create(filter, configuration)).ToArray();
     }
 
-    private static IEnumerable<string> SplitValues(string? filterSyntax)
+    private static IEnumerable<string> SplitValues(string? filterSyntax, FilterConfiguration? configuration)
     {
         if (filterSyntax == null)
             return [];
 
-        return Regex
-            .Split(filterSyntax, @"(?<!\\)[\|,;]")
+        configuration ??= FilterConfiguration.Default ?? new FilterConfiguration();
+        var escapeCharacter = configuration.EscapeCharacter.ToString();
+        var escapeEscapeCharacter = Regex.Escape(escapeCharacter);
+
+        var values = Regex
+            .Split(filterSyntax, @$"(?<!{escapeEscapeCharacter})[\|,;]")
             .Select(element => element
-                .Replace(@"\|", @"|")
-                .Replace(@"\,", @",")
-                .Replace(@"\;", @";")
+                .Replace($"{escapeCharacter}|", "|")
+                .Replace($"{escapeCharacter},", ",")
+                .Replace($"{escapeCharacter};", ";")
             )
             .ToArray();
+
+        return values;
     }
 }
