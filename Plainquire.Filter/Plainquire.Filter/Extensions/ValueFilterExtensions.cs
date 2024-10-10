@@ -69,6 +69,8 @@ public static class ValueFilterExtensions
         return filterOperator switch
         {
             FilterOperator.Contains => "contains",
+            FilterOperator.StartsWith => "starts with",
+            FilterOperator.EndsWith => "ends with",
             FilterOperator.EqualCaseSensitive => "is (case-sensitive)",
             FilterOperator.EqualCaseInsensitive => "is",
             FilterOperator.NotEqual => "is not",

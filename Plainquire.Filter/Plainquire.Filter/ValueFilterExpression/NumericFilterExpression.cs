@@ -19,6 +19,8 @@ public class NumericFilterExpression : DefaultFilterExpression, INumericFilterEx
         [
             FilterOperator.Default,
             FilterOperator.Contains,
+            FilterOperator.StartsWith,
+            FilterOperator.EndsWith,
             FilterOperator.EqualCaseInsensitive,
             FilterOperator.EqualCaseSensitive,
             FilterOperator.NotEqual,
@@ -61,6 +63,10 @@ public class NumericFilterExpression : DefaultFilterExpression, INumericFilterEx
                 return CreateNotEqualExpression(propertySelector, typedValue);
             case FilterOperator.Contains:
                 return CreateNumericContainsExpression(propertySelector, typedValue);
+            case FilterOperator.StartsWith:
+                return CreateStringStartsWithExpression(propertySelector, typedValue);
+            case FilterOperator.EndsWith:
+                return CreateStringEndsWithExpression(propertySelector, typedValue);
             case FilterOperator.LessThan:
                 return CreateLessThanExpression(propertySelector, typedValue);
             case FilterOperator.LessThanOrEqual:
@@ -91,5 +97,39 @@ public class NumericFilterExpression : DefaultFilterExpression, INumericFilterEx
         var propertyToUpper = propertyToString.StringToUpper();
         var propertyContainsValue = propertyToUpper.StringContains(valueToUpper);
         return propertyContainsValue;
+    }
+
+    /// <summary>
+    /// Creates numeric starts-with expression.
+    /// </summary>
+    /// <typeparam name="TEntity">Type of the entity.</typeparam>
+    /// <typeparam name="TProperty">Type of the property.</typeparam>
+    /// <param name="propertySelector">The property selector.</param>
+    /// <param name="value">The value to check for.</param>
+    /// <returns></returns>
+    public static Expression CreateStringStartsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object value)
+    {
+        var valueToUpper = Expression.Constant(value.ToString().ToUpper(), typeof(string));
+        var propertyToString = propertySelector.Body.ObjectToString();
+        var propertyToUpper = propertyToString.StringToUpper();
+        var propertyStartsWithValue = propertyToUpper.StringStartsWith(valueToUpper);
+        return propertyStartsWithValue;
+    }
+
+    /// <summary>
+    /// Creates numeric ends-with expression.
+    /// </summary>
+    /// <typeparam name="TEntity">Type of the entity.</typeparam>
+    /// <typeparam name="TProperty">Type of the property.</typeparam>
+    /// <param name="propertySelector">The property selector.</param>
+    /// <param name="value">The value to check for.</param>
+    /// <returns></returns>
+    public static Expression CreateStringEndsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object value)
+    {
+        var valueToUpper = Expression.Constant(value.ToString().ToUpper(), typeof(string));
+        var propertyToString = propertySelector.Body.ObjectToString();
+        var propertyToUpper = propertyToString.StringToUpper();
+        var propertyEndsWithValue = propertyToUpper.StringEndsWith(valueToUpper);
+        return propertyEndsWithValue;
     }
 }

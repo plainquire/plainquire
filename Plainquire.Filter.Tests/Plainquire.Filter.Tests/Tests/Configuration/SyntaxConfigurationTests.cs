@@ -37,6 +37,8 @@ public class SyntaxConfigurationTests
             {
                 {string.Empty, FilterOperator.Default},
                 {"~", FilterOperator.Contains},
+                {"^", FilterOperator.StartsWith},
+                {"$", FilterOperator.EndsWith},
                 {"=" , FilterOperator.EqualCaseInsensitive},
                 {"==" , FilterOperator.EqualCaseSensitive},
                 {"!" , FilterOperator.NotEqual},

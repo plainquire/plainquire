@@ -35,32 +35,44 @@ public class FilterForStringBySyntaxTests
         FilterTestCase.Create<string>(1203, "~hello", x => x is "Hello" or "HelloWorld"),
         FilterTestCase.Create<string>(1204, "~HelloWorld", x => x == "HelloWorld"),
 
-        FilterTestCase.Create<string>(1301, "=", x => x == ""),
-        FilterTestCase.Create<string>(1302, "=Hello", x => x == "Hello"),
-        FilterTestCase.Create<string>(1303, "=hello", x => x == "Hello"),
-        FilterTestCase.Create<string>(1304, "=HelloWorld", x => x == "HelloWorld"),
+        FilterTestCase.Create<string>(1301, "^", x => x != null),
+        FilterTestCase.Create<string>(1302, "^Hello", x => x is "Hello" or "HelloWorld"),
+        FilterTestCase.Create<string>(1303, "^hello", x => x is "Hello" or "HelloWorld"),
+        FilterTestCase.Create<string>(1304, "^HelloWorld", x => x == "HelloWorld"),
+        FilterTestCase.Create<string>(1305, "^World", _ => TestItems.NONE),
 
-        FilterTestCase.Create<string>(1401, "==", x => x == ""),
-        FilterTestCase.Create<string>(1402, "==Hello", x => x == "Hello"),
-        FilterTestCase.Create<string>(1403, "==hello", _ => TestItems.NONE),
-        FilterTestCase.Create<string>(1404, "==HelloWorld", x => x == "HelloWorld"),
+        FilterTestCase.Create<string>(1401, "$", x => x != null),
+        FilterTestCase.Create<string>(1402, "$World", x => x == "HelloWorld"),
+        FilterTestCase.Create<string>(1403, "$world", x => x == "HelloWorld"),
+        FilterTestCase.Create<string>(1404, "$HelloWorld", x => x == "HelloWorld"),
+        FilterTestCase.Create<string>(1405, "$NA", _ => TestItems.NONE),
 
-        FilterTestCase.Create<string>(1501, "!", x => x == null),
-        FilterTestCase.Create<string>(1502, "!Hello", x => x is null or ""),
-        FilterTestCase.Create<string>(1503, "!hello", x => x is null or ""),
-        FilterTestCase.Create<string>(1504, "!HelloWorld", x => x != "HelloWorld"),
+        FilterTestCase.Create<string>(1501, "=", x => x == ""),
+        FilterTestCase.Create<string>(1502, "=Hello", x => x == "Hello"),
+        FilterTestCase.Create<string>(1503, "=hello", x => x == "Hello"),
+        FilterTestCase.Create<string>(1504, "=HelloWorld", x => x == "HelloWorld"),
 
-        FilterTestCase.Create<string>(1600, "<", new FilterExpressionException("Filter operator 'LessThan' not allowed for property type 'System.String'")),
+        FilterTestCase.Create<string>(1601, "==", x => x == ""),
+        FilterTestCase.Create<string>(1602, "==Hello", x => x == "Hello"),
+        FilterTestCase.Create<string>(1603, "==hello", _ => TestItems.NONE),
+        FilterTestCase.Create<string>(1604, "==HelloWorld", x => x == "HelloWorld"),
 
-        FilterTestCase.Create<string>(1700, "<=", new FilterExpressionException("Filter operator 'LessThanOrEqual' not allowed for property type 'System.String'")),
+        FilterTestCase.Create<string>(1701, "!", x => x == null),
+        FilterTestCase.Create<string>(1702, "!Hello", x => x is null or ""),
+        FilterTestCase.Create<string>(1703, "!hello", x => x is null or ""),
+        FilterTestCase.Create<string>(1704, "!HelloWorld", x => x != "HelloWorld"),
 
-        FilterTestCase.Create<string>(1800, ">", new FilterExpressionException("Filter operator 'GreaterThan' not allowed for property type 'System.String'")),
+        FilterTestCase.Create<string>(1800, "<", new FilterExpressionException("Filter operator 'LessThan' not allowed for property type 'System.String'")),
 
-        FilterTestCase.Create<string>(1900, ">=", new FilterExpressionException("Filter operator 'GreaterThanOrEqual' not allowed for property type 'System.String'")),
+        FilterTestCase.Create<string>(1900, "<=", new FilterExpressionException("Filter operator 'LessThanOrEqual' not allowed for property type 'System.String'")),
 
-        FilterTestCase.Create<string>(2000, "ISNULL", x => x == null),
+        FilterTestCase.Create<string>(2000, ">", new FilterExpressionException("Filter operator 'GreaterThan' not allowed for property type 'System.String'")),
 
-        FilterTestCase.Create<string>(2100, "NOTNULL", x => x != null)
+        FilterTestCase.Create<string>(2100, ">=", new FilterExpressionException("Filter operator 'GreaterThanOrEqual' not allowed for property type 'System.String'")),
+
+        FilterTestCase.Create<string>(2200, "ISNULL", x => x == null),
+
+        FilterTestCase.Create<string>(2300, "NOTNULL", x => x != null)
     ];
     // ReSharper restore ReplaceWithStringIsNullOrEmpty
 }
