@@ -27,17 +27,14 @@ public static class ValueFiltersFactory
             return [];
 
         configuration ??= FilterConfiguration.Default ?? new FilterConfiguration();
-        var escapeCharacter = configuration.EscapeCharacter.ToString();
-        var escapeEscapeCharacter = Regex.Escape(escapeCharacter);
 
+        var escapeCharacter = Regex.Escape(configuration.EscapeCharacter.ToString());
+        var separatorCharacters = configuration.ValueSeparatorChars.Select(x => Regex.Escape(x.ToString())).ToList();
+
+        var splitRegex = $"(?<!{escapeCharacter})[{string.Join(string.Empty, separatorCharacters)}]";
         var values = Regex
-            .Split(filterSyntax, @$"(?<!{escapeEscapeCharacter})[\|,;]")
-            .Select(element => element
-                .Replace($"{escapeCharacter}|", "|")
-                .Replace($"{escapeCharacter},", ",")
-                .Replace($"{escapeCharacter};", ";")
-            )
-            .ToArray();
+            .Split(filterSyntax, splitRegex)
+            .ToList();
 
         return values;
     }
