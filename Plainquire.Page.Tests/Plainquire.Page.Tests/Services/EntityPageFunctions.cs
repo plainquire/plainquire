@@ -3,7 +3,6 @@ using Plainquire.Page.Newtonsoft;
 using Plainquire.Page.Tests.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -11,7 +10,6 @@ namespace Plainquire.Page.Tests.Services;
 
 public delegate List<TEntity> EntityPageFunction<TEntity>(IEnumerable<TEntity> items, EntityPage<TEntity> page, IPageInterceptor? interceptor = null);
 
-[ExcludeFromCodeCoverage]
 public static class EntityPageFunctions
 {
     public static IEnumerable<EntityPageFunction<TEntity>> GetEntityPageFunctions<TEntity>() where TEntity : class

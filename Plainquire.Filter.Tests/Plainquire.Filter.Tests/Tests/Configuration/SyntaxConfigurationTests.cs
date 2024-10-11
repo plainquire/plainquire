@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Plainquire.Filter.Tests.Tests.Configuration;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class SyntaxConfigurationTests
 {
     [TestMethod]

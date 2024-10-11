@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class InterceptorTests
 {
     [DataTestMethod]

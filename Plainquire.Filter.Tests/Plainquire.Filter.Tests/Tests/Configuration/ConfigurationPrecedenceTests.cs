@@ -9,13 +9,12 @@ using Plainquire.Filter.Tests.Models;
 using Plainquire.TestSupport.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Plainquire.Filter.Tests.Tests.Configuration;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class ConfigurationPrecedenceTests
 {
     private static readonly FilterConfiguration _unusedConfiguration = new();

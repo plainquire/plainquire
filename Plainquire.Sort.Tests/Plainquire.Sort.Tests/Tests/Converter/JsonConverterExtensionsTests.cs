@@ -9,7 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Sort.Tests.Tests.Converter;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class JsonConverterExtensionsTests
 {
     [TestMethod]

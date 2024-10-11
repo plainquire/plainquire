@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.Extensions;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class QueryableExtensionsTests
 {
     [TestMethod]

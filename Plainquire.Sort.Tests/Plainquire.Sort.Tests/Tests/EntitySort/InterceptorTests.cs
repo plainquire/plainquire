@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class InterceptorTests
 {
     [DataTestMethod]

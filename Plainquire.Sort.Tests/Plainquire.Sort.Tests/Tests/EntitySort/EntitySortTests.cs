@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class EntitySortTests
 {
     private static readonly SortConfiguration _defaultConfiguration = new();

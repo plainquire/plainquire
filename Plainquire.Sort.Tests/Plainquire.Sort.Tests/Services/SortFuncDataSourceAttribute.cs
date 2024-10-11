@@ -1,13 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
 namespace Plainquire.Sort.Tests.Services;
 
-[ExcludeFromCodeCoverage]
 [AttributeUsage(AttributeTargets.Method)]
 public class SortFuncDataSourceAttribute<TEntity> : Attribute, ITestDataSource where TEntity : class
 {

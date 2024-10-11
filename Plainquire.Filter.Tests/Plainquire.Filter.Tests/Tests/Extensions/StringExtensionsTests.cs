@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.Extensions;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class StringExtensionsTests
 {
     [TestMethod]

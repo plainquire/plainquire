@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.PropertySort;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class PropertySortSyntaxTests
 {
     private static readonly SortConfiguration _defaultConfiguration = new();

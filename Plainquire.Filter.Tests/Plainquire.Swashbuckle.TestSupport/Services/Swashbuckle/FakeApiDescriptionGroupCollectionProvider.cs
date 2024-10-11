@@ -7,12 +7,10 @@
 
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 {
-    [ExcludeFromCodeCoverage]
     public class FakeApiDescriptionGroupCollectionProvider : IApiDescriptionGroupCollectionProvider
     {
         private readonly IEnumerable<ApiDescription> _apiDescriptions;

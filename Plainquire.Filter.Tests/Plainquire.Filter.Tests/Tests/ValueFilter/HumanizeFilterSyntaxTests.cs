@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.ValueFilter;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class HumanizeFilterSyntaxTests
 {
     [TestMethod]

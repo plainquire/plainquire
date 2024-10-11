@@ -10,7 +10,7 @@ using static Plainquire.Sort.PropertySort;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class NestedSortTests
 {
     [DataTestMethod]

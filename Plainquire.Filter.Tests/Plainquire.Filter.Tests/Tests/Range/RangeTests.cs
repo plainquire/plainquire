@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.Range;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class RangeTests
 {
     [TestMethod]

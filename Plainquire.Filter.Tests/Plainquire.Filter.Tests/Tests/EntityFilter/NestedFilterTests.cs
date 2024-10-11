@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class NestedFilterTests
 {
     [DataTestMethod]

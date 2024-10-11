@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Page.Tests.Models;
 
-[ExcludeFromCodeCoverage]
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class TestModel<TValue> : IComparable
 {
@@ -12,7 +10,6 @@ public class TestModel<TValue> : IComparable
 
     public TValue? Value { get; init; }
 
-    [ExcludeFromCodeCoverage]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string? DebuggerDisplay => Value?.ToString();
 

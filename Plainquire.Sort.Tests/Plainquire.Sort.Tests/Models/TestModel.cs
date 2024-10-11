@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Sort.Tests.Models;
 
-[ExcludeFromCodeCoverage]
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class TestModel<TValue> : IComparable
 {
@@ -17,7 +15,6 @@ public class TestModel<TValue> : IComparable
 
     public TestModelNested<TValue>? NestedObject { get; init; }
 
-    [ExcludeFromCodeCoverage]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay
     {

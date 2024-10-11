@@ -3,7 +3,6 @@ using Plainquire.Sort.Newtonsoft;
 using Plainquire.Sort.Tests.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -11,7 +10,6 @@ namespace Plainquire.Sort.Tests.Services;
 
 public delegate List<TEntity> EntitySortFunction<TEntity>(IEnumerable<TEntity> items, EntitySort<TEntity> sort, ISortInterceptor? interceptor = null);
 
-[ExcludeFromCodeCoverage]
 public static class EntitySortFunctions
 {
     public static IEnumerable<EntitySortFunction<TEntity>> GetEntitySortFunctions<TEntity>() where TEntity : class

@@ -13,13 +13,11 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.TestSupport
 {
-    [ExcludeFromCodeCoverage]
     public static class ApiDescriptionFactory
     {
         public static ApiDescription Create(

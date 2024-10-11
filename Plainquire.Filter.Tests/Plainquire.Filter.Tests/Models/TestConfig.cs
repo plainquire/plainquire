@@ -1,10 +1,8 @@
 ﻿using Plainquire.Filter.Abstractions;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Models;
 
-[ExcludeFromCodeCoverage]
 public static class TestConfig
 {
     public static readonly FilterConfiguration IgnoreParseExceptions = new() { IgnoreParseExceptions = true };

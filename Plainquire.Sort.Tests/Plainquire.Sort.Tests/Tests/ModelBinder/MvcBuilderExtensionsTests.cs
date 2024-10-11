@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.ModelBinder;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class MvcBuilderExtensionsTests
 {
     [TestMethod]

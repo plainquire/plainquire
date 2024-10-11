@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntitySortCastTests

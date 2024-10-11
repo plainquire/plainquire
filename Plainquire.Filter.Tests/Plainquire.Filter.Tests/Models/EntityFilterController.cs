@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Models;
 
-[ExcludeFromCodeCoverage]
 [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Controller actions must not static")]
 [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Parameters required by tests")]
 public class EntityFilterController : Controller

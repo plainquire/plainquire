@@ -3,7 +3,6 @@ using Plainquire.Filter.Newtonsoft;
 using Plainquire.Filter.Tests.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -12,7 +11,6 @@ namespace Plainquire.Filter.Tests.Services;
 
 public delegate List<TEntity> EntityFilterFunc<TEntity>(ICollection<TEntity> testItems, EntityFilter<TEntity> filter, IFilterInterceptor? interceptor = null);
 
-[ExcludeFromCodeCoverage]
 public static class EntityFilterFunctions
 {
     public static IEnumerable<EntityFilterFunc<TEntity>> GetEntityFilterFunctions<TEntity>() where TEntity : class

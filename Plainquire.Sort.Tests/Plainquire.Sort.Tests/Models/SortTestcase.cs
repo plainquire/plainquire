@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace Plainquire.Sort.Tests.Models;
 
-[ExcludeFromCodeCoverage]
 public class SortTestcase<TModel> : SortTestcase
 {
     public required Expression<Func<TModel, object?>> PropertySelector { get; init; }
@@ -24,7 +22,6 @@ public class SortTestcase<TModel> : SortTestcase
         };
 }
 
-[ExcludeFromCodeCoverage]
 public abstract class SortTestcase
 {
     public required string Syntax { get; init; }

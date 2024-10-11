@@ -2,13 +2,11 @@
 using Plainquire.Filter.Tests.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
 namespace Plainquire.Filter.Tests.Services;
 
-[ExcludeFromCodeCoverage]
 [AttributeUsage(AttributeTargets.Method)]
 public class FilterTestDataSourceAttribute : Attribute, ITestDataSource
 {
