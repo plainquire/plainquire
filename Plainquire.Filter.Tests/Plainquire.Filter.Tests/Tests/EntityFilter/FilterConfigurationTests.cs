@@ -19,7 +19,7 @@ public class FilterConfigurationTests
 
         configuration.Should().BeEquivalentTo(new FilterConfiguration
         {
-            UseConditionalAccess = ConditionalAccess.WhenCompiled
+            UseConditionalAccess = FilterConditionalAccess.WhenCompiled
         });
     }
 
@@ -30,7 +30,7 @@ public class FilterConfigurationTests
     {
         var configuration = new FilterConfiguration
         {
-            UseConditionalAccess = ConditionalAccess.Never
+            UseConditionalAccess = FilterConditionalAccess.Never
         };
 
         var nestedFilter = new EntityFilter<TestModelNested>(configuration)
@@ -55,7 +55,7 @@ public class FilterConfigurationTests
     {
         var configuration = new FilterConfiguration
         {
-            UseConditionalAccess = ConditionalAccess.Always
+            UseConditionalAccess = FilterConditionalAccess.Always
         };
 
         var nestedFilter = new EntityFilter<TestModelNested>(configuration)

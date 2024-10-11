@@ -19,7 +19,7 @@ public class SortConfigurationTests
 
         configuration.Should().BeEquivalentTo(new SortConfiguration
         {
-            UseConditionalAccess = ConditionalAccess.WhenEnumerableQuery
+            UseConditionalAccess = SortConditionalAccess.WhenEnumerableQuery
         });
     }
 
@@ -36,7 +36,7 @@ public class SortConfigurationTests
 
         var configuration = new SortConfiguration
         {
-            UseConditionalAccess = ConditionalAccess.Never
+            UseConditionalAccess = SortConditionalAccess.Never
         };
 
         var sort = new EntitySort<TestModel<string>>(configuration)
@@ -52,7 +52,7 @@ public class SortConfigurationTests
     {
         var configuration = new SortConfiguration
         {
-            UseConditionalAccess = ConditionalAccess.Always
+            UseConditionalAccess = SortConditionalAccess.Always
         };
 
         var sort = new EntitySort<TestModel<string>>(configuration)

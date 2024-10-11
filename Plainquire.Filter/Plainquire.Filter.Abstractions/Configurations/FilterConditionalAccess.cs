@@ -3,7 +3,7 @@
 /// <summary>
 /// Controls the use of conditional access to navigation properties.
 /// </summary>
-public enum ConditionalAccess
+public enum FilterConditionalAccess
 {
     /// <summary>
     /// Never use conditional access (<c>person => person.Name</c>).

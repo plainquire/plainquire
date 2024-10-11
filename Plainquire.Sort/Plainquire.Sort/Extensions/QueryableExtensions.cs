@@ -144,11 +144,11 @@ public static class QueryableExtensions
     {
         switch (configuration.UseConditionalAccess)
         {
-            case ConditionalAccess.Never:
+            case SortConditionalAccess.Never:
                 return false;
-            case ConditionalAccess.Always:
+            case SortConditionalAccess.Always:
                 return true;
-            case ConditionalAccess.WhenEnumerableQuery:
+            case SortConditionalAccess.WhenEnumerableQuery:
                 var providerType = provider.GetType();
                 var isEnumerableQueryProvider = providerType.IsGenericType && providerType.GetGenericTypeDefinition() == typeof(EnumerableQuery<>);
                 return isEnumerableQueryProvider;
