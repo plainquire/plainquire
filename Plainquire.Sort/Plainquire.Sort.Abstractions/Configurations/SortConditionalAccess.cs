@@ -5,7 +5,7 @@ namespace Plainquire.Sort.Abstractions;
 /// <summary>
 /// Controls the use of conditional access to navigation properties.
 /// </summary>
-public enum ConditionalAccess
+public enum SortConditionalAccess
 {
     /// <summary>
     /// Never use conditional access (e.g. <c>person => person.Name</c>)

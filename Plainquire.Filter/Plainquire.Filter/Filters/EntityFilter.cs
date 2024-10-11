@@ -493,8 +493,8 @@ public class EntityFilter : ICloneable
     private static bool UseConditionalAccess(FilterConfiguration configuration, bool usedAsCompiledExpression)
         => configuration.UseConditionalAccess switch
         {
-            ConditionalAccess.Always => true,
-            ConditionalAccess.Never => false,
+            FilterConditionalAccess.Always => true,
+            FilterConditionalAccess.Never => false,
             _ => usedAsCompiledExpression
         };
 }

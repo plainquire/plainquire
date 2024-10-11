@@ -18,8 +18,8 @@ public class FilterConfiguration
     /// </summary>
     public string CultureName { get; set; } = CultureInfo.CurrentCulture.Name;
 
-    /// <inheritdoc cref="ConditionalAccess"/>/>
-    public ConditionalAccess UseConditionalAccess { get; set; } = ConditionalAccess.WhenCompiled;
+    /// <inheritdoc cref="FilterConditionalAccess"/>/>
+    public FilterConditionalAccess UseConditionalAccess { get; set; } = FilterConditionalAccess.WhenCompiled;
 
     /// <summary>
     /// Return <c>x => true</c> in case of any exception while parsing the value

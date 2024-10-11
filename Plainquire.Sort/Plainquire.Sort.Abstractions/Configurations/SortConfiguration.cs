@@ -41,8 +41,8 @@ public class SortConfiguration
     /// </summary>
     public bool IgnoreParseExceptions { get; set; }
 
-    /// <inheritdoc cref="ConditionalAccess"/>/>
-    public ConditionalAccess UseConditionalAccess { get; set; } = ConditionalAccess.WhenEnumerableQuery;
+    /// <inheritdoc cref="SortConditionalAccess"/>/>
+    public SortConditionalAccess UseConditionalAccess { get; set; } = SortConditionalAccess.WhenEnumerableQuery;
 
     /// <summary>
     /// Gets or sets a value indicating whether to use case-insensitive property matching.
