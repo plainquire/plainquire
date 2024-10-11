@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.OpenApiFilter;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntityPageSetParameterPositionTests

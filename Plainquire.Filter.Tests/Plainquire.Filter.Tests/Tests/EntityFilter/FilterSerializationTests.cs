@@ -10,7 +10,7 @@ using NewtonSerializer = Newtonsoft.Json.JsonConvert;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class FilterSerializationTests
 {
     [TestMethod]

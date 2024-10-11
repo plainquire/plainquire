@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Models;
 
-[ExcludeFromCodeCoverage]
 public class TestDbContext<TEntity> : DbContext
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

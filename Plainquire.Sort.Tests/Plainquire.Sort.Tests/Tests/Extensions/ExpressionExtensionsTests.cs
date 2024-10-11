@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace Plainquire.Sort.Tests.Tests.Extensions;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class ExpressionExtensionsTests
 {
     [TestMethod]

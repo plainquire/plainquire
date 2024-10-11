@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class FilterConfigurationTests
 {
     [TestMethod]

@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class EntityFilterExtensionsTests
 {
     [TestMethod]
@@ -142,7 +142,6 @@ public class EntityFilterExtensionsTests
 
     [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
     [SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
-    [ExcludeFromCodeCoverage]
     [EntityFilter(Prefix = "Test")]
     private class FilterAttributeTestModel
     {

@@ -8,7 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.Converter;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class JsonConverterExtensionsTests
 {
     [TestMethod]

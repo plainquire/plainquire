@@ -7,12 +7,10 @@
 
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Swashbuckle.AspNetCore.TestSupport
 {
-    [ExcludeFromCodeCoverage]
     public static class ModelMetadataFactory
     {
         public static ModelMetadata CreateForType(Type type)

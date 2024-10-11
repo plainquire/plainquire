@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Page.Tests.Models;
 
-[ExcludeFromCodeCoverage]
 public class EntityPageNamePageModel : PageModel
 {
     [FromQuery]

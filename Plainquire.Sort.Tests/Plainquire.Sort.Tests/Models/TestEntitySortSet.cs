@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Sort.Tests.Models;
 
-[ExcludeFromCodeCoverage]
 [EntitySortSet]
 [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Required by model binders")]
 public class TestEntitySortSet

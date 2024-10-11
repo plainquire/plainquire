@@ -13,7 +13,7 @@ using System.Reflection;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class InterceptorTests
 {
     [DataTestMethod]

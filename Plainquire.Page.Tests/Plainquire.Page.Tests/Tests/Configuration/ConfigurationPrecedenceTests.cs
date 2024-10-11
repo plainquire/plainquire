@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Plainquire.Page.Tests.Tests.Configuration;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class ConfigurationPrecedenceTests
 {
     private static readonly PageConfiguration _unusedConfiguration = new();

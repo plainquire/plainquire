@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Sort.Tests.Tests.PropertySort;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class PropertySortExceptionTests
 {
 

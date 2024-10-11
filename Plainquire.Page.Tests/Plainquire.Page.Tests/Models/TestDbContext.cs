@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Page.Tests.Models;
 
-[ExcludeFromCodeCoverage]
 public class TestDbContext<TValue> : DbContext
 {
     private readonly bool _useSqlite;

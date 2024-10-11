@@ -4,12 +4,10 @@ using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Filter.Tests.Extensions;
 
-[ExcludeFromCodeCoverage]
 public static class FilterTestCaseExtensions
 {
     public static void Run<TFilterValue, TModelValue>(this FilterTestCase<TFilterValue, TModelValue> testCase, ICollection<TestModel<TModelValue>> testItems, EntityFilterFunc<TestModel<TModelValue>> filterFunc)

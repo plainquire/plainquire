@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Models;
 
-[ExcludeFromCodeCoverage]
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class TestModel<TValue>
 {
@@ -23,7 +21,6 @@ public class TestModel<TValue>
     [Filter(Name = "ValueC")]
     public string? ValueRenamed { get; init; }
 
-    [ExcludeFromCodeCoverage]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay
     {

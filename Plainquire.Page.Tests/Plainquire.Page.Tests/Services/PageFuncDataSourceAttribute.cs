@@ -1,13 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
 namespace Plainquire.Page.Tests.Services;
 
-[ExcludeFromCodeCoverage]
 [AttributeUsage(AttributeTargets.Method)]
 public class PageFuncDataSourceAttribute<TEntity> : Attribute, ITestDataSource where TEntity : class
 {

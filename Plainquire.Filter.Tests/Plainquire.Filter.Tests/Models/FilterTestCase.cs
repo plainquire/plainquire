@@ -1,10 +1,8 @@
 ﻿using Plainquire.Filter.Abstractions;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Models;
 
-[ExcludeFromCodeCoverage]
 public class FilterTestCase<TFilterValue, TModelValue> : FilterTestCase
 {
     public FilterOperator FilterOperator { get; private init; }
@@ -54,7 +52,6 @@ public class FilterTestCase<TFilterValue, TModelValue> : FilterTestCase
         };
 }
 
-[ExcludeFromCodeCoverage]
 public class FilterTestCase
 {
     public int Id { get; }

@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class EntityPageTests
 {
     private static readonly PageTestcase<TestModel<string>>[] _validPages =

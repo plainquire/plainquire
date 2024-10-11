@@ -8,14 +8,12 @@ using Swashbuckle.AspNetCore.SwaggerGen.Test;
 using Swashbuckle.AspNetCore.TestSupport;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
 namespace Plainquire.Swashbuckle.TestSupport.Services;
 
-[ExcludeFromCodeCoverage]
 public static class SwaggerGeneratorFactory
 {
     public static SwaggerGenerator Create<TController>(string actionName, List<IOperationFilter> operationFilters) where TController : new()

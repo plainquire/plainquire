@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class FilterForDateTimeOffsetBySyntaxTests
 {
     [DataTestMethod]

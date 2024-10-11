@@ -2,13 +2,11 @@
 using Plainquire.Page.Tests.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
 namespace Plainquire.Page.Tests.Services;
 
-[ExcludeFromCodeCoverage]
 [AttributeUsage(AttributeTargets.Method)]
 public class PageTestCaseDataSourceAttribute : Attribute, ITestDataSource
 {

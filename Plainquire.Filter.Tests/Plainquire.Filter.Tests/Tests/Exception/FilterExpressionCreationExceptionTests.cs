@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.Exception;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class FilterExpressionCreationExceptionTests
 {
     [TestMethod]

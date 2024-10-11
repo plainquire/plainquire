@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 
 namespace Plainquire.Sort.Tests.Tests.PropertySort;
 
-[TestClass, ExcludeFromCodeCoverage]
+[TestClass]
 public class PropertySortExpressionTests
 {
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
