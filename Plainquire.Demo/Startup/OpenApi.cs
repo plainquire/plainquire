@@ -4,10 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Plainquire.Demo.Extensions;
 using Plainquire.Demo.Routing;
+using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Swashbuckle;
 using Plainquire.Page.Swashbuckle;
+using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Swashbuckle;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace Plainquire.Demo.Startup;
@@ -61,6 +65,7 @@ internal static class OpenApi
                 c.AddFilterSupport(filterExpressionDoc, plainquireDemoDoc);
                 c.AddSortSupport(sortQueryableDoc, plainquireDemoDoc);
                 c.AddPageSupport(pageQueryableDoc, plainquireDemoDoc);
+                c.DocumentFilter<RemoveUnusedSchemata>();
                 c.IncludeXmlComments(filterExpressionDoc);
                 c.IncludeXmlComments(sortQueryableDoc);
                 c.IncludeXmlComments(pageQueryableDoc);
@@ -70,4 +75,15 @@ internal static class OpenApi
 
     private static bool IsOpenApiRoute(this PathString path) =>
         path.StartsWithSegments(SWAGGER_UI_ROUTE) || path.StartsWithSegments(OPEN_API_UI_ROUTE);
+
+    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
+    private class RemoveUnusedSchemata : IDocumentFilter
+    {
+        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+        {
+            swaggerDoc.Components.Schemas.Remove(nameof(FilterConditionalAccess));
+            swaggerDoc.Components.Schemas.Remove(nameof(SortConditionalAccess));
+            swaggerDoc.Components.Schemas.Remove(nameof(FilterOperator));
+        }
+    }
 }
