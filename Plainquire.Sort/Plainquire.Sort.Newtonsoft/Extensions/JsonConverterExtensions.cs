@@ -15,7 +15,6 @@ public static class JsonConverterExtensions
     public static readonly JsonConverter[] NewtonsoftConverters =
     [
         new EntitySortConverter(),
-        new PropertySortConverter()
     ];
 
     /// <summary>

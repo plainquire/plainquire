@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using Plainquire.Sort.Newtonsoft;
 using Plainquire.Sort.Newtonsoft.JsonConverters;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Sort.Tests.Tests.Converter;
 
@@ -20,8 +19,7 @@ public class JsonConverterExtensionsTests
         converters.AddSortNewtonsoftSupport();
 
         using var _ = new AssertionScope();
-        converters.Should().HaveCount(2);
+        converters.Should().HaveCount(1);
         converters.Should().Contain(x => x.GetType().Name == nameof(EntitySortConverter));
-        converters.Should().Contain(x => x.GetType().Name == nameof(PropertySortConverter));
     }
 }
