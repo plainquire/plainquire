@@ -32,6 +32,10 @@ Previously the filter `property=~1` (property contains `1`) for `enum MyEnum { V
 
 The default operator `EqualCaseInsensitive` (filter `property=1`) still matches `Value0`.
 
+### Page sets removed
+
+`PageSetAttribute` and related features removed because they were too complex and impractical.
+
 # 5.2.0
 
 ## Changes

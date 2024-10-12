@@ -114,6 +114,5 @@ public class EntityPageParameterPositionTests
         =>
         [
             new EntityPageParameterReplacer(serviceProvider),
-            new EntityPageSetParameterReplacer(serviceProvider)
         ];
 }

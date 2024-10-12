@@ -20,7 +20,6 @@ public static class SwaggerGenOptionsExtensions
     public static SwaggerGenOptions AddPageSupport(this SwaggerGenOptions options, params string[] xmlDocumentationFilePaths)
     {
         options.OperationFilter<EntityPageParameterReplacer>();
-        options.OperationFilter<EntityPageSetParameterReplacer>();
         return options;
     }
 }

@@ -161,6 +161,5 @@ public class EntityPageParameterNameTests
         =>
         [
             new EntityPageParameterReplacer(serviceProvider),
-            new EntityPageSetParameterReplacer(serviceProvider)
         ];
 }
