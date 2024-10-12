@@ -8,6 +8,7 @@ namespace Plainquire.Sort.Abstractions;
 /// <summary>
 /// Holds sort order specific configuration.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 public class SortConfiguration
 {

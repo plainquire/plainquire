@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace Plainquire.Filter.Abstractions;
@@ -6,6 +7,7 @@ namespace Plainquire.Filter.Abstractions;
 /// <summary>
 /// Configuration for micro syntax used to parse HTTP query parameters.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class FilterConfiguration
 {
     /// <summary>

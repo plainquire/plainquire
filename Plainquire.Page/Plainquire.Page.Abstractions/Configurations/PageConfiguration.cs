@@ -1,8 +1,11 @@
-﻿namespace Plainquire.Page.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Plainquire.Page.Abstractions;
 
 /// <summary>
 /// Holds paging specific configuration.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class PageConfiguration
 {
     /// <summary>
