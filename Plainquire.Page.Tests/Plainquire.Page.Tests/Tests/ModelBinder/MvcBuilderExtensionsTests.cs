@@ -8,7 +8,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Plainquire.Page.Mvc;
 using Plainquire.Page.Mvc.ModelBinders;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.ModelBinder;
@@ -29,8 +28,7 @@ public class MvcBuilderExtensionsTests
         var mvcOptions = serviceProvider.GetRequiredService<IOptions<MvcOptions>>().Value;
 
         using var _ = new AssertionScope();
-        mvcOptions.ModelBinderProviders.Should().HaveCount(2);
+        mvcOptions.ModelBinderProviders.Should().ContainSingle();
         mvcOptions.ModelBinderProviders.Should().Contain(x => x.GetType().Name == nameof(EntityPageModelBinderProvider));
-        mvcOptions.ModelBinderProviders.Should().Contain(x => x.GetType().Name == nameof(EntityPageSetModelBinderProvider));
     }
 }

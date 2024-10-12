@@ -1,3 +1,67 @@
+# 6.0.0
+
+## New Features
+
+Support for filter operators `StartsWith` and `EndsWith` added
+
+Characters used to separate filter values are now configurable
+
+Character used to escape filter values are configurable
+
+Handling for escaped values in micro syntax implemented
+
+## Breaking Changes
+
+### Conditional member access for generated filter expressions (not functions) removed
+
+By default, an implicit cast to `Expression<Func<TEntity, bool>>` omits conditional property access (`x => x?.Value`) from now, while an implicit cast to `Func<TEntity, bool>` includes it. Users employing the common syntax `items.Where(filter)` should rarely notice any difference.
+
+A new configuration value, `FilterConfiguration.UseConditionalAccess`, has been added to control the generation of conditional access. For compiled LINQ queries, conditional access is typically required. However, this can often be omitted for expressions used by ORM mappers.
+
+To restore the previous behavior, set `FilterConfiguration.UseConditionalAccess` to `FilterConditionalAccess.Always`.
+
+The enum `ConditionalAccess` of `SortConfiguration` was renamed to `SortConditionalAccess` for clearer distinction.
+
+### Sorting and pagination query parameters are now case-insensitive
+
+There is no longer a difference between `&orderBy=<property>` and `&OrderBy=<property>`
+
+### Filter `contains` for enum now uses the enum's string representation
+
+Previously the filter `property=~1` (property contains `1`) for `enum MyEnum { Value0 = 1, Value1 = 2 }` matched `Value0` because of it's underlying value `1`. Now it matches `Value1`.
+
+The default operator `EqualCaseInsensitive` (filter `property=1`) still matches `Value0`.
+
+### Page sets removed
+
+`PageSetAttribute` and related features removed because they were too complex and impractical.
+
+# 5.2.0
+
+## Changes
+
+Support for parameter binding via PageModel added
+
+# 5.1.1
+
+## Fixes
+
+Fix null-reference exception when unused parameters from route are accessed
+
+# 5.1.0
+
+## Changes
+
+Convince methods for filter interception added
+
+Filter interception sample added to documentation
+
+# 5.0.1
+
+## Fixes
+
+Handling of later-bound sort pre/postfix strings fixed
+
 # 5.0.0
 
 ## New Features

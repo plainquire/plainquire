@@ -19,7 +19,6 @@ public static class MvcBuilderExtensions
         mvcBuilder.Services.Configure<MvcOptions>(options =>
         {
             options.ModelBinderProviders.Insert(0, new EntityPageModelBinderProvider());
-            options.ModelBinderProviders.Insert(0, new EntityPageSetModelBinderProvider());
         });
 
         return mvcBuilder;
