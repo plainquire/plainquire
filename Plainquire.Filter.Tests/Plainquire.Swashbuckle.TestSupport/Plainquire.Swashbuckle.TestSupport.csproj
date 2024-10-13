@@ -1,12 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../../Build/build_tests.props" />
+  <Import Project="../../Build/build_core.props" />
   <Import Project="../../Build/build_version.props" />
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
+  </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.12.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.8.1" />
   </ItemGroup>
 
