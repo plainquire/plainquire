@@ -26,9 +26,3 @@ jobs:
         dotnet-version: 8.0.x
     - name: Test
       run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "TestResults"
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-results
-        path: TestResults
-      if: ${{ always() }}
