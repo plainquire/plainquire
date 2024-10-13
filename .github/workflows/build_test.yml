@@ -17,6 +17,8 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -26,13 +28,29 @@ jobs:
         dotnet-version: 8.0.x
     - name: Test
       run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "TestResults"
-    - name: Create Test Coverage Badge
-      uses: simon-k/dotnet-code-coverage-badge@v1.0.0
-      id: create_coverage_badge
+    # - name: Create Test Coverage Badge
+    #   uses: simon-k/dotnet-code-coverage-badge@v1.0.0
+    #   id: create_coverage_badge
+    #   with:
+    #     label: Unit Test Coverage
+    #     color: brightgreen
+    #     path: TestResults/coverage.opencover.xml
+    #     gist-filename: plainquire-code-coverage-badge.json
+    #     gist-id: 138006474693c9a3040e469ede06a423
+    #     gist-auth-token: ${{ secrets.CODE_COVERAGE_BADGE }}
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
       with:
-        label: Unit Test Coverage
-        color: brightgreen
-        path: TestResults/coverage.opencover.xml
-        gist-filename: plainquire-code-coverage-badge.json
-        gist-id: 138006474693c9a3040e469ede06a423
-        gist-auth-token: ${{ secrets.CODE_COVERAGE_BADGE }}
+        files: |
+          TestResults/*.trx
+        comment_mode: off
+        check_run: false
+        job_summary: true
+        json_file: TestResults/testresult.json
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: TestResults
