@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Filter.Tests.Tests.Configuration;
@@ -12,7 +11,7 @@ namespace Plainquire.Filter.Tests.Tests.Configuration;
 [TestFixture]
 public class SyntaxConfigurationTests
 {
-    [TestMethod]
+    [Test]
     public void WhenConfigurationIsCreated_ThenDefaultValuesAreSet()
     {
         var configuration = new FilterConfiguration();

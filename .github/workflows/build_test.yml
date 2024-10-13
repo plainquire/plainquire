@@ -1,9 +1,10 @@
-name: Build+Test
+name: Build & Test
 
 on: [ push, pull_request ]
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -16,13 +17,60 @@ jobs:
       run: dotnet build --configuration Release -warnaserror
 
   test:
+    name: Test
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
+    outputs:
+      test_report_json: ${{ steps.test_report.outputs.json }}
+      coverage_report_json: ${{ steps.coverage_report.outputs.json }}
+      versionA: ${{ steps.vars.outputs.version }}
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Test
-      run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "TestResults"
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Run tests
+        run: dotnet test --configuration Release -warnaserror --settings:.runsettings
+      - name: Aggregate and publish test results
+        id: test_report
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            testreport/*.Tests.xml
+          comment_mode: off
+          check_run: false
+          job_summary: true
+          json_file: testreport/testresult.json
+      - name: Aggregate code coverage
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.3.11
+        if: always()
+        with:
+          reports: testreport/**/coverage.opencover.xml
+          title: "Code Coverage"
+          targetdir: coveragereport
+          reporttypes: HtmlInline;MarkdownSummaryGithub;JsonSummary
+          license: ${{ secrets.REPORTGENERATOR_LICENSE }}
+      - name: Publish coverage
+        id: coverage_report
+        if: always()
+        shell: bash
+        run: |
+          cat coveragereport/SummaryGithub.md | sed -e 's/# Summary - Code Coverage/## Code Coverage/g' >> $GITHUB_STEP_SUMMARY
+          echo "json=$(cat coveragereport/Summary.json | tr --delete '\n' | sed -e 's/[()\`]/Y/g')" >> $GITHUB_OUTPUT
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: testreport
+      - name: Upload code coverage reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-reports
+          path: coveragereport

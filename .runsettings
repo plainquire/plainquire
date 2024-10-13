@@ -1,22 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <RunSettings>
+  <RunConfiguration>
+    <ResultsDirectory>./testreport</ResultsDirectory>
+  </RunConfiguration>
+
+  <LoggerRunSettings>
+    <Loggers>
+      <Logger friendlyName="trx" enabled="False" />
+      <Logger friendlyName="html" enabled="False" />
+    </Loggers>
+  </LoggerRunSettings>
+
+  <NUnit>
+    <TestOutputXml>./testreport</TestOutputXml>
+    <OutputXmlFolderMode>UseResultDirectory</OutputXmlFolderMode>
+  </NUnit>
+
   <DataCollectionRunSettings>
     <DataCollectors>
-      <DataCollector friendlyName="Code Coverage">
+      <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
-          <CodeCoverage>
-            <ModulePaths>
-              <Exclude>
-                <ModulePath>FakeItEasy.dll</ModulePath>
-              </Exclude>
-            </ModulePaths>
-            <Functions>
-              <Exclude>
-                <Function>get_\w+\(\)</Function>
-                <Function>set_\w+\(.*\)</Function>
-              </Exclude>
-            </Functions>
-          </CodeCoverage>
+          <Format>opencover</Format>
+          <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+          <SkipAutoProps>true</SkipAutoProps>
+          <IncludeTestAssembly>false</IncludeTestAssembly>
         </Configuration>
       </DataCollector>
     </DataCollectors>

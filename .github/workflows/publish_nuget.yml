@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -18,18 +19,138 @@ jobs:
       run: dotnet build --configuration Release -warnaserror
 
   test:
+    name: Test
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: read
+    outputs:
+      test_report_json: ${{ steps.test_report.outputs.json }}
+      coverage_report_json: ${{ steps.coverage_report.outputs.json }}
+      versionA: ${{ steps.vars.outputs.version }}
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Test
-      run: dotnet test --configuration Release -warnaserror
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Run tests
+        run: dotnet test --configuration Release -warnaserror --settings:.runsettings
+      - name: Aggregate and publish test results
+        id: test_report
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            testreport/*.Tests.xml
+          comment_mode: off
+          check_run: false
+          job_summary: true
+          json_file: testreport/testresult.json
+      - name: Aggregate code coverage
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.3.11
+        if: always()
+        with:
+          reports: testreport/**/coverage.opencover.xml
+          title: "Code Coverage"
+          targetdir: coveragereport
+          reporttypes: HtmlInline;MarkdownSummaryGithub;JsonSummary
+          license: ${{ secrets.REPORTGENERATOR_LICENSE }}
+      - name: Publish coverage
+        id: coverage_report
+        if: always()
+        shell: bash
+        run: |
+          cat coveragereport/SummaryGithub.md | sed -e 's/# Summary - Code Coverage/## Code Coverage/g' >> $GITHUB_STEP_SUMMARY
+          echo "json=$(cat coveragereport/Summary.json | tr --delete '\n' | sed -e 's/[()\`]/Y/g')" >> $GITHUB_OUTPUT
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: testreport
+      - name: Upload code coverage reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-reports
+          path: coveragereport
+
+  pages:
+    name: Publish build & test results
+    runs-on: ubuntu-latest
+    needs: [build, test]
+    if: always()
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+    steps:
+      - name: Create index.html
+        run: |
+          mkdir -p _site
+          cat > _site/index.html <<EOL
+          <!doctype html>
+          <html lang=en>
+          <head>
+              <meta charset=utf-8>
+              <title>Plainquire</title>
+          </head>
+          <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+              <a href="https://www.plainquire.com" style="width: 50vw">
+                  <img src="https://www.plainquire.com/images/logo_light.svg">
+              </a>
+          </body>
+          </html>
+          EOL
+      - name: Create badges
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LICENSE: "MIT"
+          BUILD_STATUS: ${{ needs.build.result == 'success' && 'passing' || 'failed' }}
+          BUILD_COLOR: ${{ needs.build.result == 'success' && 'green' || 'red' }}
+          TESTS_PASSED: ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_succ }}
+          TESTS_FAILED: ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_fail }}
+          COVERAGE_STATUS: ${{ fromJson(needs.test.outputs.coverage_report_json).summary.linecoverage }}
+          BASE_PATH: "_site/badges"
+        run:  |
+          mkdir -p ${BASE_PATH}
+          # Release badge
+          LATEST_RELEASE=$(curl -sH "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/plainquire/plainquire/releases/latest" | jq -r .tag_name)
+          curl https://img.shields.io/badge/release-${LATEST_RELEASE}-blue > ${BASE_PATH}/release.svg
+          # License badge
+          curl https://img.shields.io/badge/license-${LICENSE}-blue > ${BASE_PATH}/license.svg
+          # Build badge
+          curl https://img.shields.io/badge/build-${BUILD_STATUS}-${BUILD_COLOR} > ${BASE_PATH}/build.svg
+          # Tests badge
+          [[ ${TESTS_FAILED} -eq 0 ]] && TEST_COUNT=${TESTS_PASSED} || TEST_COUNT=${TESTS_FAILED}
+          [[ ${TESTS_FAILED} -eq 0 ]] && TEST_STATUS="passed" || TEST_STATUS="failed"
+          [[ ${TESTS_FAILED} -eq 0 ]] && TEST_COLOR="green" || TEST_COLOR="red"
+          curl https://img.shields.io/badge/tests-${TEST_COUNT}_${TEST_STATUS}-${TEST_COLOR} > ${BASE_PATH}/tests.svg
+          # Coverage badge
+          [[ $COVERAGE_STATUS -lt 85 ]] && COVERAGE_COLOR="red" || { [[ $COVERAGE_STATUS -lt 90 ]] && COVERAGE_COLOR="orange" || COVERAGE_COLOR="green"; }
+          curl https://img.shields.io/badge/coverage-${COVERAGE_STATUS}%25-${COVERAGE_COLOR} > ${BASE_PATH}/coverage.svg
+      - name: Download converage report
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-reports
+          path: _site/coveragereport
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
   publish:
+    name: Publish NuGet packages
     needs: [build, test]
     runs-on: ubuntu-latest
     permissions:
