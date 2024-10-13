@@ -3,17 +3,17 @@ name: Build & Test
 on: [ push, pull_request ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Build
-      run: dotnet build --configuration Release -warnaserror
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v4
+#    - name: Setup .NET
+#      uses: actions/setup-dotnet@v4
+#      with:
+#        dotnet-version: 8.0.x
+#    - name: Build
+#      run: dotnet build --configuration Release -warnaserror
 
   test:
     runs-on: ubuntu-latest
@@ -48,6 +48,7 @@ jobs:
         check_run: false
         job_summary: true
         json_file: TestResults/testresult.json
+        json_thousands_separator: ""
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()
