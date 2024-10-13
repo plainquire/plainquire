@@ -26,3 +26,13 @@ jobs:
         dotnet-version: 8.0.x
     - name: Test
       run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "TestResults"
+    - name: Create Test Coverage Badge
+      uses: simon-k/dotnet-code-coverage-badge@v1.0.0
+      id: create_coverage_badge
+      with:
+        label: Unit Test Coverage
+        color: brightgreen
+        path: TestResults/coverage.opencover.xml
+        gist-filename: plainquire-code-coverage-badge.json
+        gist-id: 138006474693c9a3040e469ede06a423
+        gist-auth-token: ${{ secrets.CODE_COVERAGE_BADGE }}

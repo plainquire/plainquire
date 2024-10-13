@@ -12,6 +12,7 @@
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutput>../../TestResults/</CoverletOutput>
+    <CoverletOutputFormat>opencover</CoverletOutputFormat>
     <SkipAutoProps>true</SkipAutoProps>
   </PropertyGroup>
 
