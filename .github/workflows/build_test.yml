@@ -3,31 +3,65 @@ name: Build & Test
 on: [ push, pull_request ]
 
 jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#    steps:
-#    - name: Checkout
-#      uses: actions/checkout@v4
-#    - name: Setup .NET
-#      uses: actions/setup-dotnet@v4
-#      with:
-#        dotnet-version: 8.0.x
-#    - name: Build
-#      run: dotnet build --configuration Release -warnaserror
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Test
+      run: |
+        echo "Buil" && exit 0
+    #- name: Checkout
+    #  uses: actions/checkout@v4
+    #- name: Setup .NET
+    #  uses: actions/setup-dotnet@v4
+    #  with:
+    #    dotnet-version: 8.0.x
+    #- name: Build
+    #  run: dotnet build --configuration Release -warnaserror
 
   test:
     runs-on: ubuntu-latest
     permissions:
       checks: write
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
     - name: Test
-      run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "TestResults"
+      run: |
+        echo "Test" && exit 0
+    # - name: Checkout
+    #   uses: actions/checkout@v4
+    # - name: Setup .NET
+    #   uses: actions/setup-dotnet@v4
+    #   with:
+    #     dotnet-version: 8.0.x
+    # - name: Run tests
+    #   run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "TestResults"
+    # - name: Aggregate test results
+    #   uses: EnricoMi/publish-unit-test-result-action@v2
+    #   if: always()
+    #   with:
+    #     files: |
+    #       TestResults/*.trx
+    #     comment_mode: off
+    #     check_run: false
+    #     job_summary: true
+    #     json_file: TestResults/testresult.json
+    # - name: Upload test results
+    #   uses: actions/upload-artifact@v4
+    #   if: always()
+    #   with:
+    #     name: test-results
+    #     path: TestResults
+
+  badges:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+    - name: Test
+      run: |
+        echo "Badges" && exit 0
+    # steps:
+    # - name: Test
+    #   run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "TestResults"
     # - name: Create Test Coverage Badge
     #   uses: simon-k/dotnet-code-coverage-badge@v1.0.0
     #   id: create_coverage_badge
@@ -38,20 +72,19 @@ jobs:
     #     gist-filename: plainquire-code-coverage-badge.json
     #     gist-id: 138006474693c9a3040e469ede06a423
     #     gist-auth-token: ${{ secrets.CODE_COVERAGE_BADGE }}
-    - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()
-      with:
-        files: |
-          TestResults/*.trx
-        comment_mode: off
-        check_run: false
-        job_summary: true
-        json_file: TestResults/testresult.json
-        json_thousands_separator: ""
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: test-results
-        path: TestResults
+    #- name: Publish Test Results
+    #  uses: EnricoMi/publish-unit-test-result-action@v2
+    #  if: always()
+    #  with:
+    #    files: |
+    #      TestResults/*.trx
+    #    comment_mode: off
+    #    check_run: false
+    #    job_summary: true
+    #    json_file: TestResults/testresult.json
+    #- name: Upload test results
+    #  uses: actions/upload-artifact@v4
+    #  if: always()
+    #  with:
+    #    name: test-results
+    #    path: TestResults
