@@ -51,14 +51,14 @@ jobs:
     #     name: test-results
     #     path: TestResults
 
-  badges:
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    permissions:
-      checks: write
-    - name: Test
-      run: |
-        echo "Badges" && exit 0
+  # badges:
+  #   needs: [build, test]
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     checks: write
+  #   - name: Test
+  #     run: |
+  #       echo "Badges" && exit 0
     # steps:
     # - name: Test
     #   run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "TestResults"
