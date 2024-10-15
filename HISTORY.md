@@ -4,11 +4,11 @@
 
 Support for filter operators `StartsWith` and `EndsWith` added
 
-Characters used to separate filter values are now configurable
+Escaped value handling added to micro syntax
 
-Character used to escape filter values are configurable
+Character to escape values from micro syntax made customizable
 
-Handling for escaped values in micro syntax implemented
+Characters to separate values from micro syntax made customizable
 
 ## Breaking Changes
 

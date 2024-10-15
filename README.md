@@ -1,6 +1,6 @@
 # Plainquire
 
-Unlock seamless **filtering**, **sorting**, and **paging** in .NET Standard 2.1 with Plainquire. Fully **customizable**, model binding support and Swagger UI  integration.
+Seamless **filtering**, **sorting**, and **paging** for .NET Standard 2.1. Fully **customizable**. Model binding support and integration into Swagger UI.
 
 ## Demo
 
