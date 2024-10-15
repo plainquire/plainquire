@@ -8,7 +8,7 @@ jobs:
     steps:
     - name: Test
       run: |
-        echo "Buil" && exit 0
+        echo "Build" && exit 0
     #- name: Checkout
     #  uses: actions/checkout@v4
     #- name: Setup .NET
@@ -22,34 +22,34 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       checks: write
+    outputs:
+      test_result_json: ${{ steps.test_results.outputs.json }}
     steps:
-    - name: Test
-      run: |
-        echo "Test" && exit 1
-    # - name: Checkout
-    #   uses: actions/checkout@v4
-    # - name: Setup .NET
-    #   uses: actions/setup-dotnet@v4
-    #   with:
-    #     dotnet-version: 8.0.x
-    # - name: Run tests
-    #   run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "TestResults"
-    # - name: Aggregate test results
-    #   uses: EnricoMi/publish-unit-test-result-action@v2
-    #   if: always()
-    #   with:
-    #     files: |
-    #       TestResults/*.trx
-    #     comment_mode: off
-    #     check_run: false
-    #     job_summary: true
-    #     json_file: TestResults/testresult.json
-    # - name: Upload test results
-    #   uses: actions/upload-artifact@v4
-    #   if: always()
-    #   with:
-    #     name: test-results
-    #     path: TestResults
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Run tests
+        run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "TestResults" --filter "ClassName~SyntaxConfigurationTests"
+      - name: Aggregate test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        id: test_results
+        if: always()
+        with:
+          files: |
+            TestResults/*.trx
+          comment_mode: off
+          check_run: false
+          job_summary: true
+          json_file: TestResults/testresult.json
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: TestResults
 
   badges:
     needs: [build, test]
@@ -58,13 +58,14 @@ jobs:
     permissions:
       checks: write
     steps:
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJson(needs) }}
+      - name: HelloOut
         run: |
-          echo "CTX: $JOB_CONTEXT"
-          echo "RST: ${{ needs.test.result }}"
-          echo "JSN: ${{ toJson(needs) }}"
+          echo "tests: ${{ fromJson(needs.test.outputs.test_result_json).stats.runs_succ }} passed"
+          echo "tests: ${{ fromJson(needs.test.outputs.test_result_json).stats.runs_fail }} failed"
+    #   - name: Badges
+    #     run: |
+    #       echo "RST: ${{ needs.test.result }}"
+    #       echo "JSN: ${{ toJson(needs) }}"
     # - name: Badges
     #   run: |
     #     echo "1: ${{ needs.dependent-upon-fails.result }}"
@@ -95,7 +96,7 @@ jobs:
     #   uses: actions/upload-artifact@v4
     #   if: always()
     #   with:
-    #     name: test-results
+    #     name: test_results
     #     path: TestResults
 
   # badges:
@@ -133,5 +134,5 @@ jobs:
     #  uses: actions/upload-artifact@v4
     #  if: always()
     #  with:
-    #    name: test-results
+    #    name: test_results
     #    path: TestResults

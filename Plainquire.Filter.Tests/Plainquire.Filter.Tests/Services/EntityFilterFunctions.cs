@@ -16,11 +16,11 @@ public static class EntityFilterFunctions
     public static IEnumerable<EntityFilterFunc<TEntity>> GetEntityFilterFunctions<TEntity>() where TEntity : class
         => [
             FilterDirectByLinq,
-            //FilterNetCloneByLinq,
-            //FilterNewtonCloneByLinq,
-            //FilterDirectByEF,
-            //FilterNetCloneByEF,
-            //FilterNewtonCloneByEF
+            FilterNetCloneByLinq,
+            FilterNewtonCloneByLinq,
+            FilterDirectByEF,
+            FilterNetCloneByEF,
+            FilterNewtonCloneByEF
         ];
 
     public static IEnumerable<object> GetEntityFilterFunctions(Type entityType)

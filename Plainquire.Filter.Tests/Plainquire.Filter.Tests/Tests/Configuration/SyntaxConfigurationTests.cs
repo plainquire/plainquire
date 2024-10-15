@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Plainquire.Filter.Abstractions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Filter.Tests.Tests.Configuration;
@@ -12,6 +11,21 @@ namespace Plainquire.Filter.Tests.Tests.Configuration;
 [TestClass]
 public class SyntaxConfigurationTests
 {
+    [DataTestMethod]
+    [DataRow("1"), DataRow("2")]
+    public void ShouldAlwaysFails(string index)
+    {
+        true.Should().BeFalse();
+    }
+
+    [DataTestMethod]
+    [Ignore("This test is ignored")]
+    [DataRow("1"), DataRow("2")]
+    public void SkippedTest(string index)
+    {
+
+    }
+
     [TestMethod]
     public void WhenConfigurationIsCreated_ThenDefaultValuesAreSet()
     {
