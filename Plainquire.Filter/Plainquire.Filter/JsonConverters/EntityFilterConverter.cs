@@ -1,31 +1,10 @@
-﻿using Plainquire.Filter.Abstractions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Plainquire.Filter.JsonConverters;
-
-/// <summary>
-/// <see cref="EntityFilter{TEntity}"/> specific JSON converter factory for Microsoft (System.Text.Json) JSON.
-/// Implements <see cref="JsonConverterFactory" />
-/// </summary>
-/// <seealso cref="JsonConverterFactory" />
-public class EntityFilterConverterFactory : JsonConverterFactory
-{
-    /// <inheritdoc />
-    public override bool CanConvert(Type typeToConvert)
-        => typeToConvert.IsGenericEntityFilter();
-
-    /// <inheritdoc />
-    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
-    {
-        var entityType = typeToConvert.GetGenericArguments()[0];
-        var entityFilterConverterType = typeof(EntityFilterConverter<>).MakeGenericType(entityType);
-        return (JsonConverter)Activator.CreateInstance(entityFilterConverterType);
-    }
-}
 
 /// <summary>
 /// <see cref="EntityFilter{TEntity}"/> specific JSON converter for Microsoft (System.Text.Json) JSON.
@@ -113,33 +92,24 @@ public class EntityFilterConverter : JsonConverter<EntityFilter>
                     .ToList()
             ))
             .ToList();
-}
 
-internal class EntityFilterConverterData
-{
-    public List<PropertyFilterConverterData>? PropertyFilters { get; set; } = [];
-
-    public List<NestedFilter>? NestedFilters { get; set; } = [];
-
-    public FilterConfiguration? Configuration { get; set; }
-}
-
-internal class PropertyFilterConverterData
-{
-    public PropertyFilterConverterData(string propertyName, List<ValueFilterConverterData> valueFilters)
+    /// <summary>
+    /// <see cref="EntityFilter{TEntity}"/> specific JSON converter factory for Microsoft (System.Text.Json) JSON.
+    /// Implements <see cref="JsonConverterFactory" />
+    /// </summary>
+    /// <seealso cref="JsonConverterFactory" />
+    public class Factory : JsonConverterFactory
     {
-        PropertyName = propertyName;
-        ValueFilters = valueFilters;
+        /// <inheritdoc />
+        public override bool CanConvert(Type typeToConvert)
+            => typeToConvert.IsGenericEntityFilter();
+
+        /// <inheritdoc />
+        public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+        {
+            var entityType = typeToConvert.GetGenericArguments()[0];
+            var entityFilterConverterType = typeof(EntityFilterConverter<>).MakeGenericType(entityType);
+            return (JsonConverter)Activator.CreateInstance(entityFilterConverterType);
+        }
     }
-
-    public string PropertyName { get; }
-
-    public List<ValueFilterConverterData> ValueFilters { get; }
-}
-
-internal class ValueFilterConverterData
-{
-    public FilterOperator Operator { get; set; }
-
-    public string? Value { get; set; }
 }

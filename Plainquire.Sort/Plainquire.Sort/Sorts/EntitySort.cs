@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Plainquire.Filter.Abstractions;
 
 namespace Plainquire.Sort;
 
@@ -15,7 +16,7 @@ namespace Plainquire.Sort;
 /// Hub to create sort order for <typeparamref name="TEntity"/> with fluent API.
 /// </summary>
 /// <typeparam name="TEntity">The entity type to be sorted.</typeparam>
-[JsonConverter(typeof(EntitySortConverterFactory))]
+[JsonConverter(typeof(EntitySortConverter.Factory))]
 public class EntitySort<TEntity> : EntitySort
 {
     /// <summary>
@@ -190,7 +191,7 @@ public class EntitySort
         var propertyPath = property.GetPropertyPath();
         var propertySort = PropertySorts
             .OrderBy(x => x.Position)
-            .LastOrDefault(sort => sort.PropertyPath == propertyPath);
+            .LastOrDefault(sort => sort.PropertyPath.EqualsOrdinal(propertyPath));
 
         return propertySort?.ToString();
     }
@@ -206,7 +207,7 @@ public class EntitySort
         var propertyPath = property.GetPropertyPath();
         return PropertySorts
             .OrderBy(x => x.Position)
-            .LastOrDefault(sort => sort.PropertyPath == propertyPath)?.Direction;
+            .LastOrDefault(sort => sort.PropertyPath.EqualsOrdinal(propertyPath))?.Direction;
     }
 
     /// <summary>
@@ -272,7 +273,7 @@ public class EntitySort
     protected void RemoveInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         var propertyPath = property.GetPropertyPath();
-        PropertySorts.RemoveAll(x => x.PropertyPath == propertyPath);
+        PropertySorts.RemoveAll(x => x.PropertyPath.EqualsOrdinal(propertyPath));
     }
 
     /// <inheritdoc cref="EntitySort{TEntity}.Clear" />
@@ -306,7 +307,7 @@ public class EntitySort
 
         foreach (var sourceProperty in sourceProperties)
         {
-            var destinationProperty = destinationProperties.FirstOrDefault(x => x.Name == sourceProperty.Name);
+            var destinationProperty = destinationProperties.FirstOrDefault(x => x.Name.EqualsOrdinal(sourceProperty.Name));
             if (destinationProperty == null)
             {
                 RemoveRelatedProperties(destinationSort, sourceProperty.Name);
@@ -345,7 +346,7 @@ public class EntitySort
         var nestedSorts = relatedProperties
             .Select(sort =>
             {
-                var nestedPropertyPath = propertyPath == sort.PropertyPath
+                var nestedPropertyPath = propertyPath.EqualsOrdinal(sort.PropertyPath)
                     ? PropertySort.PATH_TO_SELF
                     : sort.PropertyPath[(propertyPath.Length + 1)..];
                 return PropertySort.Create(nestedPropertyPath, sort.Direction, sort.Position);
@@ -373,7 +374,7 @@ public class EntitySort
         foreach (var propertySort in nestedSort.PropertySorts)
         {
             var path = propertyPath;
-            if (propertySort.PropertyPath != PropertySort.PATH_TO_SELF)
+            if (!propertySort.PropertyPath.EqualsOrdinal(PropertySort.PATH_TO_SELF))
                 path += "." + propertySort.PropertyPath;
 
             PropertySorts.Add(PropertySort.Create(path, propertySort.Direction, propertySort.Position));

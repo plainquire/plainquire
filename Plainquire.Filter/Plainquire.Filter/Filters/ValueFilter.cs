@@ -128,7 +128,7 @@ public class ValueFilter
         var (filterSyntax, filterOperator) = configuration
             .FilterOperatorMap
             .OrderByDescending(x => x.Key.Length)
-            .FirstOrDefault(x => trimmedFilter.StartsWith(x.Key));
+            .FirstOrDefault(x => trimmedFilter.StartsWith(x.Key, StringComparison.Ordinal));
 
         var hasFilterOperator = !string.IsNullOrEmpty(filterSyntax);
         filter = hasFilterOperator ? trimmedFilter : filter;
@@ -137,7 +137,7 @@ public class ValueFilter
 
         var escapeEscapeCharacter = Regex.Escape(configuration.EscapeCharacter.ToString());
         var escapedCharClass = @$"(?<!{escapeEscapeCharacter}){escapeEscapeCharacter}(.)";
-        filterValue = Regex.Replace(filterValue, escapedCharClass, "$1");
+        filterValue = Regex.Replace(filterValue, escapedCharClass, "$1", RegexOptions.None, RegexDefaults.Timeout);
 
         return (filterOperator, filterValue);
     }

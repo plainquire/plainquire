@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Plainquire.Page.Tests.Models;
 using Plainquire.Page.Tests.Services;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
@@ -71,7 +70,7 @@ public class EntityPageTests
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };
         var page = () => pageFunc(testItems, (EntityPage<TestModel<string>>)testCase.Page);
 
-        page.Should().Throw<ArgumentOutOfRangeException>();
+        page.Should().Throw<FormatException>();
     }
 
     private static readonly PageTestcase<TestModel<string>>[] _notParseablePages =
@@ -104,6 +103,6 @@ public class EntityPageTests
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };
         var page = () => pageFunc(testItems, (EntityPage<TestModel<string>>)testCase.Page);
 
-        page.Should().Throw<ArgumentException>();
+        page.Should().Throw<InvalidOperationException>();
     }
 }

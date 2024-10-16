@@ -13,10 +13,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using Plainquire.Filter.Abstractions;
 
 namespace Plainquire.Demo.Pages;
 
-public class DemoPage : ComponentBase
+public partial class Demo : ComponentBase
 {
     [Inject] private HttpClient HttpClient { get; set; } = default!;
     [Inject] private NavigationManager NavigationManager { get; set; } = default!;
@@ -28,14 +29,14 @@ public class DemoPage : ComponentBase
 
     protected FreelancerDto QueryResult = new();
 
-    protected int PageCount => GetPageCount();
+    private int PageCount => GetPageCount();
 
-    protected readonly NumberFormatInfo NumberFormat;
+    private readonly NumberFormatInfo _numberFormat;
 
-    public DemoPage()
+    public Demo()
     {
-        NumberFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
-        NumberFormat.CurrencySymbol = new CultureInfo("en-US").NumberFormat.CurrencySymbol;
+        _numberFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
+        _numberFormat.CurrencySymbol = new CultureInfo("en-US").NumberFormat.CurrencySymbol;
     }
 
     protected override async Task OnInitializedAsync()
@@ -52,51 +53,57 @@ public class DemoPage : ComponentBase
         await JsRuntime.InvokeVoidAsync("addTooltips");
     }
 
-    protected async Task LoadPredefined(string identifier)
+    private async Task LoadPredefined(string identifier)
     {
         QueryModel.Clear();
 
-        if (identifier == "Older-than-40")
+        switch ("")
+        {
+            case "":
+                break;
+        }
+
+        if (identifier.EqualsOrdinal("Older-than-40"))
             QueryModel.Filter.Birthday = "<forty-years-ago";
-        else if (identifier == "Unknown-Age")
+        else if (identifier.EqualsOrdinal("Unknown-Age"))
             QueryModel.Filter.Birthday = "ISNULL";
-        else if (identifier == "Known-Age")
+        else if (identifier.EqualsOrdinal("Known-Age"))
             QueryModel.Filter.Birthday = "NOTNULL";
-        else if (identifier == "Gender-Contains")
+        else if (identifier.EqualsOrdinal("Gender-Contains"))
             QueryModel.Filter.Gender = "~male";
-        else if (identifier == "Address-Street")
+        else if (identifier.EqualsOrdinal("Address-Street"))
             QueryModel.Filter.AddressStreet = "A";
-        else if (identifier == "Project-Contains")
+        else if (identifier.EqualsOrdinal("Project-Contains"))
             QueryModel.Filter.ProjectTitle = "Z";
 
         await UpdateQuery();
     }
 
-    protected async Task UpdateQuery()
+    private async Task UpdateQuery()
     {
         SetUrlFromQueryModel();
         await LoadData();
     }
 
-    protected async Task ClearQuery()
+    private async Task ClearQuery()
     {
         QueryModel.Clear();
         await UpdateQuery();
     }
 
-    protected async Task ChangeSeed()
+    private async Task ChangeSeed()
     {
-        QueryModel.Seed = _randomizer.Next().ToString();
+        QueryModel.Seed = _randomizer.Next().ToString(CultureInfo.InvariantCulture);
         await UpdateQuery();
     }
 
-    protected async Task SetPage(int page)
+    private async Task SetPage(int page)
     {
         QueryModel.PageNumber = Math.Max(page, 1);
         await UpdateQuery();
     }
 
-    protected async Task SetPageSize(int pageSize)
+    private async Task SetPageSize(int pageSize)
     {
         QueryModel.PageSize = pageSize;
         await UpdateQuery();
@@ -117,7 +124,7 @@ public class DemoPage : ComponentBase
         var queryParameters = QueryHelpers.ParseQuery(uri.Query);
         QueryModel = FreelancerQueryModel.FromQuery(queryParameters);
         if (!queryParameters.ContainsKey("Seed"))
-            QueryModel.Seed = _randomizer.Next().ToString();
+            QueryModel.Seed = _randomizer.Next().ToString(CultureInfo.InvariantCulture);
     }
 
     private void SetUrlFromQueryModel()
@@ -150,7 +157,7 @@ public class DemoPage : ComponentBase
                 .ContinueWith(task =>
                 {
                     QueryResult.SqlQuery = task.Result;
-                    InvokeAsync(StateHasChanged);
+                    _ = InvokeAsync(StateHasChanged);
                 });
 
             if (QueryModel.PageNumber > 1 && QueryModel.PageNumber > PageCount)
@@ -196,7 +203,7 @@ public class DemoPage : ComponentBase
 
         public string? Seed { get; set; }
 
-        public static FreelancerQueryModel FromQuery(Dictionary<string, StringValues> queryParameters)
+        public static FreelancerQueryModel FromQuery(IDictionary<string, StringValues> queryParameters)
         {
             var result = new FreelancerQueryModel();
             foreach (var (key, value) in queryParameters)
@@ -213,10 +220,10 @@ public class DemoPage : ComponentBase
             }
 
             if (queryParameters.TryGetValue("page", out var page))
-                result.PageNumber = int.Parse(page!);
+                result.PageNumber = int.Parse(page!, CultureInfo.InvariantCulture);
 
             if (queryParameters.TryGetValue("pageSize", out var pageSize))
-                result.PageSize = int.Parse(pageSize!);
+                result.PageSize = int.Parse(pageSize!, CultureInfo.InvariantCulture);
 
             if (queryParameters.TryGetValue("seed", out var seed))
                 result.Seed = seed;
@@ -224,24 +231,28 @@ public class DemoPage : ComponentBase
             return result;
         }
 
-        public Dictionary<string, StringValues> ToQuery()
+        public IDictionary<string, StringValues> ToQuery()
         {
             var query = Filter
                 .GetType()
                 .GetProperties()
                 .Select(x => new { x.Name, Value = (string?)x.GetMethod?.Invoke(Filter, null) })
                 .Where(x => !string.IsNullOrEmpty(x.Value))
-                .ToDictionary(x => x.Name.LowercaseFirstChar(), x => new StringValues(x.Value));
+                .ToDictionary(
+                    property => property.Name.LowercaseFirstChar(),
+                    property => new StringValues(property.Value),
+                    StringComparer.Ordinal
+                 );
 
             var sort = Sort.Where(x => !string.IsNullOrEmpty(x)).ToList();
             if (sort.Count != 0)
                 query.Add("orderBy", string.Join(',', sort));
 
             if (PageNumber != 1)
-                query.Add("page", new StringValues(PageNumber.ToString()));
+                query.Add("page", new StringValues(PageNumber.ToString(CultureInfo.InvariantCulture)));
 
             if (PageSize != 10)
-                query.Add("pageSize", new StringValues(PageSize.ToString()));
+                query.Add("pageSize", new StringValues(PageSize.ToString(CultureInfo.InvariantCulture)));
 
             if (!string.IsNullOrEmpty(Seed))
                 query.Add("seed", new StringValues(Seed));

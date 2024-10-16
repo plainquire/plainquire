@@ -47,7 +47,7 @@ public class EntitySortModelBinder : IModelBinder
     }
 
     private static bool IsSortByParameter(string queryParameterName, string sortByParameterName)
-        => Regex.IsMatch(queryParameterName, @$"{sortByParameterName}(\[\d*\])?", RegexOptions.IgnoreCase);
+        => Regex.IsMatch(queryParameterName, @$"{sortByParameterName}(\[\d*\])?", RegexOptions.IgnoreCase, RegexDefaults.Timeout);
 
     private static ValueProviderResult GetParameterValues(string queryParameter, ModelBindingContext bindingContext)
         => bindingContext.ValueProvider.GetValue(queryParameter);
@@ -94,7 +94,7 @@ file static class Extensions
 
     private static string? MapToPropertyPath(string parameter, IReadOnlyCollection<PropertyNameToParameterMap> sortableProperties, SortConfiguration configuration)
     {
-        var sortSyntaxMatch = Regex.Match(parameter, configuration.SortDirectionPattern, RegexOptions.IgnoreCase);
+        var sortSyntaxMatch = Regex.Match(parameter, configuration.SortDirectionPattern, RegexOptions.IgnoreCase, RegexDefaults.Timeout);
         if (!sortSyntaxMatch.Success)
             return null;
 
@@ -107,7 +107,7 @@ file static class Extensions
 
         var primaryParameterName = propertyPathSegments.FirstOrDefault();
 
-        var property = sortableProperties.FirstOrDefault(x => x.ParameterName.Equals(primaryParameterName)) ??
+        var property = sortableProperties.FirstOrDefault(x => x.ParameterName.EqualsOrdinal(primaryParameterName)) ??
                        sortableProperties.FirstOrDefault(x => x.ParameterName.Equals(primaryParameterName, StringComparison.OrdinalIgnoreCase));
 
         if (property == null)

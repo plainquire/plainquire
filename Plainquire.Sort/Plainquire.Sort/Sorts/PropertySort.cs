@@ -1,4 +1,5 @@
-﻿using Plainquire.Sort.Abstractions;
+﻿using Plainquire.Filter.Abstractions;
+using Plainquire.Sort.Abstractions;
 using System;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -93,7 +94,7 @@ public class PropertySort
         configuration ??= SortConfiguration.Default ?? new SortConfiguration();
 
         var sortSyntaxPattern = $"^(?<prefix>{configuration.SortDirectionPrefixPattern})(?<propertyPath>.*?)(?<postfix>{configuration.SortDirectionPostfixPattern})$";
-        var match = Regex.Match(sortSyntax, sortSyntaxPattern, RegexOptions.IgnoreCase);
+        var match = Regex.Match(sortSyntax, sortSyntaxPattern, RegexOptions.IgnoreCase, RegexDefaults.Timeout);
 
         var hasDescendingPrefix = configuration.DescendingPrefixes.Contains(match.Groups["prefix"].Value);
         var hasDescendingPostfix = configuration.DescendingPostfixes.Contains(match.Groups["postfix"].Value);

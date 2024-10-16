@@ -32,7 +32,7 @@ internal static class OpenApiParameterExtensions
             if (!replacement.Parameters.Any())
                 continue;
 
-            var parameterIndex = parameters.IndexOf(replacement.Parameters.First());
+            var parameterIndex = parameters.IndexOf(replacement.Parameters[0]);
 
             foreach (var parameter in replacement.Parameters)
                 parameters.Remove(parameter);
@@ -62,7 +62,7 @@ internal static class OpenApiParameterExtensions
                 Description = docXmlReaders.GetXmlDocumentationSummary(property),
                 Schema = new OpenApiSchema { Type = "string" },
                 In = ParameterLocation.Query,
-                Extensions = new Dictionary<string, IOpenApiExtension>
+                Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.Ordinal)
                 {
                     [ENTITY_EXTENSION_PREFIX + "property-type"] = new OpenApiString(property.PropertyType.GetUnderlyingType().Name)
                 }

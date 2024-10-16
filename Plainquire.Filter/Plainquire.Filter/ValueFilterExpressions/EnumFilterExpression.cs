@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Plainquire.Filter.ValueFilterExpression;
+namespace Plainquire.Filter.ValueFilterExpressions;
 
 /// <inheritdoc cref="IEnumFilterExpression"/>
 public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpression
@@ -63,7 +63,7 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
     private Expression CreateEnumExpressionByFilterOperator<TEntity, TProperty, TEnum>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, TEnum value)
     {
         var underlyingEnumType = Enum.GetUnderlyingType(typeof(TProperty).GetUnderlyingType());
-        var numericEnumValue = Convert.ChangeType(value, underlyingEnumType);
+        var numericEnumValue = Convert.ChangeType(value, underlyingEnumType, CultureInfo.InvariantCulture);
 
         switch (filterOperator)
         {

@@ -33,7 +33,7 @@ public static class ValueFiltersFactory
 
         var splitRegex = $"(?<!{escapeCharacter})[{string.Join(string.Empty, separatorCharacters)}]";
         var values = Regex
-            .Split(filterSyntax, splitRegex)
+            .Split(filterSyntax, splitRegex, RegexOptions.None, RegexDefaults.Timeout)
             .ToList();
 
         return values;

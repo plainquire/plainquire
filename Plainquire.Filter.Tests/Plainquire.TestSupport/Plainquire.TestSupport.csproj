@@ -10,4 +10,8 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Plainquire.Filter\Plainquire.Filter.Abstractions\Plainquire.Filter.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

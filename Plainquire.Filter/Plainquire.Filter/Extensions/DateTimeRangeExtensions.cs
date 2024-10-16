@@ -84,11 +84,12 @@ public static class DateTimeRangeExtensions
         return false;
     }
 
+    [SuppressMessage("Design", "MA0132:Do not convert implicitly to DateTimeOffset", Justification = "Used library Chronic.Core can only handle DateTime")]
     private static bool TryConvertChronicRangeFormattedString(string value, DateTimeOffset now, out Range<DateTimeOffset> dateTimeRange)
     {
         dateTimeRange = new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
-        var startAndEnd = Regex.Match(value, "^(?<start>.*?)(_(?<end>(.*)))?$");
+        var startAndEnd = Regex.Match(value, "^(?<start>.*?)(_(?<end>(.*)))?$", RegexOptions.ExplicitCapture, RegexDefaults.Timeout);
         var startValue = RemoveHyphenForChronicParse(startAndEnd.Groups["start"].Value);
         var endValue = RemoveHyphenForChronicParse(startAndEnd.Groups["end"].Value);
         var endIsEmpty = string.IsNullOrWhiteSpace(endValue);
@@ -108,5 +109,5 @@ public static class DateTimeRangeExtensions
     }
 
     private static string RemoveHyphenForChronicParse(string value)
-        => Regex.Replace(value, "-([a-z0-9])", " $1");
+        => Regex.Replace(value, "-(?<word>[a-z0-9])", " ${word}", RegexOptions.ExplicitCapture, RegexDefaults.Timeout);
 }

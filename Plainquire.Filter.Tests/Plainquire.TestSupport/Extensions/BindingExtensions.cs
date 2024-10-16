@@ -9,12 +9,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Plainquire.Filter.Abstractions;
 
 namespace Plainquire.TestSupport.Extensions;
 
 public static class BindingExtensions
 {
-    public static ModelBindingContext CreateBindingContext<TController>(string actionName, string parameterName, Dictionary<string, string> queryParameters, IServiceProvider serviceProvider)
+    public static ModelBindingContext CreateBindingContext<TController>(string actionName, string parameterName, IDictionary<string, string> queryParameters, IServiceProvider serviceProvider)
         where TController : Controller
     {
         var actionContext = new ActionContext
@@ -33,7 +34,7 @@ public static class BindingExtensions
         var parameterInfo = typeof(TController)
             .GetMethod(actionName)?
             .GetParameters()
-            .FirstOrDefault(parameter => parameter.Name == parameterName)
+            .FirstOrDefault(parameter => parameter.Name.EqualsOrdinal(parameterName))
             ?? throw new ArgumentException("Method or parameter not found", nameof(actionName));
 
         var modelMetadata = (DefaultModelMetadata)new EmptyModelMetadataProvider().GetMetadataForParameter(parameterInfo, parameterInfo.ParameterType);
@@ -51,7 +52,7 @@ public static class BindingExtensions
         return bindingContext;
     }
 
-    public static ModelBindingContext CreateBindingContext<TPageModel>(string parameterName, Dictionary<string, string> queryParameters, IServiceProvider serviceProvider)
+    public static ModelBindingContext CreateBindingContext<TPageModel>(string parameterName, IDictionary<string, string> queryParameters, IServiceProvider serviceProvider)
         where TPageModel : PageModel
     {
         var actionContext = new ActionContext

@@ -36,6 +36,13 @@ The default operator `EqualCaseInsensitive` (filter `property=1`) still matches 
 
 `PageSetAttribute` and related features removed because they were too complex and impractical.
 
+### Namespaces renamed
+
+| 5.x namespace                              | 6.x namespace                               |
+| ------------------------------------------ | ------------------------------------------- |
+| Plainquire.Filter.PropertyFilterExpression | Plainquire.Filter.PropertyFilterExpressions |
+| Plainquire.Filter.ValueFilterExpression    | Plainquire.Filter.ValueFilterExpressions    |
+
 # 5.2.0
 
 ## Changes

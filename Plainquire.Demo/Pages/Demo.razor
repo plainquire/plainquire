@@ -1,7 +1,6 @@
 ﻿@page "/demo"
 @using Plainquire.Demo.Components
 @using Plainquire.Filter
-@inherits DemoPage
 
 <div class="row">
     <div class="col-12">
@@ -280,7 +279,7 @@ else
                 <td>@freelancer.LastName</td>
                 <td>@freelancer.Gender</td>
                 <td>@freelancer.Birthday?.ToString("d")</td>
-                <td>@freelancer.HourlyRate.ToString("c", NumberFormat)</td>
+                <td>@freelancer.HourlyRate.ToString("c", _numberFormat)</td>
                 <td>@freelancer.Address.Street</td>
                 <td class="projects">@string.Join(", ", freelancer.Projects.Select(x => x.Title))</td>
             </tr>

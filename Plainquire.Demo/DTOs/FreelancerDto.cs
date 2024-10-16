@@ -11,7 +11,7 @@ public class FreelancerDto
     /// <summary>
     /// Data retrieved by database query
     /// </summary>
-    public List<Freelancer>? Data { get; init; }
+    public ICollection<Freelancer>? Data { get; init; }
 
     /// <summary>
     /// Error message, if any

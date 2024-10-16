@@ -19,8 +19,8 @@ public static class ExpressionExtensions
     private static readonly MethodInfo _stringContainsMethodInfo = typeof(string).GetMethod(nameof(string.Contains), [typeof(string)])!;
     private static readonly MethodInfo _stringStartsWithMethodInfo = typeof(string).GetMethod(nameof(string.StartsWith), [typeof(string)])!;
     private static readonly MethodInfo _stringEndsWithMethodInfo = typeof(string).GetMethod(nameof(string.EndsWith), [typeof(string)])!;
-    private static readonly MethodInfo _enumerableAnyMethodInfo = typeof(Enumerable).GetMethods().First(method => method.Name == nameof(Enumerable.Any) && method.GetParameters().Select(x => x.Name).SequenceEqual(["source", "predicate"]));
-    private static readonly MethodInfo _objectToStringMethodInfo = typeof(object).GetMethods().First(method => method.Name == nameof(ToString));
+    private static readonly MethodInfo _enumerableAnyMethodInfo = typeof(Enumerable).GetMethods().First(method => method.Name.EqualsOrdinal(nameof(Enumerable.Any)) && method.GetParameters().Select(x => x.Name).SequenceEqual(["source", "predicate"], StringComparer.Ordinal));
+    private static readonly MethodInfo _objectToStringMethodInfo = typeof(object).GetMethods().First(method => method.Name.EqualsOrdinal(nameof(ToString)));
 
     /// <summary>
     /// Combines a property and an expression body to a lambda expression.

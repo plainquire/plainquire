@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Page.Abstractions;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -51,7 +52,7 @@ public class EntityPageModelBinder : IModelBinder
         var pageSizeFromFilterAttribute = pageType?
             .GetCustomAttribute<EntityFilterAttribute>()?
             .PageSize
-            .ToString();
+            .ToString(CultureInfo.InvariantCulture);
 
         entityPage.PageNumberValue = pageParameterValue ?? string.Empty;
         entityPage.PageSizeValue = pageSizeParameterValue ?? pageSizeFromFilterAttribute ?? string.Empty;

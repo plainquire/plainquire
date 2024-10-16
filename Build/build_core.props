@@ -1,5 +1,6 @@
 <Project>
   <Import Project="analyzer_disposeable.props" />
+  <Import Project="analyzer_meziantou.props" />
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>

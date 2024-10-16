@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Abstractions;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
@@ -22,7 +23,7 @@ public static class OpenApiOperationExtensions
     /// </summary>
     /// <param name="operation">The <see cref="OpenApiOperation"/> to operate on.</param>
     /// <param name="parametersToReplace">The parameters to replace.</param>
-    public static void ReplacePageParameters(this OpenApiOperation operation, List<PageParameterReplacement> parametersToReplace)
+    public static void ReplacePageParameters(this OpenApiOperation operation, IList<PageParameterReplacement> parametersToReplace)
     {
         MarkExistingParametersForDeletion(parametersToReplace);
         ReplacePageNumberParameters(operation, parametersToReplace);
@@ -30,7 +31,7 @@ public static class OpenApiOperationExtensions
         RemoveParametersMarkedForDeletion(operation);
     }
 
-    private static void ReplacePageNumberParameters(OpenApiOperation operation, List<PageParameterReplacement> parametersToReplace)
+    private static void ReplacePageNumberParameters(OpenApiOperation operation, IList<PageParameterReplacement> parametersToReplace)
     {
         var httpQueryParameterGroup = GroupByPageNumberHttpQueryParameterName(parametersToReplace);
         foreach (var (queryParameter, parameters) in httpQueryParameterGroup)
@@ -45,18 +46,18 @@ public static class OpenApiOperationExtensions
                     Format = "int32"
                 },
                 In = ParameterLocation.Query,
-                Extensions = new Dictionary<string, IOpenApiExtension>
+                Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.Ordinal)
                 {
                     [ENTITY_PAGE_EXTENSION] = new OpenApiBoolean(true)
                 }
             };
 
-            var insertionIndex = operation.Parameters.IndexOf(parameters.First().OpenApiParameter);
+            var insertionIndex = operation.Parameters.IndexOf(parameters[0].OpenApiParameter);
             operation.Parameters.Insert(insertionIndex, openApiParameter);
         }
     }
 
-    private static void ReplacePageSizeParameters(OpenApiOperation operation, List<PageParameterReplacement> parametersToReplace)
+    private static void ReplacePageSizeParameters(OpenApiOperation operation, IList<PageParameterReplacement> parametersToReplace)
     {
         var httpQueryParameterGroup = GroupByPageSizeHttpQueryParameterName(parametersToReplace);
         foreach (var (queryParameter, parameters) in httpQueryParameterGroup)
@@ -71,34 +72,36 @@ public static class OpenApiOperationExtensions
                     Format = "int32"
                 },
                 In = ParameterLocation.Query,
-                Extensions = new Dictionary<string, IOpenApiExtension>
+                Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.Ordinal)
                 {
                     [ENTITY_PAGE_EXTENSION] = new OpenApiBoolean(true)
                 }
             };
 
-            var insertionIndex = operation.Parameters.IndexOf(parameters.First().OpenApiParameter);
+            var insertionIndex = operation.Parameters.IndexOf(parameters[0].OpenApiParameter);
             operation.Parameters.Insert(insertionIndex, openApiParameter);
         }
     }
 
-    private static Dictionary<string, List<PageParameterReplacement>> GroupByPageNumberHttpQueryParameterName(List<PageParameterReplacement> parametersToReplace)
+    private static Dictionary<string, List<PageParameterReplacement>> GroupByPageNumberHttpQueryParameterName(IList<PageParameterReplacement> parametersToReplace)
         => parametersToReplace
-            .GroupBy(parameter => GetPageNumberParameterName(parameter.OpenApiDescription.ParameterDescriptor))
+            .GroupBy(parameter => GetPageNumberParameterName(parameter.OpenApiDescription.ParameterDescriptor), StringComparer.Ordinal)
             .ToDictionary(
                 group => group.Key,
-                group => group.ToList()
+                group => group.ToList(),
+                StringComparer.Ordinal
             );
 
-    private static Dictionary<string, List<PageParameterReplacement>> GroupByPageSizeHttpQueryParameterName(List<PageParameterReplacement> parametersToReplace)
+    private static Dictionary<string, List<PageParameterReplacement>> GroupByPageSizeHttpQueryParameterName(IList<PageParameterReplacement> parametersToReplace)
         => parametersToReplace
-            .GroupBy(parameter => GetPageSizeParameterName(parameter.OpenApiDescription.ParameterDescriptor))
+            .GroupBy(parameter => GetPageSizeParameterName(parameter.OpenApiDescription.ParameterDescriptor), StringComparer.Ordinal)
             .ToDictionary(
                 group => group.Key,
-                group => group.ToList()
+                group => group.ToList(),
+                StringComparer.Ordinal
             );
 
-    private static void MarkExistingParametersForDeletion(List<PageParameterReplacement> parameters)
+    private static void MarkExistingParametersForDeletion(IList<PageParameterReplacement> parameters)
     {
         foreach (var parameter in parameters)
             parameter.OpenApiParameter.Extensions.TryAdd(ENTITY_DELETE_EXTENSION, new OpenApiBoolean(true));

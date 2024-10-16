@@ -1,5 +1,6 @@
 ﻿using Plainquire.Page.Abstractions;
 using System;
+using System.Globalization;
 
 namespace Plainquire.Page;
 
@@ -31,7 +32,7 @@ public static class EntityPageExtensions
         if (pageNumberNotSet)
             return null;
 
-        var parseFailed = !int.TryParse(page.PageNumberValue, out var pageNumber);
+        var parseFailed = !int.TryParse(page.PageNumberValue, NumberStyles.None, CultureInfo.InvariantCulture, out var pageNumber);
         if (parseFailed && !configuration.IgnoreParseExceptions)
             throw new FormatException($"Error while parsing page number '{page.PageNumberValue}'");
 
@@ -41,16 +42,16 @@ public static class EntityPageExtensions
         if (configuration.IgnoreParseExceptions)
             return 1;
 
-        throw new ArgumentOutOfRangeException(nameof(EntityPage.PageNumber), page.PageNumber, $"{nameof(EntityPage.PageNumber)} must be a positive integer.");
+        throw new FormatException($"{nameof(EntityPage.PageNumber)} must be a positive integer, found: {page.PageNumber}.");
     }
 
     private static int? ParsePageSize(EntityPage page, PageConfiguration configuration)
     {
         var pageSizeNotSet = string.IsNullOrEmpty(page.PageSizeValue);
         if (pageSizeNotSet && !configuration.IgnoreParseExceptions)
-            throw new ArgumentException("Page size not set", nameof(EntityPage.PageSize));
+            throw new InvalidOperationException("Page size not set");
 
-        var parseFailed = !int.TryParse(page.PageSizeValue, out var pageSize);
+        var parseFailed = !int.TryParse(page.PageSizeValue, NumberStyles.None, CultureInfo.InvariantCulture, out var pageSize);
         if (parseFailed && !configuration.IgnoreParseExceptions)
             throw new FormatException($"Error while parsing page size '{page.PageSizeValue}'");
 
@@ -60,6 +61,6 @@ public static class EntityPageExtensions
         if (configuration.IgnoreParseExceptions)
             return int.MaxValue;
 
-        throw new ArgumentOutOfRangeException(nameof(EntityPage.PageSize), page.PageSize, $"{nameof(EntityPage.PageSize)} must be a positive integer.");
+        throw new FormatException($"{nameof(EntityPage.PageSize)} must be a positive integer, found: {page.PageSize}.");
     }
 }

@@ -1,29 +1,8 @@
-﻿using Plainquire.Page.Abstractions;
-using System;
+﻿using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Plainquire.Page.JsonConverters;
-
-/// <summary>
-/// <see cref="EntityPage{TEntity}"/> specific JSON converter factory for Microsoft (System.Text.Json) JSON.
-/// Implements <see cref="JsonConverterFactory" />
-/// </summary>
-/// <seealso cref="JsonConverterFactory" />
-public class EntityPageConverterFactory : JsonConverterFactory
-{
-    /// <inheritdoc />
-    public override bool CanConvert(Type typeToConvert)
-        => typeToConvert.IsEntityPage();
-
-    /// <inheritdoc />
-    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
-    {
-        var entityType = typeToConvert.GetGenericArguments()[0];
-        var entityPageConverterType = typeof(EntityPageConverter<>).MakeGenericType(entityType);
-        return (JsonConverter)Activator.CreateInstance(entityPageConverterType);
-    }
-}
 
 /// <summary>
 /// <see cref="EntityPage{TEntity}"/> specific JSON converter for Microsoft (System.Text.Json) JSON.
@@ -81,11 +60,24 @@ public class EntityPageConverter : JsonConverter<EntityPage>
 
         JsonSerializer.Serialize(writer, entityPageData, options);
     }
-}
 
-internal class EntityPageData
-{
-    public string? PageNumber { get; set; } = string.Empty;
-    public string? PageSize { get; set; } = string.Empty;
-    public PageConfiguration? Configuration { get; set; }
+    /// <summary>
+    /// <see cref="EntityPage{TEntity}"/> specific JSON converter factory for Microsoft (System.Text.Json) JSON.
+    /// Implements <see cref="JsonConverterFactory" />
+    /// </summary>
+    /// <seealso cref="JsonConverterFactory" />
+    public class Factory : JsonConverterFactory
+    {
+        /// <inheritdoc />
+        public override bool CanConvert(Type typeToConvert)
+            => typeToConvert.IsEntityPage();
+
+        /// <inheritdoc />
+        public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+        {
+            var entityType = typeToConvert.GetGenericArguments()[0];
+            var entityPageConverterType = typeof(EntityPageConverter<>).MakeGenericType(entityType);
+            return (JsonConverter)Activator.CreateInstance(entityPageConverterType);
+        }
+    }
 }

@@ -8,6 +8,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\Plainquire.Filter\Plainquire.Filter.Abstractions\Plainquire.Filter.Abstractions.csproj" />
     <ProjectReference Include="..\Plainquire.Page.Abstractions\Plainquire.Page.Abstractions.csproj" />
   </ItemGroup>
 

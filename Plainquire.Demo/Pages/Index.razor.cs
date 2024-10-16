@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Plainquire.Demo.Pages;
 
-public class IndexPage : ComponentBase
+public partial class Index : ComponentBase
 {
     [CascadingParameter] protected string? Theme { get; set; }
 }

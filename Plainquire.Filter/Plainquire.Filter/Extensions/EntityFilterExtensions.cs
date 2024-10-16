@@ -192,7 +192,7 @@ public static class EntityFilterExtensions
         foreach (var property in filterableProperties)
         {
             var parameterName = HttpUtility.UrlEncode(property.GetFilterParameterName(entityFilterAttribute?.Prefix));
-            var propertyFilters = entityFilter.PropertyFilters.Where(x => x.PropertyName == property.Name);
+            var propertyFilters = entityFilter.PropertyFilters.Where(x => x.PropertyName.EqualsOrdinal(property.Name));
             foreach (var filter in propertyFilters)
             {
                 var values = string.Join(',', filter.ValueFilters.Select(v => HttpUtility.UrlEncode(v.ToString())));

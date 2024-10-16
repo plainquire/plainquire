@@ -4,6 +4,7 @@ using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
@@ -24,7 +25,7 @@ public class FilterForFloatByValueTests
                 intTestCase.Run(_testItems, filterFunc);
                 break;
             default:
-                throw new InvalidOperationException("Unsupported test case");
+                throw new UnreachableException("Unsupported test case");
         }
     }
 
