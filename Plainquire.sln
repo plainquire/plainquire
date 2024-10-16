@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{4ADA43F9-E9B7-42BF-8D1D-0635400382E7}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Build\analyzer_disposeable.props = Build\analyzer_disposeable.props
 		Build\build_core.props = Build\build_core.props
 		Build\build_standard.props = Build\build_standard.props
 		Build\build_tests.props = Build\build_tests.props
