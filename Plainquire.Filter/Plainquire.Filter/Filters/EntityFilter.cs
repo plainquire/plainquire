@@ -1,5 +1,6 @@
 ﻿using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.JsonConverters;
+using Plainquire.Filter.PropertyFilterExpressions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,7 +17,7 @@ namespace Plainquire.Filter;
 /// Hub to create filter expressions for <typeparamref name="TEntity"/> with fluent API.
 /// </summary>
 /// <typeparam name="TEntity">The type to be filtered.</typeparam>
-[JsonConverter(typeof(EntityFilterConverterFactory))]
+[JsonConverter(typeof(EntityFilterConverter.Factory))]
 [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 public class EntityFilter<TEntity> : EntityFilter
 {
@@ -195,14 +196,14 @@ public class EntityFilter<TEntity> : EntityFilter
         {
             var sameDestinationPropertyExists = destinationProperties
                 .Exists(x =>
-                    x.Name == sourceProperty.Name &&
+                    x.Name.EqualsOrdinal(sourceProperty.Name) &&
                     x.PropertyType.IsAssignableFrom(sourceProperty.PropertyType)
                 );
 
             if (!sameDestinationPropertyExists)
             {
-                castFilter.PropertyFilters.RemoveAll(x => x.PropertyName == sourceProperty.Name);
-                castFilter.NestedFilters.RemoveAll(x => x.PropertyName == sourceProperty.Name);
+                castFilter.PropertyFilters.RemoveAll(x => x.PropertyName.EqualsOrdinal(sourceProperty.Name));
+                castFilter.NestedFilters.RemoveAll(x => x.PropertyName.EqualsOrdinal(sourceProperty.Name));
             }
         }
 
@@ -244,7 +245,7 @@ public class EntityFilter<TEntity> : EntityFilter
 [JsonConverter(typeof(EntityFilterConverter))]
 public class EntityFilter : ICloneable
 {
-    private static readonly MethodInfo _createFilterMethod = typeof(EntityFilter).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic).Single(x => x.Name == nameof(CreateFilter));
+    private static readonly MethodInfo _createFilterMethod = typeof(EntityFilter).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic).Single(x => x.Name.EqualsOrdinal(nameof(CreateFilter)));
 
     internal List<PropertyFilter> PropertyFilters;
     internal List<NestedFilter> NestedFilters;
@@ -289,7 +290,7 @@ public class EntityFilter : ICloneable
     protected string? GetPropertyFilterSyntaxInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         var propertyName = property.GetPropertyName();
-        var propertyFilter = PropertyFilters.FirstOrDefault(x => x.PropertyName == propertyName);
+        var propertyFilter = PropertyFilters.FirstOrDefault(x => x.PropertyName.EqualsOrdinal(propertyName));
         return ValueFilterExtensions.ToString(propertyFilter?.ValueFilters);
     }
 
@@ -302,7 +303,7 @@ public class EntityFilter : ICloneable
     protected ValueFilter[]? GetPropertyFilterValuesInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         var propertyName = property.GetPropertyName();
-        return PropertyFilters.FirstOrDefault(predicate => predicate.PropertyName == propertyName)?.ValueFilters;
+        return PropertyFilters.FirstOrDefault(predicate => predicate.PropertyName.EqualsOrdinal(propertyName))?.ValueFilters;
     }
 
     /// <summary>
@@ -314,7 +315,7 @@ public class EntityFilter : ICloneable
     protected EntityFilter<TProperty>? GetNestedFilterInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         var propertyName = property.GetPropertyName();
-        return (EntityFilter<TProperty>?)NestedFilters.FirstOrDefault(x => x.PropertyName == propertyName)?.EntityFilter;
+        return (EntityFilter<TProperty>?)NestedFilters.FirstOrDefault(x => x.PropertyName.EqualsOrdinal(propertyName))?.EntityFilter;
     }
 
     /// <summary>
@@ -328,7 +329,7 @@ public class EntityFilter : ICloneable
         where TList : IEnumerable<TProperty>
     {
         var propertyName = property.GetPropertyName();
-        return (EntityFilter<TProperty>?)NestedFilters.FirstOrDefault(x => x.PropertyName == propertyName)?.EntityFilter;
+        return (EntityFilter<TProperty>?)NestedFilters.FirstOrDefault(x => x.PropertyName.EqualsOrdinal(propertyName))?.EntityFilter;
     }
 
     /// <summary>
@@ -368,7 +369,7 @@ public class EntityFilter : ICloneable
     protected void ReplaceInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property, ValueFilter[]? valueFilters)
     {
         var propertyName = property.GetPropertyName();
-        PropertyFilters.RemoveAll(x => x.PropertyName == propertyName);
+        PropertyFilters.RemoveAll(x => x.PropertyName.EqualsOrdinal(propertyName));
         PropertyFilters.Add(new PropertyFilter(propertyName, valueFilters));
     }
 
@@ -383,7 +384,7 @@ public class EntityFilter : ICloneable
     protected void ReplaceNestedInternal<TEntity, TProperty, TNested>(Expression<Func<TEntity, TProperty?>> property, EntityFilter<TNested> nestedFilter)
     {
         var propertyName = property.GetPropertyName();
-        NestedFilters.RemoveAll(x => x.PropertyName == propertyName);
+        NestedFilters.RemoveAll(x => x.PropertyName.EqualsOrdinal(propertyName));
         NestedFilters.Add(new NestedFilter(propertyName, nestedFilter));
     }
 
@@ -391,7 +392,7 @@ public class EntityFilter : ICloneable
     protected void RemoveInternal<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
     {
         var propertyName = property.GetPropertyName();
-        PropertyFilters.RemoveAll(x => x.PropertyName == propertyName);
+        PropertyFilters.RemoveAll(x => x.PropertyName.EqualsOrdinal(propertyName));
     }
 
     /// <inheritdoc cref="EntityFilter{TEntity}.Clear" />
@@ -404,33 +405,46 @@ public class EntityFilter : ICloneable
         var configuration = Configuration ?? FilterConfiguration.Default ?? new FilterConfiguration();
         interceptor ??= IFilterInterceptor.Default;
 
+        var properties = typeof(TEntity).GetProperties();
         var useConditionalAccess = UseConditionalAccess(configuration, useAsCompiledExpression);
 
-        var properties = typeof(TEntity)
-            .GetProperties();
+        var propertyFilters = GetPropertyFilters<TEntity>(properties, interceptor, configuration);
+        var nestedObjectFilters = GetNestedObjectFilters<TEntity>(properties, useConditionalAccess, interceptor, useAsCompiledExpression);
+        var nestedListsFilters = CreateNestedListFilters<TEntity>(properties, useConditionalAccess, interceptor, useAsCompiledExpression);
 
-        var propertyFilters = properties
+        return propertyFilters
+            .Concat(nestedObjectFilters)
+            .Concat(nestedListsFilters)
+            .CombineWithConditionalAnd();
+    }
+
+    private List<Expression<Func<TEntity, bool>>?> GetPropertyFilters<TEntity>(PropertyInfo[] properties, IFilterInterceptor? interceptor, FilterConfiguration configuration)
+        => properties
             .Reverse()
             .Join(
                 PropertyFilters,
                 x => x.Name,
                 x => x.PropertyName,
-                (propertyInfo, propertyFilter) => new { Property = propertyInfo, propertyFilter.ValueFilters }
+                (propertyInfo, propertyFilter) => new { Property = propertyInfo, propertyFilter.ValueFilters },
+                StringComparer.Ordinal
             )
             .Select(x =>
                 interceptor?.CreatePropertyFilter<TEntity>(x.Property, x.ValueFilters, configuration)
-                ?? PropertyFilterExpression.PropertyFilterExpression.CreateFilter<TEntity>(x.Property, x.ValueFilters, configuration, interceptor)
+                ?? PropertyFilterExpression.CreateFilter<TEntity>(x.Property, x.ValueFilters, configuration, interceptor)
             )
             .ToList();
 
-        var nestedObjectFilters = properties
+    private List<Expression<Func<TEntity, bool>>?> GetNestedObjectFilters<TEntity>(PropertyInfo[] properties, bool useConditionalAccess, IFilterInterceptor? interceptor, bool useAsCompiledExpression)
+    {
+        return properties
             .Reverse()
             .Where(x => !x.PropertyType.IsGenericIEnumerable())
             .Join(
                 NestedFilters,
                 x => x.Name,
                 x => x.PropertyName,
-                (propertyInfo, nestedFilter) => new { Property = propertyInfo, nestedFilter.EntityFilter }
+                (propertyInfo, nestedFilter) => new { Property = propertyInfo, nestedFilter.EntityFilter },
+                StringComparer.Ordinal
             )
             .Select(x =>
             {
@@ -452,15 +466,18 @@ public class EntityFilter : ICloneable
                 return filterExpression;
             })
             .ToList();
+    }
 
-        var nestedListsFilters = properties
+    private List<Expression<Func<TEntity, bool>>?> CreateNestedListFilters<TEntity>(PropertyInfo[] properties, bool useConditionalAccess, IFilterInterceptor? interceptor, bool useAsCompiledExpression)
+        => properties
             .Reverse()
             .Where(x => x.PropertyType.IsGenericIEnumerable())
             .Join(
                 NestedFilters,
                 x => x.Name,
                 x => x.PropertyName,
-                (propertyInfo, nestedFilter) => new { Property = propertyInfo, nestedFilter.EntityFilter }
+                (propertyInfo, nestedFilter) => new { Property = propertyInfo, nestedFilter.EntityFilter },
+                StringComparer.Ordinal
             )
             .Select(x =>
             {
@@ -483,12 +500,6 @@ public class EntityFilter : ICloneable
                 return filterExpression;
             })
             .ToList();
-
-        return propertyFilters
-            .Concat(nestedObjectFilters)
-            .Concat(nestedListsFilters)
-            .CombineWithConditionalAnd();
-    }
 
     private static bool UseConditionalAccess(FilterConfiguration configuration, bool usedAsCompiledExpression)
         => configuration.UseConditionalAccess switch

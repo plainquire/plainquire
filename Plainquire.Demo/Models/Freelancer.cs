@@ -56,5 +56,5 @@ public class Freelancer
     /// <summary>
     /// The projects done.
     /// </summary>
-    public List<Project> Projects { get; init; } = [];
+    public ICollection<Project> Projects { get; init; } = [];
 }

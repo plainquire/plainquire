@@ -6,6 +6,25 @@
     <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
   </ItemGroup>
 
+  <PropertyGroup>
+
+    <!-- Use an overload that has a IEqualityComparer<string> -->
+    <NoWarn>$(NoWarn);MA0002</NoWarn>
+
+    <!-- Use string.Equals instead of Equals operator -->
+    <NoWarn>$(NoWarn);MA0006</NoWarn>
+    
+    <!-- '<none-parameter-name>' is not a valid parameter name -->
+    <NoWarn>$(NoWarn);MA0015</NoWarn>
+    
+    <!-- Prefer using collection abstraction instead of implementation -->
+    <NoWarn>$(NoWarn);MA0016</NoWarn>
+
+    <!-- File name must match type name -->
+    <NoWarn>$(NoWarn);MA0048</NoWarn>
+
+  </PropertyGroup>
+
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>

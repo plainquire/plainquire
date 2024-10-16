@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
@@ -31,7 +32,7 @@ public class FilterConfiguration
     /// <summary>
     /// Map between micro syntax and filter operator. Micro syntax is case-sensitive.
     /// </summary>
-    public Dictionary<string, FilterOperator> FilterOperatorMap { get; set; } = new()
+    public IDictionary<string, FilterOperator> FilterOperatorMap { get; set; } = new Dictionary<string, FilterOperator>(StringComparer.Ordinal)
     {
         {string.Empty, FilterOperator.Default},
         {"~", FilterOperator.Contains},
@@ -51,7 +52,7 @@ public class FilterConfiguration
     /// <summary>
     /// Map between string and boolean value. Strings are case-insensitive.
     /// </summary>
-    public Dictionary<string, bool> BooleanMap { get; set; } = new()
+    public IDictionary<string, bool> BooleanMap { get; set; } = new Dictionary<string, bool>(StringComparer.InvariantCulture)
     {
         {"NO", false},
         {"0", false},
@@ -62,7 +63,7 @@ public class FilterConfiguration
     /// <summary>
     /// Characters used to split values in micro syntax.
     /// </summary>
-    public List<char> ValueSeparatorChars { get; set; } = [',', ';', '|'];
+    public ICollection<char> ValueSeparatorChars { get; set; } = [',', ';', '|'];
 
     /// <summary>
     /// Character used as escape character in micro syntax.

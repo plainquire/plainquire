@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Plainquire.Filter.Abstractions;
 
 namespace Plainquire.Demo.Models;
 
@@ -1408,18 +1409,18 @@ public static class ProjectCodeNames
     /// <summary>
     /// Project code names
     /// </summary>
-    public static readonly List<string> CodeNames = _codeNames.Select(x => x.CodeName).ToList();
+    public static readonly ICollection<string> CodeNames = _codeNames.Select(x => x.CodeName).ToList();
 
     /// <summary>
     /// Gets the description for a code name.
     /// </summary>
     /// <param name="codeName">Name of the code.</param>
     public static string? GetDescription(string codeName)
-        => _codeNames.FirstOrDefault(x => x.CodeName == codeName)?.Description;
-}
+        => _codeNames.FirstOrDefault(x => x.CodeName.EqualsOrdinal(codeName))?.Description;
 
-internal class ProjectCodeName
-{
-    public required string CodeName { get; init; }
-    public required string Description { get; init; }
+    internal class ProjectCodeName
+    {
+        public required string CodeName { get; init; }
+        public required string Description { get; init; }
+    }
 }

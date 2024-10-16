@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -108,7 +109,7 @@ internal static class Program
     {
         var supportedCultures = CultureInfo.GetCultures(CultureTypes.AllCultures).Select(x => x.Name).ToArray();
         var localizationOptions = new RequestLocalizationOptions()
-            .SetDefaultCulture(supportedCultures.First(x => x == "en-US"))
+            .SetDefaultCulture(supportedCultures.First(culture => culture.Equals("en-US", StringComparison.Ordinal)))
             .AddSupportedCultures(supportedCultures)
             .AddSupportedUICultures(supportedCultures);
 

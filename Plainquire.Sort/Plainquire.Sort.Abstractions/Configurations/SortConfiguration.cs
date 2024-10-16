@@ -20,22 +20,22 @@ public class SortConfiguration
     /// <summary>
     /// Prefixes used to identify an ascending sort order.
     /// </summary>
-    public List<string> AscendingPrefixes { get; set; } = ["asc-", "asc ", "+"];
+    public IList<string> AscendingPrefixes { get; set; } = ["asc-", "asc ", "+"];
 
     /// <summary>
     /// Postfixes used to identify an ascending sort order.
     /// </summary>
-    public List<string> AscendingPostfixes { get; set; } = ["-asc", " asc", "+"];
+    public IList<string> AscendingPostfixes { get; set; } = ["-asc", " asc", "+"];
 
     /// <summary>
     /// Prefixes used to identify a descending sort order.
     /// </summary>
-    public List<string> DescendingPrefixes { get; set; } = ["desc-", "desc ", "dsc-", "dsc ", "-", "~"];
+    public IList<string> DescendingPrefixes { get; set; } = ["desc-", "desc ", "dsc-", "dsc ", "-", "~"];
 
     /// <summary>
     /// Postfixes used to identify a descending sort order.
     /// </summary>
-    public List<string> DescendingPostfixes { get; set; } = ["-desc", " desc", "-dsc", " dsc", "-", "~"];
+    public IList<string> DescendingPostfixes { get; set; } = ["-desc", " desc", "-dsc", " dsc", "-", "~"];
 
     /// <summary>
     /// Return <c>source.OrderBy(x => 0)</c> in case of any exception while parsing the value

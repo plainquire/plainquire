@@ -1,5 +1,5 @@
 ﻿using Plainquire.Filter.Abstractions;
-using Plainquire.Filter.ValueFilterExpression;
+using Plainquire.Filter.ValueFilterExpressions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Plainquire.Filter.PropertyFilterExpression;
+namespace Plainquire.Filter.PropertyFilterExpressions;
 
 /// <summary>
 /// Converter to create lambda filter expressions for a given property and a <see cref="ValueFilter"/>.
@@ -16,7 +16,7 @@ namespace Plainquire.Filter.PropertyFilterExpression;
 public static class PropertyFilterExpression
 {
     private static readonly IValueFilterExpression _defaultValueFilterExpressionCreator = new DefaultFilterExpression();
-    private static readonly MethodInfo _createFilterMethod = typeof(PropertyFilterExpression).GetMethods(BindingFlags.Static | BindingFlags.Public).Single(x => x.Name == nameof(CreateFilter) && x.IsGenericMethod && x.GetGenericArguments().Length == 2);
+    private static readonly MethodInfo _createFilterMethod = typeof(PropertyFilterExpression).GetMethods(BindingFlags.Static | BindingFlags.Public).Single(x => x.Name.EqualsOrdinal(nameof(CreateFilter)) && x.IsGenericMethod && x.GetGenericArguments().Length == 2);
 
     private static readonly IValueFilterExpression[] _valueFilterExpressionCreators =
     [

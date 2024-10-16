@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using Plainquire.Filter.Abstractions;
+using System.Text.RegularExpressions;
 
 namespace Plainquire.Page;
 
@@ -20,7 +21,7 @@ public static class ParameterExtensions
         if (string.IsNullOrEmpty(bindingParameterName))
             return (actionParameterName, $"{actionParameterName}Size");
 
-        var values = Regex.Match(bindingParameterName, PAGE_PARAMETER_PATTERN);
+        var values = Regex.Match(bindingParameterName, PAGE_PARAMETER_PATTERN, RegexOptions.ExplicitCapture, RegexDefaults.Timeout);
         var pageNumberBinderName = values.Groups["page"].Value;
         var pageSizeBinderName = values.Groups["pageSize"].Value;
 

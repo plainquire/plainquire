@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Plainquire.Filter.Abstractions;
+using Plainquire.Filter.PropertyFilterExpressions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
-using Plainquire.Filter.ValueFilterExpression;
+using Plainquire.Filter.ValueFilterExpressions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -71,7 +71,7 @@ public class InterceptorTests
                 .Where(x => x.Operator != FilterOperator.EqualCaseSensitive)
                 .ToArray();
 
-            var unmodifiedFilterLambda = PropertyFilterExpression.PropertyFilterExpression
+            var unmodifiedFilterLambda = PropertyFilterExpression
                 .CreateFilter<TEntity>(propertyInfo.PropertyType, propertySelector, unmodifiedFilters, configuration, this);
 
             var filterExpression = new[] { modifiedFilterLambda, unmodifiedFilterLambda }.CombineWithConditionalOr();

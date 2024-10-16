@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Plainquire.Filter.Swashbuckle.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -47,7 +48,8 @@ public class EntityFilterSetParameterReplacer : IOperationFilter
                 context.ApiDescription.ParameterDescriptions,
                 parameter => parameter.Name,
                 description => description.Name,
-                (parameter, description) => (Parameter: parameter, Description: description)
+                (parameter, description) => (Parameter: parameter, Description: description),
+                StringComparer.Ordinal
             )
             .Where(openApi => openApi.Description.IsEntityFilterSetParameter())
             .GroupBy(x => x.Description.ParameterDescriptor.ParameterType)

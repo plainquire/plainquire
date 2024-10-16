@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Plainquire.Filter.ValueFilterExpression;
+namespace Plainquire.Filter.ValueFilterExpressions;
 
 /// <inheritdoc cref="IDateTimeFilterExpression"/>
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]

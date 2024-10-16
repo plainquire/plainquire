@@ -1,10 +1,12 @@
-﻿using Plainquire.Sort.Abstractions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Plainquire.Filter.Abstractions;
+using Plainquire.Filter.Abstractions.Exceptions;
+using Plainquire.Sort.Abstractions;
 
 namespace Plainquire.Sort;
 
@@ -34,7 +36,7 @@ public static class QueryableExtensions
         var configuration = sort.Configuration ?? SortConfiguration.Default ?? new SortConfiguration();
         interceptor ??= ISortInterceptor.Default;
 
-        var first = propertySorts.First();
+        var first = propertySorts[0];
         var result = interceptor?.OrderBy(source, first);
         if (result == null)
         {
@@ -153,13 +155,13 @@ public static class QueryableExtensions
                 var isEnumerableQueryProvider = providerType.IsGenericType && providerType.GetGenericTypeDefinition() == typeof(EnumerableQuery<>);
                 return isEnumerableQueryProvider;
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new UnreachableException();
         }
     }
 
     private static Expression Add(Expression memberAccess, string propertyName, bool caseInsensitive, bool useConditionalAccess)
     {
-        if (propertyName == PropertySort.PATH_TO_SELF)
+        if (propertyName.EqualsOrdinal(PropertySort.PATH_TO_SELF))
             return memberAccess;
 
         var memberType = memberAccess.Type;
@@ -167,7 +169,7 @@ public static class QueryableExtensions
         if (property == null && caseInsensitive)
             property = memberType.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
         if (property == null)
-            throw new ArgumentException($"Property '{propertyName}' not found on type '{memberType.Name}'.");
+            throw new ArgumentException($"Property '{propertyName}' not found on type '{memberType.Name}'.", nameof(propertyName));
 
         var propertyAccess = Expression.MakeMemberAccess(memberAccess, property);
 

@@ -2,9 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq.Expressions;
 
-namespace Plainquire.Filter.ValueFilterExpression;
+namespace Plainquire.Filter.ValueFilterExpressions;
 
 /// <inheritdoc cref="IGuidFilterExpression"/>
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
@@ -61,7 +62,6 @@ public class GuidFilterExpression : DefaultFilterExpression, IGuidFilterExpressi
                 return CreateNotEqualExpression(propertySelector, value);
             case FilterOperator.Contains:
                 return CreateGuidContainsExpression(propertySelector, value);
-            // TODO: Implement LessThan/LessThanOrEqual/GreaterThan/GreaterThanOrEqual
             default:
                 throw CreateFilterExpressionCreationException($"Filter operator '{filterOperator}' not allowed for property type '{typeof(TProperty)}'", propertySelector, filterOperator, value);
         }
@@ -79,7 +79,7 @@ public class GuidFilterExpression : DefaultFilterExpression, IGuidFilterExpressi
     /// </returns>
     public static Expression CreateGuidContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object? value)
     {
-        var valueToUpper = Expression.Constant(value?.ToString().ToUpper(), typeof(string));
+        var valueToUpper = Expression.Constant(value?.ToString().ToUpper(CultureInfo.InvariantCulture), typeof(string));
         var propertyToString = propertySelector.Body.ObjectToString();
         var propertyToUpper = propertyToString.StringToUpper();
         var propertyContainsValue = propertyToUpper.StringContains(valueToUpper);
@@ -95,7 +95,7 @@ public class GuidFilterExpression : DefaultFilterExpression, IGuidFilterExpressi
     /// <param name="value">The value to check for.</param>
     public static Expression CreateGuidStartsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object? value)
     {
-        var valueToUpper = Expression.Constant(value?.ToString().ToUpper(), typeof(string));
+        var valueToUpper = Expression.Constant(value?.ToString().ToUpper(CultureInfo.InvariantCulture), typeof(string));
         var propertyToString = propertySelector.Body.ObjectToString();
         var propertyToUpper = propertyToString.StringToUpper();
         var propertyStartsWithValue = propertyToUpper.StringStartsWith(valueToUpper);
@@ -111,7 +111,7 @@ public class GuidFilterExpression : DefaultFilterExpression, IGuidFilterExpressi
     /// <param name="value">The value to check for.</param>
     public static Expression CreateGuidEndsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object? value)
     {
-        var valueToUpper = Expression.Constant(value?.ToString().ToUpper(), typeof(string));
+        var valueToUpper = Expression.Constant(value?.ToString().ToUpper(CultureInfo.InvariantCulture), typeof(string));
         var propertyToString = propertySelector.Body.ObjectToString();
         var propertyToUpper = propertyToString.StringToUpper();
         var propertyEndsWithValue = propertyToUpper.StringEndsWith(valueToUpper);

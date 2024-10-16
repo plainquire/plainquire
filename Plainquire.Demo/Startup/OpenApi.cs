@@ -27,10 +27,12 @@ internal static class OpenApi
     {
         applicationBuilder.Use(async (context, next) =>
         {
-            if (context.Request.Method == HttpMethods.Get && context.Request.Path.IsOpenApiRoute())
+            var isGetMethod = string.Equals(context.Request.Method, HttpMethods.Get, StringComparison.Ordinal);
+
+            if (isGetMethod && context.Request.Path.IsOpenApiRoute())
                 context.Response.Redirect($"/{API_UI_ROUTE}");
 
-            if (context.Request.Method == HttpMethods.Get && context.Request.Path.StartsWithSegments("/syntax"))
+            if (isGetMethod && context.Request.Path.StartsWithSegments("/syntax", StringComparison.OrdinalIgnoreCase))
                 context.Response.Redirect("https://github.com/plainquire/plainquire#syntax");
 
             await next();
@@ -74,7 +76,8 @@ internal static class OpenApi
     }
 
     private static bool IsOpenApiRoute(this PathString path) =>
-        path.StartsWithSegments(SWAGGER_UI_ROUTE) || path.StartsWithSegments(OPEN_API_UI_ROUTE);
+        path.StartsWithSegments(SWAGGER_UI_ROUTE, StringComparison.OrdinalIgnoreCase) ||
+        path.StartsWithSegments(OPEN_API_UI_ROUTE, StringComparison.OrdinalIgnoreCase);
 
     [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
     private class RemoveUnusedSchemata : IDocumentFilter

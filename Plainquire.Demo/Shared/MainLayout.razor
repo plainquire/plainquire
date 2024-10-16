@@ -1,4 +1,4 @@
-﻿@inherits MainLayoutPage
+﻿@inherits LayoutComponentBase;
 
 <header>
     <NavMenu Theme="@Theme" ToggleTheme="ToggleTheme"></NavMenu>
@@ -7,7 +7,7 @@
 <main role="main" class="@GetRoute()">
     <div class="container pt-md-5 pb-3">
         <CascadingValue Value="@Theme">
-            @Body
+            @base.Body
         </CascadingValue>
     </div>
 </main>

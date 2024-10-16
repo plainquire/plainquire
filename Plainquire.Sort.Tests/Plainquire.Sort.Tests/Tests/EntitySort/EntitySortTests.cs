@@ -234,7 +234,7 @@ public class EntitySortTests
         var sortItems = () => sortFunc(testItems, entitySort);
         sortItems.Should()
             .Throw<ArgumentException>()
-            .WithMessage("Property 'length' not found on type 'String'.");
+            .WithMessage("Property 'length' not found on type 'String'. (Parameter 'propertyName')");
     }
 
     [DataTestMethod]

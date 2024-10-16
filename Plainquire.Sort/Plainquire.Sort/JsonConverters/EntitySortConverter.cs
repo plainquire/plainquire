@@ -1,32 +1,10 @@
-﻿using Plainquire.Sort.Abstractions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Plainquire.Sort.JsonConverters;
-
-/// <summary>
-/// <see cref="EntitySort{TEntity}"/> specific JSON converter factory for Microsoft (System.Text.Json) JSON.
-/// Implements <see cref="JsonConverterFactory" />
-/// </summary>
-/// <seealso cref="JsonConverterFactory" />
-public class EntitySortConverterFactory : JsonConverterFactory
-{
-    /// <inheritdoc />
-    public override bool CanConvert(Type typeToConvert)
-        => typeToConvert.IsGenericEntitySort();
-
-    /// <inheritdoc />
-    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
-    {
-        var entityType = typeToConvert.GetGenericArguments()[0];
-        var entitySortConverterType = typeof(EntitySortConverter<>).MakeGenericType(entityType);
-        return (JsonConverter)Activator.CreateInstance(entitySortConverterType);
-    }
-}
 
 /// <summary>
 /// <see cref="EntitySort{TEntity}"/> specific JSON converter for Microsoft (System.Text.Json) JSON.
@@ -107,25 +85,24 @@ public class EntitySortConverter : JsonConverter<EntitySort>
                 position: filter.Position
             ))
             .ToList();
-}
 
-internal class EntitySortConverterData
-{
-    public List<PropertySortConverterData>? PropertySorts { get; set; } = [];
-    public SortConfiguration? Configuration { get; set; }
-}
-
-[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global", Justification = "Required by serializers")]
-internal class PropertySortConverterData
-{
-    public string PropertyPath { get; set; }
-    public SortDirection Direction { get; set; }
-    public int Position { get; set; }
-
-    public PropertySortConverterData(string propertyPath, SortDirection direction, int position)
+    /// <summary>
+    /// <see cref="EntitySort{TEntity}"/> specific JSON converter factory for Microsoft (System.Text.Json) JSON.
+    /// Implements <see cref="JsonConverterFactory" />
+    /// </summary>
+    /// <seealso cref="JsonConverterFactory" />
+    public class Factory : JsonConverterFactory
     {
-        PropertyPath = propertyPath;
-        Direction = direction;
-        Position = position;
+        /// <inheritdoc />
+        public override bool CanConvert(Type typeToConvert)
+            => typeToConvert.IsGenericEntitySort();
+
+        /// <inheritdoc />
+        public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+        {
+            var entityType = typeToConvert.GetGenericArguments()[0];
+            var entitySortConverterType = typeof(EntitySortConverter<>).MakeGenericType(entityType);
+            return (JsonConverter)Activator.CreateInstance(entitySortConverterType);
+        }
     }
 }

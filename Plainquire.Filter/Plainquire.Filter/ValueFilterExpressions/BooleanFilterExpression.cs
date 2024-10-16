@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Plainquire.Filter.ValueFilterExpression;
+namespace Plainquire.Filter.ValueFilterExpressions;
 
 /// <inheritdoc cref="IBooleanFilterExpression"/>
 public class BooleanFilterExpression : DefaultFilterExpression, IBooleanFilterExpression
@@ -31,7 +31,7 @@ public class BooleanFilterExpression : DefaultFilterExpression, IBooleanFilterEx
         if (bool.TryParse(value, out var boolValue))
             return CreateBoolExpressionByFilterOperator(propertySelector, filterOperator, boolValue);
 
-        var boolSyntax = configuration.BooleanMap.FirstOrDefault(x => x.Key.Equals(value, StringComparison.OrdinalIgnoreCase));
+        var boolSyntax = configuration.BooleanMap.FirstOrDefault(x => x.Key.Equals(value, StringComparison.InvariantCultureIgnoreCase));
         if (boolSyntax.Key != null)
             return CreateBoolExpressionByFilterOperator(propertySelector, filterOperator, boolSyntax.Value);
 

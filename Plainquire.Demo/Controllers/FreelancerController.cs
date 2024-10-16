@@ -18,6 +18,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Plainquire.Filter.Abstractions;
 using Address = Plainquire.Demo.Models.Address;
 
 namespace Plainquire.Demo.Controllers;
@@ -105,10 +106,10 @@ public class FreelancerController : Controller
     /// <param name="seed">A seed. Using seed returns predictable data.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
     [HttpPut]
-    public Task<List<Freelancer>> GenerateFreelancers(int amount = 12, string locale = "en_US", int seed = 0, CancellationToken cancellationToken = default)
+    public Task<ICollection<Freelancer>> GenerateFreelancers(int amount = 12, string locale = "en_US", int seed = 0, CancellationToken cancellationToken = default)
     {
         var freelancers = RecreateFreelancers(amount, locale, seed);
-        return Task.FromResult(freelancers);
+        return Task.FromResult<ICollection<Freelancer>>(freelancers);
     }
 
     private List<Freelancer> RecreateFreelancers(int amount, string locale, int seed)
@@ -160,7 +161,7 @@ public class FreelancerController : Controller
             .RuleFor(x => x.HourlyRate, faker => Math.Round(faker.Random.Double(minHourlyRate, maxHourlyRate), 2))
             .RuleFor(x => x.Address, _ => address.Generate())
             .RuleFor(x => x.Projects, faker => projects.Take(faker.Random.Int(0, 5)).ToList())
-            .FinishWith((_, freelancer) => freelancer.Projects.ForEach(x => x.FreelancerId = freelancer.Id))
+            .FinishWith((_, freelancer) => { foreach (var project in freelancer.Projects) project.FreelancerId = freelancer.Id; })
             .UseSeed(seed)
             .Generate(amount)
             .ToList();
@@ -170,10 +171,10 @@ public class FreelancerController : Controller
     {
         var queryString = query.ToQueryString();
 
-        var select = Regex.Match(queryString, "SELECT.*", RegexOptions.Singleline).Value;
+        var select = Regex.Match(queryString, "SELECT.*", RegexOptions.Singleline, RegexDefaults.Timeout).Value;
 
-        var parameterMatches = Regex.Matches(queryString, @"^\s*.param set (?<paramName>@__p_\d+)\s+(?<paramValue>.*)\s*$", RegexOptions.Multiline);
-        var parameters = parameterMatches.Select(x => new { Name = x.Groups["paramName"].Value.Trim(), Value = x.Groups["paramValue"].Value.Trim() }).ToDictionary(x => x.Name, x => x.Value);
+        var parameterMatches = Regex.Matches(queryString, @"^\s*.param set (?<paramName>@__p_\d+)\s+(?<paramValue>.*)\s*$", RegexOptions.Multiline, RegexDefaults.Timeout);
+        var parameters = parameterMatches.Select(x => new { Name = x.Groups["paramName"].Value.Trim(), Value = x.Groups["paramValue"].Value.Trim() }).ToDictionary(x => x.Name, x => x.Value, StringComparer.Ordinal);
 
         foreach (var parameter in parameters)
             select = select.Replace(parameter.Key, parameter.Value);

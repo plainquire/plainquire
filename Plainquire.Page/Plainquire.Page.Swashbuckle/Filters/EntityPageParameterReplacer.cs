@@ -43,7 +43,8 @@ public class EntityPageParameterReplacer : IOperationFilter
                 context.ApiDescription.ParameterDescriptions,
                 parameter => parameter.Name,
                 description => description.Name,
-                (parameter, description) => (Parameter: parameter, Description: description)
+                (parameter, description) => (Parameter: parameter, Description: description),
+                StringComparer.Ordinal
             )
             .Where(openApi => IsEntityPageParameter(openApi.Description))
             .Select(openApi =>

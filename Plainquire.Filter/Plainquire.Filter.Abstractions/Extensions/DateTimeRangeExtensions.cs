@@ -49,7 +49,7 @@ public static class DateTimeRangeExtensions
     {
         dateTimeRange = new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MinValue);
 
-        var startAndEnd = Regex.Match(value, "^(?<start>.+?)_(?<end>.+)$");
+        var startAndEnd = Regex.Match(value, "^(?<start>.+?)_(?<end>.+)$", RegexOptions.None, RegexDefaults.Timeout);
         if (!startAndEnd.Success)
             return false;
 
@@ -69,14 +69,14 @@ public static class DateTimeRangeExtensions
         const string offsetPattern = @"^(?<datetime>.+?)(?<offset>Z|[\+\-]\d{1,2}:\d{1,2})?$";
         const string dateTimePattern = @"^(?<year>\d\d\d\d)(\D(?<month>\d\d))?(\D(?<day>\d\d))?(\D(?<hour>\d\d))?(\D(?<minute>\d\d))?(\D(?<second>\d\d))?(\D(?<millisecond>\d+))?$";
 
-        var dateTimeAndOffset = Regex.Match(value, offsetPattern);
+        var dateTimeAndOffset = Regex.Match(value, offsetPattern, RegexOptions.None, RegexDefaults.Timeout);
         if (!dateTimeAndOffset.Success)
             return false;
 
         var dateTime = dateTimeAndOffset.Groups["datetime"].Value;
         var offset = dateTimeAndOffset.Groups["offset"].Value;
 
-        var dateAndTime = Regex.Match(dateTime, dateTimePattern);
+        var dateAndTime = Regex.Match(dateTime, dateTimePattern, RegexOptions.ExplicitCapture, RegexDefaults.Timeout);
         if (!dateAndTime.Success)
             return false;
 
@@ -124,7 +124,7 @@ public static class DateTimeRangeExtensions
 
     private static TimeSpan ParseOffset(string offset)
     {
-        if (string.IsNullOrEmpty(offset) || offset == "Z")
+        if (string.IsNullOrEmpty(offset) || offset.EqualsOrdinal("Z"))
             return TimeSpan.Zero;
 
         var offsetHasSign = offset[0] == '+' || offset[0] == '-';

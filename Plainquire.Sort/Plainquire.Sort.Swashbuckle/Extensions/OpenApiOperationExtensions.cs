@@ -24,7 +24,7 @@ public static class OpenApiOperationExtensions
     /// </summary>
     /// <param name="operation">The <see cref="OpenApiOperation"/> to operate on.</param>
     /// <param name="parametersToReplace">The parameters to replace.</param>
-    public static void ReplaceSortParameters(this OpenApiOperation operation, List<SortParameterReplacement> parametersToReplace)
+    public static void ReplaceSortParameters(this OpenApiOperation operation, IList<SortParameterReplacement> parametersToReplace)
     {
         MarkExistingParametersForDeletion(parametersToReplace);
 
@@ -49,33 +49,34 @@ public static class OpenApiOperationExtensions
                     },
                 },
                 In = ParameterLocation.Query,
-                Extensions = new Dictionary<string, IOpenApiExtension>
+                Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.Ordinal)
                 {
                     [ENTITY_SORT_EXTENSION] = new OpenApiBoolean(true)
                 }
             };
 
-            var insertionIndex = operation.Parameters.IndexOf(parameters.First().OpenApiParameter);
+            var insertionIndex = operation.Parameters.IndexOf(parameters[0].OpenApiParameter);
             operation.Parameters.Insert(insertionIndex, openApiParameter);
         }
 
         RemoveParametersMarkedForDeletion(operation);
     }
 
-    private static Dictionary<string, List<SortParameterReplacement>> GroupByHttpQueryParameterName(List<SortParameterReplacement> parametersToReplace)
+    private static Dictionary<string, List<SortParameterReplacement>> GroupByHttpQueryParameterName(IList<SortParameterReplacement> parametersToReplace)
         => parametersToReplace
             .GroupBy(parameter =>
             {
                 var bindingParameterName = parameter.OpenApiDescription.ParameterDescriptor.BindingInfo?.BinderModelName;
                 var actionParameterName = parameter.OpenApiDescription.ParameterDescriptor.Name;
                 return bindingParameterName ?? actionParameterName;
-            })
+            }, StringComparer.Ordinal)
             .ToDictionary(
                 group => group.Key,
-                group => group.ToList()
+                group => group.ToList(),
+                StringComparer.Ordinal
             );
 
-    private static void MarkExistingParametersForDeletion(List<SortParameterReplacement> parameters)
+    private static void MarkExistingParametersForDeletion(IList<SortParameterReplacement> parameters)
     {
         foreach (var parameter in parameters)
             parameter.OpenApiParameter.Extensions.TryAdd(ENTITY_DELETE_EXTENSION, new OpenApiBoolean(true));
@@ -93,16 +94,16 @@ public static class OpenApiOperationExtensions
 
     private static (List<string>, List<string>, string, string) GetSortPrefixes(IReadOnlyCollection<SortParameterReplacement> parameters)
     {
-        var ascendingPrefixes = parameters.Select(parameter => parameter.Configuration.AscendingPrefixes).SelectMany(x => x).Distinct().ToList();
-        var descendingPrefixes = parameters.Select(parameter => parameter.Configuration.DescendingPrefixes).SelectMany(x => x).Distinct().ToList();
-        var ascendingPostfixes = parameters.Select(parameter => parameter.Configuration.AscendingPostfixes).SelectMany(x => x).Distinct().ToList();
-        var descendingPostfixes = parameters.Select(parameter => parameter.Configuration.DescendingPostfixes).SelectMany(x => x).Distinct().ToList();
+        var ascendingPrefixes = parameters.Select(parameter => parameter.Configuration.AscendingPrefixes).SelectMany(x => x).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        var descendingPrefixes = parameters.Select(parameter => parameter.Configuration.DescendingPrefixes).SelectMany(x => x).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        var ascendingPostfixes = parameters.Select(parameter => parameter.Configuration.AscendingPostfixes).SelectMany(x => x).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        var descendingPostfixes = parameters.Select(parameter => parameter.Configuration.DescendingPostfixes).SelectMany(x => x).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
 
-        var prefixes = ascendingPrefixes.Concat(descendingPrefixes).Distinct().Select(Regex.Escape).ToList();
-        var postfixes = ascendingPostfixes.Concat(descendingPostfixes).Distinct().Select(Regex.Escape).ToList();
+        var prefixes = ascendingPrefixes.Concat(descendingPrefixes).Distinct(StringComparer.OrdinalIgnoreCase).Select(Regex.Escape).ToList();
+        var postfixes = ascendingPostfixes.Concat(descendingPostfixes).Distinct(StringComparer.OrdinalIgnoreCase).Select(Regex.Escape).ToList();
 
-        var primaryAscendingPostfix = ascendingPostfixes.First();
-        var primaryDescendingPostfix = descendingPostfixes.First();
+        var primaryAscendingPostfix = ascendingPostfixes[0];
+        var primaryDescendingPostfix = descendingPostfixes[0];
 
         return (prefixes, postfixes, primaryAscendingPostfix, primaryDescendingPostfix);
     }
@@ -119,7 +120,7 @@ public static class OpenApiOperationExtensions
         => parameters
             .Select(parameter => parameter.SortedType)
             .SelectMany(sortedType => sortedType.GetSortPropertyNames())
-            .Distinct()
+            .Distinct(StringComparer.Ordinal)
             .Select(Regex.Escape)
             .ToList();
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Mvc;
 using Plainquire.Filter.Mvc.Newtonsoft;
 using Plainquire.Filter.Swashbuckle;
@@ -25,7 +26,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         var useNewtonsoftArgument = builder.Configuration["use-newtonsoft"];
-        var useNewtonsoft = useNewtonsoftArgument != null && useNewtonsoftArgument != "false";
+        var useNewtonsoft = useNewtonsoftArgument != null && !useNewtonsoftArgument.EqualsOrdinal("false");
 
         var mvcBuilder = builder.Services.AddControllers();
 

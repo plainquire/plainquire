@@ -2,9 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq.Expressions;
 
-namespace Plainquire.Filter.ValueFilterExpression;
+namespace Plainquire.Filter.ValueFilterExpressions;
 
 /// <inheritdoc cref="IStringFilterExpression"/>
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
@@ -48,7 +49,6 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
                 return CreateStringCaseInsensitiveEqualExpression(propertySelector, strFilter);
             case FilterOperator.NotEqual:
                 return CreateStringNotContainsExpression(propertySelector, strFilter);
-            // TODO: Implement LessThan/LessThanOrEqual/GreaterThan/GreaterThanOrEqual
             default:
                 throw CreateFilterExpressionCreationException($"Filter operator '{filterOperator}' not allowed for property type '{typeof(TProperty)}'", propertySelector, filterOperator, value);
         }
@@ -63,7 +63,7 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
     /// <param name="value">The value.</param>
     public static Expression CreateStringContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string? value)
     {
-        var valueToUpper = Expression.Constant(value?.ToUpper(), typeof(TProperty));
+        var valueToUpper = Expression.Constant(value?.ToUpper(CultureInfo.InvariantCulture), typeof(TProperty));
         var propertyToUpper = propertySelector.Body.StringToUpper();
         var propertyContainsValue = propertyToUpper.StringContains(valueToUpper);
         var propertyIsNotNull = propertySelector.IsNotNull();
@@ -104,7 +104,7 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
         if (value == string.Empty)
             return propertySelector.StringIsEmpty();
 
-        var valueToUpper = Expression.Constant(value.ToUpper(), typeof(TProperty));
+        var valueToUpper = Expression.Constant(value.ToUpper(CultureInfo.InvariantCulture), typeof(TProperty));
         var propertyToUpper = propertySelector.Body.StringToUpper();
         var propertyEqualsValue = Expression.Equal(propertyToUpper, valueToUpper);
         var propertyIsNotNull = propertySelector.IsNotNull();
@@ -121,7 +121,7 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
     /// <param name="value">The value.</param>
     public static Expression? CreateStringStartsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string? value)
     {
-        var valueToUpper = Expression.Constant(value?.ToUpper(), typeof(TProperty));
+        var valueToUpper = Expression.Constant(value?.ToUpper(CultureInfo.InvariantCulture), typeof(TProperty));
         var propertyToUpper = propertySelector.Body.StringToUpper();
         var propertyStartsWithValue = propertyToUpper.StringStartsWith(valueToUpper);
         var propertyIsNotNull = propertySelector.IsNotNull();
@@ -138,7 +138,7 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
     /// <param name="value">The value.</param>
     public static Expression? CreateStringEndsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string? value)
     {
-        var valueToUpper = Expression.Constant(value?.ToUpper(), typeof(TProperty));
+        var valueToUpper = Expression.Constant(value?.ToUpper(CultureInfo.InvariantCulture), typeof(TProperty));
         var propertyToUpper = propertySelector.Body.StringToUpper();
         var propertyEndsWithValue = propertyToUpper.StringEndsWith(valueToUpper);
         var propertyIsNotNull = propertySelector.IsNotNull();

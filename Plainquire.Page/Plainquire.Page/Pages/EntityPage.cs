@@ -1,6 +1,7 @@
 ﻿using Plainquire.Page.Abstractions;
 using Plainquire.Page.JsonConverters;
 using System;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -10,7 +11,7 @@ namespace Plainquire.Page;
 /// Hub to create pagination for <typeparamref name="TEntity"/>.
 /// </summary>
 /// <typeparam name="TEntity">The entity type to be paged.</typeparam>
-[JsonConverter(typeof(EntityPageConverterFactory))]
+[JsonConverter(typeof(EntityPageConverter.Factory))]
 public class EntityPage<TEntity> : EntityPage
 {
     /// <inheritdoc />
@@ -59,8 +60,8 @@ public class EntityPage : ICloneable
     /// </summary>
     public int? PageNumber
     {
-        get => int.TryParse(PageNumberValue, out var page) ? page : null;
-        set => PageNumberValue = value.ToString();
+        get => int.TryParse(PageNumberValue, NumberStyles.None, CultureInfo.InvariantCulture, out var page) ? page : null;
+        set => PageNumberValue = value?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
     }
 
     /// <summary>
@@ -68,8 +69,8 @@ public class EntityPage : ICloneable
     /// </summary>
     public int? PageSize
     {
-        get => int.TryParse(PageSizeValue, out var pageSize) ? pageSize : null;
-        set => PageSizeValue = value.ToString();
+        get => int.TryParse(PageSizeValue, NumberStyles.None, CultureInfo.InvariantCulture, out var pageSize) ? pageSize : null;
+        set => PageSizeValue = value?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
     }
 
     /// <summary>

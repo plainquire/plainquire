@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Plainquire.Demo.Extensions;
+using Plainquire.Filter.Abstractions;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Plainquire.Demo.Shared;
 
-public class MainLayoutPage : LayoutComponentBase
+public partial class MainLayout : LayoutComponentBase
 {
     protected string ProductName = string.Empty;
     protected string ProductVersion = string.Empty;
@@ -18,6 +20,7 @@ public class MainLayoutPage : LayoutComponentBase
 
     protected string Theme = "light";
 
+    [SuppressMessage("Design", "MA0119:JSRuntime must not be used in OnInitialized or OnInitializedAsync", Justification = "False positive")]
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -35,7 +38,7 @@ public class MainLayoutPage : LayoutComponentBase
 
     protected async Task ToggleTheme()
     {
-        Theme = Theme == "dark" ? "light" : "dark";
+        Theme = Theme.EqualsOrdinal("dark") ? "light" : "dark";
         await JsRuntime.InvokeVoidAsync("setTheme", Theme);
     }
 }

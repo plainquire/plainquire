@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using Plainquire.Filter.Abstractions;
+using System.Text.RegularExpressions;
 
 namespace Plainquire.Sort;
 
@@ -8,6 +9,7 @@ internal static class PropertySortExtensions
         => Regex.IsMatch(
                input: sort.PropertyPath,
                pattern: @$"^{Regex.Escape(propertyName)}(\..+)?$",
-               options: RegexOptions.IgnoreCase
+               options: RegexOptions.IgnoreCase,
+               matchTimeout: RegexDefaults.Timeout
            );
 }

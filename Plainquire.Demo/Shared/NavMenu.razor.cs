@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Plainquire.Demo.Shared;
 
-public class NavMenuComponent : ComponentBase
+public partial class NavMenu : ComponentBase
 {
     [Inject] private NavigationManager NavigationManager { get; set; } = default!;
     [Inject] private IHostEnvironment Environment { get; set; } = default!;
@@ -15,14 +15,14 @@ public class NavMenuComponent : ComponentBase
     [Parameter] public string Theme { get; set; } = default!;
     [Parameter] public EventCallback ToggleTheme { get; set; }
 
-    protected bool IsDevelopment => Environment.IsDevelopment();
-    protected string OpeApiLink = string.Empty;
+    private bool IsDevelopment => Environment.IsDevelopment();
+    private string _opeApiLink = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
         var uri = new Uri(NavigationManager.BaseUri);
-        OpeApiLink = $"{uri.Scheme}://{uri.Authority}/{OpenApi.API_UI_ROUTE}".TrimEnd('/');
+        _opeApiLink = $"{uri.Scheme}://{uri.Authority}/{OpenApi.API_UI_ROUTE}".TrimEnd('/');
     }
 }
