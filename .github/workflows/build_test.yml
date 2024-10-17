@@ -55,7 +55,7 @@ jobs:
           reports: testreport/**/coverage.opencover.xml
           title: "Code Coverage"
           targetdir: coveragereport
-          reporttypes: MarkdownSummaryGithub;JsonSummary
+          reporttypes: HtmlInline;MarkdownSummaryGithub;JsonSummary
           license: ${{ secrets.REPORTGENERATOR_LICENSE }}
       - name: Publish coverage
         id: coverage_report
@@ -99,9 +99,10 @@ jobs:
       - name: Create badges
         run:  |
           mkdir badges
+          BUILD_STATUS=${{ needs.build.result }}
           BUILD_COLOR=${{ needs.build.result == 'success' && 'reen' || 'red' }}
           echo "BUILD_COLOR: $BUILD_COLOR"
-          curl https://img.shields.io/badge/Build-passed-$BUILD_COLOR > badges/build.svg
+          curl https://img.shields.io/badge/Build-$BUILD_STATUS-$BUILD_COLOR > badges/build.svg
       - name: Upload badges
         uses: actions/upload-artifact@v4
         with:
