@@ -11,7 +11,7 @@
 
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
-    <CoverletOutput>../../TestResults/coverage.opencover.$(MSBuildProjectName).xml</CoverletOutput>
+    <CoverletOutput>../../testreport/coverage.opencover.$(MSBuildProjectName).xml</CoverletOutput>
     <CoverletOutputFormat>opencover</CoverletOutputFormat>
     <SkipAutoProps>true</SkipAutoProps>
   </PropertyGroup>
