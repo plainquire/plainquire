@@ -305,3 +305,5 @@ __pycache__/
 /Plainquire.Filter.Swashbuckle/Plainquire.Filter.Swashbuckle.xml
 /Plainquire.Filter/Plainquire.Filter.xml
 /Todo.txt
+/coveragereport
+/testreport

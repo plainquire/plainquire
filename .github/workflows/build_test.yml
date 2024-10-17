@@ -37,7 +37,7 @@ jobs:
           dotnet-version: 8.0.x
       - name: Run tests
         run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "testreport" --filter "ClassName~SyntaxConfigurationTests"
-      - name: Aggregate test results
+      - name: Aggregate and publish test results
         id: test_report
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
@@ -55,7 +55,7 @@ jobs:
           reports: testreport/coverage.opencover.*.Tests.xml
           title: "Code Coverage"
           targetdir: coveragereport
-          reporttypes: MarkdownSummaryGithub;JsonSummary;Badges
+          reporttypes: MarkdownSummaryGithub;JsonSummary
           license: ${{ secrets.REPORTGENERATOR_LICENSE }}
       - name: Publish coverage
         id: coverage_report
@@ -64,7 +64,6 @@ jobs:
         run: |
           cat coveragereport/SummaryGithub.md | sed -e 's/# Summary - Code Coverage/## Code Coverage/g' >> $GITHUB_STEP_SUMMARY
           echo "json=$(cat coveragereport/Summary.json | tr --delete '\n' | sed -e 's/[()\`]/Y/g')" >> $GITHUB_OUTPUT
-        
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
@@ -96,3 +95,15 @@ jobs:
           echo "---"
           echo "tests: ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_succ }} passed"
           echo "tests: ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_fail }} failed"
+          
+      - name: Create badges
+        run:  |
+          mkdir badges
+          BUILD_COLOR=${{ needs.build.result == 'success' && 'reen' || 'red' }}
+          echo "BUILD_COLOR: $BUILD_COLOR"
+          curl https://img.shields.io/badge/Build-passed-$BUILD_COLOR > badges/build.svg
+      - name: Upload badges
+        uses: actions/upload-artifact@v4
+        with:
+          name: badges
+          path: badges
