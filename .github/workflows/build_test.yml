@@ -4,11 +4,12 @@ on: [ push, pull_request ]
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
     - name: Test
       run: |
-        echo "Build" && exit 1
+        echo "Build" && exit 0
     #- name: Checkout
     #  uses: actions/checkout@v4
     #- name: Setup .NET
@@ -87,7 +88,7 @@ jobs:
       - name: HelloOutA
         run: |
           echo "---"
-          echo "bbuild: ${{ needs.build.result }}"
+          echo "build: ${{ needs.build.result }}"
           echo "---"
           echo "coverage: ${{ fromJson(needs.test.outputs.coverage_report_json).summary.linecoverage }} lines"
           echo "coverage: ${{ fromJson(needs.test.outputs.coverage_report_json).summary.branchcoverage }} branches"
@@ -95,93 +96,3 @@ jobs:
           echo "---"
           echo "tests: ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_succ }} passed"
           echo "tests: ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_fail }} failed"
-          echo "---"
-          echo "${{ toJson(needs) }}"
-
-    #  - name: HelloOut
-    #    run: |
-    #      echo "tests: ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_succ }} passed"
-    #      echo "tests: ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_fail }} failed"
-    #  - name: HelloOut
-    #    run: |
-    #      echo "tests   : ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_succ }} passed"
-    #      echo "tests   : ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_fail }} failed"
-    #      # echo "build   : ${{ fromJson(needs.build).result }}"
-    #      # echo "build   : ${{ fromJson(needs.build) }}"
-    #      # echo "coverage: ${{ needs.test.outputs.coverage_report_json }}"
-    #      echo "all     : ${{ toJson(needs) }}"
-    #      echo "all     : ${{ fromJson(needs) }}"
-    #   - name: Badges
-    #     run: |
-    #       echo "RST: ${{ needs.test.result }}"
-    #       echo "JSN: ${{ toJson(needs) }}"
-    # - name: Badges
-    #   run: |
-    #     echo "1: ${{ needs.dependent-upon-fails.result }}"
-    #     echo "2: ${{ jobs.build.outputs.exit_code }}"
-    #     echo "3: ${{ jobs.test.outputs.exit_code }}"
-    #     echo "4: ${{ jobs.test.outputs }}"
-    #     echo "5: ${{ toJson(jobs.test.outputs) }}"
-    #     echo "Badges" && exit 0
-    # - name: Checkout
-    #   uses: actions/checkout@v4
-    # - name: Setup .NET
-    #   uses: actions/setup-dotnet@v4
-    #   with:
-    #     dotnet-version: 8.0.x
-    # - name: Run tests
-    #   run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "testreport"
-    # - name: Aggregate test results
-    #   uses: EnricoMi/publish-unit-test-result-action@v2
-    #   if: always()
-    #   with:
-    #     files: |
-    #       testreport/*.trx
-    #     comment_mode: off
-    #     check_run: false
-    #     job_summary: true
-    #     json_file: testreport/testresult.json
-    # - name: Upload test results
-    #   uses: actions/upload-artifact@v4
-    #   if: always()
-    #   with:
-    #     name: test_results
-    #     path: testreport
-
-  # badges:
-  #   needs: [build, test]
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     checks: write
-  #   - name: Test
-  #     run: |
-  #       echo "Badges" && exit 0
-    # steps:
-    # - name: Test
-    #   run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "testreport"
-    # - name: Create Test Coverage Badge
-    #   uses: simon-k/dotnet-code-coverage-badge@v1.0.0
-    #   id: create_coverage_badge
-    #   with:
-    #     label: Unit Test Coverage
-    #     color: brightgreen
-    #     path: testreport/coverage.opencover.xml
-    #     gist-filename: plainquire-code-coverage-badge.json
-    #     gist-id: 138006474693c9a3040e469ede06a423
-    #     gist-auth-token: ${{ secrets.CODE_COVERAGE_BADGE }}
-    #- name: Publish Test Results
-    #  uses: EnricoMi/publish-unit-test-result-action@v2
-    #  if: always()
-    #  with:
-    #    files: |
-    #      testreport/*.trx
-    #    comment_mode: off
-    #    check_run: false
-    #    job_summary: true
-    #    json_file: testreport/testresult.json
-    #- name: Upload test results
-    #  uses: actions/upload-artifact@v4
-    #  if: always()
-    #  with:
-    #    name: test_results
-    #    path: testreport
