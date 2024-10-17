@@ -11,15 +11,17 @@
     <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
   </ItemGroup>
 
+  <!--
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutput>../../testreport/coverage.opencover.$(MSBuildProjectName).xml</CoverletOutput>
     <CoverletOutputFormat>opencover</CoverletOutputFormat>
     <SkipAutoProps>true</SkipAutoProps>
   </PropertyGroup>
+  -->
 
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="6.0.2">
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

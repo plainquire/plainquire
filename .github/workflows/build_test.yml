@@ -36,7 +36,7 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Run tests
-        run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --results-directory "testreport" --filter "ClassName~SyntaxConfigurationTests"
+        run: dotnet test --configuration Release -warnaserror --logger:trx --logger:html --collect:"XPlat Code Coverage" --settings:.runsettings --results-directory "testreport" --filter "ClassName~SyntaxConfigurationTests"
       - name: Aggregate and publish test results
         id: test_report
         uses: EnricoMi/publish-unit-test-result-action@v2
@@ -52,7 +52,7 @@ jobs:
         uses: danielpalme/ReportGenerator-GitHub-Action@5.3.11
         if: always()
         with:
-          reports: testreport/coverage.opencover.*.Tests.xml
+          reports: testreport/**/coverage.opencover.xml
           title: "Code Coverage"
           targetdir: coveragereport
           reporttypes: MarkdownSummaryGithub;JsonSummary
