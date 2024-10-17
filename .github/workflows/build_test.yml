@@ -99,10 +99,13 @@ jobs:
       - name: Create badges
         run:  |
           mkdir badges
-          BUILD_STATUS=${{ needs.build.result }}
+          BUILD_STATUS=${{ needs.build.result == 'success' && 'passing' || 'failed' }}
           BUILD_COLOR=${{ needs.build.result == 'success' && 'reen' || 'red' }}
-          echo "BUILD_COLOR: $BUILD_COLOR"
-          curl https://img.shields.io/badge/Build-$BUILD_STATUS-$BUILD_COLOR > badges/build.svg
+          curl https://img.shields.io/badge/build-$BUILD_STATUS-$BUILD_COLOR > badges/build.svg
+          
+          COVERAGE_STATUS=${{ fromJson(needs.test.outputs.coverage_report_json).summary.linecoverage }}
+          COVERAGE_COLOR=red
+          curl https://img.shields.io/badge/coverage-$COVERAGE_STATUS%-$COVERAGE_COLOR > badges/coverage.svg
       - name: Upload badges
         uses: actions/upload-artifact@v4
         with:
