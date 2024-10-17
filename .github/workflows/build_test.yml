@@ -104,7 +104,7 @@ jobs:
           curl https://img.shields.io/badge/build-$BUILD_STATUS-$BUILD_COLOR > badges/build.svg
           
           COVERAGE_STATUS=${{ fromJson(needs.test.outputs.coverage_report_json).summary.linecoverage }}
-          COVERAGE_COLOR=if (( COVERAGE_STATUS < 85 )); then C="red"; elif (( COVERAGE_STATUS < 90 )); then C="orange"; else C="green"; fi
+          COVERAGE_COLOR=if (( $COVERAGE_STATUS < 85 )); then C="red"; elif (( $COVERAGE_STATUS < 90 )); then C="orange"; else C="green"; fi
           curl https://img.shields.io/badge/coverage-$COVERAGE_STATUS%25-$COVERAGE_COLOR > badges/coverage.svg
       - name: Upload badges
         uses: actions/upload-artifact@v4
