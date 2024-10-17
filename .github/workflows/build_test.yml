@@ -9,7 +9,7 @@ jobs:
     steps:
     - name: Test
       run: |
-        echo "Build" && exit 0
+        echo "Build" && exit 1
     #- name: Checkout
     #  uses: actions/checkout@v4
     #- name: Setup .NET
