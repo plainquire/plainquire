@@ -101,15 +101,36 @@ jobs:
           mkdir badges
           BUILD_STATUS=${{ needs.build.result == 'success' && 'passing' || 'failed' }}
           BUILD_COLOR=${{ needs.build.result == 'success' && 'reen' || 'red' }}
-          curl https://img.shields.io/badge/build-$BUILD_STATUS-$BUILD_COLOR > badges/build.svg
-          curl https://img.shields.io/badge/build-$BUILD_STATUS-$BUILD_COLOR > badges/build.svg
+          curl https://img.shields.io/badge/build-${BUILD_STATUS}-${BUILD_COLOR} > badges/build.svg
           
           COVERAGE_STATUS=${{ fromJson(needs.test.outputs.coverage_report_json).summary.linecoverage }}        
-          [[ $COVERAGE_STATUS -lt 85 ]] && COVERAGE_COLOR="red" || { [[ $COVERAGE_STATUS -lt 90 ]] && COVERAGE_COLOR="orange" || C="green"; }
-          echo "COVERAGE_STATUS: $COVERAGE_STATUS"
-          echo "COVERAGE_COLOR: $COVERAGE_COLOR"
-          echo "curl curl https://img.shields.io/badge/coverage-${COVERAGE_STATUS}%25-${COVERAGE_COLOR} > badges/coverage.svg"
+          [[ $COVERAGE_STATUS -lt 85 ]] && COVERAGE_COLOR="red" || { [[ $COVERAGE_STATUS -lt 90 ]] && COVERAGE_COLOR="orange" || COVERAGE_COLOR="green"; }
           curl https://img.shields.io/badge/coverage-${COVERAGE_STATUS}%25-${COVERAGE_COLOR} > badges/coverage.svg
+          
+          COVERAGE_STATUS=85
+          [[ $COVERAGE_STATUS -lt 85 ]] && COVERAGE_COLORA="red" || { [[ $COVERAGE_STATUS -lt 90 ]] && COVERAGE_COLORA="orange" || COVERAGE_COLORA="green"; }
+          echo "COVERAGE_COLORA: $COVERAGE_COLORA"
+          
+          COVERAGE_STATUS=95
+          [[ $COVERAGE_STATUS -lt 85 ]] && COVERAGE_COLORB="red" || { [[ $COVERAGE_STATUS -lt 90 ]] && COVERAGE_COLORB="orange" || COVERAGE_COLORB="green"; }
+          echo "COVERAGE_COLORB: $COVERAGE_COLORB"
+          
+          TESTS_PASSED=${{ fromJson(needs.test.outputs.test_report_json).stats.runs_succ }}
+          TESTS_FAILED=${{ fromJson(needs.test.outputs.test_report_json).stats.runs_fail }}
+          [[ ${TESTS_FAILED} -eq 0 ]] && TEST_COUNT=${TESTS_PASSED} || TEST_COUNT=${TESTS_FAILED}
+          [[ ${TESTS_FAILED} -eq 0 ]] && TEST_STATUS="passed" || TEST_STATUS="failed"
+          [[ ${TESTS_FAILED} -eq 0 ]] && TEST_COLOR="green" || TEST_COLOR="red"
+          echo "curl https://img.shields.io/badge/tests-${TEST_COUNT}_${TEST_STATUS}-${TEST_COLOR} > badges/tests.svg"
+          curl https://img.shields.io/badge/tests-${TEST_COUNT}_${TEST_STATUS}-${TEST_COLOR} > badges/tests.svg
+          
+          LATEST_VERSION_TAG=$(git describe --tags --match="[0-9]*" --abbrev=0 main)
+          echo "curl https://img.shields.io/badge/version-${LATEST_VERSION_TAG}-blue > badges/version.svg"
+          curl https://img.shields.io/badge/release-${LATEST_VERSION_TAG}-blue > badges/release.svg
+          
+          LICENSE=MIT
+          echo "curl https://img.shields.io/badge/license-${LICENSE}-green > badges/license.svg"
+          curl https://img.shields.io/badge/license-${LICENSE}-green > badges/license.svg
+
       - name: Upload badges
         uses: actions/upload-artifact@v4
         with:
