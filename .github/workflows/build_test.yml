@@ -104,26 +104,24 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LICENSE: "MIT"
           BUILD_STATUS: ${{ needs.build.result == 'success' && 'passing' || 'failed' }}
+          BUILD_COLOR: ${{ needs.build.result == 'success' && 'green' || 'red' }}
+          COVERAGE_STATUS: ${{ fromJson(needs.test.outputs.coverage_report_json).summary.linecoverage }}   
+          TESTS_PASSED: ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_succ }}
+          TESTS_FAILED: ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_fail }}
         run:  |
           mkdir badges
           
+          # Release badge
           LATEST_RELEASE=$(curl -sH "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/plainquire/plainquire/releases/latest" | jq -r .tag_name)
-          echo "Latest release tag: $LATEST_RELEASE"
-          echo "curl https://img.shields.io/badge/version-${LATEST_RELEASE}-blue > badges/version.svg"
           curl https://img.shields.io/badge/release-${LATEST_RELEASE}-blue > badges/release.svg
           
-          echo "curl https://img.shields.io/badge/license-${LICENSE}-green > badges/license.svg"
           curl https://img.shields.io/badge/license-${LICENSE}-green > badges/license.svg
           
-          BUILD_COLOR=${{ needs.build.result == 'success' && 'green' || 'red' }}
           curl https://img.shields.io/badge/build-${BUILD_STATUS}-${BUILD_COLOR} > badges/build.svg
-          
-          COVERAGE_STATUS=${{ fromJson(needs.test.outputs.coverage_report_json).summary.linecoverage }}        
+               
           [[ $COVERAGE_STATUS -lt 85 ]] && COVERAGE_COLOR="red" || { [[ $COVERAGE_STATUS -lt 90 ]] && COVERAGE_COLOR="orange" || COVERAGE_COLOR="green"; }
           curl https://img.shields.io/badge/coverage-${COVERAGE_STATUS}%25-${COVERAGE_COLOR} > badges/coverage.svg
           
-          TESTS_PASSED=${{ fromJson(needs.test.outputs.test_report_json).stats.runs_succ }}
-          TESTS_FAILED=${{ fromJson(needs.test.outputs.test_report_json).stats.runs_fail }}
           [[ ${TESTS_FAILED} -eq 0 ]] && TEST_COUNT=${TESTS_PASSED} || TEST_COUNT=${TESTS_FAILED}
           [[ ${TESTS_FAILED} -eq 0 ]] && TEST_STATUS="passed" || TEST_STATUS="failed"
           [[ ${TESTS_FAILED} -eq 0 ]] && TEST_COLOR="green" || TEST_COLOR="red"
