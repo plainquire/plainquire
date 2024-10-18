@@ -85,6 +85,22 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
+      - name: Create index.html
+        run: |
+          cat > _site/index.html <<EOL
+          <!doctype html>
+          <html lang=en>
+          <head>
+              <meta charset=utf-8>
+              <title>Plainquire</title>
+          </head>
+          <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+              <a href="https://www.plainquire.com" style="width: 50vw">
+                  <img src="https://www.plainquire.com/images/logo_light.svg">
+              </a>
+          </body>
+          </html>
+          EOL
       - name: Create badges
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -95,7 +111,7 @@ jobs:
           TESTS_FAILED: ${{ fromJson(needs.test.outputs.test_report_json).stats.runs_fail }}
           COVERAGE_STATUS: ${{ fromJson(needs.test.outputs.coverage_report_json).summary.linecoverage }}
         run:  |
-          mkdir badges
+          mkdir -p _site/badges
           # Release badge
           LATEST_RELEASE=$(curl -sH "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/plainquire/plainquire/releases/latest" | jq -r .tag_name)
           curl https://img.shields.io/badge/release-${LATEST_RELEASE}-blue > badges/release.svg
@@ -116,4 +132,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: badges
-          path: badges
+          path: _site
