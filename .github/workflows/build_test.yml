@@ -108,8 +108,8 @@ jobs:
           [[ $COVERAGE_STATUS -lt 85 ]] && COVERAGE_COLOR="red" || { [[ $COVERAGE_STATUS -lt 90 ]] && COVERAGE_COLOR="orange" || C="green"; }
           echo "COVERAGE_STATUS: $COVERAGE_STATUS"
           echo "COVERAGE_COLOR: $COVERAGE_COLOR"
-          echo "curl https://img.shields.io/badge/coverage-$COVERAGE_STATUS%25-$COVERAGE_COLOR > badges/coverage.svg"
-          curl https://img.shields.io/badge/coverage-$COVERAGE_STATUS%25-$COVERAGE_COLOR > badges/coverage.svg
+          echo "curl curl https://img.shields.io/badge/coverage-${COVERAGE_STATUS}%25-${COVERAGE_COLOR} > badges/coverage.svg"
+          curl https://img.shields.io/badge/coverage-${COVERAGE_STATUS}%25-${COVERAGE_COLOR} > badges/coverage.svg
       - name: Upload badges
         uses: actions/upload-artifact@v4
         with:
