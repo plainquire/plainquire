@@ -24,6 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       checks: write
+      contents: read
+      pages: write
+      id-token: write
     outputs:
       test_report_json: ${{ steps.test_report.outputs.json }}
       coverage_report_json: ${{ steps.coverage_report.outputs.json }}
@@ -114,6 +117,10 @@ jobs:
           [[ ${TESTS_FAILED} -eq 0 ]] && TEST_COLOR="green" || TEST_COLOR="red"
           echo "curl https://img.shields.io/badge/tests-${TEST_COUNT}_${TEST_STATUS}-${TEST_COLOR} > badges/tests.svg"
           curl https://img.shields.io/badge/tests-${TEST_COUNT}_${TEST_STATUS}-${TEST_COLOR} > badges/tests.svg
+          
+          LICENSE=MIT
+          echo "curl https://img.shields.io/badge/license-${LICENSE}-green > badges/license.svg"
+          curl https://img.shields.io/badge/license-${LICENSE}-green > badges/license.svg
 
       - name: Upload badges
         uses: actions/upload-artifact@v4
