@@ -1,16 +1,16 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
-[TestClass]
+[TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntitySortCastTests
 {
-    [TestMethod]
+    [Test]
     public void WhenEntitySortIsCast_PropertiesAreMappedByName()
     {
         var sort = new EntitySort<PersonDto>()

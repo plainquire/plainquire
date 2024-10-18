@@ -1,7 +1,7 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Mvc.ModelBinders;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.TestSupport.Extensions;
@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace Plainquire.Filter.Tests.Tests.ModelBinder;
 
-[TestClass]
+[TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntityFilterModelBinderTests
 {
-    [TestMethod]
+    [Test]
     public async Task WhenGenericEntityFilterParameterIsGiven_ParameterBoundAsExpected()
     {
         // Arrange
@@ -44,7 +44,7 @@ public class EntityFilterModelBinderTests
         propertyFilter.ValueFilters.Select(x => x.Value).Should().Equal("Hello");
     }
 
-    [TestMethod]
+    [Test]
     public async Task WhenGenericEntityFilterPropertyIsGiven_ParameterBoundAsExpected()
     {
         // Arrange

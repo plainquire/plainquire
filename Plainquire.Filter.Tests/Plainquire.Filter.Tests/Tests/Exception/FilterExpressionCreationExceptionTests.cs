@@ -1,16 +1,15 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Models;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.Exception;
 
-[TestClass]
+[TestFixture]
 public class FilterExpressionCreationExceptionTests
 {
-    [TestMethod]
+    [Test]
     public void WhenFilterExpressionCreationExceptionIsThrown_AllMembersAreFilled()
     {
         var filter = new EntityFilter<TestModel<bool>>()

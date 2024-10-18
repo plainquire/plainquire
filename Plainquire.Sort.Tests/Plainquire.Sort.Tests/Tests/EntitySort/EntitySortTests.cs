@@ -1,21 +1,19 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Sort.Tests.Services;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
-[TestClass]
+[TestFixture]
 public class EntitySortTests
 {
     private static readonly SortConfiguration _defaultConfiguration = new();
 
-    [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenObjectIsNull_ThenValidQueryableIsCreated(EntitySortFunction<TestModel<string>> sortFunc)
     {
@@ -35,7 +33,7 @@ public class EntitySortTests
         sortedEntities.Should().ContainInOrder(testItems[0], testItems[2], testItems[1], testItems[3]);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenPropertySortIsAdded_ThenSamePropertySorOrdersAreKept()
     {
         var sort = new EntitySort<TestModel<string>>()
@@ -45,7 +43,7 @@ public class EntitySortTests
         sort.PropertySorts.Should().HaveCount(2);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenPropertySortIsRemoved_OtherSortsAreKept()
     {
         var sort = new EntitySort<TestModel<string>>()
@@ -57,7 +55,7 @@ public class EntitySortTests
         sort.PropertySorts.Should().ContainSingle(x => x.PropertyPath == "Value2");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNestedPropertySortIsRemoved_OtherSortsAreKept()
     {
         var sort = new EntitySort<TestModel<string>>()
@@ -69,7 +67,7 @@ public class EntitySortTests
         sort.PropertySorts.Should().ContainSingle(x => x.PropertyPath == "Value");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenSortIsCleared_AllPropertySortsAreRemoved()
     {
         var sort = new EntitySort<TestModel<string>>()
@@ -81,7 +79,7 @@ public class EntitySortTests
         sort.PropertySorts.Should().BeEmpty();
     }
 
-    [TestMethod]
+    [Test]
     public void WhenPropertySortStringForSingleValueIsRetrieved_ThenSortSyntaxIsSameAsGiven()
     {
         var syntax = $"NestedObject.Id{_defaultConfiguration.PrimaryDescendingPostfix}";
@@ -91,7 +89,7 @@ public class EntitySortTests
         sort.ToString().Should().Be(syntax);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenSortToStringIsCalled_SortSyntaxIsReturned()
     {
         var sort = new EntitySort<TestModel<string>>()
@@ -101,7 +99,6 @@ public class EntitySortTests
         sort.ToString().Should().Be($"NestedObject.Id{_defaultConfiguration.PrimaryAscendingPostfix}, Value2{_defaultConfiguration.PrimaryDescendingPostfix}");
     }
 
-    [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenEntitiesSortedByMultiplePropertyExpressions_EntitiesSortedAsExpected(EntitySortFunction<TestModel<string>> sortFunc)
     {
@@ -121,7 +118,6 @@ public class EntitySortTests
         sortedItems.Should().ContainInOrder(testItems[1], testItems[3], testItems[0], testItems[2]);
     }
 
-    [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenEntitiesSortedByMultiplePropertySyntax_EntitiesSortedAsExpected(EntitySortFunction<TestModel<string>> sortFunc)
     {
@@ -141,7 +137,6 @@ public class EntitySortTests
         sortedItems.Should().ContainInOrder(testItems[1], testItems[3], testItems[0], testItems[2]);
     }
 
-    [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenEntitiesSortedWithExplicitPositions_EntitiesSortedAsExpected(EntitySortFunction<TestModel<string>> sortFunc)
     {
@@ -161,7 +156,7 @@ public class EntitySortTests
         sortedItems.Should().ContainInOrder(testItems[1], testItems[0], testItems[3], testItems[2]);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenEntitiesSortedWithoutExplicitPositions_PositionIsGenerated()
     {
         var sort = new EntitySort<TestModel<string>>()
@@ -171,7 +166,7 @@ public class EntitySortTests
         sort.PropertySorts.Select(x => x.Position).Should().ContainInOrder(0, 1);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenEntitiesSortedWithPartialExplicitPositions_PositionIsIncremented()
     {
         var sort = new EntitySort<TestModel<string>>()
@@ -181,7 +176,7 @@ public class EntitySortTests
         sort.PropertySorts.Select(x => x.Position).Should().ContainInOrder(10, 11);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenPropertySortSyntaxIsRetrieved_FinalSortSyntaxIsReturned()
     {
         var sort = new EntitySort<TestModel<string>>()
@@ -192,7 +187,7 @@ public class EntitySortTests
         valueASyntax.Should().Be($"Value{_defaultConfiguration.PrimaryAscendingPostfix}");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenPropertySortDirectionIsRetrieved_FinalSortDirectionIsReturned()
     {
         var sort = new EntitySort<TestModel<string>>()
@@ -203,7 +198,6 @@ public class EntitySortTests
         valueASortDirection.Should().Be(SortDirection.Descending);
     }
 
-    [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenEntitiesSortedByLowercaseSyntax_EntitiesSortedAsExpected(EntitySortFunction<TestModel<string>> sortFunc)
     {
@@ -220,7 +214,6 @@ public class EntitySortTests
         sortedItems.Should().ContainInOrder(testItems[1], testItems[0]);
     }
 
-    [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenEntitiesSortedWithLowercaseSyntaxForbiddenByConfig_ExceptionIsThrow(EntitySortFunction<TestModel<string>> sortFunc)
     {
@@ -237,7 +230,6 @@ public class EntitySortTests
             .WithMessage("Property 'length' not found on type 'String'. (Parameter 'propertyName')");
     }
 
-    [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenIgnoreParseExceptionsIsConfiguredAndPropertyNotFound_PropertyIsIgnoredWhileSorting(EntitySortFunction<TestModel<string>> sortFunc)
     {
@@ -258,7 +250,6 @@ public class EntitySortTests
         sortedItems.Should().ContainInOrder(testItems[2], testItems[1], testItems[0]);
     }
 
-    [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenNoSortIsAdded_EntitySortIsEmpty(EntitySortFunction<TestModel<string>> sortFunc)
     {

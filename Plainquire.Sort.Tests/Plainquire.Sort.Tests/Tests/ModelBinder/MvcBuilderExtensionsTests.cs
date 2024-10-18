@@ -4,19 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Sort.Mvc;
 using Plainquire.Sort.Mvc.ModelBinders;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.ModelBinder;
 
-[TestClass]
+[TestFixture]
 public class MvcBuilderExtensionsTests
 {
-    [TestMethod]
+    [Test]
     public void WhenSortSupportIsAdded_AllRequiredModelBindersAreRegistered()
     {
         var servCollection = new ServiceCollection();

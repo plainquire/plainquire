@@ -1,7 +1,7 @@
 ﻿using FakeItEasy;
 using FluentAssertions.Execution;
 using Microsoft.OpenApi.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Page.Swashbuckle.Filters;
 using Plainquire.Page.Tests.Models;
 using Plainquire.Swashbuckle.TestSupport.Extensions;
@@ -14,12 +14,12 @@ using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.OpenApiFilter;
 
-[TestClass]
+[TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntityPageParameterNameTests
 {
-    [TestMethod]
+    [Test]
     public void WhenUnnamedPageParameterIsGiven_GeneratedParametersMatchExpected()
     {
         // Arrange
@@ -46,7 +46,7 @@ public class EntityPageParameterNameTests
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNumberNamedPageParameterIsGiven_GeneratedParametersMatchExpected()
     {
         // Arrange
@@ -73,7 +73,7 @@ public class EntityPageParameterNameTests
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
     }
 
-    [TestMethod]
+    [Test]
     public void WheSizeNamedPageParameterIsGiven_GeneratedParametersMatchExpected()
     {
         // Arrange
@@ -100,7 +100,7 @@ public class EntityPageParameterNameTests
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenBothNamedPageParameterIsGiven_GeneratedParametersMatchExpected()
     {
         // Arrange
@@ -127,7 +127,7 @@ public class EntityPageParameterNameTests
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenMixedNamedPageParametersAreGiven_GeneratedParametersMatchExpected()
     {
         // Arrange

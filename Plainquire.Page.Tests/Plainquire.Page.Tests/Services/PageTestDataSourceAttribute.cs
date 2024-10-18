@@ -2,21 +2,21 @@
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 using NUnit.Framework.Internal.Builders;
-using Plainquire.Filter.Tests.Models;
+using Plainquire.Page.Tests.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Plainquire.Filter.Tests.Services;
+namespace Plainquire.Page.Tests.Services;
 
 [AttributeUsage(AttributeTargets.Method, Inherited = false)]
-public class FilterTestDataSourceAttribute : NUnitAttribute, ITestBuilder, IImplyFixture
+public class PageTestDataSourceAttribute : NUnitAttribute, ITestBuilder, IImplyFixture
 {
     private readonly NUnitTestCaseBuilder _builder = new();
     private readonly string _testCasesField;
 
-    public FilterTestDataSourceAttribute(string testCasesField)
+    public PageTestDataSourceAttribute(string testCasesField)
         => _testCasesField = testCasesField;
 
     public IEnumerable<TestMethod> BuildFrom(IMethodInfo method, Test? suite)
@@ -41,19 +41,21 @@ public class FilterTestDataSourceAttribute : NUnitAttribute, ITestBuilder, IImpl
         if (testCasesField.GetValue(null) is not IEnumerable<object> testCasesFieldValue)
             throw new InvalidOperationException($"Field {_testCasesField} of type '{testClass.Name}' has no value or does not implement IEnumerable");
 
-        var testCases = testCasesFieldValue.Cast<FilterTestCase>().ToList();
-        var testCaseModelType = testCases.First().GetType().GetGenericArguments().Last();
-        var testModelType = typeof(TestModel<>).MakeGenericType(testCaseModelType);
-        var filterFunctions = EntityFilterFunctions.GetEntityFilterFunctions(testModelType);
+        var testCases = testCasesFieldValue.Cast<PageTestcase>().ToList();
+        var entityPageFuncParameterType = methodInfo.GetParameters()[1].ParameterType.GenericTypeArguments[0];
+        var pageFunctions = EntityPageFunctions.GetEntityPageFunctions(entityPageFuncParameterType);
+
         return testCases
-            .SelectMany(_ => filterFunctions, (testCase, filterFunc) => CreateTestCaseData(testName, testCase, filterFunc))
+            .SelectMany(_ => pageFunctions, (testCase, pageFunc) => CreateTestCaseData(testName, testCase, pageFunc))
             .ToList();
     }
 
-    private static TestCaseData CreateTestCaseData(string testName, FilterTestCase testCase, Delegate filterFunc)
+    private static TestCaseData CreateTestCaseData(string testName, PageTestcase testCase, Delegate pageFunc)
     {
-        var testCaseData = new TestCaseData([testCase, filterFunc]);
-        testCaseData.SetName($"{testName}(Id: {testCase.Id}, {filterFunc.Method.Name})");
+        var testCaseData = new TestCaseData([testCase, pageFunc]);
+        var page = testCase.Page;
+        var name = $"{testName}({pageFunc.Method.Name}, PageNumber: {page.PageNumber}, PageSize: {page.PageSize})";
+        testCaseData.SetName(name);
         return testCaseData;
     }
 }

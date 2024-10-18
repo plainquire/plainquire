@@ -22,8 +22,8 @@ public static class EntitySortFunctions
             SortNewtonCloneByEF
         ];
 
-    public static IEnumerable<object> GetEntitySortFunctions(Type entityType)
-        => (IEnumerable<object>)typeof(EntitySortFunctions)
+    public static IEnumerable<Delegate> GetEntitySortFunctions(Type entityType)
+        => (IEnumerable<Delegate>)typeof(EntitySortFunctions)
             .GetMethod(nameof(GetEntitySortFunctions), BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly, [])!
             .MakeGenericMethod(entityType)
             .Invoke(null, [])!;

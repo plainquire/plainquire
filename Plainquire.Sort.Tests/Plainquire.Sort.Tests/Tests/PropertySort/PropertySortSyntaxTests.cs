@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Sort.Tests.Services;
@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.PropertySort;
 
-[TestClass]
+[TestFixture]
 public class PropertySortSyntaxTests
 {
     private static readonly SortConfiguration _defaultConfiguration = new();
@@ -33,7 +33,6 @@ public class PropertySortSyntaxTests
     private static readonly SortTestcase<TestModel<string>>[] _ownPropertyTestCases = CreateOwnPropertyTestcases<string>();
     private static readonly SortTestcase<TestModel<string>>[] _navigationPropertyTestCases = CreateNavigationPropertyTestcases<string>();
 
-    [DataTestMethod]
     [SortTestCaseDataSource(nameof(_ownPropertyTestCases))]
     public void WhenPropertySortIsCreatedByOwnPropertySyntax_EntitiesSortedAsExpected(SortTestcase<TestModel<string>> testCase, EntitySortFunction<TestModel<string>> sortFunc)
     {
@@ -47,7 +46,6 @@ public class PropertySortSyntaxTests
         sortedTestItems.Should().Equal(expectedTestItems);
     }
 
-    [DataTestMethod]
     [SortTestCaseDataSource(nameof(_navigationPropertyTestCases))]
     public void WhenPropertySortIsCreatedByNavigationPropertySyntax_EntitiesSortedAsExpected(SortTestcase<TestModel<string>> testCase, EntitySortFunction<TestModel<string>> sortFunc)
     {

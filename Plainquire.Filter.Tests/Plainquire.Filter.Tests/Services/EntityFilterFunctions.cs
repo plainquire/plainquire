@@ -23,8 +23,8 @@ public static class EntityFilterFunctions
             FilterNewtonCloneByEF
         ];
 
-    public static IEnumerable<object> GetEntityFilterFunctions(Type entityType)
-        => (IEnumerable<object>)typeof(EntityFilterFunctions)
+    public static IEnumerable<Delegate> GetEntityFilterFunctions(Type entityType)
+        => (IEnumerable<Delegate>)typeof(EntityFilterFunctions)
             .GetMethod(nameof(GetEntityFilterFunctions), BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly, [])!
             .MakeGenericMethod(entityType)
             .Invoke(null, [])!;

@@ -1,16 +1,14 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Page.Tests.Models;
 using Plainquire.Page.Tests.Services;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
 
-[TestClass]
+[TestFixture]
 public class InterceptorTests
 {
-    [DataTestMethod]
     [PageFuncDataSource<TestModel<string>>]
     public void WhenPagedUsingInterceptorViaParameter_InterceptorIsCalledToCreatePage(EntityPageFunction<TestModel<string>> pageFunc)
     {

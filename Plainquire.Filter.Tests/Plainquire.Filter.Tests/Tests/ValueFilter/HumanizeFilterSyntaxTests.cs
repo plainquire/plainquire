@@ -1,14 +1,13 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics.CodeAnalysis;
+using NUnit.Framework;
 
 namespace Plainquire.Filter.Tests.Tests.ValueFilter;
 
-[TestClass]
+[TestFixture]
 public class HumanizeFilterSyntaxTests
 {
-    [TestMethod]
+    [Test]
     public void WhenFilteredTypeIsString_DefaultOperatorIsContains()
     {
         const string filterSyntax = "A";
@@ -16,7 +15,7 @@ public class HumanizeFilterSyntaxTests
         humanizedSyntax.Should().Be("Name contains 'A'");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenFilteredTypeIsNotString_DefaultOperatorIsEqualCaseInsensitive()
     {
         const string filterSyntax = "25";
@@ -24,7 +23,7 @@ public class HumanizeFilterSyntaxTests
         humanizedSyntax.Should().Be("Age is '25'");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenTwoFilterValuesAreProvided_ThenTheyAreCombinedWithOr()
     {
         const string filterSyntax = "25,26";
@@ -32,7 +31,7 @@ public class HumanizeFilterSyntaxTests
         humanizedSyntax.Should().Be("Age is '25' or '26'");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenMultipleValuesToFilterOperatorNotAreProvided_ThenTheyAreCombinedWithNor()
     {
         const string filterSyntax = "<24,>30";
@@ -40,7 +39,7 @@ public class HumanizeFilterSyntaxTests
         humanizedSyntax.Should().Be("Age is less than '24' or Age is greater than '30'");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenThreeOrMoreFilterValuesAreProvided_ThenTheyAreCombinedWithCommaAndOr()
     {
         const string filterSyntax = "25,26,27";
@@ -48,7 +47,7 @@ public class HumanizeFilterSyntaxTests
         humanizedSyntax.Should().Be("Age is '25', '26' or '27'");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenEmptyFilterValuesAreProvided_ThenIsUnfilteredIsReturned()
     {
         const string filterSyntax = "";
@@ -56,7 +55,7 @@ public class HumanizeFilterSyntaxTests
         humanizedSyntax.Should().Be("Age is unfiltered");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenFilterOperatorIsProvided_ThenResultMatches()
     {
         using var _ = new AssertionScope();
@@ -94,7 +93,7 @@ public class HumanizeFilterSyntaxTests
         humanizedSyntax8.Should().Be("Age is less than or equal to 'A'");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNullCheckFilterOperatorIsProvided_ThenResultMatches()
     {
         using var _ = new AssertionScope();

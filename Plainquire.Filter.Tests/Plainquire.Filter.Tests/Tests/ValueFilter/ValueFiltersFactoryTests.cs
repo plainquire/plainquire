@@ -1,13 +1,12 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics.CodeAnalysis;
+using NUnit.Framework;
 
 namespace Plainquire.Filter.Tests.Tests.ValueFilter;
 
-[TestClass]
+[TestFixture]
 public class ValueFiltersFactoryTests
 {
-    [TestMethod]
+    [Test]
     public void WhenValueFiltersCreatedFromSyntax_SupportedOperatorsReturnSameResult()
     {
         // Act

@@ -2,7 +2,7 @@
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Mvc.ModelBinders;
 using Plainquire.Sort.Tests.Models;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Plainquire.Sort.Tests.Tests.Configuration;
 
-[TestClass]
+[TestFixture]
 public class ConfigurationPrecedenceTests
 {
     private static readonly SortConfiguration _unusedConfiguration = new();
@@ -24,8 +24,8 @@ public class ConfigurationPrecedenceTests
         DescendingPrefixes = ["--"]
     };
 
-    [TestMethod]
-    [DoNotParallelize]
+    [Test]
+    [NonParallelizable]
     public async Task WhenEntitySortPrototypeIsRegisteredInDI_ConfigurationsFromPrototypeIsUsedAsFirstPrecedence()
     {
         var configuredTestSort = new EntitySort<TestModel<string>>(_usedConfiguration);
@@ -63,8 +63,8 @@ public class ConfigurationPrecedenceTests
         SortConfiguration.Default = null;
     }
 
-    [TestMethod]
-    [DoNotParallelize]
+    [Test]
+    [NonParallelizable]
     public async Task WhenEntitySortConfigurationIsRegisteredViaDI_ConfigurationsFromDIIsUsedAsFirstPrecedence()
     {
         // Arrange
@@ -99,8 +99,8 @@ public class ConfigurationPrecedenceTests
         SortConfiguration.Default = null;
     }
 
-    [TestMethod]
-    [DoNotParallelize]
+    [Test]
+    [NonParallelizable]
     public async Task WhenStaticDefaultSortConfigurationIsSet_StaticDefaultConfigurationsIsUsedAsFirstPrecedence()
     {
         // Arrange
@@ -135,7 +135,7 @@ public class ConfigurationPrecedenceTests
         SortConfiguration.Default = null;
     }
 
-    [TestMethod]
+    [Test]
     public async Task WhenNoConfigurationIsSet_DefaultConfigurationsIsUsedAsFirstPrecedence()
     {
         // Arrange

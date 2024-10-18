@@ -1,17 +1,16 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Sort.Tests.Models;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace Plainquire.Sort.Tests.Tests.Extensions;
 
-[TestClass]
+[TestFixture]
 public class ExpressionExtensionsTests
 {
-    [TestMethod]
+    [Test]
     public void WhenExpressionReturnsSelfReference_PropertyPathShouldBePathToSelfConstant()
     {
         Expression<Func<string, string>> expr = value => value;
@@ -19,7 +18,7 @@ public class ExpressionExtensionsTests
         path.Should().Be(Sort.PropertySort.PATH_TO_SELF);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenExpressionContainsOtherThanMemberAccess_ArgumentExceptionIsThrown()
     {
         Expression<Func<string, string>> getSubstring = value => value.Substring(1);

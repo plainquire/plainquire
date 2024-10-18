@@ -1,17 +1,16 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Sort.Tests.Models;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Sort.Tests.Tests.PropertySort;
 
-[TestClass]
+[TestFixture]
 public class PropertySortExceptionTests
 {
 
-    [TestMethod]
+    [Test]
     public void WhenPropertySortIsCreatedWithNullOrEmptySyntax_ExceptionIsThrown()
     {
         Action createWithEmptyString = () => new EntitySort<TestModel<string>>().Add("");

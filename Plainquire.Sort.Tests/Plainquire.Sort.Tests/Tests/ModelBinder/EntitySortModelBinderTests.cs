@@ -1,7 +1,7 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Sort.Mvc.ModelBinders;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.TestSupport.Extensions;
@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace Plainquire.Sort.Tests.Tests.ModelBinder;
 
-[TestClass]
+[TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntitySortModelBinderTests
 {
-    [TestMethod]
+    [Test]
     public async Task WhenGenericEntitySortParameterIsGiven_ParameterBoundAsExpected()
     {
         // Arrange
@@ -46,7 +46,7 @@ public class EntitySortModelBinderTests
             .Should()
             .ContainInOrder("Value");
     }
-    [TestMethod]
+    [Test]
     public async Task WhenGenericEntitySortPageIsGiven_ParameterBoundAsExpected()
     {
         // Arrange
@@ -74,11 +74,10 @@ public class EntitySortModelBinderTests
             .ContainInOrder("Value");
     }
 
-    [DataTestMethod]
-    [DataRow(nameof(EntitySortPositionController.SingleSort))]
-    [DataRow(nameof(EntitySortPositionController.SingleSortAtStart))]
-    [DataRow(nameof(EntitySortPositionController.SingleSortAtEnd))]
-    [DataRow(nameof(EntitySortPositionController.SingleSortBetween))]
+    [TestCase(nameof(EntitySortPositionController.SingleSort))]
+    [TestCase(nameof(EntitySortPositionController.SingleSortAtStart))]
+    [TestCase(nameof(EntitySortPositionController.SingleSortAtEnd))]
+    [TestCase(nameof(EntitySortPositionController.SingleSortBetween))]
     public async Task WhenSingleEntitySortIsGiven_FinalOrderMatchesQueryParams(string actionName)
     {
         // Arrange
@@ -106,13 +105,12 @@ public class EntitySortModelBinderTests
             .ContainInOrder("Name", "Birthday");
     }
 
-    [DataTestMethod]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortSameParameter))]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortAtStartSameParameter))]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortAtEndSameParameter))]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortBetweenSameParameter))]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortAroundSameParameter))]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortSpreadSameParameter))]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortSameParameter))]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortAtStartSameParameter))]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortAtEndSameParameter))]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortBetweenSameParameter))]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortAroundSameParameter))]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortSpreadSameParameter))]
     public async Task WhenMultipleEntitySortWithSameParameterNameAreGiven_FinalOrderMatchesQueryParams(string actionName)
     {
         // Arrange
@@ -146,13 +144,12 @@ public class EntitySortModelBinderTests
             .ContainInOrder("Name", "Birthday", "Address.Street");
     }
 
-    [DataTestMethod]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortSeparateParameter))]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortAtStartSeparateParameter))]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortAtEndSeparateParameter))]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortBetweenSeparateParameter))]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortAroundSeparateParameter))]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortSpreadSeparateParameter))]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortSeparateParameter))]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortAtStartSeparateParameter))]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortAtEndSeparateParameter))]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortBetweenSeparateParameter))]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortAroundSeparateParameter))]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortSpreadSeparateParameter))]
     public async Task WhenMultipleEntitySortWithSeparateParameterNamesAreGiven_FinalOrderMatchesQueryParams(string actionName)
     {
         // Arrange

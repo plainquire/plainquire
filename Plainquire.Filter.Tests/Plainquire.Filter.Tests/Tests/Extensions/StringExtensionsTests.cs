@@ -1,13 +1,12 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics.CodeAnalysis;
+using NUnit.Framework;
 
 namespace Plainquire.Filter.Tests.Tests.Extensions;
 
-[TestClass]
+[TestFixture]
 public class StringExtensionsTests
 {
-    [TestMethod]
+    [Test]
     public void WhenStringLowercaseFirstCharIsCalled_FirstCharIsLowercase()
     {
         var lowerCase1 = "HELLO".LowercaseFirstChar();
@@ -24,7 +23,7 @@ public class StringExtensionsTests
         lowerCase4.Should().BeNull();
     }
 
-    [TestMethod]
+    [Test]
     public void WhenStringUppercaseFirstCharIsCalled_FirstCharIsUppercase()
     {
         var uppercase1 = "hello".UppercaseFirstChar();

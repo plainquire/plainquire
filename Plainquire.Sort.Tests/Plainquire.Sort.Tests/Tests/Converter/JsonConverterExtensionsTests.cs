@@ -1,17 +1,17 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using NUnit.Framework;
 using Plainquire.Sort.Newtonsoft;
 using Plainquire.Sort.Newtonsoft.JsonConverters;
 using System.Collections.Generic;
 
 namespace Plainquire.Sort.Tests.Tests.Converter;
 
-[TestClass]
+[TestFixture]
 public class JsonConverterExtensionsTests
 {
-    [TestMethod]
+    [Test]
     public void WhenNewtonsoftJsonSupportIsAdded_AllRequiredConvertersAreRegistered()
     {
         var converters = new List<JsonConverter>();

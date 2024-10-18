@@ -1,15 +1,14 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Page.Abstractions;
 using Plainquire.Page.Tests.Models;
 using Plainquire.Page.Tests.Services;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
 
-[TestClass]
+[TestFixture]
 public class PageConfigurationTests
 {
     private static readonly PageConfiguration _ignoreParseExceptionConfiguration = new() { IgnoreParseExceptions = true };
@@ -23,8 +22,7 @@ public class PageConfigurationTests
         PageTestcase<TestModel<string>>.Create("a", "1", _ignoreParseExceptionConfiguration),
     ];
 
-    [DataTestMethod]
-    [PageTestCaseDataSource(nameof(_invalidPageNumber))]
+    [PageTestDataSource(nameof(_invalidPageNumber))]
     public void WhenInvalidPageNumberIsGivenAndParseExceptionsAreIgnored_FirstPageIsReturned(PageTestcase<TestModel<string>> testCase, EntityPageFunction<TestModel<string>> pageFunc)
     {
         if (testCase.Page.PageSize == null)
@@ -49,8 +47,7 @@ public class PageConfigurationTests
         PageTestcase<TestModel<string>>.Create("1", "a", _ignoreParseExceptionConfiguration),
     ];
 
-    [DataTestMethod]
-    [PageTestCaseDataSource(nameof(_invalidPageSize))]
+    [PageTestDataSource(nameof(_invalidPageSize))]
     public void WhenInvalidPageSizeIsGivenAndParseExceptionsAreIgnored_AllItemsReturned(PageTestcase<TestModel<string>> testCase, EntityPageFunction<TestModel<string>> pageFunc)
     {
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };

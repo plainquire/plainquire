@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Integration.Tests.Services;
 using Plainquire.Integration.Tests.TestSupport.Models;
 using System.Collections.Generic;
@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 
 namespace Plainquire.Integration.Tests.Tests;
 
-[TestClass]
+[TestFixture]
 public class ModelBinderTests
 {
-    [DataTestMethod]
-    [DataRow([true], DisplayName = "WithNewtonsoftJson")]
-    [DataRow([false], DisplayName = "WithMicrosoftJson")]
+    [TestCase(true, TestName = "WhenRequestMadeWithIndividualEntities_ResultMatchesGivenParameters(WithNewtonsoftJson)")]
+    [TestCase(false, TestName = "WhenRequestMadeWithIndividualEntities_ResultMatchesGivenParameters(WithMicrosoftJson)")]
     public async Task WhenRequestMadeWithIndividualEntities_ResultMatchesGivenParameters(bool useNewtonSoft)
     {
         await using var testHost = await TestHost.Create(useNewtonSoft);
@@ -29,9 +28,8 @@ public class ModelBinderTests
         filteredTestPersons![0].LastName.Should().Be("Ray");
     }
 
-    [DataTestMethod]
-    [DataRow([true], DisplayName = "WithNewtonsoftJson")]
-    [DataRow([false], DisplayName = "WithMicrosoftJson")]
+    [TestCase(true, TestName = "WhenRequestMadeWithSetEntities_ResultMatchesGivenParameters(WithNewtonsoftJson)")]
+    [TestCase(false, TestName = "WhenRequestMadeWithSetEntities_ResultMatchesGivenParameters(WithMicrosoftJson)")]
     public async Task WhenRequestMadeWithSetEntities_ResultMatchesGivenParameters(bool useNewtonSoft)
     {
         await using var testHost = await TestHost.Create(useNewtonSoft);

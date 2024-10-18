@@ -1,22 +1,35 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
+using NUnit.Framework.Interfaces;
+using NUnit.Framework.Internal;
+using NUnit.Framework.Internal.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Plainquire.Sort.Tests.Services;
 
-[AttributeUsage(AttributeTargets.Method)]
-public class SortFuncDataSourceAttribute<TEntity> : Attribute, ITestDataSource where TEntity : class
+[AttributeUsage(AttributeTargets.Method, Inherited = false)]
+public class SortFuncDataSourceAttribute<TEntity> : NUnitAttribute, ITestBuilder, IImplyFixture where TEntity : class
 {
-    public IEnumerable<object?[]> GetData(MethodInfo methodInfo)
-        => EntitySortFunctions.GetEntitySortFunctions<TEntity>().Select(filterFunc => new[] { filterFunc });
+    private readonly NUnitTestCaseBuilder _builder = new();
 
-    public string GetDisplayName(MethodInfo methodInfo, object?[]? data)
+    public IEnumerable<TestMethod> BuildFrom(IMethodInfo method, Test? suite)
     {
-        var filterFunctionName = ((Delegate?)data?[0])?.Method.Name
-            ?? throw new InvalidOperationException("Unable to get filter method name.");
+        var testCases = GetTestcases(method.Name);
+        foreach (var testCase in testCases)
+            yield return _builder.BuildTestMethod(method, suite, testCase);
+    }
 
-        return $"{filterFunctionName}: {methodInfo.Name}";
+    private static List<TestCaseData> GetTestcases(string testName)
+        => EntitySortFunctions
+            .GetEntitySortFunctions<TEntity>()
+            .Select(filterFunc => CreateTestCaseData(filterFunc, testName))
+            .ToList();
+
+    private static TestCaseData CreateTestCaseData(Delegate filterFunc, string testName)
+    {
+        var testCaseData = new TestCaseData([filterFunc]);
+        testCaseData.SetName($"{testName}({filterFunc.Method.Name})");
+        return testCaseData;
     }
 }

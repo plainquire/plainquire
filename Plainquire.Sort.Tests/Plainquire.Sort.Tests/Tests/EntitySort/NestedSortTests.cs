@@ -1,19 +1,17 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Sort.Tests.Services;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using static Plainquire.Sort.PropertySort;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
-[TestClass]
+[TestFixture]
 public class NestedSortTests
 {
-    [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenNestedSortIsApplied_ThenNestedPropertyIsSorted(EntitySortFunction<TestModel<string>> sortFunc)
     {
@@ -37,7 +35,6 @@ public class NestedSortTests
         sortedEntities.Should().ContainInOrder(testItems[3], testItems[1], testItems[2], testItems[0]);
     }
 
-    [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenNestedObjectIsNull_ThenValidQueryableIsCreated(EntitySortFunction<TestModel<string>> sortFunc)
     {
@@ -60,7 +57,7 @@ public class NestedSortTests
         sortedEntities.Should().ContainInOrder(testItems[0], testItems[1], testItems[3], testItems[2]);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNestedSortIsAdded_PathToSelfIsReplacedByPropertyName()
     {
         var nestedSort = new EntitySort<TestModelNested<string>>()
@@ -72,7 +69,7 @@ public class NestedSortTests
         outerSort.PropertySorts.Should().ContainSingle(x => x.PropertyPath == "NestedObject.Value");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNestedSortIsAdded_NestedPathsAreKept()
     {
         var sort = new EntitySort<TestModel<string>>()
@@ -88,7 +85,7 @@ public class NestedSortTests
         nestedSort.PropertySorts.Should().Contain(x => x.PropertyPath == "Value.Length");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNestedSortIsRetrieved_ItEqualsToAddedOne()
     {
         var nestedSort = new EntitySort<TestModelNested<string>>()
@@ -104,7 +101,7 @@ public class NestedSortTests
         retrievedNestedSort.PropertySorts.Should().BeEquivalentTo(nestedSort.PropertySorts);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNestedSortIsRemoved_ChildSortsAreRemoved()
     {
         var sort = new EntitySort<TestModel<string>>()
@@ -117,7 +114,7 @@ public class NestedSortTests
         sort.PropertySorts.Should().ContainSingle(x => x.PropertyPath == "Value");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNestedSortIsSetToNull_ArgumentNullExceptionIsThrown()
     {
         Action setNestedSortToNull = () => new EntitySort<TestModel<string>>()

@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Models;
 using System;
@@ -7,10 +7,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
-[TestClass]
+[TestFixture]
 public class EntityFilterExtensionsTests
 {
-    [TestMethod]
+    [Test]
     public void WhenFilterAddedViaSyntax_FilterIsChanged()
     {
         var filter = new EntityFilter<TestModel<int>>()
@@ -19,7 +19,7 @@ public class EntityFilterExtensionsTests
         filter.ToString().Should().Be("x => ((x.ValueA == 1) AndAlso (x.ValueA == 2))");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNullFilterSyntaxIsAdded_FilterIsReturnedUnchanged()
     {
         var filter = new EntityFilter<TestModel<bool>>()
@@ -28,7 +28,7 @@ public class EntityFilterExtensionsTests
         filter.ToString().Should().Be("x => (x.ValueA == True)");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenAddedFilterValuesAreNull_FilterIsReturnedUnchanged()
     {
         var filter1 = new EntityFilter<TestModel<int>>()
@@ -48,7 +48,7 @@ public class EntityFilterExtensionsTests
         filter3.ToString().Should().Be("x => (x.ValueA == 1)");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenAddedFilterValuesAreEmpty_FilterIsReturnedUnchanged()
     {
         var filter1 = new EntityFilter<TestModel<int>>()
@@ -68,7 +68,7 @@ public class EntityFilterExtensionsTests
         filter3.ToString().Should().Be("x => (x.ValueA == 1)");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenFilterReplacedViaSyntax_FilterIsChanged()
     {
         var filter = new EntityFilter<TestModel<int>>()
@@ -77,7 +77,7 @@ public class EntityFilterExtensionsTests
         filter.ToString().Should().Be("x => (x.ValueA == 2)");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNullFilterSyntaxIsReplaced_FilterIsReturnedUnchanged()
     {
         var filter = new EntityFilter<TestModel<bool>>()
@@ -86,7 +86,7 @@ public class EntityFilterExtensionsTests
         filter.ToString().Should().Be(string.Empty);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenReplacedFilterValuesAreNull_FilterIsReturnedUnchanged()
     {
         var filter1 = new EntityFilter<TestModel<int>>()
@@ -106,7 +106,7 @@ public class EntityFilterExtensionsTests
         filter3.ToString().Should().Be(string.Empty);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenReplacedFilterValuesAreEmpty_FilterIsReturnedUnchanged()
     {
         var filter1 = new EntityFilter<TestModel<int>>()
@@ -125,7 +125,7 @@ public class EntityFilterExtensionsTests
         filter3.ToString().Should().Be(string.Empty);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenConvertedToQueryParams_FilterAttributesAreTakenIntoAccount()
     {
         var modelFilter = new EntityFilter<FilterAttributeTestModel>()

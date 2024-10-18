@@ -1,16 +1,16 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
 
-[TestClass]
+[TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntityPageCastTests
 {
-    [TestMethod]
+    [Test]
     public void WhenTypedEntityPageIsCast_PageParametersAreKept()
     {
         var dtoPage = new EntityPage<PersonDto>(2, 3);
@@ -21,7 +21,7 @@ public class EntityPageCastTests
         modelPage.PageSizeValue.Should().Be("3");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenEntityPageIsCloned_PageParametersAreKept()
     {
         var page = new Page.EntityPage(2, 3);

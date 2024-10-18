@@ -1,16 +1,15 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.Range;
 
-[TestClass]
+[TestFixture]
 public class RangeTests
 {
-    [TestMethod]
+    [Test]
     public void WhenRangeIsCreated_ResultMatchExpected()
     {
         var range1 = new Range<int>(1, 2);
@@ -22,7 +21,7 @@ public class RangeTests
         range2.End.Should().Be(2);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenRangeToStringIsCalled_ResultMatchExpected()
     {
         using var _ = new AssertionScope();
@@ -46,7 +45,7 @@ public class RangeTests
         range6.ToString().Should().Be("NonConvertible_NonConvertible");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenRangesAreCompared_ResultMatchExpected()
     {
         var rangeSmall1 = new Range<int>(2, 3);
@@ -64,7 +63,7 @@ public class RangeTests
         (rangeSmall1 <= rangeSmall2).Should().BeTrue();
     }
 
-    [TestMethod]
+    [Test]
     public void WhenRangeIsConverted_ResultMatchExpected()
     {
         IConvertible rangeMin = new Range<double>(0, 0);
@@ -147,7 +146,7 @@ public class RangeTests
         toType.Should().Throw<OverflowException>().WithMessage("Range was too large for a UInt64");
     }
 
-    [TestMethod]
+    [Test]
     public void RangeDistance_ShouldMatchExpected()
     {
         var intRange = new Range<int>(1, 4);
@@ -160,14 +159,14 @@ public class RangeTests
         dateTimeOffsetRange.Distance.Should().Be(TimeSpan.FromDays(1).Ticks);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenStartAndEndOfRangeAreNull_DistanceIsZero()
     {
         var range = new Range<NonConvertible>(null, null);
         range.Distance.Should().Be(0);
     }
 
-    [TestMethod]
+    [Test]
     public void RangeWithNonConvertibleType_CouldNotCalculateDistance()
     {
         var range = new Range<NonConvertible>(new NonConvertible(), new NonConvertible());
@@ -175,7 +174,7 @@ public class RangeTests
         toDouble.Should().Throw<InvalidOperationException>().WithMessage("The type NonConvertible is not convertible to Double");
     }
 
-    [TestMethod]
+    [Test]
     public void RangeWithNonConvertibleType_CouldNotConvertedViaIConvertible()
     {
         IConvertible range = new Range<NonConvertible>(new NonConvertible(), new NonConvertible());
@@ -183,21 +182,21 @@ public class RangeTests
         toDouble.Should().Throw<InvalidOperationException>().WithMessage("The type NonConvertible is not convertible to Double");
     }
 
-    [TestMethod]
+    [Test]
     public void Range_HasTypeCodeObject()
     {
         IConvertible range = new Range<int>(2, 3);
         range.GetTypeCode().Should().Be(TypeCode.Object);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenRangeHasCodeIsCalculated_ResultMatchExpected()
     {
         IConvertible range = new Range<int>(2, 3);
         range.GetHashCode().Should().Be(HashCode.Combine(2, 3));
     }
 
-    [TestMethod]
+    [Test]
     public void WhenDateTimeSpansComparedForEquality_ResultMatchExpected()
     {
         var spanA1 = new Range<DateTimeOffset>(new DateTimeOffset(2000, 01, 01, 0, 0, 0, TimeSpan.Zero), new DateTimeOffset(2000, 12, 31, 0, 0, 0, TimeSpan.Zero));
@@ -208,7 +207,7 @@ public class RangeTests
         spanA2.Should().NotBe(spanB);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenDateTimeSpansIntersectIsCalculated_ResultMatchExpected()
     {
         // ReSharper disable InconsistentNaming
@@ -238,7 +237,7 @@ public class RangeTests
         ((Range<DateTimeOffset>?)null).Intersect(null).Should().BeFalse();
     }
 
-    [TestMethod]
+    [Test]
     public void OverlappingRangesWithOpenSide_DoIntersect()
     {
         var overlappingRanges = new[] {
@@ -283,7 +282,7 @@ public class RangeTests
         }
     }
 
-    [TestMethod]
+    [Test]
     public void DistinctRangesWithOpenSide_DoNotIntersect()
     {
         var distinctRanges = new[] {
@@ -312,7 +311,7 @@ public class RangeTests
         }
     }
 
-    [TestMethod]
+    [Test]
     public void WhenDateTimeSpansIntersectionIsCalculated_ResultMatchExpected()
     {
         // ReSharper disable InconsistentNaming
@@ -342,7 +341,7 @@ public class RangeTests
         ((Range<DateTimeOffset>?)null).Intersection(null).Should().Be(default);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenDateTimeSpansUnionIsCalculated_ResultMatchExpected()
     {
         // ReSharper disable InconsistentNaming
@@ -373,7 +372,7 @@ public class RangeTests
         ((Range<DateTimeOffset>?)null).Union(null).Should().Be(default);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenDateTimeSpansContainsIsCalculated_ResultMatchExpected()
     {
         // ReSharper disable InconsistentNaming
@@ -403,7 +402,7 @@ public class RangeTests
         ((Range<DateTimeOffset>?)null).Contains(null).Should().BeFalse();
     }
 
-    [TestMethod]
+    [Test]
     public void EqualRangesWithOpenSide_ContainsItselfOther()
     {
         var containingRanges = new[] {
@@ -426,7 +425,7 @@ public class RangeTests
             ranges.Range.Contains(ranges.Range).Should().BeTrue(because: $"range with Id {ranges.Id} should contain itself");
     }
 
-    [TestMethod]
+    [Test]
     public void ContainerRangeWithOpenSide_ContainsInner()
     {
         var containingRanges = new[] {

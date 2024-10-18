@@ -1,20 +1,18 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
-[TestClass]
+[TestFixture]
 public class EntityFilterTests
 {
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<DateTime>>]
     public void WhenPropertyFilterIsAdded_ThenSamePropertyFiltersAreKept(EntityFilterFunc<TestModel<DateTime>> filterFunc)
     {
@@ -34,7 +32,6 @@ public class EntityFilterTests
         filteredEntitiesLinq.Should().BeEquivalentTo([testItems[1], testItems[2]]);
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenPropertyFilterIsReplaced_ThenSamePropertyFiltersAreRemoved(EntityFilterFunc<TestModel<string>> filterFunc)
     {
@@ -52,7 +49,6 @@ public class EntityFilterTests
         filteredEntities.Should().BeEquivalentTo([testItems[1]]);
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenPropertyFilterIsRemoved_ThenOtherPropertyFiltersAreKept(EntityFilterFunc<TestModel<string>> filterFunc)
     {
@@ -71,7 +67,7 @@ public class EntityFilterTests
         filteredEntities.Should().BeEquivalentTo([testItems[0]]);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenFilterIsCleared_ThenAllPropertyFiltersAreRemoved()
     {
         var entityFilter = new EntityFilter<TestModel<string>>()
@@ -83,7 +79,7 @@ public class EntityFilterTests
         filter.Should().BeNull();
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNoValueForPropertyIsProvided_ThenFilterIsLeftUnchanged()
     {
         using var _ = new AssertionScope();
@@ -98,7 +94,7 @@ public class EntityFilterTests
         entityFilter2.Should().Match<EntityFilter<TestModel<string>>>(x => x.IsEmpty());
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNullValueForPropertyIsProvided_ThenArgumentExceptionIsThrown()
     {
         Action createInvalidEntityFilter = () => new EntityFilter<TestModel<string>>()
@@ -107,7 +103,7 @@ public class EntityFilterTests
         createInvalidEntityFilter.Should().Throw<ArgumentException>().WithMessage("Filter values cannot be null. If filtering for NULL is intended, use filter operator 'IsNull' or 'NotNull' (Parameter 'value')");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenUnknownTypeIsFiltered_ThenArgumentExceptionIsThrown()
     {
         using var _ = new AssertionScope();
@@ -118,7 +114,6 @@ public class EntityFilterTests
         createInvalidEntityFilter1.Should().Throw<ArgumentException>().WithMessage("The type 'System.Collections.Generic.List`1[System.String]' is not filterable by any known expression creator (Parameter 'value')");
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenPropertyIsFilteredForNull_FilterOperatorIsRecognizedCorrectly(EntityFilterFunc<TestModel<string>> filterFunc)
     {
@@ -151,7 +146,6 @@ public class EntityFilterTests
         notNullItemsReplaced.Should().BeEquivalentTo([testItems[0]]);
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenPropertyIsFilteredForNull_GivenValuesAreIgnored(EntityFilterFunc<TestModel<string>> filterFunc)
     {
@@ -186,7 +180,6 @@ public class EntityFilterTests
         notNullItemsReplaced.Should().BeEquivalentTo([testItems[0]]);
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenPropertyIsFilteredForEmptyString_MatchingEntitiesAreReturned(EntityFilterFunc<TestModel<string>> filterFunc)
     {
@@ -205,7 +198,6 @@ public class EntityFilterTests
         filteredItems.Should().BeEquivalentTo([testItems[1]]);
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<bool>>]
     public void WhenPropertyFilterValueIsInvalid_FilterExpressionExceptionIsThrown(EntityFilterFunc<TestModel<bool>> filterFunc)
     {
@@ -219,7 +211,7 @@ public class EntityFilterTests
         filterItems.Should().Throw<FilterExpressionException>().WithMessage("Unable to parse given filter value");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenPropertyFilterStringForSingleValueIsRetrieved_ThenFilterSyntaxIsSameAsGiven()
     {
         const string filterSyntax = ">=2000";
@@ -231,7 +223,7 @@ public class EntityFilterTests
         retrievedFilterSyntax.Should().Be(filterSyntax);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenPropertyFilterStringForMultipleValuesAreRetrieved_ThenFilterSyntaxIsSameAsGiven()
     {
         const string filterSyntax = ">=2000,<3000";
@@ -243,7 +235,7 @@ public class EntityFilterTests
         retrievedFilterSyntax.Should().Be(filterSyntax);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenPropertyFilterValuesForSingleValueIsRetrieved_ThenFilterSyntaxIsSameAsGiven()
     {
         var filterValues = new[] { Filter.ValueFilter.Create(">=2000") };
@@ -255,7 +247,7 @@ public class EntityFilterTests
         retrievedFilterValues.Should().BeEquivalentTo(filterValues);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenPropertyFilterValuesForMultipleValuesAreRetrieved_ThenFilterSyntaxIsSameAsGiven()
     {
         var filterValues = new[] {
@@ -271,7 +263,7 @@ public class EntityFilterTests
         retrievedFilterValues.Should().BeEquivalentTo(filterValues);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNestedFilterIsRetrieved_ThenFilterIsSameAsGiven()
     {
         using var _ = new AssertionScope();
@@ -292,7 +284,6 @@ public class EntityFilterTests
         retrievedListFilter.Should().BeEquivalentTo(nestedFilter);
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void EscapedValuesInMicroSyntax_AreRecognized(EntityFilterFunc<TestModel<string>> filterFunc)
     {
@@ -309,7 +300,6 @@ public class EntityFilterTests
         filteredEntities.Should().BeEquivalentTo([testItems[0]]);
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void CustomEscapeCharacterForMicroSyntax_WorksAsExpected(EntityFilterFunc<TestModel<string>> filterFunc)
     {
@@ -328,7 +318,6 @@ public class EntityFilterTests
         filteredEntities.Should().BeEquivalentTo([testItems[0]]);
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void CustomSeparatorCharsForMicroSyntax_WorksAsExpected(EntityFilterFunc<TestModel<string>> filterFunc)
     {

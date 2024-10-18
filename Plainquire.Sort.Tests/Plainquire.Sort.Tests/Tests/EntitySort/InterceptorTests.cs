@@ -1,16 +1,14 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Sort.Tests.Services;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
-[TestClass]
+[TestFixture]
 public class InterceptorTests
 {
-    [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenFirstSortUsingInterceptorViaParameter_InterceptorIsCalledToCreateSort(EntitySortFunction<TestModel<string>> sortFunc)
     {
@@ -31,7 +29,6 @@ public class InterceptorTests
         sortedItems.Should().ContainInOrder(testItems[1], testItems[0], testItems[3], testItems[2]);
     }
 
-    [DataTestMethod]
     [SortFuncDataSource<TestModel<string>>]
     public void WhenSecondarySortUsingInterceptorViaParameter_InterceptorIsCalledToCreateSort(EntitySortFunction<TestModel<string>> sortFunc)
     {

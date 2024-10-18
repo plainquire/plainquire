@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Page.Tests.Models;
 using Plainquire.Page.Tests.Services;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
 
-[TestClass]
+[TestFixture]
 public class EntityPageTests
 {
     private static readonly PageTestcase<TestModel<string>>[] _validPages =
@@ -38,8 +38,7 @@ public class EntityPageTests
         PageTestcase<TestModel<string>>.Create("2", "4"),
     ];
 
-    [DataTestMethod]
-    [PageTestCaseDataSource(nameof(_validPages))]
+    [PageTestDataSource(nameof(_validPages))]
     public void WhenValidPageIsGiven_ItemsMatchingRequestedPageAreReturned(PageTestcase<TestModel<string>> testCase, EntityPageFunction<TestModel<string>> pageFunc)
     {
         if (testCase.Page.PageSize == null)
@@ -63,8 +62,7 @@ public class EntityPageTests
         PageTestcase<TestModel<string>>.Create("1", "0"),
     ];
 
-    [DataTestMethod]
-    [PageTestCaseDataSource(nameof(_outOfRangePages))]
+    [PageTestDataSource(nameof(_outOfRangePages))]
     public void WhenOutOfRangePageParameterIsGiven_ArgumentOutOfRangeExceptionIsThrown(PageTestcase<TestModel<string>> testCase, EntityPageFunction<TestModel<string>> pageFunc)
     {
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };
@@ -80,8 +78,7 @@ public class EntityPageTests
         PageTestcase<TestModel<string>>.Create("a", "b"),
     ];
 
-    [DataTestMethod]
-    [PageTestCaseDataSource(nameof(_notParseablePages))]
+    [PageTestDataSource(nameof(_notParseablePages))]
     public void WhenNotParseablePageParameterIsGiven_FormatExceptionIsThrown(PageTestcase<TestModel<string>> testCase, EntityPageFunction<TestModel<string>> pageFunc)
     {
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };
@@ -96,8 +93,7 @@ public class EntityPageTests
         PageTestcase<TestModel<string>>.Create("1", ""),
     ];
 
-    [DataTestMethod]
-    [PageTestCaseDataSource(nameof(_noPageSizePages))]
+    [PageTestDataSource(nameof(_noPageSizePages))]
     public void WhenPageWithoutPageSizeIsGiven_ArgumentExceptionIsThrown(PageTestcase<TestModel<string>> testCase, EntityPageFunction<TestModel<string>> pageFunc)
     {
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };

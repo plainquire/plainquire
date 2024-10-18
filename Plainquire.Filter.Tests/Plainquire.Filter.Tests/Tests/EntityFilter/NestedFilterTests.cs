@@ -1,17 +1,15 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
-[TestClass]
+[TestFixture]
 public class NestedFilterTests
 {
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenNestedEntityFilterIsApplied_ThenNestedPropertyIsFiltered(EntityFilterFunc<TestModel<string>> filterFunc)
     {
@@ -35,7 +33,6 @@ public class NestedFilterTests
         filteredEntities.Should().BeEquivalentTo([testItems[0]]);
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenNestedEntityFilterIsApplied_ThenNestedListIsFiltered(EntityFilterFunc<TestModel<string>> filterFunc)
     {
@@ -60,7 +57,6 @@ public class NestedFilterTests
         filteredEntities.Should().BeEquivalentTo([testItems[0], testItems[2]]);
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenNestedObjectIsNUll_ConditionPropertyAccessIsGeneratedAsNeeded(EntityFilterFunc<TestModel<string>> filterFunc)
     {
@@ -84,7 +80,6 @@ public class NestedFilterTests
         filteredEntities.Should().BeEquivalentTo([testItems[0]]);
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenNestedListIsNUll_ConditionPropertyAccessIsGeneratedAsNeeded(EntityFilterFunc<TestModel<string>> filterFunc)
     {
@@ -109,7 +104,7 @@ public class NestedFilterTests
         filteredEntities.Should().BeEquivalentTo([testItems[0], testItems[2]]);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenNestedPropertyFilterIsAdded_ThenArgumentExceptionIsThrown()
     {
         ((Action)(() => new EntityFilter<TestModel<string>>().Add(x => x.NestedObject!.Value, "=NestedA")))
@@ -117,7 +112,6 @@ public class NestedFilterTests
             .Throw<ArgumentException>().WithMessage("Given property must be a first level property access expression like person => person.Name (Parameter 'property')");
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenNestedFilterIsNull_ThenEmptyNestedFilterIsCreated(EntityFilterFunc<TestModel<string>> filterFunc)
     {

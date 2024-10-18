@@ -2,7 +2,7 @@
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.OpenApi.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Sort.Swashbuckle.Filters;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Swashbuckle.TestSupport.Services;
@@ -14,16 +14,15 @@ using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.OpenApiFilter;
 
-[TestClass]
+[TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntitySortSetParameterPositionTests
 {
-    [DataTestMethod]
-    [DataRow(nameof(EntitySortSetPositionController.SingleSortSet))]
-    [DataRow(nameof(EntitySortSetPositionController.SingleSortSetAtStart))]
-    [DataRow(nameof(EntitySortSetPositionController.SingleSortSetAtEnd))]
-    [DataRow(nameof(EntitySortSetPositionController.SingleSortSetBetween))]
+    [TestCase(nameof(EntitySortSetPositionController.SingleSortSet))]
+    [TestCase(nameof(EntitySortSetPositionController.SingleSortSetAtStart))]
+    [TestCase(nameof(EntitySortSetPositionController.SingleSortSetAtEnd))]
+    [TestCase(nameof(EntitySortSetPositionController.SingleSortSetBetween))]
     public void WhenSingleEntitySortSetIsGiven_ItIsReplacedBySingleSortParameter(string actionName)
     {
         // Arrange
@@ -48,13 +47,12 @@ public class EntitySortSetParameterPositionTests
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
     }
 
-    [DataTestMethod]
-    [DataRow(nameof(EntitySortSetPositionController.MixedSortAndSet), 0, 1)]
-    [DataRow(nameof(EntitySortSetPositionController.MixedSortAndSetAtStart), 0, 1)]
-    [DataRow(nameof(EntitySortSetPositionController.MixedSortAndSetAtEnd), 1, 2)]
-    [DataRow(nameof(EntitySortSetPositionController.MixedSortAndSetBetween), 1, 2)]
-    [DataRow(nameof(EntitySortSetPositionController.MixedSortAndSetAround), 0, 2)]
-    [DataRow(nameof(EntitySortSetPositionController.MixedSortAndSetSpread), 1, 3)]
+    [TestCase(nameof(EntitySortSetPositionController.MixedSortAndSet), 0, 1)]
+    [TestCase(nameof(EntitySortSetPositionController.MixedSortAndSetAtStart), 0, 1)]
+    [TestCase(nameof(EntitySortSetPositionController.MixedSortAndSetAtEnd), 1, 2)]
+    [TestCase(nameof(EntitySortSetPositionController.MixedSortAndSetBetween), 1, 2)]
+    [TestCase(nameof(EntitySortSetPositionController.MixedSortAndSetAround), 0, 2)]
+    [TestCase(nameof(EntitySortSetPositionController.MixedSortAndSetSpread), 1, 3)]
     public void WhenMixedEntitySortAndSetAreGiven_TheyAreReplacedBySingleSortParameter(string actionName, int expectedOrderByIndex, int expectedSortByIndex)
     {
         // Arrange

@@ -1,17 +1,16 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Models;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.Extensions;
 
-[TestClass]
+[TestFixture]
 public class ParameterExtensionsTests
 {
-    [TestMethod]
+    [Test]
     public void WhenPrefixIsExtracted_ValueMatchesExpected()
     {
         var simpleType = typeof(TestModelNested);

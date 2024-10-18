@@ -1,14 +1,14 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Integration.Tests.Services;
 using System.Threading.Tasks;
 
 namespace Plainquire.Integration.Tests.Tests;
 
-[TestClass]
+[TestFixture]
 public class FilterSortAndPageTests
 {
-    [TestMethod]
+    [Test]
     public async Task WhenOpenAPIDocumentationIsRequested_FilterAttributeConfigurationIsApplied()
     {
         await using var testHost = await TestHost.Create(false);

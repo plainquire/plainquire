@@ -1,15 +1,15 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Tests.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
-[TestClass]
+[TestFixture]
 public class CastFilterTests
 {
-    [TestMethod]
+    [Test]
     public void WhenEntityFilterIsCast_ThenPropertiesNotExistsOrAreNotAssignableAreRemoved()
     {
         var dtoFilterSrc = new EntityFilter<ModelDto>()
@@ -34,7 +34,6 @@ public class CastFilterTests
         dtoFilter.PropertyFilters.Should().Contain(x => x.PropertyName == "Created");
     }
 
-    [DataTestMethod]
     [FilterFuncDataSource<ModelDto>]
     public void WhenEntityFilterIsCast_ThenCastFilterCanBeCreatedAndMatches(EntityFilterFunc<ModelDto> filterFunc)
     {

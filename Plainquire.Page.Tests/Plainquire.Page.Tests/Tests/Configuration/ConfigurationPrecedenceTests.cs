@@ -2,19 +2,18 @@
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Page.Abstractions;
 using Plainquire.Page.Mvc.ModelBinders;
 using Plainquire.Page.Tests.Models;
 using Plainquire.TestSupport.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Plainquire.Page.Tests.Tests.Configuration;
 
-[TestClass]
+[TestFixture]
 public class ConfigurationPrecedenceTests
 {
     private static readonly PageConfiguration _unusedConfiguration = new();
@@ -23,8 +22,8 @@ public class ConfigurationPrecedenceTests
         IgnoreParseExceptions = true,
     };
 
-    [TestMethod]
-    [DoNotParallelize]
+    [Test]
+    [NonParallelizable]
     public async Task WhenEntityPagePrototypeIsRegisteredInDI_ConfigurationsFromPrototypeIsUsedAsFirstPrecedence()
     {
         var configuredTestSort = new EntityPage<TestAddress> { Configuration = _usedConfiguration };
@@ -63,8 +62,8 @@ public class ConfigurationPrecedenceTests
         PageConfiguration.Default = null;
     }
 
-    [TestMethod]
-    [DoNotParallelize]
+    [Test]
+    [NonParallelizable]
     public async Task WhenEntityPageConfigurationIsRegisteredViaDI_ConfigurationsFromDIIsUsedAsFirstPrecedence()
     {
         // Arrange
@@ -100,8 +99,8 @@ public class ConfigurationPrecedenceTests
         PageConfiguration.Default = null;
     }
 
-    [TestMethod]
-    [DoNotParallelize]
+    [Test]
+    [NonParallelizable]
     public async Task WhenDefaultPageConfigurationIsSet_StaticDefaultConfigurationsIsUsedAsFirstPrecedence()
     {
         // Arrange
@@ -136,7 +135,7 @@ public class ConfigurationPrecedenceTests
         PageConfiguration.Default = null;
     }
 
-    [TestMethod]
+    [Test]
     public async Task WhenNoConfigurationIsSet_DefaultConfigurationsIsUsedAsFirstPrecedence()
     {
         // Arrange

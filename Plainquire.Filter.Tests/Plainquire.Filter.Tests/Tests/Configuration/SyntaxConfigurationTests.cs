@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Plainquire.Filter.Tests.Tests.Configuration;
 
-[TestClass]
+[TestFixture]
 public class SyntaxConfigurationTests
 {
     [TestMethod]
@@ -52,8 +52,7 @@ public class SyntaxConfigurationTests
         });
     }
 
-    [DataTestMethod]
-    [DataRow(95211681), DataRow(29033541), DataRow(1381767876), DataRow(962091306), DataRow(1708798465), DataRow(1651555894), DataRow(771267596), DataRow(2036213990), DataRow(463360784), DataRow(555610126)]
+    [TestCase(95211681), TestCase(29033541), TestCase(1381767876), TestCase(962091306), TestCase(1708798465), TestCase(1651555894), TestCase(771267596), TestCase(2036213990), TestCase(463360784), TestCase(555610126)]
     public void WhenCustomLatinFilterOperatorMapIsUsed_ExtractedFilterOperatorsMatches(int seed)
     {
         var random = new Random(seed);
@@ -76,8 +75,7 @@ public class SyntaxConfigurationTests
         }
     }
 
-    [DataTestMethod]
-    [DataRow(1003423602), DataRow(1749279816), DataRow(1227455077), DataRow(836849770), DataRow(813002086), DataRow(999354917), DataRow(1009451602), DataRow(879269766), DataRow(39888831), DataRow(1577752722)]
+    [TestCase(1003423602), TestCase(1749279816), TestCase(1227455077), TestCase(836849770), TestCase(813002086), TestCase(999354917), TestCase(1009451602), TestCase(879269766), TestCase(39888831), TestCase(1577752722)]
     public void WhenCustomSpecialCharFilterOperatorMapIsUsed_ExtractedFilterOperatorsMatches(int seed)
     {
         var random = new Random(seed);
@@ -100,8 +98,7 @@ public class SyntaxConfigurationTests
         }
     }
 
-    [DataTestMethod]
-    [DataRow(1205306014), DataRow(1005120611), DataRow(1249716117), DataRow(577193075), DataRow(762685557), DataRow(353479256), DataRow(1690516590), DataRow(978662266), DataRow(1352422928), DataRow(19624871)]
+    [TestCase(1205306014), TestCase(1005120611), TestCase(1249716117), TestCase(577193075), TestCase(762685557), TestCase(353479256), TestCase(1690516590), TestCase(978662266), TestCase(1352422928), TestCase(19624871)]
     public void WhenCustomUnicodeFilterOperatorMapIsUsed_ExtractedFilterOperatorsMatches(int seed)
     {
         var random = new Random(seed);
@@ -124,7 +121,7 @@ public class SyntaxConfigurationTests
         }
     }
 
-    [TestMethod]
+    [Test]
     public void WhenSieveFilterOperatorSyntaxIsUsed_ExtractedFilterOperatorsMatches()
     {
         var configuration = new FilterConfiguration

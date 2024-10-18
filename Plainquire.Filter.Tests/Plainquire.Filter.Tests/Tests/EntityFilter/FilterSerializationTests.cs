@@ -1,19 +1,18 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Newtonsoft;
 using Plainquire.Filter.Tests.Models;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NetSerializer = System.Text.Json.JsonSerializer;
 using NewtonSerializer = Newtonsoft.Json.JsonConvert;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
-[TestClass]
+[TestFixture]
 public class FilterSerializationTests
 {
-    [TestMethod]
+    [Test]
     public void WhenEntityFilterIsSerializedWithNetAndNewtonsoft_ResultIsEqual()
     {
         var nestedEntityFilterA = new EntityFilter<TestModelNested>()
@@ -33,7 +32,7 @@ public class FilterSerializationTests
         netJson.Should().Be(newtonJson);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenEmptyEntityFilterIsDeserialized_ThenValidEmptyFilterIsCreated()
     {
         var (netFilter, newtonFilter) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_EMPTY);
@@ -43,7 +42,7 @@ public class FilterSerializationTests
         netFilter.CreateFilter().Should().BeNull();
     }
 
-    [TestMethod]
+    [Test]
     public void WhenEntityFilterWithEmptyPropertiesIsDeserialized_ThenValidEmptyFilterIsCreated()
     {
         var (netFilter1, newtonFilter1) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_PROP_NULL);
@@ -56,7 +55,7 @@ public class FilterSerializationTests
         netFilter1.CreateFilter().Should().BeNull();
     }
 
-    [TestMethod]
+    [Test]
     public void WhenEntityFilterWithEmptyNestedIsDeserialized_ThenValidFilterIsCreated()
     {
         var (netFilter1, newtonFilter1) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_NULL);
@@ -77,7 +76,7 @@ public class FilterSerializationTests
         filteredItems.Should().BeEquivalentTo([items[1]]);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenEntityFilterWithEmptyNestedPropertyIsDeserialized_ThenValidFilterIsCreated()
     {
         var (netFilter1, newtonFilter1) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_NESTED_PROP_NULL);
@@ -98,7 +97,7 @@ public class FilterSerializationTests
         filteredItems.Should().BeEquivalentTo([items[1]]);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenFullEntityFilterIsDeserialized_ThenValidFilterIsCreated()
     {
         var (netFilter, newtonFilter) = Deserialize<EntityFilter<TestModel<DateTime>>>(FILTER_FULL);

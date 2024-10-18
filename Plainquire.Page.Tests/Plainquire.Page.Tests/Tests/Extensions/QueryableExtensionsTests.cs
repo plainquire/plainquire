@@ -1,15 +1,14 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Page.Tests.Models;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.Extensions;
 
-[TestClass]
+[TestFixture]
 public class QueryableExtensionsTests
 {
-    [TestMethod]
+    [Test]
     public void WhenEnumerableIsPagedDirectly_ExpectedPageIsReturned()
     {
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };
@@ -17,7 +16,7 @@ public class QueryableExtensionsTests
         pagedItems.Should().Equal(testItems[2], testItems[3]);
     }
 
-    [TestMethod]
+    [Test]
     public void WhenQueryableIsPagedDirectly_ExpectedPageIsReturned()
     {
         var testItems = new TestModel<string>[] { new("a"), new("b"), new("c"), new("d") };

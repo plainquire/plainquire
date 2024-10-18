@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.PropertyFilterExpressions;
 using Plainquire.Filter.Tests.Models;
@@ -13,10 +13,9 @@ using System.Reflection;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
-[TestClass]
+[TestFixture]
 public class InterceptorTests
 {
-    [DataTestMethod]
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenFilterInterceptorIsUsed_ValuesAreFilteredAsExpected(EntityFilterFunc<TestModel<string>> filterFunc)
     {

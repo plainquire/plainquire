@@ -2,7 +2,7 @@
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.OpenApi.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Swashbuckle.Filters;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Swashbuckle.TestSupport.Services;
@@ -14,12 +14,12 @@ using System.Linq;
 
 namespace Plainquire.Filter.Tests.Tests.OpenApiFilter;
 
-[TestClass]
+[TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntityFilterParameterNameTests
 {
-    [TestMethod]
+    [Test]
     public void WhenSingleFilterIsGiven_GeneratedParametersMatchExpected()
     {
         // Arrange

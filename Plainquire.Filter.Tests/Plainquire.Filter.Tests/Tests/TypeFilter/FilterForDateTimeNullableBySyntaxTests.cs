@@ -1,16 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
-[TestClass]
+[TestFixture]
 public class FilterForDateTimeNullableBySyntaxTests
 {
-    [DataTestMethod]
     [FilterTestDataSource(nameof(_testCases))]
     public void FilterForDateTimeNullableBySyntax_WorksAsExpected(FilterTestCase<DateTime?, DateTime?> testCase, EntityFilterFunc<TestModel<DateTime?>> filterFunc)
         => testCase.Run(_testItems, filterFunc);

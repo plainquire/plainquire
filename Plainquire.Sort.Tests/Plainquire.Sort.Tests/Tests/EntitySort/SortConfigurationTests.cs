@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Tests.Models;
 using System;
@@ -9,10 +9,10 @@ using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
-[TestClass]
+[TestFixture]
 public class SortConfigurationTests
 {
-    [TestMethod]
+    [Test]
     public void WhenConfigurationIsCreated_ThenDefaultValuesAreSet()
     {
         var configuration = new SortConfiguration();
@@ -23,7 +23,7 @@ public class SortConfigurationTests
         });
     }
 
-    [TestMethod]
+    [Test]
     [SuppressMessage("Performance", "CA1806:Do not ignore method results", Justification = "Required to execute sorting")]
     [SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed", Justification = "Required to execute sorting")]
     public void WhenConditionalAccessIsSetToNever_CallAgainstEnumerableWithNullValuesThrows()
@@ -47,7 +47,7 @@ public class SortConfigurationTests
         sortEnumerableWithNullValues.Should().Throw<NullReferenceException>();
     }
 
-    [TestMethod]
+    [Test]
     public void WhenConditionalAccessIsSetToAlways_ConditionalAccessGeneratedForProvidersOtherThanEnumerableQuery()
     {
         var configuration = new SortConfiguration
@@ -69,7 +69,7 @@ public class SortConfigurationTests
             .Contain("IIF((x == null), null, x.NestedObject)");
     }
 
-    [TestMethod]
+    [Test]
     public void WhenConditionalAccessIsNotSet_ConditionalAccessIsNotGeneratedForProvidersOtherThanEnumerableQuery()
     {
         var sort = new EntitySort<TestModel<string>>()

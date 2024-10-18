@@ -1,7 +1,7 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Page.Mvc.ModelBinders;
 using Plainquire.Page.Tests.Models;
 using Plainquire.TestSupport.Extensions;
@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace Plainquire.Page.Tests.Tests.ModelBinder;
 
-[TestClass]
+[TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntityPageModelBinderTests
 {
-    [TestMethod]
+    [Test]
     public async Task WhenUnnamedPageParameterIsGiven_PageParameterMatchesExpected()
     {
         // Arrange
@@ -43,7 +43,7 @@ public class EntityPageModelBinderTests
         page.PageSize.Should().Be(2);
     }
 
-    [TestMethod]
+    [Test]
     public async Task WhenNumberNamedPageParameterIsGiven_PageParameterMatchesExpected()
     {
         // Arrange
@@ -69,7 +69,7 @@ public class EntityPageModelBinderTests
         page.PageSize.Should().Be(2);
     }
 
-    [TestMethod]
+    [Test]
     public async Task WheSizeNamedPageParameterIsGiven_PageParameterMatchesExpected()
     {
         // Arrange
@@ -95,7 +95,7 @@ public class EntityPageModelBinderTests
         page.PageSize.Should().Be(2);
     }
 
-    [TestMethod]
+    [Test]
     public async Task WhenBothNamedPageParameterIsGiven_PageParameterMatchesExpected()
     {
         // Arrange
@@ -121,7 +121,7 @@ public class EntityPageModelBinderTests
         page.PageSize.Should().Be(2);
     }
 
-    [TestMethod]
+    [Test]
     public async Task WhenMixedNamedPageParametersAreGiven_PageParameterMatchesExpected()
     {
         // Arrange
@@ -154,7 +154,7 @@ public class EntityPageModelBinderTests
         page2.PageSize.Should().Be(3);
     }
 
-    [TestMethod]
+    [Test]
     public async Task WhenPageSizeSetByFilterAttribute_PageParameterMatchesExpected()
     {
         // Arrange
@@ -180,7 +180,7 @@ public class EntityPageModelBinderTests
         page.PageSize.Should().Be(10);
     }
 
-    [TestMethod]
+    [Test]
     public async Task WhenUnnamedPagePropertyIsGiven_PagePropertyMatchesExpected()
     {
         // Arrange
@@ -205,7 +205,7 @@ public class EntityPageModelBinderTests
         page.PageSize.Should().Be(2);
     }
 
-    [TestMethod]
+    [Test]
     public async Task WhenNumberNamedPagePropertyIsGiven_PagePropertyMatchesExpected()
     {
         // Arrange
@@ -230,7 +230,7 @@ public class EntityPageModelBinderTests
         page.PageSize.Should().Be(2);
     }
 
-    [TestMethod]
+    [Test]
     public async Task WheSizeNamedPagePropertyIsGiven_PagePropertyMatchesExpected()
     {
         // Arrange
@@ -255,7 +255,7 @@ public class EntityPageModelBinderTests
         page.PageSize.Should().Be(2);
     }
 
-    [TestMethod]
+    [Test]
     public async Task WhenBothNamedPagePropertyIsGiven_PagePropertyMatchesExpected()
     {
         // Arrange

@@ -2,7 +2,7 @@
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Mvc.ModelBinders;
 using Plainquire.Filter.Tests.Models;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Plainquire.Filter.Tests.Tests.Configuration;
 
-[TestClass]
+[TestFixture]
 public class ConfigurationPrecedenceTests
 {
     private static readonly FilterConfiguration _unusedConfiguration = new();
@@ -24,8 +24,8 @@ public class ConfigurationPrecedenceTests
         FilterOperatorMap = { ["="] = FilterOperator.Contains }
     };
 
-    [TestMethod]
-    [DoNotParallelize]
+    [Test]
+    [NonParallelizable]
     public async Task WhenEntityFilterPrototypeIsRegisteredInDI_ConfigurationsFromPrototypeIsUsedAsFirstPrecedence()
     {
         // Arrange
@@ -62,8 +62,8 @@ public class ConfigurationPrecedenceTests
         FilterConfiguration.Default = null;
     }
 
-    [TestMethod]
-    [DoNotParallelize]
+    [Test]
+    [NonParallelizable]
     public async Task WhenEntityFilterConfigurationIsRegisteredViaDI_ConfigurationsFromDIIsUsedAsFirstPrecedence()
     {
         // Arrange
@@ -98,8 +98,8 @@ public class ConfigurationPrecedenceTests
         FilterConfiguration.Default = null;
     }
 
-    [TestMethod]
-    [DoNotParallelize]
+    [Test]
+    [NonParallelizable]
     public async Task WhenDefaultFilterConfigurationIsSet_StaticDefaultConfigurationsIsUsedAsFirstPrecedence()
     {
         // Arrange
@@ -133,8 +133,8 @@ public class ConfigurationPrecedenceTests
         FilterConfiguration.Default = null;
     }
 
-    [TestMethod]
-    [DoNotParallelize]
+    [Test]
+    [NonParallelizable]
     public async Task WhenNoConfigurationIsSet_DefaultConfigurationsIsUsedAsFirstPrecedence()
     {
         // Arrange

@@ -22,8 +22,8 @@ public static class EntityPageFunctions
             PageNewtonCloneByEF
         ];
 
-    public static IEnumerable<object> GetEntityPageFunctions(Type entityType)
-        => (IEnumerable<object>)typeof(EntityPageFunctions)
+    public static IEnumerable<Delegate> GetEntityPageFunctions(Type entityType)
+        => (IEnumerable<Delegate>)typeof(EntityPageFunctions)
             .GetMethod(nameof(GetEntityPageFunctions), BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly, [])!
             .MakeGenericMethod(entityType)
             .Invoke(null, [])!;

@@ -2,7 +2,7 @@
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.OpenApi.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Plainquire.Sort.Swashbuckle.Filters;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Swashbuckle.TestSupport.Services;
@@ -14,16 +14,15 @@ using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.OpenApiFilter;
 
-[TestClass]
+[TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
 public class EntitySortParameterPositionTests
 {
-    [DataTestMethod]
-    [DataRow(nameof(EntitySortPositionController.SingleSort))]
-    [DataRow(nameof(EntitySortPositionController.SingleSortAtStart))]
-    [DataRow(nameof(EntitySortPositionController.SingleSortAtEnd))]
-    [DataRow(nameof(EntitySortPositionController.SingleSortBetween))]
+    [TestCase(nameof(EntitySortPositionController.SingleSort))]
+    [TestCase(nameof(EntitySortPositionController.SingleSortAtStart))]
+    [TestCase(nameof(EntitySortPositionController.SingleSortAtEnd))]
+    [TestCase(nameof(EntitySortPositionController.SingleSortBetween))]
     public void WhenSingleEntitySortIsGiven_ItIsReplacedBySingleSortParameter(string actionName)
     {
         // Arrange
@@ -48,13 +47,12 @@ public class EntitySortParameterPositionTests
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
     }
 
-    [DataTestMethod]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortSameParameter), 0)]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortAtStartSameParameter), 0)]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortAtEndSameParameter), 1)]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortBetweenSameParameter), 1)]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortAroundSameParameter), 0)]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortSpreadSameParameter), 1)]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortSameParameter), 0)]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortAtStartSameParameter), 0)]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortAtEndSameParameter), 1)]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortBetweenSameParameter), 1)]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortAroundSameParameter), 0)]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortSpreadSameParameter), 1)]
     public void WhenMultipleEntitySortWithSameParameterNameAreGiven_TheyAreReplacedBySingleSortParameter(string actionName, int expectedIndex)
     {
         // Arrange
@@ -82,13 +80,12 @@ public class EntitySortParameterPositionTests
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
     }
 
-    [DataTestMethod]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortSeparateParameter), 0, 1)]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortAtStartSeparateParameter), 0, 1)]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortAtEndSeparateParameter), 1, 2)]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortBetweenSeparateParameter), 1, 2)]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortAroundSeparateParameter), 0, 2)]
-    [DataRow(nameof(EntitySortPositionController.MultipleSortSpreadSeparateParameter), 1, 3)]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortSeparateParameter), 0, 1)]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortAtStartSeparateParameter), 0, 1)]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortAtEndSeparateParameter), 1, 2)]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortBetweenSeparateParameter), 1, 2)]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortAroundSeparateParameter), 0, 2)]
+    [TestCase(nameof(EntitySortPositionController.MultipleSortSpreadSeparateParameter), 1, 3)]
     public void WhenMultipleEntitySortWithSeparateParameterNamesAreGiven_TheyAreReplacedByMultipleSortParameter(string actionName, int expectedOrderByIndex, int expectedSortByIndex)
     {
         // Arrange
