@@ -102,10 +102,20 @@ jobs:
       - name: Create badges
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LICENSE: "MIT"
+          BUILD_STATUS: ${{ needs.build.result == 'success' && 'passing' || 'failed' }}
         run:  |
           mkdir badges
-          BUILD_STATUS=${{ needs.build.result == 'success' && 'passing' || 'failed' }}
-          BUILD_COLOR=${{ needs.build.result == 'success' && 'reen' || 'red' }}
+          
+          LATEST_RELEASE=$(curl -sH "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/plainquire/plainquire/releases/latest" | jq -r .tag_name)
+          echo "Latest release tag: $LATEST_RELEASE"
+          echo "curl https://img.shields.io/badge/version-${LATEST_RELEASE}-blue > badges/version.svg"
+          curl https://img.shields.io/badge/release-${LATEST_RELEASE}-blue > badges/release.svg
+          
+          echo "curl https://img.shields.io/badge/license-${LICENSE}-green > badges/license.svg"
+          curl https://img.shields.io/badge/license-${LICENSE}-green > badges/license.svg
+          
+          BUILD_COLOR=${{ needs.build.result == 'success' && 'green' || 'red' }}
           curl https://img.shields.io/badge/build-${BUILD_STATUS}-${BUILD_COLOR} > badges/build.svg
           
           COVERAGE_STATUS=${{ fromJson(needs.test.outputs.coverage_report_json).summary.linecoverage }}        
@@ -119,18 +129,6 @@ jobs:
           [[ ${TESTS_FAILED} -eq 0 ]] && TEST_COLOR="green" || TEST_COLOR="red"
           echo "curl https://img.shields.io/badge/tests-${TEST_COUNT}_${TEST_STATUS}-${TEST_COLOR} > badges/tests.svg"
           curl https://img.shields.io/badge/tests-${TEST_COUNT}_${TEST_STATUS}-${TEST_COLOR} > badges/tests.svg
-          
-          LICENSE=MIT
-          echo "curl https://img.shields.io/badge/license-${LICENSE}-green > badges/license.svg"
-          curl https://img.shields.io/badge/license-${LICENSE}-green > badges/license.svg
-          
-          RELEASE_INFO=$(curl -sH "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/plainquire/plainquire/releases/latest")
-          echo "RELEASE_INFO: $RELEASE_INFO"
-          
-          LATEST_RELEASE=$(curl -sH "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/plainquire/plainquire/releases/latest" | jq -r .tag_name)
-          echo "Latest release tag: $LATEST_RELEASE"
-          echo "curl https://img.shields.io/badge/version-${LATEST_RELEASE}-blue > badges/version.svg"
-          curl https://img.shields.io/badge/release-${LATEST_RELEASE}-blue > badges/release.svg
 
       - name: Upload badges
         uses: actions/upload-artifact@v4
