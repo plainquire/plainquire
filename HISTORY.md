@@ -10,6 +10,10 @@ Character to escape values from micro syntax made customizable
 
 Characters to separate values from micro syntax made customizable
 
+## Changes
+
+Update to .NET 8.0 where applicable
+
 ## Breaking Changes
 
 ### Parameters of interceptors changed
