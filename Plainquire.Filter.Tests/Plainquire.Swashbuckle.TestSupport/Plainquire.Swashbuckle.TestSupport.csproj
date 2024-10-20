@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.8.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.9.0" />
   </ItemGroup>
 
 </Project>
