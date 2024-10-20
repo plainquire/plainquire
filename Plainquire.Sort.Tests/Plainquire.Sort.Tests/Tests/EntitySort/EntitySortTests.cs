@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Sort.Tests.Services;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Linq;
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
 [TestFixture]
-public class EntitySortTests
+public class EntitySortTests : TestContainer
 {
     private static readonly SortConfiguration _defaultConfiguration = new();
 

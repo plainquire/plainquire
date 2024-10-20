@@ -2,12 +2,13 @@
 using FluentAssertions.Execution;
 using NUnit.Framework;
 using Plainquire.Sort.Tests.Models;
+using Plainquire.TestSupport.Services;
 using System;
 
 namespace Plainquire.Sort.Tests.Tests.PropertySort;
 
 [TestFixture]
-public class PropertySortExceptionTests
+public class PropertySortExceptionTests : TestContainer
 {
 
     [Test]

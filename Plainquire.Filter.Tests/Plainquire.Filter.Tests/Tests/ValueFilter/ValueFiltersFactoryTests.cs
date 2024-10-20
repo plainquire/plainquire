@@ -1,10 +1,11 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.ValueFilter;
 
 [TestFixture]
-public class ValueFiltersFactoryTests
+public class ValueFiltersFactoryTests : TestContainer
 {
     [Test]
     public void WhenValueFiltersCreatedFromSyntax_SupportedOperatorsReturnSameResult()

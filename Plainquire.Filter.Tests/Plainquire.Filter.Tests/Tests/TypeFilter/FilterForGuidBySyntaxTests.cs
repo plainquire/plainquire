@@ -3,11 +3,12 @@ using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [TestFixture]
-public class FilterForGuidBySyntaxTests
+public class FilterForGuidBySyntaxTests : TestContainer
 {
     [FilterTestDataSource(nameof(_testCases))]
     public void FilterForGuidBySyntax_WorksAsExpected(FilterTestCase<Guid, Guid> testCase, EntityFilterFunc<TestModel<Guid>> filterFunc)

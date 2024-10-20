@@ -2,12 +2,13 @@
 using NUnit.Framework;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Sort.Tests.Services;
+using Plainquire.TestSupport.Services;
 using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
 [TestFixture]
-public class InterceptorTests
+public class InterceptorTests : TestContainer
 {
     [SortFuncDataSource<TestModel<string>>]
     public void WhenFirstSortUsingInterceptorViaParameter_InterceptorIsCalledToCreateSort(EntitySortFunction<TestModel<string>> sortFunc)

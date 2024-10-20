@@ -3,11 +3,12 @@ using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [TestFixture]
-public class FilterForBoolByValueTests
+public class FilterForBoolByValueTests : TestContainer
 {
     [FilterTestDataSource(nameof(_testCases))]
     public void FilterForBoolByValue_WorksAsExpected(FilterTestCase<bool, bool> testCase, EntityFilterFunc<TestModel<bool>> filterFunc)

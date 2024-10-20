@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Sort.Tests.Services;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Linq.Expressions;
 namespace Plainquire.Sort.Tests.Tests.PropertySort;
 
 [TestFixture]
-public class PropertySortExpressionTests
+public class PropertySortExpressionTests : TestContainer
 {
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
     private readonly TestModel<string>[] _testItems =

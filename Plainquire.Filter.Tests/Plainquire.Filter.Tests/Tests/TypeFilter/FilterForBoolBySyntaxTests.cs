@@ -2,11 +2,12 @@
 using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [TestFixture]
-public class FilterForBoolBySyntaxTests
+public class FilterForBoolBySyntaxTests : TestContainer
 {
     [FilterTestDataSource(nameof(_testCases))]
     public void FilterForBoolBySyntax_WorksAsExpected(FilterTestCase<bool, bool> testCase, EntityFilterFunc<TestModel<bool>> filterFunc)

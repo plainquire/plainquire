@@ -3,11 +3,12 @@ using NUnit.Framework;
 using Plainquire.Filter.Tests.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
 [TestFixture]
-public class CastFilterTests
+public class CastFilterTests : TestContainer
 {
     [Test]
     public void WhenEntityFilterIsCast_ThenPropertiesNotExistsOrAreNotAssignableAreRemoved()

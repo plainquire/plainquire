@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using NUnit.Framework;
+using Plainquire.TestSupport.Services;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
@@ -8,7 +9,7 @@ namespace Plainquire.Page.Tests.Tests.EntityPage;
 [TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
-public class EntityPageCastTests
+public class EntityPageCastTests : TestContainer
 {
     [Test]
     public void WhenTypedEntityPageIsCast_PageParametersAreKept()

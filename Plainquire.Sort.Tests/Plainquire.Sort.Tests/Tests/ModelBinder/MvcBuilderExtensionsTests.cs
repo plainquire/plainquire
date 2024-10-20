@@ -7,13 +7,14 @@ using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using Plainquire.Sort.Mvc;
 using Plainquire.Sort.Mvc.ModelBinders;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.ModelBinder;
 
 [TestFixture]
-public class MvcBuilderExtensionsTests
+public class MvcBuilderExtensionsTests : TestContainer
 {
     [Test]
     public void WhenSortSupportIsAdded_AllRequiredModelBindersAreRegistered()

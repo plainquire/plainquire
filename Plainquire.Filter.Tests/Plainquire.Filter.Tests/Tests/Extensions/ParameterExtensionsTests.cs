@@ -3,12 +3,13 @@ using FluentAssertions.Execution;
 using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Models;
+using Plainquire.TestSupport.Services;
 using System.Collections.Generic;
 
 namespace Plainquire.Filter.Tests.Tests.Extensions;
 
 [TestFixture]
-public class ParameterExtensionsTests
+public class ParameterExtensionsTests : TestContainer
 {
     [Test]
     public void WhenPrefixIsExtracted_ValueMatchesExpected()

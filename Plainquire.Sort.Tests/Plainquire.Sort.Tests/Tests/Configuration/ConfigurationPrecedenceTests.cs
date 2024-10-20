@@ -7,6 +7,7 @@ using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Mvc.ModelBinders;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.TestSupport.Extensions;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace Plainquire.Sort.Tests.Tests.Configuration;
 
 [TestFixture]
-public class ConfigurationPrecedenceTests
+public class ConfigurationPrecedenceTests : TestContainer
 {
     private static readonly SortConfiguration _unusedConfiguration = new();
     private static readonly SortConfiguration _usedConfiguration = new()

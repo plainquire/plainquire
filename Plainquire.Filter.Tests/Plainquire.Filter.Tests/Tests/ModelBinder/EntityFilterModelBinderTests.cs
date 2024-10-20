@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Plainquire.Filter.Mvc.ModelBinders;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.TestSupport.Extensions;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -16,7 +17,7 @@ namespace Plainquire.Filter.Tests.Tests.ModelBinder;
 [TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
-public class EntityFilterModelBinderTests
+public class EntityFilterModelBinderTests : TestContainer
 {
     [Test]
     public async Task WhenGenericEntityFilterParameterIsGiven_ParameterBoundAsExpected()

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../Build/build_tests.props" />
+  <Import Project="../../Build/build_version.props" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Plainquire.Filter.Tests\Plainquire.Filter.Tests\Plainquire.Filter.Tests.csproj" />
+    <ProjectReference Include="..\..\Plainquire.Filter.Tests\Plainquire.Swashbuckle.TestSupport\Plainquire.Swashbuckle.TestSupport.csproj" />
+    <ProjectReference Include="..\..\Plainquire.Filter.Tests\Plainquire.TestSupport\Plainquire.TestSupport.csproj" />
+    <ProjectReference Include="..\..\Plainquire.Page.Tests\Plainquire.Page.Tests\Plainquire.Page.Tests.csproj" />
+    <ProjectReference Include="..\..\Plainquire.Sort.Tests\Plainquire.Sort.Tests\Plainquire.Sort.Tests.csproj" />
+    <ProjectReference Include="..\Plainquire.Integration.Tests.TestSupport\Plainquire.Integration.Tests.TestSupport.csproj" />
+    <ProjectReference Include="..\Plainquire.Integration.Tests\Plainquire.Integration.Tests.csproj" />
+  </ItemGroup>
+
+</Project>

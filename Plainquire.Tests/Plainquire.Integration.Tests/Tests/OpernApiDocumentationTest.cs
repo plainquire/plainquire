@@ -1,12 +1,13 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using Plainquire.Integration.Tests.Services;
+using Plainquire.TestSupport.Services;
 using System.Threading.Tasks;
 
 namespace Plainquire.Integration.Tests.Tests;
 
 [TestFixture]
-public class FilterSortAndPageTests
+public class FilterSortAndPageTests : TestContainer
 {
     [Test]
     public async Task WhenOpenAPIDocumentationIsRequested_FilterAttributeConfigurationIsApplied()

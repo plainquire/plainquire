@@ -2,13 +2,14 @@
 using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Models;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
 [TestFixture]
-public class EntityFilterExtensionsTests
+public class EntityFilterExtensionsTests : TestContainer
 {
     [Test]
     public void WhenFilterAddedViaSyntax_FilterIsChanged()

@@ -4,11 +4,12 @@ using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System.Diagnostics;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [TestFixture]
-public class FilterForEnumByValueTests
+public class FilterForEnumByValueTests : TestContainer
 {
     [FilterTestDataSource(nameof(_testCases))]
     public void FilterForEnumByValue_WorksAsExpected(object testCase, EntityFilterFunc<TestModel<TestEnum>> filterFunc)

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Plainquire.Page.Mvc.ModelBinders;
 using Plainquire.Page.Tests.Models;
 using Plainquire.TestSupport.Extensions;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -15,7 +16,7 @@ namespace Plainquire.Page.Tests.Tests.ModelBinder;
 [TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
-public class EntityPageModelBinderTests
+public class EntityPageModelBinderTests : TestContainer
 {
     [Test]
     public async Task WhenUnnamedPageParameterIsGiven_PageParameterMatchesExpected()

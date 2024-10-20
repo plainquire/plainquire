@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Tests.Models;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -10,7 +11,7 @@ using System.Linq;
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
 [TestFixture]
-public class SortConfigurationTests
+public class SortConfigurationTests : TestContainer
 {
     [Test]
     public void WhenConfigurationIsCreated_ThenDefaultValuesAreSet()

@@ -3,13 +3,14 @@ using NUnit.Framework;
 using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Sort.Tests.Services;
+using Plainquire.TestSupport.Services;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plainquire.Sort.Tests.Tests.PropertySort;
 
 [TestFixture]
-public class PropertySortSyntaxTests
+public class PropertySortSyntaxTests : TestContainer
 {
     private static readonly SortConfiguration _defaultConfiguration = new();
 

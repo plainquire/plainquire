@@ -7,6 +7,7 @@ using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Mvc.ModelBinders;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.TestSupport.Extensions;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace Plainquire.Filter.Tests.Tests.Configuration;
 
 [TestFixture]
-public class ConfigurationPrecedenceTests
+public class ConfigurationPrecedenceTests : TestContainer
 {
     private static readonly FilterConfiguration _unusedConfiguration = new();
     private static readonly FilterConfiguration _usedConfiguration = new()

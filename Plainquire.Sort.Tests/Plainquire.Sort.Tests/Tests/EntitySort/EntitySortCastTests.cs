@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using NUnit.Framework;
+using Plainquire.TestSupport.Services;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
@@ -8,7 +9,7 @@ namespace Plainquire.Sort.Tests.Tests.EntitySort;
 [TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
-public class EntitySortCastTests
+public class EntitySortCastTests : TestContainer
 {
     [Test]
     public void WhenEntitySortIsCast_PropertiesAreMappedByName()

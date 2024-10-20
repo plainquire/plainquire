@@ -4,11 +4,12 @@ using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System.Diagnostics;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [TestFixture]
-public class FilterForFloatNullableByValueTests
+public class FilterForFloatNullableByValueTests : TestContainer
 {
     [FilterTestDataSource(nameof(_testCases))]
     public void FilterForFloatNullableByValue_WorksAsExpected(object testCase, EntityFilterFunc<TestModel<float?>> filterFunc)

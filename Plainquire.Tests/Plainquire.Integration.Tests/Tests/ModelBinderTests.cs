@@ -3,6 +3,7 @@ using FluentAssertions.Execution;
 using NUnit.Framework;
 using Plainquire.Integration.Tests.Services;
 using Plainquire.Integration.Tests.TestSupport.Models;
+using Plainquire.TestSupport.Services;
 using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace Plainquire.Integration.Tests.Tests;
 
 [TestFixture]
-public class ModelBinderTests
+public class ModelBinderTests : TestContainer
 {
     [TestCase(true, TestName = "WhenRequestMadeWithIndividualEntities_ResultMatchesGivenParameters(WithNewtonsoftJson)")]
     [TestCase(false, TestName = "WhenRequestMadeWithIndividualEntities_ResultMatchesGivenParameters(WithMicrosoftJson)")]

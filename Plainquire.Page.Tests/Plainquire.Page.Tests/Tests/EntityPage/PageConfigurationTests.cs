@@ -3,13 +3,14 @@ using NUnit.Framework;
 using Plainquire.Page.Abstractions;
 using Plainquire.Page.Tests.Models;
 using Plainquire.Page.Tests.Services;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
 
 [TestFixture]
-public class PageConfigurationTests
+public class PageConfigurationTests : TestContainer
 {
     private static readonly PageConfiguration _ignoreParseExceptionConfiguration = new() { IgnoreParseExceptions = true };
 

@@ -4,11 +4,12 @@ using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System;
 using System.Collections.Generic;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
 [TestFixture]
-public class NestedFilterTests
+public class NestedFilterTests : TestContainer
 {
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenNestedEntityFilterIsApplied_ThenNestedPropertyIsFiltered(EntityFilterFunc<TestModel<string>> filterFunc)

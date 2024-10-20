@@ -2,6 +2,7 @@
 using FluentAssertions.Execution;
 using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Linq;
 namespace Plainquire.Filter.Tests.Tests.Configuration;
 
 [TestFixture]
-public class SyntaxConfigurationTests
+public class SyntaxConfigurationTests : TestContainer
 {
     [Test]
     public void WhenConfigurationIsCreated_ThenDefaultValuesAreSet()

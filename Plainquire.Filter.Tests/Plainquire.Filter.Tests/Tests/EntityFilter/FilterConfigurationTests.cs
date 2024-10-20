@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Models;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -10,7 +11,7 @@ using System.Linq;
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
 [TestFixture]
-public class FilterConfigurationTests
+public class FilterConfigurationTests : TestContainer
 {
     [Test]
     public void WhenConfigurationIsCreated_ThenDefaultValuesAreSet()

@@ -3,12 +3,13 @@ using FluentAssertions.Execution;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Plainquire.Filter.Newtonsoft;
+using Plainquire.TestSupport.Services;
 using System.Collections.Generic;
 
 namespace Plainquire.Filter.Tests.Tests.Converter;
 
 [TestFixture]
-public class JsonConverterExtensionsTests
+public class JsonConverterExtensionsTests : TestContainer
 {
     [Test]
     public void WhenNewtonsoftJsonSupportIsAdded_AllRequiredConvertersAreRegistered()

@@ -2,11 +2,12 @@
 using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [TestFixture]
-public class FilterForShortNullableBySyntaxTests
+public class FilterForShortNullableBySyntaxTests : TestContainer
 {
     [FilterTestDataSource(nameof(_testCases))]
     public void FilterForShortNullableBySyntax_WorksAsExpected(FilterTestCase<short?, short?> testCase, EntityFilterFunc<TestModel<short?>> filterFunc)

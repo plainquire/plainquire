@@ -7,13 +7,14 @@ using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using Plainquire.Filter.Mvc;
 using Plainquire.Filter.Mvc.ModelBinders;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Linq;
 
 namespace Plainquire.Filter.Tests.Tests.ModelBinder;
 
 [TestFixture]
-public class MvcBuilderExtensionsTests
+public class MvcBuilderExtensionsTests : TestContainer
 {
     [Test]
     public void WhenPageSupportIsAdded_AllRequiredModelBindersAreRegistered()

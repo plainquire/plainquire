@@ -2,13 +2,14 @@
 using FluentAssertions.Execution;
 using NUnit.Framework;
 using Plainquire.Sort.Tests.Models;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Linq.Expressions;
 
 namespace Plainquire.Sort.Tests.Tests.Extensions;
 
 [TestFixture]
-public class ExpressionExtensionsTests
+public class ExpressionExtensionsTests : TestContainer
 {
     [Test]
     public void WhenExpressionReturnsSelfReference_PropertyPathShouldBePathToSelfConstant()

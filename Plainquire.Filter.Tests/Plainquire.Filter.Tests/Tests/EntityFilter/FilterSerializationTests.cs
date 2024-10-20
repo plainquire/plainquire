@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Plainquire.Filter.Newtonsoft;
 using Plainquire.Filter.Tests.Models;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Linq;
 using NetSerializer = System.Text.Json.JsonSerializer;
@@ -10,7 +11,7 @@ using NewtonSerializer = Newtonsoft.Json.JsonConvert;
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
 [TestFixture]
-public class FilterSerializationTests
+public class FilterSerializationTests : TestContainer
 {
     [Test]
     public void WhenEntityFilterIsSerializedWithNetAndNewtonsoft_ResultIsEqual()

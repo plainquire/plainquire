@@ -3,11 +3,12 @@ using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [TestFixture]
-public class FilterForDateTimeOffsetNullableBySyntaxTests
+public class FilterForDateTimeOffsetNullableBySyntaxTests : TestContainer
 {
     [FilterTestDataSource(nameof(_testCases))]
     public void FilterForDateTimeNullableBySyntax_WorksAsExpected(FilterTestCase<DateTimeOffset?, DateTimeOffset?> testCase, EntityFilterFunc<TestModel<DateTimeOffset?>> filterFunc)

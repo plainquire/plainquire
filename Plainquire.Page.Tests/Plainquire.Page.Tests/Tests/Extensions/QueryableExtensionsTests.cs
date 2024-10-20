@@ -1,12 +1,13 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using Plainquire.Page.Tests.Models;
+using Plainquire.TestSupport.Services;
 using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.Extensions;
 
 [TestFixture]
-public class QueryableExtensionsTests
+public class QueryableExtensionsTests : TestContainer
 {
     [Test]
     public void WhenEnumerableIsPagedDirectly_ExpectedPageIsReturned()

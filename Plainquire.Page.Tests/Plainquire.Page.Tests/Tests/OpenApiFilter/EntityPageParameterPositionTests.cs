@@ -6,6 +6,7 @@ using Plainquire.Page.Swashbuckle.Filters;
 using Plainquire.Page.Tests.Models;
 using Plainquire.Swashbuckle.TestSupport.Extensions;
 using Plainquire.Swashbuckle.TestSupport.Services;
+using Plainquire.TestSupport.Services;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Plainquire.Page.Tests.Tests.OpenApiFilter;
 [TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
-public class EntityPageParameterPositionTests
+public class EntityPageParameterPositionTests : TestContainer
 {
     [TestCase(nameof(EntityPagePositionController.SinglePage))]
     [TestCase(nameof(EntityPagePositionController.SinglePageAtStart))]

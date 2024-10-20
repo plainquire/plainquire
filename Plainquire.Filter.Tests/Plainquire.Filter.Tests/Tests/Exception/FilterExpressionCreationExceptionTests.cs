@@ -2,12 +2,13 @@
 using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Models;
+using Plainquire.TestSupport.Services;
 using System;
 
 namespace Plainquire.Filter.Tests.Tests.Exception;
 
 [TestFixture]
-public class FilterExpressionCreationExceptionTests
+public class FilterExpressionCreationExceptionTests : TestContainer
 {
     [Test]
     public void WhenFilterExpressionCreationExceptionIsThrown_AllMembersAreFilled()

@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Plainquire.Sort.Swashbuckle.Filters;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Swashbuckle.TestSupport.Services;
+using Plainquire.TestSupport.Services;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Plainquire.Sort.Tests.Tests.OpenApiFilter;
 [TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
-public class EntitySortParameterNameTests
+public class EntitySortParameterNameTests : TestContainer
 {
     [Test]
     public void WhenGenericEntitySortIsGiven_GeneratedSchemaPatternMatchesExpected()

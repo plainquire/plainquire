@@ -4,11 +4,12 @@ using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System.Diagnostics;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [TestFixture]
-public class FilterForShortByValueTests
+public class FilterForShortByValueTests : TestContainer
 {
     [FilterTestDataSource(nameof(_testCases))]
     public void FilterForShortByValue_WorksAsExpected(object testCase, EntityFilterFunc<TestModel<short>> filterFunc)

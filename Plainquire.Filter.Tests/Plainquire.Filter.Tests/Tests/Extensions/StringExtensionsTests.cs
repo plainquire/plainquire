@@ -1,10 +1,11 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.Extensions;
 
 [TestFixture]
-public class StringExtensionsTests
+public class StringExtensionsTests : TestContainer
 {
     [Test]
     public void WhenStringLowercaseFirstCharIsCalled_FirstCharIsLowercase()

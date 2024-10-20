@@ -7,6 +7,7 @@ using Plainquire.Page.Abstractions;
 using Plainquire.Page.Mvc.ModelBinders;
 using Plainquire.Page.Tests.Models;
 using Plainquire.TestSupport.Extensions;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 namespace Plainquire.Page.Tests.Tests.Configuration;
 
 [TestFixture]
-public class ConfigurationPrecedenceTests
+public class ConfigurationPrecedenceTests : TestContainer
 {
     private static readonly PageConfiguration _unusedConfiguration = new();
     private static readonly PageConfiguration _usedConfiguration = new()

@@ -2,12 +2,13 @@
 using NUnit.Framework;
 using Plainquire.Page.Tests.Models;
 using Plainquire.Page.Tests.Services;
+using Plainquire.TestSupport.Services;
 using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
 
 [TestFixture]
-public class InterceptorTests
+public class InterceptorTests : TestContainer
 {
     [PageFuncDataSource<TestModel<string>>]
     public void WhenPagedUsingInterceptorViaParameter_InterceptorIsCalledToCreatePage(EntityPageFunction<TestModel<string>> pageFunc)

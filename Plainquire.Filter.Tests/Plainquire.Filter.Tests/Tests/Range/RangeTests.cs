@@ -2,12 +2,13 @@
 using FluentAssertions.Execution;
 using NUnit.Framework;
 using Plainquire.Filter.Abstractions;
+using Plainquire.TestSupport.Services;
 using System;
 
 namespace Plainquire.Filter.Tests.Tests.Range;
 
 [TestFixture]
-public class RangeTests
+public class RangeTests : TestContainer
 {
     [Test]
     public void WhenRangeIsCreated_ResultMatchExpected()

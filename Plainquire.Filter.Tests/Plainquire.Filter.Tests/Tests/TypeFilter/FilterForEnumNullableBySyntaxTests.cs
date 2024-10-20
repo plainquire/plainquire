@@ -2,11 +2,12 @@
 using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [TestFixture]
-public class FilterForEnumNullableBySyntaxTests
+public class FilterForEnumNullableBySyntaxTests : TestContainer
 {
     [FilterTestDataSource(nameof(_testCases))]
     public void FilterForEnumNullableBySyntax_WorksAsExpected(FilterTestCase<TestEnum?, TestEnum?> testCase, EntityFilterFunc<TestModel<TestEnum?>> filterFunc)

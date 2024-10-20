@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Plainquire.Sort.Mvc.ModelBinders;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.TestSupport.Extensions;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -16,7 +17,7 @@ namespace Plainquire.Sort.Tests.Tests.ModelBinder;
 [TestFixture]
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Created by reflection")]
 [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local", Justification = "Accessed by reflection")]
-public class EntitySortModelBinderTests
+public class EntitySortModelBinderTests : TestContainer
 {
     [Test]
     public async Task WhenGenericEntitySortParameterIsGiven_ParameterBoundAsExpected()

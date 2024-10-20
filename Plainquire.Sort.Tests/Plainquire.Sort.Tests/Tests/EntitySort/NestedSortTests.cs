@@ -3,6 +3,7 @@ using FluentAssertions.Execution;
 using NUnit.Framework;
 using Plainquire.Sort.Tests.Models;
 using Plainquire.Sort.Tests.Services;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Collections.Generic;
 using static Plainquire.Sort.PropertySort;
@@ -10,7 +11,7 @@ using static Plainquire.Sort.PropertySort;
 namespace Plainquire.Sort.Tests.Tests.EntitySort;
 
 [TestFixture]
-public class NestedSortTests
+public class NestedSortTests : TestContainer
 {
     [SortFuncDataSource<TestModel<string>>]
     public void WhenNestedSortIsApplied_ThenNestedPropertyIsSorted(EntitySortFunction<TestModel<string>> sortFunc)

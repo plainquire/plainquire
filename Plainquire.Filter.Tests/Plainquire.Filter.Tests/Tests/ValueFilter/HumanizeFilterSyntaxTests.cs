@@ -1,11 +1,12 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Execution;
 using NUnit.Framework;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.ValueFilter;
 
 [TestFixture]
-public class HumanizeFilterSyntaxTests
+public class HumanizeFilterSyntaxTests : TestContainer
 {
     [Test]
     public void WhenFilteredTypeIsString_DefaultOperatorIsContains()

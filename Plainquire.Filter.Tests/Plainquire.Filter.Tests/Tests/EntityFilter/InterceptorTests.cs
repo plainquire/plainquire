@@ -10,11 +10,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
 [TestFixture]
-public class InterceptorTests
+public class InterceptorTests : TestContainer
 {
     [FilterFuncDataSource<TestModel<string>>]
     public void WhenFilterInterceptorIsUsed_ValuesAreFilteredAsExpected(EntityFilterFunc<TestModel<string>> filterFunc)

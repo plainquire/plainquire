@@ -3,11 +3,12 @@ using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [TestFixture]
-public class FilterForDateTimeBySyntaxTests
+public class FilterForDateTimeBySyntaxTests : TestContainer
 {
     [FilterTestDataSource(nameof(_testCases))]
     public void FilterForDateTimeBySyntax_WorksAsExpected(FilterTestCase<DateTime, DateTime> testCase, EntityFilterFunc<TestModel<DateTime>> filterFunc)

@@ -5,14 +5,22 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{4ADA43F9-E9B7-42BF-8D1D-0635400382E7}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		Build\analyzer_disposeable.props = Build\analyzer_disposeable.props
-		Build\analyzer_meziantou.props = Build\analyzer_meziantou.props
 		Build\build_core.props = Build\build_core.props
 		Build\build_standard.props = Build\build_standard.props
 		Build\build_tests.props = Build\build_tests.props
 		Build\build_version.props = Build\build_version.props
 		Build\build_xml_documentation.props = Build\build_xml_documentation.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "analyzers", "analyzers", "{68ADD508-71F1-403C-B850-4B345B68F1AB}"
+	ProjectSection(SolutionItems) = preProject
+		Build\analyzer_disposeable.props = Build\analyzer_disposeable.props
+		Build\analyzer_meziantou.props = Build\analyzer_meziantou.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configuration", "configuration", "{59A4868C-2B36-4EF1-B294-1EA3FFF7EF4B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plainquire.Filter", "Plainquire.Filter", "{D1F2A2BB-C421-4950-85EC-5F3D6E44179F}"
@@ -80,6 +88,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainquire.Integration.Tests.TestSupport", "Plainquire.Tests\Plainquire.Integration.Tests.TestSupport\Plainquire.Integration.Tests.TestSupport.csproj", "{EFFB7C43-194A-45DF-AD51-430C8C51652F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainquire.Integration.Tests", "Plainquire.Tests\Plainquire.Integration.Tests\Plainquire.Integration.Tests.csproj", "{8F073773-9AA1-4247-BCC3-9D5F32E39C1A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainquire.Architecture.Tests", "Plainquire.Tests\Plainquire.Architecture.Tests\Plainquire.Architecture.Tests.csproj", "{EEDF5142-FB6A-427D-A345-601DC3AB23DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -191,11 +201,17 @@ Global
 		{8F073773-9AA1-4247-BCC3-9D5F32E39C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F073773-9AA1-4247-BCC3-9D5F32E39C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F073773-9AA1-4247-BCC3-9D5F32E39C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEDF5142-FB6A-427D-A345-601DC3AB23DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEDF5142-FB6A-427D-A345-601DC3AB23DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEDF5142-FB6A-427D-A345-601DC3AB23DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEDF5142-FB6A-427D-A345-601DC3AB23DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{68ADD508-71F1-403C-B850-4B345B68F1AB} = {4ADA43F9-E9B7-42BF-8D1D-0635400382E7}
+		{59A4868C-2B36-4EF1-B294-1EA3FFF7EF4B} = {4ADA43F9-E9B7-42BF-8D1D-0635400382E7}
 		{825D0361-7EC9-40DC-9AB6-D206E2B80DEA} = {D1F2A2BB-C421-4950-85EC-5F3D6E44179F}
 		{1B1FBE6D-B411-400F-9BC3-88D8CD5E81C4} = {D1F2A2BB-C421-4950-85EC-5F3D6E44179F}
 		{476D668F-4B4C-471B-81B2-076ED19A6F53} = {D1F2A2BB-C421-4950-85EC-5F3D6E44179F}
@@ -221,6 +237,7 @@ Global
 		{DED43145-88B8-4B34-A77B-973DDA9A290C} = {7C5B8FDE-6D71-4103-9035-753D41B88421}
 		{EFFB7C43-194A-45DF-AD51-430C8C51652F} = {11F6D087-2112-4B93-94F2-2F32B572DCAC}
 		{8F073773-9AA1-4247-BCC3-9D5F32E39C1A} = {11F6D087-2112-4B93-94F2-2F32B572DCAC}
+		{EEDF5142-FB6A-427D-A345-601DC3AB23DB} = {11F6D087-2112-4B93-94F2-2F32B572DCAC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6D896BF2-BA48-420C-9664-AB7DC7D38A33}

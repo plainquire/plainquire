@@ -7,11 +7,12 @@ using Plainquire.Filter.Tests.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 
 [TestFixture]
-public class EntityFilterTests
+public class EntityFilterTests : TestContainer
 {
     [FilterFuncDataSource<TestModel<DateTime>>]
     public void WhenPropertyFilterIsAdded_ThenSamePropertyFiltersAreKept(EntityFilterFunc<TestModel<DateTime>> filterFunc)

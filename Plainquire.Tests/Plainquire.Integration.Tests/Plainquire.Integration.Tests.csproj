@@ -8,6 +8,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\Plainquire.Filter.Tests\Plainquire.TestSupport\Plainquire.TestSupport.csproj" />
     <ProjectReference Include="..\Plainquire.Integration.Tests.TestSupport\Plainquire.Integration.Tests.TestSupport.csproj" />
   </ItemGroup>
 

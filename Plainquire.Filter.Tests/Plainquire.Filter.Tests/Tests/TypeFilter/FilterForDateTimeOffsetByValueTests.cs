@@ -5,11 +5,12 @@ using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using System;
 using System.Diagnostics;
+using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 
 [TestFixture]
-public class FilterForDateTimeOffsetByValueTests
+public class FilterForDateTimeOffsetByValueTests : TestContainer
 {
     [FilterTestDataSource(nameof(_testCases))]
     public void FilterForDateTimeByValue_WorksAsExpected(object testCase, EntityFilterFunc<TestModel<DateTimeOffset>> filterFunc)

@@ -2,13 +2,14 @@
 using NUnit.Framework;
 using Plainquire.Page.Tests.Models;
 using Plainquire.Page.Tests.Services;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Linq;
 
 namespace Plainquire.Page.Tests.Tests.EntityPage;
 
 [TestFixture]
-public class EntityPageTests
+public class EntityPageTests : TestContainer
 {
     private static readonly PageTestcase<TestModel<string>>[] _validPages =
     [
