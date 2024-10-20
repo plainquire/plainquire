@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using Plainquire.Filter.Tests.Services;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 

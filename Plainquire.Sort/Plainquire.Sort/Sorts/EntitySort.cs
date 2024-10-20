@@ -1,4 +1,5 @@
-﻿using Plainquire.Sort.Abstractions;
+﻿using Plainquire.Filter.Abstractions;
+using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.JsonConverters;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Plainquire.Filter.Abstractions;
 
 namespace Plainquire.Sort;
 

@@ -5,12 +5,12 @@ using Plainquire.Filter.PropertyFilterExpressions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
 using Plainquire.Filter.ValueFilterExpressions;
+using Plainquire.TestSupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Plainquire.TestSupport.Services;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
 

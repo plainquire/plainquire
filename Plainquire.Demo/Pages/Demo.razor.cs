@@ -6,6 +6,7 @@ using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using Plainquire.Demo.DTOs;
 using Plainquire.Filter;
+using Plainquire.Filter.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,7 +14,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-using Plainquire.Filter.Abstractions;
 
 namespace Plainquire.Demo.Pages;
 

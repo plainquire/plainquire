@@ -3,8 +3,8 @@ using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Extensions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.Filter.Tests.Services;
-using System.Diagnostics;
 using Plainquire.TestSupport.Services;
+using System.Diagnostics;
 
 namespace Plainquire.Filter.Tests.Tests.TypeFilter;
 

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Plainquire.Filter.Abstractions;
+using Plainquire.Filter.Abstractions.Exceptions;
+using Plainquire.Sort.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Plainquire.Filter.Abstractions;
-using Plainquire.Filter.Abstractions.Exceptions;
-using Plainquire.Sort.Abstractions;
 
 namespace Plainquire.Sort;
 

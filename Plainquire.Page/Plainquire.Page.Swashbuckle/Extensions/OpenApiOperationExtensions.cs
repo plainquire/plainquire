@@ -1,9 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc.Abstractions;
+﻿using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
 using Plainquire.Page.Swashbuckle.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 

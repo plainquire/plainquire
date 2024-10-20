@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Plainquire.Filter.Abstractions;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Plainquire.Filter.Abstractions;
 
 namespace Plainquire.Demo.Models;
 

@@ -9,6 +9,7 @@ using Plainquire.Demo.Models;
 using Plainquire.Demo.Models.FilterSets;
 using Plainquire.Demo.Routing;
 using Plainquire.Filter;
+using Plainquire.Filter.Abstractions;
 using Plainquire.Page;
 using Plainquire.Sort;
 using System;
@@ -18,7 +19,6 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Plainquire.Filter.Abstractions;
 using Address = Plainquire.Demo.Models.Address;
 
 namespace Plainquire.Demo.Controllers;

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Plainquire.Filter.Abstractions;
+﻿using Plainquire.Filter.Abstractions;
+using System.Collections.Generic;
 
 namespace Plainquire.Filter.JsonConverters;
 
