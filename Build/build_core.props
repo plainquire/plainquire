@@ -3,10 +3,9 @@
   <Import Project="analyzer_meziantou.props" />
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <DefineConstants Condition="'$(TargetFramework)' == 'net6.0'">$(DefineConstants);NET_CORE</DefineConstants>
+    <TargetFramework>net8.0</TargetFramework>
+    <DefineConstants Condition="'$(TargetFramework)' == 'net8.0'">$(DefineConstants);NET_CORE</DefineConstants>
     <Nullable>enable</Nullable>
-    <LangVersion>12.0</LangVersion>
   </PropertyGroup>
   
 </Project>
