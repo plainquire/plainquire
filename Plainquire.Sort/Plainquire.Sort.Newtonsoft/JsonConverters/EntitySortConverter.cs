@@ -19,7 +19,10 @@ public class EntitySortConverter : JsonConverter
     /// <inheritdoc />
     public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
-        var entitySort = (EntitySort)Activator.CreateInstance(objectType);
+        var entitySortInstance = Activator.CreateInstance(objectType)
+            ?? throw new InvalidOperationException($"Unable to create instance of type {objectType.Name}");
+
+        var entitySort = (EntitySort)entitySortInstance;
         var entitySortData = serializer.Deserialize<EntitySortConverterData>(reader) ?? new EntitySortConverterData();
         var propertySorts = Sort.JsonConverters.EntitySortConverter.GetPropertySorts(entitySortData);
 

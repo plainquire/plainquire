@@ -73,11 +73,11 @@ public class EntityPageConverter : JsonConverter<EntityPage>
             => typeToConvert.IsEntityPage();
 
         /// <inheritdoc />
-        public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+        public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var entityType = typeToConvert.GetGenericArguments()[0];
             var entityPageConverterType = typeof(EntityPageConverter<>).MakeGenericType(entityType);
-            return (JsonConverter)Activator.CreateInstance(entityPageConverterType);
+            return (JsonConverter?)Activator.CreateInstance(entityPageConverterType);
         }
     }
 }

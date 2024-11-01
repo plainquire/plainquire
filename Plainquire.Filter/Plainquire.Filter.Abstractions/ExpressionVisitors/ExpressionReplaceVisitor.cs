@@ -1,4 +1,5 @@
 ﻿#pragma warning disable 1591
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace Plainquire.Filter.Abstractions.ExpressionVisitors;
@@ -15,7 +16,8 @@ public class ExpressionReplaceVisitor : ExpressionVisitor
         _right = right;
     }
 
-    public override Expression Visit(Expression node)
+    [return: NotNullIfNotNull(nameof(node))]
+    public override Expression? Visit(Expression? node)
         => Equals(node, _left)
             ? _right
             : base.Visit(node);

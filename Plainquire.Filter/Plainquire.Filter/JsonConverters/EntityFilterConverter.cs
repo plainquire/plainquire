@@ -105,11 +105,11 @@ public class EntityFilterConverter : JsonConverter<EntityFilter>
             => typeToConvert.IsGenericEntityFilter();
 
         /// <inheritdoc />
-        public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+        public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var entityType = typeToConvert.GetGenericArguments()[0];
             var entityFilterConverterType = typeof(EntityFilterConverter<>).MakeGenericType(entityType);
-            return (JsonConverter)Activator.CreateInstance(entityFilterConverterType);
+            return (JsonConverter?)Activator.CreateInstance(entityFilterConverterType);
         }
     }
 }

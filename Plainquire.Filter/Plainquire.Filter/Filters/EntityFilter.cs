@@ -449,7 +449,7 @@ public class EntityFilter : ICloneable
             .Select(x =>
             {
                 var createFilterExpression = _createFilterMethod.MakeGenericMethod(x.Property.PropertyType);
-                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, [interceptor, useAsCompiledExpression]);
+                var nestedFilterExpression = (LambdaExpression?)createFilterExpression.Invoke(x.EntityFilter, [interceptor, useAsCompiledExpression]);
                 if (nestedFilterExpression == null)
                     return null;
 
@@ -483,7 +483,7 @@ public class EntityFilter : ICloneable
             {
                 var propertyType = x.Property.PropertyType.GetGenericArguments()[0];
                 var createFilterExpression = _createFilterMethod.MakeGenericMethod(propertyType);
-                var nestedFilterExpression = (LambdaExpression)createFilterExpression.Invoke(x.EntityFilter, [interceptor, useAsCompiledExpression]);
+                var nestedFilterExpression = (LambdaExpression?)createFilterExpression.Invoke(x.EntityFilter, [interceptor, useAsCompiledExpression]);
                 if (nestedFilterExpression == null)
                     return null;
 

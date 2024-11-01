@@ -91,12 +91,6 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
 
     private static IEnumerable<TProperty> GetEnumValuesMatchByStringFilter<TProperty>(FilterOperator filterOperator, string? value, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
-        var underlyingEnumType = typeof(TProperty).GetUnderlyingType();
-        var enumValueToNameMap = Enum
-            .GetValues(underlyingEnumType)
-            .Cast<TProperty>()
-            .ToDictionary(key => key, val => Enum.GetName(underlyingEnumType, val!));
-
         var stringFilterExpressionCreator = new StringFilterExpression();
         Expression<Func<KeyValuePair<TProperty, string>, string>> dictionaryValueSelector = x => x.Value;
 
@@ -110,16 +104,26 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
             _ => FilterOperator.EqualCaseInsensitive
         };
 
-        var stringFilterExpression = stringFilterExpressionCreator.CreateExpressionForValue(dictionaryValueSelector, stringFilterOperator, value, configuration, interceptor);
+        var underlyingEnumType = typeof(TProperty).GetUnderlyingType();
+
+        var stringFilterExpression = stringFilterExpressionCreator
+            .CreateExpressionForValue(dictionaryValueSelector, stringFilterOperator, value, configuration, interceptor);
 
         var stringFilter = Expression
             .Lambda<Func<KeyValuePair<TProperty, string>, bool>>(stringFilterExpression, dictionaryValueSelector.Parameters)
             .Compile();
 
-        var filteredValues = enumValueToNameMap
+        var filteredValues = Enum
+            .GetValues(underlyingEnumType)
+            .Cast<TProperty>()
+            .Select(enumValue => KeyValuePair.Create(enumValue, EnumGetName(underlyingEnumType, enumValue)))
             .Where(stringFilter)
-            .ToDictionary(x => x.Key, x => x.Value);
+            .Select(x => x.Key);
 
-        return filteredValues.Keys;
+        return filteredValues;
     }
+
+    private static string EnumGetName<TEnum>(Type underlyingEnumType, TEnum value)
+        => Enum.GetName(underlyingEnumType, value!)
+           ?? throw new InvalidOperationException($"Unable to get value of {value} for enum {underlyingEnumType.Name}");
 }

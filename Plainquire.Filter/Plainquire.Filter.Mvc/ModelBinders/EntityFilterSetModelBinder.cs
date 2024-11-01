@@ -28,9 +28,8 @@ public class EntityFilterSetModelBinder : IModelBinder
         if (bindingContext == null)
             throw new ArgumentNullException(nameof(bindingContext));
 
-        var entityFilterSet = Activator.CreateInstance(bindingContext.ModelType);
-        if (entityFilterSet == null)
-            throw new InvalidOperationException($"Cannot create instance of filter set '{bindingContext.ModelType.Name}'");
+        var entityFilterSet = Activator.CreateInstance(bindingContext.ModelType)
+            ?? throw new InvalidOperationException($"Cannot create instance of filter set '{bindingContext.ModelType.Name}'");
 
         var entityFilterProperties = entityFilterSet.GetType().GetProperties();
         foreach (var entityFilter in entityFilterProperties)

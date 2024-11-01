@@ -110,7 +110,7 @@ public class ValueFilter
             null => string.Empty,
             DateTime dateTime => dateTime.ToString("o"),
             DateTimeOffset dateTime => dateTime.ToString("o"),
-            _ => value.ToString()
+            _ => value.ToString() ?? string.Empty
         };
 
         return result;

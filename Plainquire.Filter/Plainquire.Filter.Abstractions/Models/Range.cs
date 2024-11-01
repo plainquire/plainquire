@@ -135,19 +135,19 @@ public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType :
     TypeCode IConvertible.GetTypeCode()
         => TypeCode.Object;
 
-    bool IConvertible.ToBoolean(IFormatProvider provider)
+    bool IConvertible.ToBoolean(IFormatProvider? provider)
         => throw new InvalidCastException($"Invalid cast from {nameof(Range)} to {nameof(Boolean)}");
 
-    char IConvertible.ToChar(IFormatProvider provider)
+    char IConvertible.ToChar(IFormatProvider? provider)
         => throw new InvalidCastException($"Invalid cast from {nameof(Range)} to {nameof(Char)}");
 
-    DateTime IConvertible.ToDateTime(IFormatProvider provider)
+    DateTime IConvertible.ToDateTime(IFormatProvider? provider)
         => throw new InvalidCastException($"Invalid cast from {nameof(Range)} to {nameof(DateTime)}");
 
-    string IConvertible.ToString(IFormatProvider provider)
+    string IConvertible.ToString(IFormatProvider? provider)
         => this.ToString();
 
-    object IConvertible.ToType(Type conversionType, IFormatProvider provider)
+    object IConvertible.ToType(Type conversionType, IFormatProvider? provider)
     {
         try
         {
@@ -159,7 +159,7 @@ public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType :
         }
     }
 
-    byte IConvertible.ToByte(IFormatProvider provider)
+    byte IConvertible.ToByte(IFormatProvider? provider)
     {
         var result = ToDouble(End) - ToDouble(Start);
         if (result <= byte.MaxValue)
@@ -167,7 +167,7 @@ public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType :
         throw new OverflowException($"Range was too large for a {nameof(Byte)}");
     }
 
-    decimal IConvertible.ToDecimal(IFormatProvider provider)
+    decimal IConvertible.ToDecimal(IFormatProvider? provider)
     {
         try
         {
@@ -179,10 +179,10 @@ public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType :
         }
     }
 
-    double IConvertible.ToDouble(IFormatProvider provider)
+    double IConvertible.ToDouble(IFormatProvider? provider)
         => ToDouble(End) - ToDouble(Start);
 
-    short IConvertible.ToInt16(IFormatProvider provider)
+    short IConvertible.ToInt16(IFormatProvider? provider)
     {
         var result = ToDouble(End) - ToDouble(Start);
         if (result <= short.MaxValue)
@@ -190,7 +190,7 @@ public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType :
         throw new OverflowException($"Range was too large for a {nameof(Int16)}");
     }
 
-    int IConvertible.ToInt32(IFormatProvider provider)
+    int IConvertible.ToInt32(IFormatProvider? provider)
     {
         var result = ToDouble(End) - ToDouble(Start);
         if (result <= int.MaxValue)
@@ -198,7 +198,7 @@ public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType :
         throw new OverflowException($"Range was too large for a {nameof(Int32)}");
     }
 
-    long IConvertible.ToInt64(IFormatProvider provider)
+    long IConvertible.ToInt64(IFormatProvider? provider)
     {
         var result = ToDouble(End) - ToDouble(Start);
         if (result <= long.MaxValue)
@@ -206,7 +206,7 @@ public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType :
         throw new OverflowException($"Range was too large for a {nameof(Int64)}");
     }
 
-    sbyte IConvertible.ToSByte(IFormatProvider provider)
+    sbyte IConvertible.ToSByte(IFormatProvider? provider)
     {
         var result = ToDouble(End) - ToDouble(Start);
         if (result <= sbyte.MaxValue)
@@ -214,7 +214,7 @@ public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType :
         throw new OverflowException($"Range was too large for a {nameof(SByte)}");
     }
 
-    float IConvertible.ToSingle(IFormatProvider provider)
+    float IConvertible.ToSingle(IFormatProvider? provider)
     {
         var result = ToDouble(End) - ToDouble(Start);
         if (result < float.MaxValue)
@@ -222,7 +222,7 @@ public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType :
         throw new OverflowException($"Range was too large for a {nameof(Single)}");
     }
 
-    ushort IConvertible.ToUInt16(IFormatProvider provider)
+    ushort IConvertible.ToUInt16(IFormatProvider? provider)
     {
         var result = ToDouble(End) - ToDouble(Start);
         if (result <= ushort.MaxValue)
@@ -230,7 +230,7 @@ public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType :
         throw new OverflowException($"Range was too large for a {nameof(UInt16)}");
     }
 
-    uint IConvertible.ToUInt32(IFormatProvider provider)
+    uint IConvertible.ToUInt32(IFormatProvider? provider)
     {
         var result = ToDouble(End) - ToDouble(Start);
         if (result <= uint.MaxValue)
@@ -238,7 +238,7 @@ public class Range<TType> : IEquatable<Range<TType>>, IConvertible where TType :
         throw new OverflowException($"Range was too large for a {nameof(UInt32)}");
     }
 
-    ulong IConvertible.ToUInt64(IFormatProvider provider)
+    ulong IConvertible.ToUInt64(IFormatProvider? provider)
     {
         var result = ToDouble(End) - ToDouble(Start);
         if (result <= ulong.MaxValue)

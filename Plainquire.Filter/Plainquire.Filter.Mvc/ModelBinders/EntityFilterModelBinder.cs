@@ -46,7 +46,10 @@ public class EntityFilterModelBinder : IModelBinder
             return new EntityFilter();
 
         var entityFilterType = typeof(EntityFilter<>).MakeGenericType(type);
-        var entityFilter = (EntityFilter)Activator.CreateInstance(entityFilterType);
+        var entityFilterInstance = Activator.CreateInstance(entityFilterType)
+            ?? throw new InvalidOperationException($"Unable to create instance of type {entityFilterType.Name}");
+
+        var entityFilter = (EntityFilter)entityFilterInstance;
 
         var prototypeConfiguration = ((EntityFilter?)serviceProvider.GetService(entityFilterType))?.Configuration;
         var injectedConfiguration = serviceProvider.GetService<IOptions<FilterConfiguration>>()?.Value;

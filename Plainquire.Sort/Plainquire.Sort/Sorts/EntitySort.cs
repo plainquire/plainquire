@@ -353,8 +353,11 @@ public class EntitySort
             })
             .ToList();
 
-        var genericSort = typeof(EntitySort<>).MakeGenericType(propertyType);
-        var nestedSort = (EntitySort)Activator.CreateInstance(genericSort);
+        var genericSortType = typeof(EntitySort<>).MakeGenericType(propertyType);
+        var nestedSortInstance = Activator.CreateInstance(genericSortType)
+            ?? throw new InvalidOperationException($"Unable to create instance of type {genericSortType.Name}");
+
+        var nestedSort = (EntitySort)nestedSortInstance;
         nestedSort.PropertySorts.AddRange(nestedSorts);
 
         return nestedSort;

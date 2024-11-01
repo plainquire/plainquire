@@ -71,7 +71,11 @@ public class DefaultFilterExpression : IValueFilterExpression
                         return CreateExpressionForValue(propertySelector, filter.Operator, filter.Value, configuration, interceptor);
                 }
             })
+            .WhereNotNull()
             .ToList();
+
+        if (filterExpressions.Count == 0)
+            return null;
 
         var filterExpression = filterExpressions.Aggregate(Expression.OrElse);
 

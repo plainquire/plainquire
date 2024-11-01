@@ -31,7 +31,7 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
         => type.GetUnderlyingType() == typeof(string);
 
     /// <inheritdoc />
-    protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration, IFilterInterceptor? interceptor)
+    protected internal override Expression CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration, IFilterInterceptor? interceptor)
     {
         var strFilter = value?.Trim();
         switch (filterOperator)
@@ -119,7 +119,7 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
     /// <typeparam name="TProperty">The type of the property.</typeparam>
     /// <param name="propertySelector">The property selector.</param>
     /// <param name="value">The value.</param>
-    public static Expression? CreateStringStartsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string? value)
+    public static Expression CreateStringStartsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string? value)
     {
         var valueToUpper = Expression.Constant(value?.ToUpper(CultureInfo.InvariantCulture), typeof(TProperty));
         var propertyToUpper = propertySelector.Body.StringToUpper();
@@ -136,7 +136,7 @@ public class StringFilterExpression : DefaultFilterExpression, IStringFilterExpr
     /// <typeparam name="TProperty">The type of the property.</typeparam>
     /// <param name="propertySelector">The property selector.</param>
     /// <param name="value">The value.</param>
-    public static Expression? CreateStringEndsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string? value)
+    public static Expression CreateStringEndsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, string? value)
     {
         var valueToUpper = Expression.Constant(value?.ToUpper(CultureInfo.InvariantCulture), typeof(TProperty));
         var propertyToUpper = propertySelector.Body.StringToUpper();

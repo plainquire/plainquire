@@ -98,11 +98,11 @@ public class EntitySortConverter : JsonConverter<EntitySort>
             => typeToConvert.IsGenericEntitySort();
 
         /// <inheritdoc />
-        public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+        public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             var entityType = typeToConvert.GetGenericArguments()[0];
             var entitySortConverterType = typeof(EntitySortConverter<>).MakeGenericType(entityType);
-            return (JsonConverter)Activator.CreateInstance(entitySortConverterType);
+            return (JsonConverter?)Activator.CreateInstance(entitySortConverterType);
         }
     }
 }

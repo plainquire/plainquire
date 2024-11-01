@@ -55,7 +55,10 @@ public class EntitySortModelBinder : IModelBinder
     private static EntitySort CreateEntitySort(Type sortedType, IServiceProvider serviceProvider)
     {
         var entitySortType = typeof(EntitySort<>).MakeGenericType(sortedType);
-        var entitySort = (EntitySort)Activator.CreateInstance(entitySortType)!;
+        var entitySortInstance = Activator.CreateInstance(entitySortType)
+            ?? throw new InvalidOperationException($"Unable to create instance of type {entitySortType.Name}");
+
+        var entitySort = (EntitySort)entitySortInstance;
 
         var prototypeConfiguration = ((EntitySort?)serviceProvider.GetService(entitySortType))?.Configuration;
         var injectedConfiguration = serviceProvider.GetService<IOptions<SortConfiguration>>()?.Value;

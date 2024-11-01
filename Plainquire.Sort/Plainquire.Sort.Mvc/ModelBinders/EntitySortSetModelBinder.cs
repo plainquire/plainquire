@@ -30,9 +30,8 @@ public class EntitySortSetModelBinder : IModelBinder
         if (bindingContext == null)
             throw new ArgumentNullException(nameof(bindingContext));
 
-        var entitySortSet = Activator.CreateInstance(bindingContext.ModelType);
-        if (entitySortSet == null)
-            throw new InvalidOperationException($"Cannot create instance of sort set '{bindingContext.ModelType.Name}'");
+        var entitySortSet = Activator.CreateInstance(bindingContext.ModelType)
+            ?? throw new InvalidOperationException($"Cannot create instance of sort set '{bindingContext.ModelType.Name}'");
 
         var entitySortSetProperties = entitySortSet.GetType().GetProperties();
         foreach (var entitySort in entitySortSetProperties)

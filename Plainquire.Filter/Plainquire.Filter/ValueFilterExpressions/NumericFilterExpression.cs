@@ -92,7 +92,7 @@ public class NumericFilterExpression : DefaultFilterExpression, INumericFilterEx
     /// </returns>
     public static Expression CreateNumericContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object value)
     {
-        var valueToUpper = Expression.Constant(value.ToString().ToUpper(CultureInfo.InvariantCulture), typeof(string));
+        var valueToUpper = Expression.Constant(value.ToString()?.ToUpper(CultureInfo.InvariantCulture), typeof(string));
         var propertyToString = propertySelector.Body.ObjectToString();
         var propertyToUpper = propertyToString.StringToUpper();
         var propertyContainsValue = propertyToUpper.StringContains(valueToUpper);
@@ -109,7 +109,7 @@ public class NumericFilterExpression : DefaultFilterExpression, INumericFilterEx
     /// <returns></returns>
     public static Expression CreateStringStartsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object value)
     {
-        var valueToUpper = Expression.Constant(value.ToString().ToUpper(CultureInfo.InvariantCulture), typeof(string));
+        var valueToUpper = Expression.Constant(value.ToString()?.ToUpper(CultureInfo.InvariantCulture), typeof(string));
         var propertyToString = propertySelector.Body.ObjectToString();
         var propertyToUpper = propertyToString.StringToUpper();
         var propertyStartsWithValue = propertyToUpper.StringStartsWith(valueToUpper);
@@ -126,7 +126,7 @@ public class NumericFilterExpression : DefaultFilterExpression, INumericFilterEx
     /// <returns></returns>
     public static Expression CreateStringEndsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object value)
     {
-        var valueToUpper = Expression.Constant(value.ToString().ToUpper(CultureInfo.InvariantCulture), typeof(string));
+        var valueToUpper = Expression.Constant(value.ToString()?.ToUpper(CultureInfo.InvariantCulture), typeof(string));
         var propertyToString = propertySelector.Body.ObjectToString();
         var propertyToUpper = propertyToString.StringToUpper();
         var propertyEndsWithValue = propertyToUpper.StringEndsWith(valueToUpper);

@@ -30,9 +30,8 @@ public class EntityPageSetModelBinder : IModelBinder
         if (bindingContext == null)
             throw new ArgumentNullException(nameof(bindingContext));
 
-        var entityPageSet = Activator.CreateInstance(bindingContext.ModelType);
-        if (entityPageSet == null)
-            throw new InvalidOperationException($"Cannot create instance of page set '{bindingContext.ModelType.Name}'");
+        var entityPageSet = Activator.CreateInstance(bindingContext.ModelType)
+            ?? throw new InvalidOperationException($"Cannot create instance of page set '{bindingContext.ModelType.Name}'");
 
         var entityPageProperties = entityPageSet.GetType().GetProperties();
 

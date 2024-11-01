@@ -79,7 +79,7 @@ public class GuidFilterExpression : DefaultFilterExpression, IGuidFilterExpressi
     /// </returns>
     public static Expression CreateGuidContainsExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object? value)
     {
-        var valueToUpper = Expression.Constant(value?.ToString().ToUpper(CultureInfo.InvariantCulture), typeof(string));
+        var valueToUpper = Expression.Constant(value?.ToString()?.ToUpper(CultureInfo.InvariantCulture), typeof(string));
         var propertyToString = propertySelector.Body.ObjectToString();
         var propertyToUpper = propertyToString.StringToUpper();
         var propertyContainsValue = propertyToUpper.StringContains(valueToUpper);
@@ -95,7 +95,7 @@ public class GuidFilterExpression : DefaultFilterExpression, IGuidFilterExpressi
     /// <param name="value">The value to check for.</param>
     public static Expression CreateGuidStartsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object? value)
     {
-        var valueToUpper = Expression.Constant(value?.ToString().ToUpper(CultureInfo.InvariantCulture), typeof(string));
+        var valueToUpper = Expression.Constant(value?.ToString()?.ToUpper(CultureInfo.InvariantCulture), typeof(string));
         var propertyToString = propertySelector.Body.ObjectToString();
         var propertyToUpper = propertyToString.StringToUpper();
         var propertyStartsWithValue = propertyToUpper.StringStartsWith(valueToUpper);
@@ -111,7 +111,7 @@ public class GuidFilterExpression : DefaultFilterExpression, IGuidFilterExpressi
     /// <param name="value">The value to check for.</param>
     public static Expression CreateGuidEndsWithExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, object? value)
     {
-        var valueToUpper = Expression.Constant(value?.ToString().ToUpper(CultureInfo.InvariantCulture), typeof(string));
+        var valueToUpper = Expression.Constant(value?.ToString()?.ToUpper(CultureInfo.InvariantCulture), typeof(string));
         var propertyToString = propertySelector.Body.ObjectToString();
         var propertyToUpper = propertyToString.StringToUpper();
         var propertyEndsWithValue = propertyToUpper.StringEndsWith(valueToUpper);

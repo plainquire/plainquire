@@ -71,7 +71,10 @@ public class EntityPageModelBinder : IModelBinder
             return new EntityPage();
 
         var entityPageType = typeof(EntityPage<>).MakeGenericType(pageType);
-        var entityPage = (EntityPage)Activator.CreateInstance(entityPageType)!;
+        var entityPageInstance = Activator.CreateInstance(entityPageType)
+            ?? throw new InvalidOperationException($"Unable to create instance of type {entityPageType.Name}");
+
+        var entityPage = (EntityPage)entityPageInstance;
 
         var prototypeConfiguration = ((EntityPage?)serviceProvider.GetService(entityPageType))?.Configuration;
         var injectedConfiguration = serviceProvider.GetService<IOptions<PageConfiguration>>()?.Value;

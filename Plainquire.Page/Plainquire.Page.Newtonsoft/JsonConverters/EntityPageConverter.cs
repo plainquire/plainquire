@@ -36,7 +36,10 @@ public class EntityPageConverter : JsonConverter
     /// <inheritdoc />
     public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
-        var entityPage = (EntityPage)Activator.CreateInstance(objectType);
+        var entityPageInstance = Activator.CreateInstance(objectType)
+            ?? throw new InvalidOperationException($"Unable to create instance of type {objectType.Name}");
+
+        var entityPage = (EntityPage)entityPageInstance;
         var entityPageData = serializer.Deserialize<EntityPageData>(reader) ?? new EntityPageData();
         entityPage.PageNumberValue = entityPageData.PageNumber ?? string.Empty;
         entityPage.PageSizeValue = entityPageData.PageSize ?? string.Empty;

@@ -19,7 +19,10 @@ public class EntityFilterConverter : JsonConverter
     /// <inheritdoc />
     public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
-        var entityFilter = (EntityFilter)Activator.CreateInstance(objectType);
+        var entityFilterInstance = Activator.CreateInstance(objectType)
+            ?? throw new InvalidOperationException($"Unable to create instance of type {objectType.Name}");
+
+        var entityFilter = (EntityFilter)(entityFilterInstance);
         var entityFilterData = serializer.Deserialize<EntityFilterConverterData>(reader) ?? new EntityFilterConverterData();
         var propertyFilters = Filter.JsonConverters.EntityFilterConverter.GetPropertyFilters(entityFilterData);
 
