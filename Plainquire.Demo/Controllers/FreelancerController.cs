@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Plainquire.Demo.Database;
 using Plainquire.Demo.DTOs;
+using Plainquire.Demo.Extensions;
 using Plainquire.Demo.Models;
 using Plainquire.Demo.Models.FilterSets;
 using Plainquire.Demo.Routing;
@@ -157,7 +158,7 @@ public class FreelancerController : Controller
                 _ => faker.Name.FirstName()
             })
             .RuleFor(x => x.LastName, faker => faker.Name.LastName())
-            .RuleFor(x => x.Birthday, faker => faker.Date.Between(today.AddYears(-maxAge), today.AddYears(-minAge)).Date.OrNull(faker, .25f))
+            .RuleFor(x => x.Birthday, faker => faker.Date.Between(today.AddYears(-maxAge), today.AddYears(-minAge)).Date.OrNull(faker, .25f).ToDateOnly())
             .RuleFor(x => x.HourlyRate, faker => Math.Round(faker.Random.Double(minHourlyRate, maxHourlyRate), 2))
             .RuleFor(x => x.Address, _ => address.Generate())
             .RuleFor(x => x.Projects, faker => projects.Take(faker.Random.Int(0, 5)).ToList())

@@ -31,7 +31,11 @@ public class DateTimeFilterExpression : DefaultFilterExpression, IDateTimeFilter
 
     /// <inheritdoc />
     public override bool CanCreateExpressionFor(Type type)
+#if NET6_0_OR_GREATER
+        => new[] { typeof(Range<DateTimeOffset>), typeof(DateTime), typeof(DateOnly), typeof(DateTimeOffset) }.Contains(type.GetUnderlyingType());
+#else
         => new[] { typeof(Range<DateTimeOffset>), typeof(DateTime), typeof(DateTimeOffset) }.Contains(type.GetUnderlyingType());
+#endif
 
     /// <inheritdoc />
     protected internal override Expression? CreateExpressionForValue<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration, IFilterInterceptor? interceptor)
@@ -57,6 +61,13 @@ public class DateTimeFilterExpression : DefaultFilterExpression, IDateTimeFilter
             valueStart = (TProperty)(object)value.Start.DateTime;
             valueEnd = (TProperty)(object)value.End.DateTime;
         }
+#if NET6_0_OR_GREATER
+        else if (underlyingFilterPropertyType == typeof(DateOnly))
+        {
+            valueStart = (TProperty)(object)DateOnly.FromDateTime(value.Start.Date);
+            valueEnd = (TProperty)(object)DateOnly.FromDateTime(value.End.Date);
+        }
+#endif
         else
         {
             valueStart = (TProperty)(object)value.Start;

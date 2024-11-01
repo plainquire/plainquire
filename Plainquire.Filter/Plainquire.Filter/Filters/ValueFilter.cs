@@ -109,6 +109,10 @@ public class ValueFilter
         {
             null => string.Empty,
             DateTime dateTime => dateTime.ToString("o"),
+#if NET6_0_OR_GREATER
+            DateOnly date => date.ToString("o"),
+            //DateOnly date => date.ToString("yyyy-MM-dd"),
+#endif
             DateTimeOffset dateTime => dateTime.ToString("o"),
             _ => value.ToString() ?? string.Empty
         };

@@ -41,7 +41,7 @@ public class Freelancer
     /// <summary>
     /// Birthday.
     /// </summary>
-    public DateTime? Birthday { get; init; }
+    public DateOnly? Birthday { get; init; }
 
     /// <summary>
     /// Hourly rate.
