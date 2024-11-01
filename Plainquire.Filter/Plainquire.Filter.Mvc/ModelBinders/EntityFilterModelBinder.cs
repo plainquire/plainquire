@@ -45,13 +45,13 @@ public class EntityFilterModelBinder : IModelBinder
         if (type == null)
             return new EntityFilter();
 
-        var entityPageType = typeof(EntityFilter<>).MakeGenericType(type);
-        var entityPage = (EntityFilter)Activator.CreateInstance(entityPageType)!;
+        var entityFilterType = typeof(EntityFilter<>).MakeGenericType(type);
+        var entityFilter = (EntityFilter)Activator.CreateInstance(entityFilterType);
 
-        var prototypeConfiguration = ((EntityFilter?)serviceProvider.GetService(entityPageType))?.Configuration;
+        var prototypeConfiguration = ((EntityFilter?)serviceProvider.GetService(entityFilterType))?.Configuration;
         var injectedConfiguration = serviceProvider.GetService<IOptions<FilterConfiguration>>()?.Value;
-        entityPage.Configuration = prototypeConfiguration ?? injectedConfiguration;
+        entityFilter.Configuration = prototypeConfiguration ?? injectedConfiguration;
 
-        return entityPage;
+        return entityFilter;
     }
 }

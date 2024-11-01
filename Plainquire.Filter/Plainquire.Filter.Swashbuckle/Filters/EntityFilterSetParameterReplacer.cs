@@ -34,10 +34,10 @@ public class EntityFilterSetParameterReplacer : IOperationFilter
     /// <param name="context">The context.</param>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        var parameterReplacementInfos = GetEntityFilterReplacements(operation, context);
-        operation.Parameters.ReplaceFilterParameters(parameterReplacementInfos, _docXmlReaders);
+        var parameterReplacements = GetEntityFilterReplacements(operation, context);
+        operation.Parameters.ReplaceFilterParameters(parameterReplacements, _docXmlReaders);
 
-        var hasParametersFromEntityFilter = parameterReplacementInfos.Any();
+        var hasParametersFromEntityFilter = parameterReplacements.Any();
         operation.Extensions[OpenApiParameterExtensions.ENTITY_EXTENSION_PREFIX + "has-filter-parameters"] = new OpenApiBoolean(hasParametersFromEntityFilter);
     }
 
