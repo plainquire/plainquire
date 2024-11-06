@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Plainquire.Architecture.Tests;
+namespace Plainquire.Architecture.Tests.TestFixtures;
 
 [TestFixture]
 public class TestFixtureArchitectureTests : TestContainer
