@@ -1,6 +1,6 @@
 <Project>
-  <Import Project="analyzer_disposeable.props" />
-  <Import Project="analyzer_meziantou.props" />
+  <Import Project="../analyzers/analyzer_disposeable.props" />
+  <Import Project="../analyzers/analyzer_meziantou.props" />
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
