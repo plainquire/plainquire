@@ -14,7 +14,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.0.x
     - name: Build
       run: dotnet build --configuration Release -warnaserror
 
@@ -34,7 +34,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x
       - name: Run tests
         run: dotnet test --configuration Release -warnaserror --settings:.runsettings
       - name: Aggregate and publish test results
@@ -161,7 +161,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.0.x
     - name: Pack
       run: |
         VERSION=`echo ${GITHUB_REF} | perl -pe 's/^refs\/tags\/(.*)$/\1/'`

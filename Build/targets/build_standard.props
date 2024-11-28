@@ -3,7 +3,7 @@
   <Import Project="../analyzers/analyzer_meziantou.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net6;net8</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net8;net9</TargetFrameworks>
     <Nullable>enable</Nullable>
     <LangVersion>12.0</LangVersion>
   </PropertyGroup>
