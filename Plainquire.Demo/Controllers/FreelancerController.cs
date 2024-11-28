@@ -1,6 +1,6 @@
-﻿using Bogus;
+﻿using AgileObjects.ReadableExpressions;
+using Bogus;
 using Bogus.DataSets;
-using ExpressionTreeToString;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Plainquire.Demo.Database;
@@ -92,7 +92,7 @@ public class FreelancerController : Controller
             FilteredCount = filteredCount,
             UnfilteredCount = unfilteredCount,
             SqlQuery = GetSqlQuery(query),
-            FilterExpression = freelancerFilter.CreateFilter()?.ToString("C#"),
+            FilterExpression = freelancerFilter.CreateFilter()?.ToReadableString(c => c.ShowLambdaParameterTypes).Replace(Environment.NewLine, " "),
             HttpQuery = WebUtility.UrlDecode(HttpContext.Request.Path.Value + HttpContext.Request.QueryString.Value)
         };
 
