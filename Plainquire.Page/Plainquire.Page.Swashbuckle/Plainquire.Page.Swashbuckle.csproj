@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../../Build/targets/build_core.props" />
   <Import Project="../../Build/targets/build_version.props" />
   <Import Project="../../Build/targets/build_xml_documentation.props" />
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.9.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="7.1.0" />
   </ItemGroup>
 
   <ItemGroup>
