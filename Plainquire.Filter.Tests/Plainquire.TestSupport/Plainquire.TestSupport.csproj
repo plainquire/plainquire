@@ -1,13 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../../Build/targets/build_core.props" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../Build/targets/build_tests.props" />
   <Import Project="../../Build/targets/build_version.props" />
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
   </ItemGroup>
 
   <ItemGroup>

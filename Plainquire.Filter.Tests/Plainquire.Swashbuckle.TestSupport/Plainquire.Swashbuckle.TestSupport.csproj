@@ -1,13 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../../Build/targets/build_core.props" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../Build/targets/build_tests.props" />
   <Import Project="../../Build/targets/build_version.props" />
 
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
-  </ItemGroup>
-
   <PropertyGroup>
-
     <!-- Use an overload that has a IEqualityComparer<string> -->
     <NoWarn>$(NoWarn);MA0002</NoWarn>
 
@@ -22,7 +17,6 @@
 
     <!-- File name must match type name -->
     <NoWarn>$(NoWarn);MA0048</NoWarn>
-
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="6.12.2" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="7.1.0" />
   </ItemGroup>
 
