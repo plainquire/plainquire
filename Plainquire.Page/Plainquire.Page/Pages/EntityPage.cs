@@ -74,6 +74,16 @@ public class EntityPage : ICloneable
     }
 
     /// <summary>
+    /// Number of rows to skip when fetching the page.
+    /// </summary>
+    public int? Skip => (PageNumber - 1) * PageSize;
+
+    /// <summary>
+    /// Number of rows to take when fetching the page.
+    /// </summary>
+    public int? Take => PageSize;
+
+    /// <summary>
     /// Creates a new instance of <see cref="EntityPage"/>.
     /// </summary>
     public EntityPage() { }
