@@ -2,6 +2,10 @@
   <Import Project="../../Build/targets/build_tests.props" />
   <Import Project="../../Build/targets/build_version.props" />
 
+  <PropertyGroup>
+    <IsTestProject>false</IsTestProject>
+  </PropertyGroup>
+
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>

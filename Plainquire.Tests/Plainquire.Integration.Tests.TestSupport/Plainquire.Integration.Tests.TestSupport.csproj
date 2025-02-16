@@ -1,15 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
-  <Import Project="../../Build/targets/build_core.props" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../Build/targets/build_tests.props" />
   <Import Project="../../Build/targets/build_version.props" />
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <IsPackable>false</IsPackable>
+    <IsTestProject>false</IsTestProject>
+    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />

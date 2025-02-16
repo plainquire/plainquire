@@ -3,6 +3,10 @@
   <Import Project="../../Build/targets/build_version.props" />
 
   <PropertyGroup>
+    <IsTestProject>false</IsTestProject>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <!-- Use an overload that has a IEqualityComparer<string> -->
     <NoWarn>$(NoWarn);MA0002</NoWarn>
 
