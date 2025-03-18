@@ -41,10 +41,11 @@ public class EnumFilterExpression : DefaultFilterExpression, IEnumFilterExpressi
             return CreateEnumFromStringExpression(propertySelector, filterOperator, value, configuration, interceptor);
 
         var valueIsNumeric = long.TryParse(value, NumberStyles.Any, new CultureInfo(configuration.CultureName), out var numericValue);
-        if (valueIsNumeric)
-            return CreateEnumExpressionByFilterOperator(propertySelector, filterOperator, numericValue);
+        if (!valueIsNumeric)
+            return CreateEnumFromStringExpression(propertySelector, filterOperator, value, configuration, interceptor);
 
-        return CreateEnumFromStringExpression(propertySelector, filterOperator, value, configuration, interceptor);
+        var enumValue = (TProperty)Enum.ToObject(typeof(TProperty).GetUnderlyingType(), numericValue);
+        return CreateEnumExpressionByFilterOperator(propertySelector, filterOperator, enumValue);
     }
 
     private Expression CreateEnumFromStringExpression<TEntity, TProperty>(Expression<Func<TEntity, TProperty>> propertySelector, FilterOperator filterOperator, string? value, FilterConfiguration configuration, IFilterInterceptor? interceptor)
