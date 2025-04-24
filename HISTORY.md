@@ -1,3 +1,37 @@
+# 6.4.0
+
+## New Features
+
+Support for nested filters added to `EntityFilter.ToQueryParams()`
+
+# 6.3.1
+
+## Fixes
+
+Convert numeric values to type of enum before creating filter expression
+
+# 6.3.0
+
+## New Features
+
+Properties `EntityPage.Skip` and `EntityPage.Take` added
+
+# 6.2.0
+
+## Changes
+
+Support for .NET 9 added
+
+Support for .NET 6 removed
+
+# 6.1.0
+
+## New Features
+
+Support for `DateOnly` added
+
+Support for building against multiple target frameworks added
+
 # 6.0.0
 
 ## New Features

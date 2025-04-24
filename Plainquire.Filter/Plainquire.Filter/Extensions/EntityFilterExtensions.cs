@@ -182,10 +182,27 @@ public static class EntityFilterExtensions
     /// </summary>
     /// <typeparam name="TEntity">Type of the entity.</typeparam>
     /// <param name="entityFilter">The filter to act on.</param>
-    public static string ToQueryParams<TEntity>(this EntityFilter<TEntity> entityFilter)
+    public static string ToQueryParams<TEntity>(this EntityFilter<TEntity>? entityFilter)
     {
-        var filteredType = typeof(TEntity);
-        var filterableProperties = filteredType.GetFilterableProperties();
+        var queryParams = ToQueryParams((EntityFilter?)entityFilter);
+        return string.Join('&', queryParams);
+    }
+
+    /// <summary>
+    /// Converts an entity filter to it's corresponding HTTP query parameters.
+    /// </summary>
+    /// <param name="entityFilter">The filter to act on.</param>
+    private static List<string> ToQueryParams(this EntityFilter? entityFilter)
+    {
+        if (entityFilter == null)
+            return [];
+
+        var entityFilterType = entityFilter.GetType();
+        if (!entityFilterType.IsGenericType)
+            throw new ArgumentException($"Given filter must be a generic {nameof(EntityFilter)}", nameof(entityFilter));
+
+        var filteredType = entityFilterType.GenericTypeArguments[0];
+        var filterableProperties = filteredType.GetFilterableProperties().ToList();
         var entityFilterAttribute = filteredType.GetCustomAttribute<EntityFilterAttribute>();
 
         var queryParams = new List<string>();
@@ -200,6 +217,12 @@ public static class EntityFilterExtensions
             }
         }
 
-        return string.Join('&', queryParams);
+        foreach (var nestedFilter in entityFilter.NestedFilters)
+        {
+            var nestedQueryParams = nestedFilter.EntityFilter.ToQueryParams();
+            queryParams.AddRange(nestedQueryParams);
+        }
+
+        return queryParams;
     }
 }

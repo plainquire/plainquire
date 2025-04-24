@@ -141,6 +141,20 @@ public class EntityFilterExtensionsTests : TestContainer
         queryParams.Should().Be("testFirstName=John,Jane&testSurname=%3dDoe&testBirthday=%3e2020-01-01,ISNULL&testBirthday=%3c2021-01-01");
     }
 
+    [Test]
+    public void WhenConvertedToQueryParams_NestedFiltersAreTakenIntoAccount()
+    {
+        var modelFilter = new EntityFilter<FilterAttributeTestModel>()
+            .Add(x => x.FirstName, "John,Jane");
+        var addressFilter = new EntityFilter<NestedFilterTestModel>()
+            .Add(x => x.Street, "==Bakerstreet");
+        modelFilter.AddNested(x => x.Address, addressFilter);
+
+        var queryParams = modelFilter.ToQueryParams();
+
+        queryParams.Should().Be("testFirstName=John,Jane&addressStreet=%3d%3dBakerstreet");
+    }
+
     [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
     [SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
     [EntityFilter(Prefix = "Test")]
@@ -155,5 +169,17 @@ public class EntityFilterExtensionsTests : TestContainer
         public string? Gender { get; }
 
         public DateTime? Birthday { get; }
+
+        public NestedFilterTestModel? Address { get; set; }
+    }
+
+    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
+    [SuppressMessage("ReSharper", "UnassignedGetOnlyAutoProperty")]
+    [EntityFilter(Prefix = "Address")]
+    private class NestedFilterTestModel
+    {
+        public string? Street { get; }
+
+        public string? City { get; }
     }
 }
