@@ -96,6 +96,41 @@ public class EntityFilterTests : TestContainer
     }
 
     [Test]
+    public void WhenValueForPropertyIsProvided_ThenFilterIsNotEmpty()
+    {
+        using var _ = new AssertionScope();
+
+        var entityFilter1 = new EntityFilter<TestModel<string>>()
+            .Add(x => x.ValueA, "");
+
+        var entityFilter2 = new EntityFilter<TestModel<string>>()
+            .Add(x => x.ValueA, [""]);
+
+        entityFilter1.Should().Match<EntityFilter<TestModel<string>>>(x => !x.IsEmpty());
+        entityFilter2.Should().Match<EntityFilter<TestModel<string>>>(x => !x.IsEmpty());
+    }
+
+    [Test]
+    public void WhenValueForPropertyIsProvided_ThenFilterForPropertyIsNotEmpty()
+    {
+        using var _ = new AssertionScope();
+
+        var entityFilter1 = new EntityFilter<TestModel<string>>()
+            .Add(x => x.ValueA, "");
+
+        var entityFilter2 = new EntityFilter<TestModel<string>>()
+            .Add(x => x.ValueA, ["A"]);
+
+        entityFilter2.IsEmpty(x => x.ValueA);
+
+        entityFilter1.Should().Match<EntityFilter<TestModel<string>>>(x => !x.IsEmpty(model => model.ValueA));
+        entityFilter1.Should().Match<EntityFilter<TestModel<string>>>(x => x.IsEmpty(model => model.ValueB));
+
+        entityFilter2.Should().Match<EntityFilter<TestModel<string>>>(x => !x.IsEmpty(model => model.ValueA));
+        entityFilter2.Should().Match<EntityFilter<TestModel<string>>>(x => x.IsEmpty(model => model.ValueB));
+    }
+
+    [Test]
     public void WhenNullValueForPropertyIsProvided_ThenArgumentExceptionIsThrown()
     {
         Action createInvalidEntityFilter = () => new EntityFilter<TestModel<string>>()

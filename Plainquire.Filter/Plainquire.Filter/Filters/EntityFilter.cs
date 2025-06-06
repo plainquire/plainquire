@@ -34,6 +34,14 @@ public class EntityFilter<TEntity> : EntityFilter
         : base(configuration) { }
 
     /// <summary>
+    /// Indicates whether the filter for the specified property is empty.
+    /// </summary>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
+    /// <param name="property">The property to get the information for.</param>
+    public bool IsEmpty<TProperty>(Expression<Func<TEntity, TProperty?>> property)
+        => GetPropertyFilterValuesInternal(property)?.All(value => value.IsEmpty) ?? true;
+
+    /// <summary>
     /// Gets the filter syntax for the given <paramref name="property"/>.
     /// </summary>
     /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
@@ -280,6 +288,15 @@ public class EntityFilter : ICloneable
     /// Indicates whether this filter is empty.
     /// </summary>
     public bool IsEmpty() => !PropertyFilters.Any() && !NestedFilters.Any();
+
+    /// <summary>
+    /// Indicates whether the specified property filter is empty.
+    /// </summary>
+    /// <typeparam name="TEntity">The type to be filtered.</typeparam>
+    /// <typeparam name="TProperty">The type of the property to be filtered.</typeparam>
+    /// <param name="property">The property to get the information for.</param>
+    public bool IsEmpty<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
+        => GetPropertyFilterValuesInternal(property)?.All(value => value.IsEmpty) ?? true;
 
     /// <summary>
     /// Gets the filter syntax for the given <typeparamref name="TProperty"/>.

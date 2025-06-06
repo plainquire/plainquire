@@ -1,3 +1,9 @@
+# 6.5.0
+
+## New Features
+
+Property-based version of `EntityFilter.IsEmpty(...)` added.
+
 # 6.4.0
 
 ## New Features
