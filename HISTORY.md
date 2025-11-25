@@ -1,8 +1,14 @@
+# 6.5.1
+
+## Changes
+
+Support for .NET 10 added
+
 # 6.5.0
 
 ## New Features
 
-Property-based version of `EntityFilter.IsEmpty(...)` added.
+Property-based version of `EntityFilter.IsEmpty(...)` added
 
 # 6.4.0
 
