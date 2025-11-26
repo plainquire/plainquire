@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Plainquire.Demo.Extensions;
 using Plainquire.Demo.Routing;
 using Plainquire.Filter.Abstractions;
@@ -39,7 +39,11 @@ internal static class OpenApi
         });
 
         return applicationBuilder
-            .UseSwagger(c => c.RouteTemplate = $"{API_UI_ROUTE}{{documentName}}/{OPEN_API_SPEC}")
+            .UseSwagger(c =>
+            {
+                c.RouteTemplate = $"{API_UI_ROUTE}{{documentName}}/{OPEN_API_SPEC}";
+                c.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1;
+            })
             .UseSwaggerUI(c =>
             {
                 c.RoutePrefix = API_UI_ROUTE.Trim('/');
@@ -84,6 +88,9 @@ internal static class OpenApi
     {
         public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
         {
+            if (swaggerDoc.Components?.Schemas is null)
+                return;
+
             swaggerDoc.Components.Schemas.Remove(nameof(FilterConditionalAccess));
             swaggerDoc.Components.Schemas.Remove(nameof(SortConditionalAccess));
             swaggerDoc.Components.Schemas.Remove(nameof(FilterOperator));

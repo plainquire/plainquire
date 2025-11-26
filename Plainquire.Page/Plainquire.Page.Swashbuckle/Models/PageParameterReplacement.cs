@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Plainquire.Page.Abstractions;
 using System;
 
@@ -16,7 +16,7 @@ namespace Plainquire.Page.Swashbuckle.Models;
 /// <param name="PagedType">The type of the entity to page.</param>
 /// <param name="Configuration">The page configuration for the paged type.</param>
 public record PageParameterReplacement(
-    OpenApiParameter OpenApiParameter,
+    IOpenApiParameter OpenApiParameter,
     ApiParameterDescription OpenApiDescription,
     Type? PagedType,
     PageConfiguration Configuration

@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Plainquire.Page.Abstractions;
 using Plainquire.Page.Swashbuckle.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -38,6 +39,7 @@ public class EntityPageParameterReplacer : IOperationFilter
     /// <param name="context">The context.</param>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
+        operation.Parameters ??= new List<IOpenApiParameter>();
         var parametersToReplace = operation.Parameters
             .Join(
                 context.ApiDescription.ParameterDescriptions,

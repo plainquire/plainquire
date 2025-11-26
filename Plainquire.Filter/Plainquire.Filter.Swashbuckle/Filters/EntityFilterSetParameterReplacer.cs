@@ -1,12 +1,12 @@
 ﻿using LoxSmoke.DocXml;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Plainquire.Filter.Swashbuckle.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.Json.Nodes;
 
 namespace Plainquire.Filter.Swashbuckle.Filters;
 
@@ -35,14 +35,17 @@ public class EntityFilterSetParameterReplacer : IOperationFilter
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         var parameterReplacements = GetEntityFilterReplacements(operation, context);
+        operation.Parameters ??= new List<IOpenApiParameter>();
         operation.Parameters.ReplaceFilterParameters(parameterReplacements, _docXmlReaders);
 
         var hasParametersFromEntityFilter = parameterReplacements.Any();
-        operation.Extensions[OpenApiParameterExtensions.ENTITY_EXTENSION_PREFIX + "has-filter-parameters"] = new OpenApiBoolean(hasParametersFromEntityFilter);
+        operation.Extensions ??= new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase);
+        operation.Extensions[OpenApiParameterExtensions.ENTITY_EXTENSION_PREFIX + "has-filter-parameters"] = new JsonNodeExtension(JsonValue.Create(hasParametersFromEntityFilter));
     }
 
     private static List<FilterParameterReplaceInfo> GetEntityFilterReplacements(OpenApiOperation operation, OperationFilterContext context)
     {
+        operation.Parameters ??= new List<IOpenApiParameter>();
         var parameterReplacements = operation.Parameters
             .Join(
                 context.ApiDescription.ParameterDescriptions,

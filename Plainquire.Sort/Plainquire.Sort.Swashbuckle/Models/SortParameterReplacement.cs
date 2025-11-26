@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Plainquire.Sort.Abstractions;
 using System;
 
@@ -16,7 +16,7 @@ namespace Plainquire.Sort.Swashbuckle.Models;
 /// <param name="SortedType">The type of the entity to sort.</param>
 /// <param name="Configuration">The sort configuration for the sorted type.</param>
 public record SortParameterReplacement(
-    OpenApiParameter OpenApiParameter,
+    IOpenApiParameter OpenApiParameter,
     ApiParameterDescription OpenApiDescription,
     Type SortedType,
     SortConfiguration Configuration

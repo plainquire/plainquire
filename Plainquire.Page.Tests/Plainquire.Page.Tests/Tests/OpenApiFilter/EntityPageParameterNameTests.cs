@@ -1,6 +1,6 @@
 ﻿using FakeItEasy;
+using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.OpenApi.Models;
 using NUnit.Framework;
 using Plainquire.Page.Swashbuckle.Filters;
 using Plainquire.Page.Tests.Models;
@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net.Http;
 
 namespace Plainquire.Page.Tests.Tests.OpenApiFilter;
 
@@ -36,7 +37,8 @@ public class EntityPageParameterNameTests : TestContainer
 
         // Assert   
         using var _ = new AssertionScope();
-        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations[OperationType.Get].Parameters;
+        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations?[HttpMethod.Get].Parameters;
+        parameters.Should().NotBeNull();
 
         var page = parameters.SingleOrDefault(parameter => parameter.Name == "page")!;
         page.Should().BePageNumberParameter();
@@ -63,7 +65,8 @@ public class EntityPageParameterNameTests : TestContainer
 
         // Assert   
         using var _ = new AssertionScope();
-        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations[OperationType.Get].Parameters;
+        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations?[HttpMethod.Get].Parameters;
+        parameters.Should().NotBeNull();
 
         var page = parameters.SingleOrDefault(parameter => parameter.Name == "defaultPage")!;
         page.Should().BePageNumberParameter();
@@ -90,7 +93,8 @@ public class EntityPageParameterNameTests : TestContainer
 
         // Assert   
         using var _ = new AssertionScope();
-        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations[OperationType.Get].Parameters;
+        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations?[HttpMethod.Get].Parameters;
+        parameters.Should().NotBeNull();
 
         var page = parameters.SingleOrDefault(parameter => parameter.Name == "page")!;
         page.Should().BePageNumberParameter();
@@ -117,7 +121,8 @@ public class EntityPageParameterNameTests : TestContainer
 
         // Assert   
         using var _ = new AssertionScope();
-        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations[OperationType.Get].Parameters;
+        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations?[HttpMethod.Get].Parameters;
+        parameters.Should().NotBeNull();
 
         var page = parameters.SingleOrDefault(parameter => parameter.Name == "defaultPage")!;
         page.Should().BePageNumberParameter();
@@ -144,7 +149,8 @@ public class EntityPageParameterNameTests : TestContainer
 
         // Assert   
         using var _ = new AssertionScope();
-        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations[OperationType.Get].Parameters;
+        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations?[HttpMethod.Get].Parameters;
+        parameters.Should().NotBeNull();
 
         var page1 = parameters.SingleOrDefault(parameter => parameter.Name == "page1")!;
         page1.Should().BePageNumberParameter();

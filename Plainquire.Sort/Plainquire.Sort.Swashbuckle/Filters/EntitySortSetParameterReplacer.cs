@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Sort.Abstractions;
 using Plainquire.Sort.Swashbuckle.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -37,13 +38,14 @@ public class EntitySortSetParameterReplacer : IOperationFilter
     /// <inheritdoc />
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
+        operation.Parameters ??= new List<IOpenApiParameter>();
         var parametersToReplace = operation.Parameters
             .Join(
                 context.ApiDescription.ParameterDescriptions,
                 parameter => parameter.Name,
                 description => description.Name,
                 (parameter, description) => (Parameter: parameter, Description: description),
-                StringComparer.Ordinal
+                StringComparer.OrdinalIgnoreCase
             )
             .Where(openApi => IsEntitySortSetParameter(openApi.Description))
             .SelectMany(openApi =>

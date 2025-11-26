@@ -1,7 +1,7 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Mvc;
 using Plainquire.Filter.Mvc.Newtonsoft;
@@ -59,7 +59,11 @@ public class Program
 
         var app = builder.Build();
 
-        app.UseSwagger(c => c.RouteTemplate = $"{API_UI_ROUTE}{{documentName}}/{OPEN_API_SPEC}");
+        app.UseSwagger(c =>
+        {
+            c.RouteTemplate = $"{API_UI_ROUTE}{{documentName}}/{OPEN_API_SPEC}";
+            c.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1;
+        });
         app.UseSwaggerUI(c =>
         {
             c.RoutePrefix = API_UI_ROUTE.Trim('/');

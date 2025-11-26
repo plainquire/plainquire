@@ -1,7 +1,7 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using NUnit.Framework;
 using Plainquire.Sort.Swashbuckle.Filters;
 using Plainquire.Sort.Tests.Models;
@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net.Http;
 
 namespace Plainquire.Sort.Tests.Tests.OpenApiFilter;
 
@@ -38,11 +39,17 @@ public class EntitySortSetParameterPositionTests : TestContainer
 
         // Assert   
         using var _ = new AssertionScope();
-        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations[OperationType.Get].Parameters;
+        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations?[HttpMethod.Get].Parameters;
+        parameters.Should().NotBeNull();
+
         var orderBy = parameters.SingleOrDefault(parameter => parameter.Name == "orderBy")!;
         orderBy.Should().NotBeNull();
         orderBy.Description.Should().Be("Sorts the result by the given property in ascending (-asc) or descending (-desc) order.");
-        orderBy.Schema.Type.Should().Be("array");
+
+        orderBy.Schema.Should().NotBeNull();
+        orderBy.Schema.Type.Should().Be(JsonSchemaType.Array);
+
+        orderBy.Schema.Items.Should().NotBeNull();
         orderBy.Schema.Items.Pattern.Should().Be(@"^(asc-|asc\ |\+|desc-|desc\ |dsc-|dsc\ |-|~)?(fullName|birthday|address|addressStreet|addressCountry)(\..+)?(-asc|\ asc|\+|-desc|\ desc|-dsc|\ dsc|-|~)?$");
 
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
@@ -68,14 +75,19 @@ public class EntitySortSetParameterPositionTests : TestContainer
 
         // Assert   
         using var _ = new AssertionScope();
-        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations[OperationType.Get].Parameters.ToList();
+        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations?[HttpMethod.Get].Parameters?.ToList();
+        parameters.Should().NotBeNull();
 
         var orderByIndex = parameters.FindIndex(parameter => parameter.Name == "orderBy");
         orderByIndex.Should().Be(expectedOrderByIndex);
 
         var orderBy = parameters[orderByIndex];
         orderBy.Description.Should().Be("Sorts the result by the given property in ascending (-asc) or descending (-desc) order.");
-        orderBy.Schema.Type.Should().Be("array");
+
+        orderBy.Schema.Should().NotBeNull();
+        orderBy.Schema.Type.Should().Be(JsonSchemaType.Array);
+
+        orderBy.Schema.Items.Should().NotBeNull();
         orderBy.Schema.Items.Pattern.Should().Be(@"^(asc-|asc\ |\+|desc-|desc\ |dsc-|dsc\ |-|~)?(fullName|birthday|address|addressStreet|addressCountry)(\..+)?(-asc|\ asc|\+|-desc|\ desc|-dsc|\ dsc|-|~)?$");
 
         var sortByIndex = parameters.FindIndex(parameter => parameter.Name == "sortBy");
@@ -83,7 +95,11 @@ public class EntitySortSetParameterPositionTests : TestContainer
 
         var sortBy = parameters[sortByIndex];
         sortBy.Description.Should().Be("Sorts the result by the given property in ascending (-asc) or descending (-desc) order.");
-        sortBy.Schema.Type.Should().Be("array");
+
+        sortBy.Schema.Should().NotBeNull();
+        sortBy.Schema.Type.Should().Be(JsonSchemaType.Array);
+
+        sortBy.Schema.Items.Should().NotBeNull();
         sortBy.Schema.Items.Pattern.Should().Be(@"^(asc-|asc\ |\+|desc-|desc\ |dsc-|dsc\ |-|~)?(addressStreet|addressCountry)(\..+)?(-asc|\ asc|\+|-desc|\ desc|-dsc|\ dsc|-|~)?$");
 
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);

@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Plainquire.Page.Swashbuckle.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Nodes;
 
 namespace Plainquire.Page.Swashbuckle;
 
@@ -42,16 +41,17 @@ public static class OpenApiOperationExtensions
                 Description = "Pages the result by the given page number.",
                 Schema = new OpenApiSchema
                 {
-                    Type = "integer",
+                    Type = JsonSchemaType.Integer,
                     Format = "int32"
                 },
                 In = ParameterLocation.Query,
                 Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.Ordinal)
                 {
-                    [ENTITY_PAGE_EXTENSION] = new OpenApiBoolean(true)
+                    [ENTITY_PAGE_EXTENSION] = new JsonNodeExtension(JsonValue.Create(true))
                 }
             };
 
+            operation.Parameters ??= new List<IOpenApiParameter>();
             var insertionIndex = operation.Parameters.IndexOf(parameters[0].OpenApiParameter);
             operation.Parameters.Insert(insertionIndex, openApiParameter);
         }
@@ -68,16 +68,17 @@ public static class OpenApiOperationExtensions
                 Description = "Pages the result by the given page size.",
                 Schema = new OpenApiSchema
                 {
-                    Type = "integer",
+                    Type = JsonSchemaType.Integer,
                     Format = "int32"
                 },
                 In = ParameterLocation.Query,
                 Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.Ordinal)
                 {
-                    [ENTITY_PAGE_EXTENSION] = new OpenApiBoolean(true)
+                    [ENTITY_PAGE_EXTENSION] = new JsonNodeExtension(JsonValue.Create(true))
                 }
             };
 
+            operation.Parameters ??= new List<IOpenApiParameter>();
             var insertionIndex = operation.Parameters.IndexOf(parameters[0].OpenApiParameter);
             operation.Parameters.Insert(insertionIndex, openApiParameter);
         }
@@ -104,13 +105,27 @@ public static class OpenApiOperationExtensions
     private static void MarkExistingParametersForDeletion(IList<PageParameterReplacement> parameters)
     {
         foreach (var parameter in parameters)
-            parameter.OpenApiParameter.Extensions.TryAdd(ENTITY_DELETE_EXTENSION, new OpenApiBoolean(true));
+        {
+            if (parameter.OpenApiParameter is not IOpenApiExtensible extensibleParameter)
+                throw new InvalidOperationException("The OpenApiParameter must implement IOpenApiExtensible to be replaceable.");
+
+            extensibleParameter.Extensions ??= new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase);
+            extensibleParameter.Extensions.TryAdd(ENTITY_DELETE_EXTENSION, new JsonNodeExtension(JsonValue.Create(true)));
+        }
     }
 
     private static void RemoveParametersMarkedForDeletion(OpenApiOperation operation)
     {
+        operation.Parameters ??= new List<IOpenApiParameter>();
         var parametersToRemove = operation.Parameters
-            .Where(parameter => parameter.Extensions.ContainsKey(ENTITY_DELETE_EXTENSION))
+            .Where(parameter =>
+            {
+                if (parameter is not IOpenApiExtensible extensibleParameter)
+                    throw new InvalidOperationException("The OpenApiParameter must implement IOpenApiExtensible to be replaceable.");
+
+                extensibleParameter.Extensions ??= new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase);
+                return extensibleParameter.Extensions.ContainsKey(ENTITY_DELETE_EXTENSION);
+            })
             .ToList();
 
         foreach (var parameter in parametersToRemove)

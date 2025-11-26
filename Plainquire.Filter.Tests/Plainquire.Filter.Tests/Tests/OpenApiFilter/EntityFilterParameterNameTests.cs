@@ -1,7 +1,6 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.OpenApi.Models;
 using NUnit.Framework;
 using Plainquire.Filter.Swashbuckle.Filters;
 using Plainquire.Filter.Tests.Models;
@@ -12,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net.Http;
 
 namespace Plainquire.Filter.Tests.Tests.OpenApiFilter;
 
@@ -36,7 +36,9 @@ public class EntityFilterParameterNameTests : TestContainer
 
         // Assert
         using var _ = new AssertionScope();
-        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations[OperationType.Get].Parameters;
+        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations?[HttpMethod.Get].Parameters;
+
+        parameters.Should().NotBeNull();
 
         parameters
             .Select(x => x.Name)

@@ -1,12 +1,11 @@
-﻿using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Sort.Swashbuckle.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 
 namespace Plainquire.Sort.Swashbuckle;
@@ -40,21 +39,22 @@ public static class OpenApiOperationExtensions
                 Description = $"Sorts the result by the given property in ascending ({primaryAscendingPostfix}) or descending ({primaryDescendingPostfix}) order.",
                 Schema = new OpenApiSchema
                 {
-                    Type = "array",
+                    Type = JsonSchemaType.Array,
                     Items = new OpenApiSchema
                     {
-                        Type = "string",
-                        Example = new OpenApiString(string.Empty),
+                        Type = JsonSchemaType.String,
+                        Example = string.Empty,
                         Pattern = allowedPropertyNamePattern
                     },
                 },
                 In = ParameterLocation.Query,
-                Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.Ordinal)
+                Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase)
                 {
-                    [ENTITY_SORT_EXTENSION] = new OpenApiBoolean(true)
+                    [ENTITY_SORT_EXTENSION] = new JsonNodeExtension(JsonValue.Create(true))
                 }
             };
 
+            operation.Parameters ??= new List<IOpenApiParameter>();
             var insertionIndex = operation.Parameters.IndexOf(parameters[0].OpenApiParameter);
             operation.Parameters.Insert(insertionIndex, openApiParameter);
         }
@@ -69,23 +69,38 @@ public static class OpenApiOperationExtensions
                 var bindingParameterName = parameter.OpenApiDescription.ParameterDescriptor.BindingInfo?.BinderModelName;
                 var actionParameterName = parameter.OpenApiDescription.ParameterDescriptor.Name;
                 return bindingParameterName ?? actionParameterName;
-            }, StringComparer.Ordinal)
+            }, StringComparer.OrdinalIgnoreCase)
             .ToDictionary(
                 group => group.Key,
                 group => group.ToList(),
-                StringComparer.Ordinal
+                StringComparer.OrdinalIgnoreCase
             );
 
     private static void MarkExistingParametersForDeletion(IList<SortParameterReplacement> parameters)
     {
         foreach (var parameter in parameters)
-            parameter.OpenApiParameter.Extensions.TryAdd(ENTITY_DELETE_EXTENSION, new OpenApiBoolean(true));
+        {
+            if (parameter.OpenApiParameter is not IOpenApiExtensible extensibleParameter)
+                throw new InvalidOperationException("The OpenApiParameter must implement IOpenApiExtensible to be replaceable.");
+
+            extensibleParameter.Extensions ??= new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase);
+            extensibleParameter.Extensions.TryAdd(ENTITY_DELETE_EXTENSION, new JsonNodeExtension(JsonValue.Create(true)));
+        }
     }
 
     private static void RemoveParametersMarkedForDeletion(OpenApiOperation operation)
     {
+        operation.Parameters ??= new List<IOpenApiParameter>();
         var parametersToRemove = operation.Parameters
-            .Where(parameter => parameter.Extensions.ContainsKey(ENTITY_DELETE_EXTENSION))
+            .Where(parameter =>
+            {
+                if (parameter is not IOpenApiExtensible extensibleParameter)
+                    throw new InvalidOperationException("The OpenApiParameter must implement IOpenApiExtensible to be replaceable.");
+
+                extensibleParameter.Extensions ??= new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase);
+
+                return extensibleParameter.Extensions.ContainsKey(ENTITY_DELETE_EXTENSION);
+            })
             .ToList();
 
         foreach (var parameter in parametersToRemove)
@@ -120,7 +135,7 @@ public static class OpenApiOperationExtensions
         => parameters
             .Select(parameter => parameter.SortedType)
             .SelectMany(sortedType => sortedType.GetSortPropertyNames())
-            .Distinct(StringComparer.Ordinal)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
             .Select(Regex.Escape)
             .ToList();
 

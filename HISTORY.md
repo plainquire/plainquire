@@ -1,3 +1,13 @@
+# 7.0.0
+
+## Changes
+
+Support for OpenAPI 3.1 added
+
+## Breaking Changes
+
+`Swashbuckle.AspNetCore` with version `>= 10.x` required
+
 # 6.6.0
 
 ## Changes

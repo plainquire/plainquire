@@ -1,8 +1,6 @@
 ﻿using LoxSmoke.DocXml;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Interfaces;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Swashbuckle.Models;
 using System;
@@ -10,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json.Nodes;
 
 namespace Plainquire.Filter.Swashbuckle;
 
@@ -25,7 +24,7 @@ internal static class OpenApiParameterExtensions
     public static bool IsEntityFilterSetParameter(this ApiParameterDescription description)
         => description.ParameterDescriptor?.ParameterType.GetCustomAttribute<EntityFilterSetAttribute>() != null;
 
-    public static void ReplaceFilterParameters(this IList<OpenApiParameter> parameters, List<FilterParameterReplaceInfo> parameterReplacements, IReadOnlyCollection<DocXmlReader> docXmlReaders)
+    public static void ReplaceFilterParameters(this IList<IOpenApiParameter> parameters, List<FilterParameterReplaceInfo> parameterReplacements, IReadOnlyCollection<DocXmlReader> docXmlReaders)
     {
         foreach (var replacement in parameterReplacements)
         {
@@ -60,11 +59,11 @@ internal static class OpenApiParameterExtensions
             {
                 Name = property.GetFilterParameterName(entityFilterAttribute?.Prefix),
                 Description = docXmlReaders.GetXmlDocumentationSummary(property),
-                Schema = new OpenApiSchema { Type = "string" },
+                Schema = new OpenApiSchema { Type = JsonSchemaType.String },
                 In = ParameterLocation.Query,
                 Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.Ordinal)
                 {
-                    [ENTITY_EXTENSION_PREFIX + "property-type"] = new OpenApiString(property.PropertyType.GetUnderlyingType().Name)
+                    [ENTITY_EXTENSION_PREFIX + "property-type"] = new JsonNodeExtension(JsonValue.Create(property.PropertyType.GetUnderlyingType().Name))
                 }
             })
             .ToList();
