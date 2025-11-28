@@ -10,8 +10,8 @@ namespace Plainquire.Page;
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Provided as library, can be used from outside")]
 public static class QueryableExtensions
 {
-    /// <inheritdoc cref="Page{TEntity}(IQueryable{TEntity}, int?, int?, IPageInterceptor?)"/>
-    public static IEnumerable<TEntity> Page<TEntity>(this IEnumerable<TEntity> source, int? pageNumber, int? pageSize, IPageInterceptor? interceptor = null)
+    /// <inheritdoc cref="Page{TEntity}(IQueryable{TEntity}, uint?, uint?, IPageInterceptor?)"/>
+    public static IEnumerable<TEntity> Page<TEntity>(this IEnumerable<TEntity> source, uint? pageNumber, uint? pageSize, IPageInterceptor? interceptor = null)
         => source.AsQueryable().Page(new EntityPage(pageNumber, pageSize), interceptor);
 
     /// <inheritdoc cref="Page{TEntity}(IQueryable{TEntity}, EntityPage, IPageInterceptor?)"/>"
@@ -27,7 +27,7 @@ public static class QueryableExtensions
     /// <param name="pageSize">The page size to use.</param>
     /// <param name="interceptor">An interceptor to manipulate the generated page.</param>
     /// <returns></returns>
-    public static IQueryable<TEntity> Page<TEntity>(this IQueryable<TEntity> source, int? pageNumber, int? pageSize, IPageInterceptor? interceptor = null)
+    public static IQueryable<TEntity> Page<TEntity>(this IQueryable<TEntity> source, uint? pageNumber, uint? pageSize, IPageInterceptor? interceptor = null)
         => source.Page(new EntityPage(pageNumber, pageSize), interceptor);
 
     /// <summary>

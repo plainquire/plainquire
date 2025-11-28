@@ -29,7 +29,7 @@ public partial class Demo : ComponentBase
 
     protected FreelancerDto QueryResult = new();
 
-    private int PageCount => GetPageCount();
+    private uint PageCount => GetPageCount();
 
     private readonly NumberFormatInfo _numberFormat;
 
@@ -97,25 +97,25 @@ public partial class Demo : ComponentBase
         await UpdateQuery();
     }
 
-    private async Task SetPage(int page)
+    private async Task SetPage(uint page)
     {
         QueryModel.PageNumber = Math.Max(page, 1);
         await UpdateQuery();
     }
 
-    private async Task SetPageSize(int pageSize)
+    private async Task SetPageSize(uint pageSize)
     {
         QueryModel.PageSize = pageSize;
         await UpdateQuery();
     }
 
-    private int GetPageCount()
+    private uint GetPageCount()
     {
         if (QueryResult.FilteredCount == 0)
             return 1;
 
         var pageFraction = QueryResult.FilteredCount / (float)QueryModel.PageSize;
-        return (int)Math.Ceiling(pageFraction);
+        return (uint)Math.Ceiling(pageFraction);
     }
 
     private void SetQueryModelFromUrl(string url)
@@ -197,9 +197,9 @@ public partial class Demo : ComponentBase
 
         public string[] Sort { get; private set; } = ["", "", "", ""];
 
-        public int PageNumber { get; set; } = 1;
+        public uint PageNumber { get; set; } = 1;
 
-        public int PageSize { get; set; } = 10;
+        public uint PageSize { get; set; } = 10;
 
         public string? Seed { get; set; }
 
@@ -220,10 +220,10 @@ public partial class Demo : ComponentBase
             }
 
             if (queryParameters.TryGetValue("page", out var page))
-                result.PageNumber = int.Parse(page!, CultureInfo.InvariantCulture);
+                result.PageNumber = uint.Parse(page!, CultureInfo.InvariantCulture);
 
             if (queryParameters.TryGetValue("pageSize", out var pageSize))
-                result.PageSize = int.Parse(pageSize!, CultureInfo.InvariantCulture);
+                result.PageSize = uint.Parse(pageSize!, CultureInfo.InvariantCulture);
 
             if (queryParameters.TryGetValue("seed", out var seed))
                 result.Seed = seed;

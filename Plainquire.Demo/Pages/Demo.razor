@@ -220,7 +220,7 @@
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    @for (var pageIndex = 1; pageIndex <= PageCount; pageIndex++)
+                    @for (uint pageIndex = 1; pageIndex <= PageCount; pageIndex++)
                     {
                         <li class="page-item @(pageIndex == QueryModel.PageNumber ? "active" : "")">
                             @{

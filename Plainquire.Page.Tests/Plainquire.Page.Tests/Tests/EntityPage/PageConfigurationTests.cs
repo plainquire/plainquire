@@ -34,7 +34,7 @@ public class PageConfigurationTests : TestContainer
         var pagedItems = pageFunc(testItems, (EntityPage<TestModel<string>>)testCase.Page);
 
         var expectedItems = testItems
-            .Take(testCase.Page.PageSize.Value);
+            .Take((int)testCase.Page.PageSize.Value);
 
         pagedItems.Should().Equal(expectedItems);
     }

@@ -1,8 +1,10 @@
-# 6.5.1
+# 6.6.0
 
 ## Changes
 
 Support for .NET 10 added
+
+Parameters `PageNumber` and `PageSize` switched from `int` to `uint`.
 
 # 6.5.0
 

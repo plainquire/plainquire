@@ -22,11 +22,11 @@ public class EntityPage<TEntity> : EntityPage
         : base(configuration) { }
 
     /// <inheritdoc />
-    public EntityPage(int? pageNumber, int? pageSize)
+    public EntityPage(uint? pageNumber, uint? pageSize)
         : base(pageNumber, pageSize) { }
 
     /// <inheritdoc />
-    public EntityPage(int? pageNumber, int? pageSize, PageConfiguration configuration)
+    public EntityPage(uint? pageNumber, uint? pageSize, PageConfiguration configuration)
         : base(pageNumber, pageSize, configuration) { }
 
     /// <summary>
@@ -58,30 +58,30 @@ public class EntityPage : ICloneable
     /// <summary>
     /// The page number to get.
     /// </summary>
-    public int? PageNumber
+    public uint? PageNumber
     {
-        get => int.TryParse(PageNumberValue, NumberStyles.None, CultureInfo.InvariantCulture, out var page) ? page : null;
+        get => uint.TryParse(PageNumberValue, NumberStyles.None, CultureInfo.InvariantCulture, out var page) ? page : null;
         set => PageNumberValue = value?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
     }
 
     /// <summary>
     /// The page size to use.
     /// </summary>
-    public int? PageSize
+    public uint? PageSize
     {
-        get => int.TryParse(PageSizeValue, NumberStyles.None, CultureInfo.InvariantCulture, out var pageSize) ? pageSize : null;
+        get => uint.TryParse(PageSizeValue, NumberStyles.None, CultureInfo.InvariantCulture, out var pageSize) ? pageSize : null;
         set => PageSizeValue = value?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
     }
 
     /// <summary>
     /// Number of rows to skip when fetching the page.
     /// </summary>
-    public int? Skip => (PageNumber - 1) * PageSize;
+    public uint? Skip => (PageNumber - 1) * PageSize;
 
     /// <summary>
     /// Number of rows to take when fetching the page.
     /// </summary>
-    public int? Take => PageSize;
+    public uint? Take => PageSize;
 
     /// <summary>
     /// Creates a new instance of <see cref="EntityPage"/>.
@@ -101,7 +101,7 @@ public class EntityPage : ICloneable
     /// </summary>
     /// <param name="pageNumber">Page number.</param>
     /// <param name="pageSize">Page size.</param>
-    public EntityPage(int? pageNumber, int? pageSize)
+    public EntityPage(uint? pageNumber, uint? pageSize)
     {
         PageNumber = pageNumber;
         PageSize = pageSize;
@@ -113,7 +113,7 @@ public class EntityPage : ICloneable
     /// <param name="pageNumber">Page number.</param>
     /// <param name="pageSize">Page size.</param>
     /// <param name="configuration">The configuration to use.</param>
-    public EntityPage(int? pageNumber, int? pageSize, PageConfiguration configuration)
+    public EntityPage(uint? pageNumber, uint? pageSize, PageConfiguration configuration)
     {
         PageNumber = pageNumber;
         PageSize = pageSize;

@@ -49,8 +49,8 @@ public class EntityPageTests : TestContainer
         var pagedItems = pageFunc(testItems, (EntityPage<TestModel<string>>)testCase.Page);
 
         var expectedItems = testItems
-            .Skip(((testCase.Page.PageNumber ?? 1) - 1) * testCase.Page.PageSize.Value)
-            .Take(testCase.Page.PageSize.Value);
+            .Skip((int)(((testCase.Page.PageNumber ?? 1) - 1) * testCase.Page.PageSize.Value))
+            .Take((int)testCase.Page.PageSize.Value);
 
         pagedItems.Should().Equal(expectedItems);
     }
