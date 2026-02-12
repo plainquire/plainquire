@@ -42,10 +42,9 @@ public class EntitySortSetParameterReplacer : IOperationFilter
         var parametersToReplace = operation.Parameters
             .Join(
                 context.ApiDescription.ParameterDescriptions,
-                parameter => parameter.Name,
-                description => description.Name,
-                (parameter, description) => (Parameter: parameter, Description: description),
-                StringComparer.OrdinalIgnoreCase
+                parameter => operation.Parameters.IndexOf(parameter),
+                description => context.ApiDescription.ParameterDescriptions.IndexOf(description),
+                (parameter, description) => (Parameter: parameter, Description: description)
             )
             .Where(openApi => IsEntitySortSetParameter(openApi.Description))
             .SelectMany(openApi =>
