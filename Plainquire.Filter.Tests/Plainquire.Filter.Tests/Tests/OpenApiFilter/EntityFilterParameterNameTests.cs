@@ -51,6 +51,42 @@ public class EntityFilterParameterNameTests : TestContainer
         //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
     }
 
+    [Test]
+    public void WhenMultipleFiltersAreGiven_GeneratedParametersMatchExpected()
+    {
+        // Arrange
+        var serviceProvider = A.Fake<IServiceProvider>();
+        A.CallTo(() => serviceProvider.GetService(default!)).WithAnyArguments().Returns(null);
+
+        const string actionName = nameof(EntityFilterController.MultiFilter);
+        var operationFilters = CreateOperationFilters();
+        var swaggerGenerator = SwaggerGeneratorFactory.Create<EntityFilterController>(actionName, operationFilters);
+
+        // Act
+        var openApiDocument = swaggerGenerator.GetSwagger("v1");
+
+        // Assert
+        using var _ = new AssertionScope();
+        var parameters = openApiDocument.Paths[$"/{actionName}"].Operations?[OperationType.Get].Parameters;
+
+        parameters.Should().NotBeNull();
+
+        parameters
+            .Select(x => x.Name)
+            .Should()
+            .Equal(
+                "testModelDateTimeId",
+                "testModelDateTimeValueA",
+                "testModelDateTimeValueB",
+                "testModelDateTimeValueC",
+                "testModelNestedId",
+                "testModelNestedParentId",
+                "testModelNestedValue"
+            );
+
+        //var debugJson = openApiDocument.SerializeAsJson(OpenApiSpecVersion.OpenApi3_0);
+    }
+
     private static List<IOperationFilter> CreateOperationFilters()
         =>
         [

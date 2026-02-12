@@ -10,4 +10,7 @@ public class EntityFilterController : Controller
 {
     public void SingleFilter([FromQuery] EntityFilter<TestModel<DateTime>> testModel)
     { }
+
+    public void MultiFilter([FromQuery] EntityFilter<TestModel<DateTime>> testModel, [FromQuery] EntityFilter<TestModelNested> nestedTestModel)
+    { }
 }
