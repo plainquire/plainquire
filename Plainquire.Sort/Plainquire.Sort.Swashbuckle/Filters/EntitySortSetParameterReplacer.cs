@@ -54,15 +54,16 @@ public class EntitySortSetParameterReplacer : IOperationFilter
                     .Select(x => x.PropertyType)
                     .Where(type => type.IsGenericEntitySort())
                     .Select(entitySortType => new SortParameterReplacement(
-                        OpenApiParameter: openApi.Parameter,
-                        OpenApiDescription: openApi.Description,
+                        Parameter: openApi.Parameter,
+                        Description: openApi.Description,
                         SortedType: entitySortType.GenericTypeArguments[0],
                         Configuration: GetConfiguration(entitySortType))
                     )
             )
             .ToList();
 
-        operation.ReplaceSortParameters(parametersToReplace);
+        operation.Parameters ??= new List<IOpenApiParameter>();
+        operation.Parameters.ReplaceSortParameters(parametersToReplace);
     }
 
     [SuppressMessage("ReSharper", "ConditionalAccessQualifierIsNonNullableAccordingToAPIContract", Justification = "ParameterDescriptor can be null")]

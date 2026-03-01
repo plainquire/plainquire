@@ -10,28 +10,20 @@ using System.Text.RegularExpressions;
 
 namespace Plainquire.Sort.Swashbuckle;
 
-/// <summary>
-/// Extension methods for <see cref="OpenApiOperation"/>.
-/// </summary>
-public static class OpenApiOperationExtensions
+internal static class OpenApiOperationExtensions
 {
     private const string ENTITY_SORT_EXTENSION = "x-entity-sort";
     private const string ENTITY_DELETE_EXTENSION = "x-entity-sort-delete";
 
-    /// <summary>
-    /// Replaces <see cref="EntitySort{TEntity}"/> and with the sort parameters.
-    /// </summary>
-    /// <param name="operation">The <see cref="OpenApiOperation"/> to operate on.</param>
-    /// <param name="parametersToReplace">The parameters to replace.</param>
-    public static void ReplaceSortParameters(this OpenApiOperation operation, IList<SortParameterReplacement> parametersToReplace)
+    public static void ReplaceSortParameters(this IList<IOpenApiParameter> parameters, IList<SortParameterReplacement> parametersToReplace)
     {
         MarkExistingParametersForDeletion(parametersToReplace);
 
         var httpQueryParameterGroup = GroupByHttpQueryParameterName(parametersToReplace);
-        foreach (var (queryParameter, parameters) in httpQueryParameterGroup)
+        foreach (var (queryParameter, parameterReplacements) in httpQueryParameterGroup)
         {
-            var (prefixes, postfixes, primaryAscendingPostfix, primaryDescendingPostfix) = GetSortPrefixes(parameters);
-            var allowedPropertyNamePattern = CreatePropertyNamePattern(parameters, prefixes, postfixes);
+            var (prefixes, postfixes, primaryAscendingPostfix, primaryDescendingPostfix) = GetSortPrefixes(parameterReplacements);
+            var allowedPropertyNamePattern = CreatePropertyNamePattern(parameterReplacements, prefixes, postfixes);
 
             var openApiParameter = new OpenApiParameter
             {
@@ -54,20 +46,19 @@ public static class OpenApiOperationExtensions
                 }
             };
 
-            operation.Parameters ??= new List<IOpenApiParameter>();
-            var insertionIndex = operation.Parameters.IndexOf(parameters[0].OpenApiParameter);
-            operation.Parameters.Insert(insertionIndex, openApiParameter);
+            var insertionIndex = parameters.IndexOf(parameterReplacements[0].Parameter);
+            parameters.Insert(insertionIndex, openApiParameter);
         }
 
-        RemoveParametersMarkedForDeletion(operation);
+        RemoveParametersMarkedForDeletion(parameters);
     }
 
     private static Dictionary<string, List<SortParameterReplacement>> GroupByHttpQueryParameterName(IList<SortParameterReplacement> parametersToReplace)
         => parametersToReplace
             .GroupBy(parameter =>
             {
-                var bindingParameterName = parameter.OpenApiDescription.ParameterDescriptor.BindingInfo?.BinderModelName;
-                var actionParameterName = parameter.OpenApiDescription.ParameterDescriptor.Name;
+                var bindingParameterName = parameter.Description.ParameterDescriptor.BindingInfo?.BinderModelName;
+                var actionParameterName = parameter.Description.ParameterDescriptor.Name;
                 return bindingParameterName ?? actionParameterName;
             }, StringComparer.OrdinalIgnoreCase)
             .ToDictionary(
@@ -80,7 +71,7 @@ public static class OpenApiOperationExtensions
     {
         foreach (var parameter in parameters)
         {
-            if (parameter.OpenApiParameter is not IOpenApiExtensible extensibleParameter)
+            if (parameter.Parameter is not IOpenApiExtensible extensibleParameter)
                 throw new InvalidOperationException("The OpenApiParameter must implement IOpenApiExtensible to be replaceable.");
 
             extensibleParameter.Extensions ??= new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase);
@@ -88,10 +79,9 @@ public static class OpenApiOperationExtensions
         }
     }
 
-    private static void RemoveParametersMarkedForDeletion(OpenApiOperation operation)
+    private static void RemoveParametersMarkedForDeletion(IList<IOpenApiParameter> parameters)
     {
-        operation.Parameters ??= new List<IOpenApiParameter>();
-        var parametersToRemove = operation.Parameters
+        var parametersToRemove = parameters
             .Where(parameter =>
             {
                 if (parameter is not IOpenApiExtensible extensibleParameter)
@@ -104,7 +94,7 @@ public static class OpenApiOperationExtensions
             .ToList();
 
         foreach (var parameter in parametersToRemove)
-            operation.Parameters.Remove(parameter);
+            parameters.Remove(parameter);
     }
 
     private static (List<string>, List<string>, string, string) GetSortPrefixes(IReadOnlyCollection<SortParameterReplacement> parameters)

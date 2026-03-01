@@ -40,8 +40,15 @@ public class EntitySortParameterReplacer : IOperationFilter
     /// <param name="context">The context.</param>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
+        var parametersToReplace = GetEntitySortReplacements(operation, context);
         operation.Parameters ??= new List<IOpenApiParameter>();
-        var parametersToReplace = operation.Parameters
+        operation.Parameters.ReplaceSortParameters(parametersToReplace);
+    }
+
+    private List<SortParameterReplacement> GetEntitySortReplacements(OpenApiOperation operation, OperationFilterContext context)
+    {
+        operation.Parameters ??= new List<IOpenApiParameter>();
+        var parameterReplacements = operation.Parameters
             .Join(
                 context.ApiDescription.ParameterDescriptions,
                 parameter => operation.Parameters.IndexOf(parameter),
@@ -54,14 +61,14 @@ public class EntitySortParameterReplacer : IOperationFilter
                 var entitySortType = openApi.Description.ParameterDescriptor.ParameterType;
                 var configuration = GetConfiguration(entitySortType);
                 return new SortParameterReplacement(
-                    OpenApiParameter: openApi.Parameter,
-                    OpenApiDescription: openApi.Description,
+                    Parameter: openApi.Parameter,
+                    Description: openApi.Description,
                     SortedType: entitySortType.GenericTypeArguments[0],
                     Configuration: configuration);
             })
             .ToList();
 
-        operation.ReplaceSortParameters(parametersToReplace);
+        return parameterReplacements;
     }
 
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract", Justification = "ParameterDescriptor can be null")]
