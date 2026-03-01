@@ -195,28 +195,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// </summary>
     /// <typeparam name="TDestination">The type of the destination entity to filter.</typeparam>
     public EntityFilter<TDestination> Cast<TDestination>()
-    {
-        var castFilter = JsonSerializer.Deserialize<EntityFilter<TDestination>>(JsonSerializer.Serialize(this))!;
-        var sourceProperties = typeof(TEntity).GetProperties();
-        var destinationProperties = typeof(TDestination).GetProperties().ToList();
-
-        foreach (var sourceProperty in sourceProperties)
-        {
-            var sameDestinationPropertyExists = destinationProperties
-                .Exists(x =>
-                    x.Name.EqualsOrdinal(sourceProperty.Name) &&
-                    x.PropertyType.IsAssignableFrom(sourceProperty.PropertyType)
-                );
-
-            if (!sameDestinationPropertyExists)
-            {
-                castFilter.PropertyFilters.RemoveAll(x => x.PropertyName.EqualsOrdinal(sourceProperty.Name));
-                castFilter.NestedFilters.RemoveAll(x => x.PropertyName.EqualsOrdinal(sourceProperty.Name));
-            }
-        }
-
-        return castFilter;
-    }
+        => this.Cast<TEntity, TDestination>();
 
     /// <summary>
     /// Creates the filter expression. Returns <c>null</c> when filter is empty.

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Json;
 using System.Web;
 
 namespace Plainquire.Filter;
@@ -175,6 +176,36 @@ public static class EntityFilterExtensions
 
         entityFilter.Replace(property, valueFilters);
         return entityFilter;
+    }
+
+    /// <summary>
+    /// Casts this filter to a different type (by creating a deep clone).
+    /// Filtered properties are matched by type (check if assignable) and name (case-sensitive).
+    /// </summary>
+    /// <typeparam name="TEntity">The type to be filtered.</typeparam>
+    /// <typeparam name="TDestination">The type of the destination entity to filter.</typeparam>
+    public static EntityFilter<TDestination> Cast<TEntity, TDestination>(this EntityFilter<TEntity> filter)
+    {
+        var castFilter = JsonSerializer.Deserialize<EntityFilter<TDestination>>(JsonSerializer.Serialize(filter))!;
+        var sourceProperties = typeof(TEntity).GetProperties();
+        var destinationProperties = typeof(TDestination).GetProperties().ToList();
+
+        foreach (var sourceProperty in sourceProperties)
+        {
+            var sameDestinationPropertyExists = destinationProperties
+                .Exists(x =>
+                            x.Name.EqualsOrdinal(sourceProperty.Name) &&
+                            x.PropertyType.IsAssignableFrom(sourceProperty.PropertyType)
+                );
+
+            if (!sameDestinationPropertyExists)
+            {
+                castFilter.PropertyFilters.RemoveAll(x => x.PropertyName.EqualsOrdinal(sourceProperty.Name));
+                castFilter.NestedFilters.RemoveAll(x => x.PropertyName.EqualsOrdinal(sourceProperty.Name));
+            }
+        }
+
+        return castFilter;
     }
 
     /// <summary>
