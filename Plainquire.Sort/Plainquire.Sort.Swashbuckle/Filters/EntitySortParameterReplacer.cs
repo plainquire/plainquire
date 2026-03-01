@@ -42,7 +42,7 @@ public class EntitySortParameterReplacer : IOperationFilter
     {
         var parametersToReplace = GetEntitySortReplacements(operation, context);
         operation.Parameters ??= new List<IOpenApiParameter>();
-        operation.Parameters.ReplaceSortParameters(parametersToReplace);
+        OpenApiOperationExtensions.ReplaceSortParameters(operation.Parameters, parametersToReplace);
     }
 
     private List<SortParameterReplacement> GetEntitySortReplacements(OpenApiOperation operation, OperationFilterContext context)

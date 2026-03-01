@@ -15,7 +15,7 @@ internal static class OpenApiOperationExtensions
     private const string ENTITY_SORT_EXTENSION = "x-entity-sort";
     private const string ENTITY_DELETE_EXTENSION = "x-entity-sort-delete";
 
-    public static void ReplaceSortParameters(this IList<IOpenApiParameter> parameters, IList<SortParameterReplacement> parametersToReplace)
+    public static void ReplaceSortParameters(IList<IOpenApiParameter> parameters, IList<SortParameterReplacement> parametersToReplace)
     {
         MarkExistingParametersForDeletion(parametersToReplace);
 

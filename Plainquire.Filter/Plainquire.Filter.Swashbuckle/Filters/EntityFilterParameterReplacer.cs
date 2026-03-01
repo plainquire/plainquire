@@ -36,7 +36,7 @@ public class EntityFilterParameterReplacer : IOperationFilter
     {
         var parameterReplacements = GetEntityFilterReplacements(operation, context);
         operation.Parameters ??= new List<IOpenApiParameter>();
-        operation.Parameters.ReplaceFilterParameters(parameterReplacements, _docXmlReaders);
+        OpenApiParameterExtensions.ReplaceFilterParameters(operation.Parameters, parameterReplacements, _docXmlReaders);
 
         var hasParametersFromEntityFilter = parameterReplacements.Any();
         operation.Extensions ??= new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase);

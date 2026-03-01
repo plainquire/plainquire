@@ -24,7 +24,7 @@ internal static class OpenApiParameterExtensions
     public static bool IsEntityFilterSetParameter(this ApiParameterDescription description)
         => description.ParameterDescriptor?.ParameterType.GetCustomAttribute<EntityFilterSetAttribute>() != null;
 
-    public static void ReplaceFilterParameters(this IList<IOpenApiParameter> parameters, List<FilterParameterReplaceInfo> parameterReplacements, IReadOnlyCollection<DocXmlReader> docXmlReaders)
+    public static void ReplaceFilterParameters(IList<IOpenApiParameter> parameters, List<FilterParameterReplaceInfo> parameterReplacements, IReadOnlyCollection<DocXmlReader> docXmlReaders)
     {
         foreach (var replacement in parameterReplacements)
         {
