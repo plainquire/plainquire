@@ -1,5 +1,5 @@
-﻿using FluentAssertions;
-using FluentAssertions.Execution;
+﻿using AwesomeAssertions;
+using AwesomeAssertions.Execution;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;

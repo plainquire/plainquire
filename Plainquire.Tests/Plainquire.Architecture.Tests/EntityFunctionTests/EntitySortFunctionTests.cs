@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using NUnit.Framework;
 using Plainquire.Sort.Tests.Services;
 using Plainquire.TestSupport.Services;

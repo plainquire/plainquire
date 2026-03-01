@@ -1,5 +1,5 @@
-﻿using FluentAssertions;
-using FluentAssertions.Execution;
+﻿using AwesomeAssertions;
+using AwesomeAssertions.Execution;
 using NUnit.Framework;
 using Plainquire.Integration.Tests.Services;
 using Plainquire.Integration.Tests.TestSupport.Models;

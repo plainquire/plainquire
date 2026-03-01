@@ -1,38 +1,54 @@
-﻿using FluentAssertions;
-using FluentAssertions.Execution;
-using FluentAssertions.Primitives;
+﻿using AwesomeAssertions;
+using AwesomeAssertions.Execution;
+using AwesomeAssertions.Primitives;
 using Microsoft.OpenApi;
-using System;
 
 namespace Plainquire.Swashbuckle.TestSupport.Extensions;
 
 public static class OpenApiParameterExtensions
 {
     public static OpenApiParameterAssertions Should(this IOpenApiParameter instance)
-        => new(instance);
+        => new(instance, AssertionChain.GetOrCreate());
 }
 
 public class OpenApiParameterAssertions : ReferenceTypeAssertions<IOpenApiParameter, OpenApiParameterAssertions>
 {
-    public OpenApiParameterAssertions(IOpenApiParameter instance)
-        : base(instance) { }
+    private readonly AssertionChain _assertionChain;
+
+    public OpenApiParameterAssertions(IOpenApiParameter instance, AssertionChain assertionChain)
+        : base(instance, assertionChain)
+        => _assertionChain = assertionChain;
 
     protected override string Identifier => "OpenApiParameter";
 
     [CustomAssertion]
     public AndConstraint<OpenApiParameterAssertions> BePageNumberParameter(string because = "", params object[] becauseArgs)
     {
-        using var scope = new AssertionScope();
-        var identity = scope.CallerIdentity;
+        _assertionChain
+            .ForCondition(Subject is not null)
+            .BecauseOf(because, becauseArgs)
+            .FailWith("Expected {context:OpenApiParameter} not to be <null>{reason}.");
 
-        Subject.Should().NotBeNull(because, becauseArgs);
+        if (Subject is null)
+            return new AndConstraint<OpenApiParameterAssertions>(this);
 
-        scope.Context = new Lazy<string>(() => $"{identity}.{nameof(Subject.Description)}");
-        Subject.Description.Should().Be("Pages the result by the given page number.", because, becauseArgs);
+        _assertionChain
+            .ForCondition(Subject.Description == "Pages the result by the given page number.")
+            .BecauseOf(because, becauseArgs)
+            .FailWith("Expected {context:OpenApiParameter}.Description to be \"Pages the result by the given page number.\"{reason}, but found {0}.", Subject.Description);
 
-        scope.Context = new Lazy<string>(() => $"{identity}.{nameof(Subject.Schema)}.{nameof(Subject.Schema.Type)}");
-        Subject.Schema.Should().NotBeNull(because, becauseArgs);
-        Subject.Schema.Type.Should().Be(JsonSchemaType.Integer, because, becauseArgs);
+        _assertionChain
+            .ForCondition(Subject.Schema is not null)
+            .BecauseOf(because, becauseArgs)
+            .FailWith("Expected {context:OpenApiParameter}.Schema not to be <null>{reason}.");
+
+        if (Subject.Schema is not null)
+        {
+            _assertionChain
+                .ForCondition(Subject.Schema.Type == JsonSchemaType.Integer)
+                .BecauseOf(because, becauseArgs)
+                .FailWith("Expected {context:OpenApiParameter}.Schema.Type to be {0}{reason}, but found {1}.", JsonSchemaType.Integer, Subject.Schema.Type);
+        }
 
         return new AndConstraint<OpenApiParameterAssertions>(this);
     }
@@ -40,17 +56,31 @@ public class OpenApiParameterAssertions : ReferenceTypeAssertions<IOpenApiParame
     [CustomAssertion]
     public AndConstraint<OpenApiParameterAssertions> BePageSizeParameter(string because = "", params object[] becauseArgs)
     {
-        using var scope = new AssertionScope();
-        var identity = scope.CallerIdentity;
+        _assertionChain
+            .ForCondition(Subject is not null)
+            .BecauseOf(because, becauseArgs)
+            .FailWith("Expected {context:OpenApiParameter} not to be <null>{reason}.");
 
-        Subject.Should().NotBeNull(because, becauseArgs);
+        if (Subject is null)
+            return new AndConstraint<OpenApiParameterAssertions>(this);
 
-        scope.Context = new Lazy<string>(() => $"{identity}.{nameof(Subject.Description)}");
-        Subject.Description.Should().Be("Pages the result by the given page size.", because, becauseArgs);
+        _assertionChain
+            .ForCondition(Subject.Description == "Pages the result by the given page size.")
+            .BecauseOf(because, becauseArgs)
+            .FailWith("Expected {context:OpenApiParameter}.Description to be \"Pages the result by the given page size.\"{reason}, but found {0}.", Subject.Description);
 
-        scope.Context = new Lazy<string>(() => $"{identity}.{nameof(Subject.Schema)}.{nameof(Subject.Schema.Type)}");
-        Subject.Schema.Should().NotBeNull(because, becauseArgs);
-        Subject.Schema.Type.Should().Be(JsonSchemaType.Integer, because, becauseArgs);
+        _assertionChain
+            .ForCondition(Subject.Schema is not null)
+            .BecauseOf(because, becauseArgs)
+            .FailWith("Expected {context:OpenApiParameter}.Schema not to be <null>{reason}.");
+
+        if (Subject.Schema is not null)
+        {
+            _assertionChain
+                .ForCondition(Subject.Schema.Type == JsonSchemaType.Integer)
+                .BecauseOf(because, becauseArgs)
+                .FailWith("Expected {context:OpenApiParameter}.Schema.Type to be {0}{reason}, but found {1}.", JsonSchemaType.Integer, Subject.Schema.Type);
+        }
 
         return new AndConstraint<OpenApiParameterAssertions>(this);
     }

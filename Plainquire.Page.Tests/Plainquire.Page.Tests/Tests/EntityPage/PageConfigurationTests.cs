@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using NUnit.Framework;
 using Plainquire.Page.Abstractions;
 using Plainquire.Page.Tests.Models;

@@ -1,6 +1,6 @@
 ﻿using FakeItEasy;
-using FluentAssertions;
-using FluentAssertions.Execution;
+using AwesomeAssertions;
+using AwesomeAssertions.Execution;
 using NUnit.Framework;
 using Plainquire.Page.Swashbuckle.Filters;
 using Plainquire.Page.Tests.Models;

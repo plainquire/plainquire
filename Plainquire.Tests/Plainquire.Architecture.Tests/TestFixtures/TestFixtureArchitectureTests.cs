@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using Plainquire.TestSupport.Services;

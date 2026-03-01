@@ -1,5 +1,5 @@
-﻿using FluentAssertions;
-using FluentAssertions.Execution;
+﻿using AwesomeAssertions;
+using AwesomeAssertions.Execution;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Plainquire.Sort.Newtonsoft;

@@ -1,6 +1,6 @@
 ﻿using FakeItEasy;
-using FluentAssertions;
-using FluentAssertions.Execution;
+using AwesomeAssertions;
+using AwesomeAssertions.Execution;
 using Microsoft.OpenApi;
 using NUnit.Framework;
 using Plainquire.Sort.Swashbuckle.Filters;
