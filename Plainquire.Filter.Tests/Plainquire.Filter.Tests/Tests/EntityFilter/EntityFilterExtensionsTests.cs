@@ -136,7 +136,7 @@ public class EntityFilterExtensionsTests : TestContainer
             .Add(x => x.Birthday, ">2020-01-01,ISNULL")
             .Add(x => x.Birthday, "<2021-01-01");
 
-        var queryParams = modelFilter.ToQueryParams();
+        var queryParams = modelFilter.ToQueryString();
 
         queryParams.Should().Be("testFirstName=John,Jane&testSurname=%3dDoe&testBirthday=%3e2020-01-01,ISNULL&testBirthday=%3c2021-01-01");
     }
@@ -150,7 +150,7 @@ public class EntityFilterExtensionsTests : TestContainer
             .Add(x => x.Street, "==Bakerstreet");
         modelFilter.AddNested(x => x.Address, addressFilter);
 
-        var queryParams = modelFilter.ToQueryParams();
+        var queryParams = modelFilter.ToQueryString();
 
         queryParams.Should().Be("testFirstName=John,Jane&addressStreet=%3d%3dBakerstreet");
     }

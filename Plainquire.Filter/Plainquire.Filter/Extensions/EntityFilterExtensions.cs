@@ -209,15 +209,20 @@ public static class EntityFilterExtensions
     }
 
     /// <summary>
-    /// Converts an entity filter to it's corresponding HTTP query parameters.
+    /// Converts an entity filter to it's corresponding HTTP query string.
     /// </summary>
     /// <typeparam name="TEntity">Type of the entity.</typeparam>
     /// <param name="entityFilter">The filter to act on.</param>
-    public static string ToQueryParams<TEntity>(this EntityFilter<TEntity>? entityFilter)
+    public static string ToQueryString<TEntity>(this EntityFilter<TEntity>? entityFilter)
     {
         var queryParams = ToQueryParams((EntityFilter?)entityFilter);
         return string.Join('&', queryParams);
     }
+
+    /// <inheritdoc cref="ToQueryString{TEntity}(EntityFilter{TEntity}?)"/>
+    [Obsolete($"Use {nameof(ToQueryString)} instead.")]
+    public static string ToQueryParams<TEntity>(this EntityFilter<TEntity>? entityFilter)
+        => entityFilter.ToQueryString();
 
     /// <summary>
     /// Converts an entity filter to it's corresponding HTTP query parameters.

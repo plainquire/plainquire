@@ -177,7 +177,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// <summary>
     /// Removes all filters of all properties.
     /// </summary>
-    public EntityFilter<TEntity> Clear()
+    public new EntityFilter<TEntity> Clear()
     {
         base.Clear();
         return this;
