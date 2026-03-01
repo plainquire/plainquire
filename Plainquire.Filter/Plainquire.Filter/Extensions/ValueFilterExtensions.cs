@@ -22,7 +22,7 @@ public static class ValueFilterExtensions
         if (string.IsNullOrWhiteSpace(filterSyntax))
             return $"{valueName} is unfiltered";
 
-        var filters = ValueFiltersFactory.Create(filterSyntax, configuration)
+        var filters = ValueFilterFactory.Create(filterSyntax, configuration)
             .GroupBy(x => x.Operator)
             .Select(filterGroup =>
             {

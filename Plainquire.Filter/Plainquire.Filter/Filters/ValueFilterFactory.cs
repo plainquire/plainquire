@@ -1,4 +1,5 @@
 ﻿using Plainquire.Filter.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -8,10 +9,10 @@ namespace Plainquire.Filter;
 /// <summary>
 /// Factory to create <see cref="ValueFilter"/> for all values from filterSyntax.
 /// </summary>
-public static class ValueFiltersFactory
+public static class ValueFilterFactory
 {
     /// <summary>
-    /// Create <see cref="ValueFilter"/> from filterSyntax.
+    /// Create <see cref="ValueFilter"/> from filter syntax.
     /// </summary>
     /// <param name="filterSyntax">The filter micro syntax to create the filter from.</param>
     /// <param name="configuration">The filter configuration to use.</param>
@@ -38,4 +39,15 @@ public static class ValueFiltersFactory
 
         return values;
     }
+}
+
+/// <inheritdoc cref="ValueFilterFactory"/>
+[Obsolete($"Use {nameof(ValueFilterFactory)} instead.")]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "MA0048:File name must match type name", Justification = "Obsolete compatibility")]
+public static class ValueFiltersFactory
+{
+    /// <inheritdoc cref="ValueFilterFactory.Create(string, FilterConfiguration?)"/>
+    [Obsolete($"Use {nameof(ValueFilterFactory)}.{nameof(ValueFilterFactory.Create)} instead.")]
+    public static ValueFilter[] Create(string filterSyntax, FilterConfiguration? configuration = null)
+        => ValueFilterFactory.Create(filterSyntax, configuration);
 }
