@@ -179,7 +179,7 @@ public class EntityFilter<TEntity> : EntityFilter
     /// </summary>
     public EntityFilter<TEntity> Clear()
     {
-        ClearInternal();
+        base.Clear();
         return this;
     }
 
@@ -276,6 +276,10 @@ public class EntityFilter : ICloneable
     /// <param name="property">The property to get the information for.</param>
     public bool IsEmpty<TEntity, TProperty>(Expression<Func<TEntity, TProperty?>> property)
         => GetPropertyFilterValuesInternal(property)?.All(value => value.IsEmpty) ?? true;
+
+    /// <inheritdoc cref="EntityFilter{TEntity}.Clear" />
+    public void Clear()
+        => PropertyFilters.Clear();
 
     /// <summary>
     /// Gets the filter syntax for the given <typeparamref name="TProperty"/>.
@@ -390,10 +394,6 @@ public class EntityFilter : ICloneable
         var propertyName = property.GetPropertyName();
         PropertyFilters.RemoveAll(x => x.PropertyName.EqualsOrdinal(propertyName));
     }
-
-    /// <inheritdoc cref="EntityFilter{TEntity}.Clear" />
-    protected void ClearInternal()
-        => PropertyFilters.Clear();
 
     /// <inheritdoc cref="EntityFilter{TEntity}.CreateFilter" />
     protected internal Expression<Func<TEntity, bool>>? CreateFilter<TEntity>(IFilterInterceptor? interceptor, bool useAsCompiledExpression)
