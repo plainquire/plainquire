@@ -209,6 +209,48 @@ public static class EntityFilterExtensions
     }
 
     /// <summary>
+    /// Applies given filters to <see cref="EntityFilter{TEntity}"/>.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity being filtered.</typeparam>
+    /// <param name="entityFilter">The <see cref="EntityFilter{TEntity}"/> to apply filters to.</param>
+    /// <param name="filters">Property names mapped to their filter expressions in micro-syntax (e.g., {"customer", "~Joe"}).</param>
+    /// <returns></returns>
+    public static void ApplyFromSyntax<TEntity>(this EntityFilter<TEntity> entityFilter, KeyValuePair<string, string?>[]? filters)
+    {
+        var filteredType = typeof(TEntity);
+        entityFilter.ApplyFromSyntax(filteredType, filters);
+    }
+
+    /// <summary>
+    /// Apply given filters to <see cref="EntityFilter{TEntity}"/>.
+    /// </summary>
+    /// <param name="entityFilter">The <see cref="EntityFilter"/> to apply filters to.</param>
+    /// <param name="filteredType">The type of the entity being filtered.</param>
+    /// <param name="filters">Property names mapped to their filter expressions in micro-syntax (e.g., {"customer", "~Joe"}).</param>
+    /// <returns></returns>
+    public static void ApplyFromSyntax(this EntityFilter entityFilter, Type filteredType, KeyValuePair<string, string?>[]? filters)
+    {
+        if (filters == null || filters.Length == 0)
+            return;
+
+        var filterableProperties = filteredType.GetFilterableProperties().ToList();
+        var entityFilterAttribute = filteredType.GetCustomAttribute<EntityFilterAttribute>();
+
+        foreach (var property in filterableProperties)
+        {
+            var parameterName = property.GetFilterParameterName(entityFilterAttribute?.Prefix);
+            var parameterValues = filters
+                .Where(filter => filter.Key.Equals(parameterName, StringComparison.InvariantCultureIgnoreCase))
+                .Select(filter => filter.Value)
+                .WhereNotNull()
+                .ToList();
+
+            foreach (var filterSyntax in parameterValues)
+                entityFilter.PropertyFilters.Add(new PropertyFilter(property.Name, ValueFilterFactory.Create(filterSyntax, entityFilter.Configuration)));
+        }
+    }
+
+    /// <summary>
     /// Converts an entity filter to it's corresponding HTTP query string.
     /// </summary>
     /// <typeparam name="TEntity">Type of the entity.</typeparam>

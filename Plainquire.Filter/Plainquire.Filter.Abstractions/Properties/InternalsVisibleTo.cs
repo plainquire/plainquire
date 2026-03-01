@@ -1,4 +1,5 @@
 ﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Plainquire.Filter")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Plainquire.Filter.Mvc")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Plainquire.Filter.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Plainquire.Page")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Plainquire.Page.Mvc")]

@@ -3,7 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Plainquire.Filter.Abstractions;
 using System;
-using System.Reflection;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Plainquire.Filter.Mvc.ModelBinders;
@@ -21,40 +22,34 @@ public class EntityFilterModelBinder : IModelBinder
         if (bindingContext == null)
             throw new ArgumentNullException(nameof(bindingContext));
 
-        var serviceProvider = bindingContext.ActionContext.HttpContext.RequestServices;
+        var request = bindingContext.ActionContext.HttpContext.Request;
+
         var filteredType = bindingContext.ModelType.GetGenericArguments()[0];
+        var serviceProvider = bindingContext.ActionContext.HttpContext.RequestServices;
+        var configuration = GetFilterConfiguration(filteredType, serviceProvider);
+        var entityFilter = EntityFilterFactory.Create(filteredType, configuration);
 
-        var filterableProperties = filteredType.GetFilterableProperties();
-        var entityFilterAttribute = filteredType.GetCustomAttribute<EntityFilterAttribute>();
-        var entityFilter = CreateEntityFilter(filteredType, serviceProvider);
+        var filters = request.Query
+            .SelectMany(kvp => kvp.Value.Select(value => new KeyValuePair<string, string?>(kvp.Key, value)))
+            .ToArray();
 
-        foreach (var property in filterableProperties)
-        {
-            var parameterName = property.GetFilterParameterName(entityFilterAttribute?.Prefix);
-            var parameterValues = bindingContext.ValueProvider.GetValue(parameterName);
-            foreach (var filterSyntax in parameterValues)
-                entityFilter.PropertyFilters.Add(new PropertyFilter(property.Name, ValueFiltersFactory.Create(filterSyntax, entityFilter.Configuration)));
-        }
+        entityFilter.ApplyFromSyntax(filteredType, filters);
 
         bindingContext.Result = ModelBindingResult.Success(entityFilter);
+
         return Task.CompletedTask;
     }
 
-    private static EntityFilter CreateEntityFilter(Type? type, IServiceProvider serviceProvider)
+    private static FilterConfiguration? GetFilterConfiguration(Type? entityType, IServiceProvider serviceProvider)
     {
-        if (type == null)
-            return new EntityFilter();
+        if (entityType == null)
+            return null;
 
-        var entityFilterType = typeof(EntityFilter<>).MakeGenericType(type);
-        var entityFilterInstance = Activator.CreateInstance(entityFilterType)
-            ?? throw new InvalidOperationException($"Unable to create instance of type {entityFilterType.Name}");
-
-        var entityFilter = (EntityFilter)entityFilterInstance;
-
+        var entityFilterType = typeof(EntityFilter<>).MakeGenericType(entityType);
         var prototypeConfiguration = ((EntityFilter?)serviceProvider.GetService(entityFilterType))?.Configuration;
         var injectedConfiguration = serviceProvider.GetService<IOptions<FilterConfiguration>>()?.Value;
-        entityFilter.Configuration = prototypeConfiguration ?? injectedConfiguration;
 
-        return entityFilter;
+        var configuration = prototypeConfiguration ?? injectedConfiguration;
+        return configuration;
     }
 }
