@@ -4,6 +4,7 @@ using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Tests.Models;
 using Plainquire.TestSupport.Services;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Plainquire.Filter.Tests.Tests.EntityFilter;
@@ -153,6 +154,28 @@ public class EntityFilterExtensionsTests : TestContainer
         var queryParams = modelFilter.ToQueryString();
 
         queryParams.Should().Be("testFirstName=John,Jane&addressStreet=%3d%3dBakerstreet");
+    }
+
+    [Test]
+    public void WhenFilterAppliedFromSyntaxMap_FilterIsChanged()
+    {
+        var filters = new[] {
+            KeyValuePair.Create("testFirstName", "~a"),
+            KeyValuePair.Create("testfirstname", "b"),
+            KeyValuePair.Create("TestSurname", "c,d"),
+            KeyValuePair.Create("TestBirthday", "<2000"),
+            KeyValuePair.Create("TestGender", "<NotFilterable>"),
+        };
+
+        var modelFilter = new EntityFilter<FilterAttributeTestModel>();
+
+        modelFilter.ApplyFromSyntax(filters);
+
+        modelFilter.PropertyFilters.Should().ContainEquivalentOf(new PropertyFilter("FirstName", ValueFilterFactory.Create("~a")));
+        modelFilter.PropertyFilters.Should().ContainEquivalentOf(new PropertyFilter("FirstName", ValueFilterFactory.Create("b")));
+        modelFilter.PropertyFilters.Should().ContainEquivalentOf(new PropertyFilter("LastName", ValueFilterFactory.Create("c,d")));
+        modelFilter.PropertyFilters.Should().ContainEquivalentOf(new PropertyFilter("Birthday", ValueFilterFactory.Create("<2000")));
+        modelFilter.PropertyFilters.Should().NotContainEquivalentOf(new PropertyFilter("TestGender", []));
     }
 
     [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]

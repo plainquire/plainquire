@@ -40,12 +40,14 @@ public class EntityPageParameterReplacer : IOperationFilter
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         operation.Parameters ??= new List<IOpenApiParameter>();
-        var parametersToReplace = operation.Parameters
+        operation.AddOriginalIndexExtensionIfMissing(context);
+
+        var parametersToReplace = context.ApiDescription.ParameterDescriptions
             .Join(
-                context.ApiDescription.ParameterDescriptions,
-                parameter => operation.Parameters.IndexOf(parameter),
+                operation.Parameters,
                 description => context.ApiDescription.ParameterDescriptions.IndexOf(description),
-                (parameter, description) => (Parameter: parameter, Description: description)
+                parameter => parameter.GetOriginalIndex(),
+                (description, parameter) => (Parameter: parameter, Description: description)
             )
             .Where(openApi => IsEntityPageParameter(openApi.Description))
             .Select(openApi =>

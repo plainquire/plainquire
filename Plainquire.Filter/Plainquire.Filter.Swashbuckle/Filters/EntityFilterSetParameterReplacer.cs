@@ -46,12 +46,13 @@ public class EntityFilterSetParameterReplacer : IOperationFilter
     private static List<FilterParameterReplaceInfo> GetEntityFilterReplacements(OpenApiOperation operation, OperationFilterContext context)
     {
         operation.Parameters ??= new List<IOpenApiParameter>();
-        var parameterReplacements = operation.Parameters
+        operation.AddOriginalIndexExtensionIfMissing(context);
+        var parameterReplacements = context.ApiDescription.ParameterDescriptions
             .Join(
-                context.ApiDescription.ParameterDescriptions,
-                parameter => operation.Parameters.IndexOf(parameter),
+                operation.Parameters,
                 description => context.ApiDescription.ParameterDescriptions.IndexOf(description),
-                (parameter, description) => (Parameter: parameter, Description: description)
+                parameter => parameter.GetOriginalIndex(),
+                (description, parameter) => (Parameter: parameter, Description: description)
             )
             .Where(openApi => openApi.Description.IsEntityFilterSetParameter())
             .GroupBy(x => x.Description.ParameterDescriptor.ParameterType)

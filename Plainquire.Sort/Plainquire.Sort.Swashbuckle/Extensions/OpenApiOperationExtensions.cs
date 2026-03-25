@@ -1,6 +1,7 @@
 ﻿using Microsoft.OpenApi;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Sort.Swashbuckle.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,9 @@ namespace Plainquire.Sort.Swashbuckle;
 /// <summary>
 /// Extension methods for <see cref="OpenApiOperation"/>.
 /// </summary>
-public static class OpenApiOperationExtensions
+internal static class OpenApiOperationExtensions
 {
+    private const string PARAMETER_INDEX_EXTENSION = "x-original-parameter-index";
     private const string ENTITY_SORT_EXTENSION = "x-entity-sort";
     private const string ENTITY_DELETE_EXTENSION = "x-entity-sort-delete";
 
@@ -60,6 +62,43 @@ public static class OpenApiOperationExtensions
         }
 
         RemoveParametersMarkedForDeletion(operation);
+    }
+
+    public static void AddOriginalIndexExtensionIfMissing(this OpenApiOperation operation, OperationFilterContext context)
+    {
+        if (operation.Parameters == null)
+            return;
+
+        var indexExtensionsAlreadyAdded = operation.Parameters.Any(p => p.Extensions?.ContainsKey(PARAMETER_INDEX_EXTENSION) == true);
+        if (indexExtensionsAlreadyAdded)
+            return;
+
+        for (var index = 0; index < operation.Parameters.Count; index++)
+        {
+            var parameter = operation.Parameters[index];
+            if (parameter is not IOpenApiExtensible openApiParameter)
+                throw new InvalidOperationException("The OpenApiParameter must implement IOpenApiExtensible to be replaceable.");
+
+            openApiParameter.Extensions ??= new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase);
+            openApiParameter.Extensions.Add(PARAMETER_INDEX_EXTENSION, new JsonNodeExtension(JsonValue.Create(index)));
+        }
+    }
+
+    public static int GetOriginalIndex(this IOpenApiParameter parameter)
+    {
+        if (parameter.Extensions == null)
+            return -1;
+
+        if (!parameter.Extensions.TryGetValue(PARAMETER_INDEX_EXTENSION, out var extension))
+            return -1;
+
+        if (extension is not JsonNodeExtension nodeExtension)
+            throw new InvalidOperationException($"Extension '{PARAMETER_INDEX_EXTENSION}' must be of type {nameof(JsonNodeExtension)}.");
+
+        if (nodeExtension.Node is not JsonValue jsonValue)
+            throw new InvalidOperationException($"Value of extension '{PARAMETER_INDEX_EXTENSION}' must be of type {nameof(JsonValue)}.");
+
+        return jsonValue.GetValue<int>();
     }
 
     private static Dictionary<string, List<SortParameterReplacement>> GroupByHttpQueryParameterName(IList<SortParameterReplacement> parametersToReplace)

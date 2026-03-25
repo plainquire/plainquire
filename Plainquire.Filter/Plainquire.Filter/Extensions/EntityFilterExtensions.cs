@@ -212,10 +212,11 @@ public static class EntityFilterExtensions
     /// Applies given filters to <see cref="EntityFilter{TEntity}"/>.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity being filtered.</typeparam>
+    /// <typeparam name="TValue">The type of the filter value.</typeparam>
     /// <param name="entityFilter">The <see cref="EntityFilter{TEntity}"/> to apply filters to.</param>
     /// <param name="filters">Property names mapped to their filter expressions in micro-syntax (e.g., {"customer", "~Joe"}).</param>
     /// <returns></returns>
-    public static void ApplyFromSyntax<TEntity>(this EntityFilter<TEntity> entityFilter, KeyValuePair<string, string?>[]? filters)
+    public static void ApplyFromSyntax<TEntity, TValue>(this EntityFilter<TEntity> entityFilter, IEnumerable<KeyValuePair<string, TValue>>? filters)
     {
         var filteredType = typeof(TEntity);
         entityFilter.ApplyFromSyntax(filteredType, filters);
@@ -224,13 +225,15 @@ public static class EntityFilterExtensions
     /// <summary>
     /// Apply given filters to <see cref="EntityFilter{TEntity}"/>.
     /// </summary>
+    /// <typeparam name="TValue">The type of the filter value (string or string?).</typeparam>
     /// <param name="entityFilter">The <see cref="EntityFilter"/> to apply filters to.</param>
     /// <param name="filteredType">The type of the entity being filtered.</param>
     /// <param name="filters">Property names mapped to their filter expressions in micro-syntax (e.g., {"customer", "~Joe"}).</param>
     /// <returns></returns>
-    public static void ApplyFromSyntax(this EntityFilter entityFilter, Type filteredType, KeyValuePair<string, string?>[]? filters)
+    public static void ApplyFromSyntax<TValue>(this EntityFilter entityFilter, Type filteredType, IEnumerable<KeyValuePair<string, TValue>>? filters)
     {
-        if (filters == null || filters.Length == 0)
+        var filterList = filters?.ToList();
+        if (filterList == null || filterList.Count == 0)
             return;
 
         var filterableProperties = filteredType.GetFilterableProperties().ToList();
@@ -239,9 +242,9 @@ public static class EntityFilterExtensions
         foreach (var property in filterableProperties)
         {
             var parameterName = property.GetFilterParameterName(entityFilterAttribute?.Prefix);
-            var parameterValues = filters
+            var parameterValues = filterList
                 .Where(filter => filter.Key.Equals(parameterName, StringComparison.InvariantCultureIgnoreCase))
-                .Select(filter => filter.Value)
+                .Select(filter => filter.Value?.ToString())
                 .WhereNotNull()
                 .ToList();
 

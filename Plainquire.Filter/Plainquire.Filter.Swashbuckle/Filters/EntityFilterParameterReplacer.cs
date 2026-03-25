@@ -34,8 +34,9 @@ public class EntityFilterParameterReplacer : IOperationFilter
     /// <param name="context">The context.</param>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        var parameterReplacements = GetEntityFilterReplacements(operation, context);
         operation.Parameters ??= new List<IOpenApiParameter>();
+        operation.AddOriginalIndexExtensionIfMissing(context);
+        var parameterReplacements = GetEntityFilterReplacements(operation, context);
         operation.Parameters.ReplaceFilterParameters(parameterReplacements, _docXmlReaders);
 
         var hasParametersFromEntityFilter = parameterReplacements.Any();
@@ -46,12 +47,13 @@ public class EntityFilterParameterReplacer : IOperationFilter
     private static List<FilterParameterReplaceInfo> GetEntityFilterReplacements(OpenApiOperation operation, OperationFilterContext context)
     {
         operation.Parameters ??= new List<IOpenApiParameter>();
-        var parameterReplacements = operation.Parameters
+
+        var parameterReplacements = context.ApiDescription.ParameterDescriptions
             .Join(
-                context.ApiDescription.ParameterDescriptions,
-                parameter => operation.Parameters.IndexOf(parameter),
+                operation.Parameters,
                 description => context.ApiDescription.ParameterDescriptions.IndexOf(description),
-                (parameter, description) => (Parameter: parameter, Description: description)
+                parameter => parameter.GetOriginalIndex(),
+                (description, parameter) => (Parameter: parameter, Description: description)
              )
             .Where(openApi => openApi.Description.IsEntityFilterParameter())
             .GroupBy(openApi => openApi.Description.ParameterDescriptor.ParameterType)

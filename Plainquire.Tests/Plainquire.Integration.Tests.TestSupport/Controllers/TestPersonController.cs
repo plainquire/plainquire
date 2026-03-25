@@ -16,8 +16,8 @@ namespace Plainquire.Integration.Tests.TestSupport.Controllers;
 public class TestPersonController : ControllerBase
 {
     [HttpGet(nameof(GetTestPersons))]
-    public Task<ICollection<TestPerson>> GetTestPersons([FromQuery] EntityFilter<TestPerson> filter, [FromQuery(Name = "orderBy")] EntitySort<TestPerson> sort, [FromQuery(Name = "p,ps")] EntityPage<TestPerson> page)
-        => Task.FromResult<ICollection<TestPerson>>(_testPersons.Where(filter).OrderBy(sort).Page(page).ToList());
+    public Task<ICollection<TestPerson>> GetTestPersons([FromQuery] EntityFilter<TestPerson> personFilter, [FromQuery] EntityFilter<TestAddress> addressFilter, [FromQuery(Name = "orderBy")] EntitySort<TestPerson> sort, [FromQuery(Name = "p,ps")] EntityPage<TestPerson> page)
+        => Task.FromResult<ICollection<TestPerson>>(_testPersons.Where(personFilter).OrderBy(sort).Page(page).ToList());
 
     [HttpGet(nameof(GetTestPersonsBySet))]
     public Task<ICollection<TestPerson>> GetTestPersonsBySet([FromQuery] EntityFilterSet filterSet, [FromQuery] EntitySortSet sortBy, [FromQuery] EntityPage<TestPerson> page)

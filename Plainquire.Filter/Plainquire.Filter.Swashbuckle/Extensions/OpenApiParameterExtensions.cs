@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi;
 using Plainquire.Filter.Abstractions;
 using Plainquire.Filter.Swashbuckle.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -14,6 +15,7 @@ namespace Plainquire.Filter.Swashbuckle;
 
 internal static class OpenApiParameterExtensions
 {
+    private const string PARAMETER_INDEX_EXTENSION = "x-original-parameter-index";
     internal const string ENTITY_EXTENSION_PREFIX = "x-entity-filter-";
 
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract", Justification = "ParameterDescriptor can be null")]
@@ -47,6 +49,43 @@ internal static class OpenApiParameterExtensions
             foreach (var parameter in propertyParameters)
                 parameters.Insert(parameterIndex++, parameter);
         }
+    }
+
+    public static void AddOriginalIndexExtensionIfMissing(this OpenApiOperation operation, OperationFilterContext context)
+    {
+        if (operation.Parameters == null)
+            return;
+
+        var indexExtensionsAlreadyAdded = operation.Parameters.Any(p => p.Extensions?.ContainsKey(PARAMETER_INDEX_EXTENSION) == true);
+        if (indexExtensionsAlreadyAdded)
+            return;
+
+        for (var index = 0; index < operation.Parameters.Count; index++)
+        {
+            var parameter = operation.Parameters[index];
+            if (parameter is not IOpenApiExtensible openApiParameter)
+                throw new InvalidOperationException("The OpenApiParameter must implement IOpenApiExtensible to be replaceable.");
+
+            openApiParameter.Extensions ??= new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase);
+            openApiParameter.Extensions.Add(PARAMETER_INDEX_EXTENSION, new JsonNodeExtension(JsonValue.Create(index)));
+        }
+    }
+
+    public static int GetOriginalIndex(this IOpenApiParameter parameter)
+    {
+        if (parameter.Extensions == null)
+            return -1;
+
+        if (!parameter.Extensions.TryGetValue(PARAMETER_INDEX_EXTENSION, out var extension))
+            return -1;
+
+        if (extension is not JsonNodeExtension nodeExtension)
+            throw new InvalidOperationException($"Extension '{PARAMETER_INDEX_EXTENSION}' must be of type {nameof(JsonNodeExtension)}.");
+
+        if (nodeExtension.Node is not JsonValue jsonValue)
+            throw new InvalidOperationException($"Value of extension '{PARAMETER_INDEX_EXTENSION}' must be of type {nameof(JsonValue)}.");
+
+        return jsonValue.GetValue<int>();
     }
 
     private static List<OpenApiParameter> ExpandToPropertyParameters(this Type filteredType, IReadOnlyCollection<DocXmlReader> docXmlReaders)
