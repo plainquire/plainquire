@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.OpenApi;
 using Plainquire.Page.Swashbuckle.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,10 @@ namespace Plainquire.Page.Swashbuckle;
 /// <summary>
 /// Extension methods for <see cref="OpenApiOperation"/>.
 /// </summary>
-public static class OpenApiOperationExtensions
+internal static class OpenApiOperationExtensions
 {
     private const string ENTITY_PAGE_EXTENSION = "x-entity-page";
     private const string ENTITY_DELETE_EXTENSION = "x-entity-page-delete";
-
 
     /// <summary>
     /// Replaces <see cref="EntityPage{TEntity}"/> and with the sort parameters.
@@ -45,7 +45,7 @@ public static class OpenApiOperationExtensions
                     Format = "int32"
                 },
                 In = ParameterLocation.Query,
-                Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.Ordinal)
+                Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase)
                 {
                     [ENTITY_PAGE_EXTENSION] = new JsonNodeExtension(JsonValue.Create(true))
                 }
@@ -72,7 +72,7 @@ public static class OpenApiOperationExtensions
                     Format = "int32"
                 },
                 In = ParameterLocation.Query,
-                Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.Ordinal)
+                Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase)
                 {
                     [ENTITY_PAGE_EXTENSION] = new JsonNodeExtension(JsonValue.Create(true))
                 }
@@ -86,20 +86,20 @@ public static class OpenApiOperationExtensions
 
     private static Dictionary<string, List<PageParameterReplacement>> GroupByPageNumberHttpQueryParameterName(IList<PageParameterReplacement> parametersToReplace)
         => parametersToReplace
-            .GroupBy(parameter => GetPageNumberParameterName(parameter.OpenApiDescription.ParameterDescriptor), StringComparer.Ordinal)
+            .GroupBy(parameter => GetPageNumberParameterName(parameter.OpenApiDescription.ParameterDescriptor), StringComparer.OrdinalIgnoreCase)
             .ToDictionary(
                 group => group.Key,
                 group => group.ToList(),
-                StringComparer.Ordinal
+                StringComparer.OrdinalIgnoreCase
             );
 
     private static Dictionary<string, List<PageParameterReplacement>> GroupByPageSizeHttpQueryParameterName(IList<PageParameterReplacement> parametersToReplace)
         => parametersToReplace
-            .GroupBy(parameter => GetPageSizeParameterName(parameter.OpenApiDescription.ParameterDescriptor), StringComparer.Ordinal)
+            .GroupBy(parameter => GetPageSizeParameterName(parameter.OpenApiDescription.ParameterDescriptor), StringComparer.OrdinalIgnoreCase)
             .ToDictionary(
                 group => group.Key,
                 group => group.ToList(),
-                StringComparer.Ordinal
+                StringComparer.OrdinalIgnoreCase
             );
 
     private static void MarkExistingParametersForDeletion(IList<PageParameterReplacement> parameters)

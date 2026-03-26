@@ -61,7 +61,7 @@ internal static class OpenApiParameterExtensions
                 Description = docXmlReaders.GetXmlDocumentationSummary(property),
                 Schema = new OpenApiSchema { Type = JsonSchemaType.String },
                 In = ParameterLocation.Query,
-                Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.Ordinal)
+                Extensions = new Dictionary<string, IOpenApiExtension>(StringComparer.OrdinalIgnoreCase)
                 {
                     [ENTITY_EXTENSION_PREFIX + "property-type"] = new JsonNodeExtension(JsonValue.Create(property.PropertyType.GetUnderlyingType().Name))
                 }

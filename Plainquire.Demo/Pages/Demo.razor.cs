@@ -241,7 +241,7 @@ public partial class Demo : ComponentBase
                 .ToDictionary(
                     property => property.Name.LowercaseFirstChar(),
                     property => new StringValues(property.Value),
-                    StringComparer.Ordinal
+                    StringComparer.OrdinalIgnoreCase
                  );
 
             var sort = Sort.Where(x => !string.IsNullOrEmpty(x)).ToList();
