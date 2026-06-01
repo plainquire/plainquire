@@ -4,7 +4,7 @@
   
   <ItemGroup>
     <PackageReference Include="Autofac.Extras.FakeItEasy" Version="7.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.24" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.8" />
   </ItemGroup>
   
   <ItemGroup>
