@@ -294,6 +294,10 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
+# Cursor
+.cursorindexingignore
+.specstory
+
 # User added stuff
 /Assets
 /Plainquire.Demo/Freelancer.sqlite

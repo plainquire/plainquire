@@ -11,6 +11,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -31,6 +33,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -158,6 +162,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -166,12 +172,12 @@ jobs:
       run: |
         VERSION=`echo ${GITHUB_REF} | perl -pe 's/^refs\/tags\/(.*)$/\1/'`
         FILE_VERSION=`echo ${GITHUB_REF} | perl -pe 's/^refs\/tags\/(\d+(?:\.\d+)*)(.*)$/\1/'`
-        dotnet pack --configuration Release --output packages -p:Version=$VERSION -p:FileVersion=$FILE_VERSION
+        dotnet pack --configuration Release --output packages -p:Version=$VERSION -p:FileVersion=$FILE_VERSION -p:ContinuousIntegrationBuild=true
     - name: Upload NuGet package artifacts
       uses: skx/github-action-publish-binaries@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        args: 'packages/*.nupkg'
+        args: 'packages/*.nupkg packages/*.snupkg'
     - name: Publish
       run: dotnet nuget push packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
